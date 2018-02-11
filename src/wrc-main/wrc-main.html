@@ -6,20 +6,195 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Polymer -->
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<!-- App Elements -->
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+
 <!-- Paper Elements -->
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <!-- Polymerfire Elements -->
 <link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+
+<!-- Suji Elements -->
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
+
+<!-- App Polymer Icon -->
+<link rel="import" href="../app-icons.html">
 
 <dom-module id="wrc-main">
     <template>
-        <style></style>
+        <style>
+            /* General Style */
+            .flex {
+				@apply --layout-flex;
+			}
+
+			a,
+			a:hover,
+			a:active {
+				text-transform: none;
+				text-decoration: none;
+			}
+
+            /* App Drawer Style */
+			app-drawer-layout:not([narrow]) [drawer-toggle] {
+				display: none;
+			}
+
+			app-drawer-layout:not([narrow]) #header div[main-title] {
+				display: none;
+			}
+
+			app-toolbar {
+				color: #fff;
+				background-color: var(--azul-primary);
+				box-shadow: -4px 3px 5px 0px rgba(0, 0, 0, 0.25);
+			}
+
+			app-header paper-icon-button {
+				--paper-icon-button-ink-color: white;
+			}
+
+			app-drawer app-toolbar {
+				@apply --layout-horizontal;
+				@apply --layout-center-center;
+				@apply --layout-center;
+			}
+
+			app-drawer div.menu-container {
+				box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.25);
+			}
+
+			app-header-layout div.main-container {
+				height: calc(100vh - 64px);
+				min-height: calc(100vh - 64px);
+				min-width: 100%;
+				background-color: var(--azul-background);
+				/* box-shadow: -4px 3px 10px 0px rgba(0, 0, 0, 0.10); */
+			}
+
+			#drawer div.menu-container {
+				height: calc(100vh - 64px);
+				min-height: calc(100vh - 64px);
+				border-right: 1px solid var(--paper-grey-300);
+			}
+
+			#drawer app-toolbar a {
+				margin: 0;
+				padding: 0;
+				text-decoration: none;
+				color: #fff;
+				@apply --layout-horizontal;
+				@apply --layout-center;
+				@apply --layout-center-center;
+			}
+
+			#drawer app-toolbar a iron-image {
+				width: 50px;
+				height: 50px;
+				margin-right: 14px;
+			}
+
+            /* User Wrapper */
+            div.user-wrapper {
+                padding: 1.5em 0 0;
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .user-wrapper div.image-container {
+                width: 120px;
+                height: 120px;
+                border-radius: 300em;
+                background-color: var(--azul-background);
+            }
+
+            .user-wrapper div.image-container iron-image {
+                width: 100%;
+                height: 100%;
+                border-radius: 300em;
+            }
+
+            div[slot='dropdown-trigger'] span {
+                color: var(--azul-text-title);
+                margin-right: 24px;
+                font-weight: lighter;
+                font-size: .9em;
+            }
+
+            div[slot='dropdown-trigger'] span:hover {
+                color: var(--paper-grey-600);
+            }
+
+            div[slot='dropdown-trigger'] iron-icon {
+                color: var(--paper-grey-400);
+            }
+
+            div[slot='dropdown-trigger'] iron-icon:hover {
+                color: var(--paper-grey-600);
+            }
+        </style>
 
         <!-- Firebase Authentication Configuration -->
         <firebase-auth id="firebaseAuth" app-name="wrc_software" user="{{user}}"></firebase-auth>
 
-        <paper-button on-tap="updateUser">Update</paper-button>
+        <!-- Element UI -->
+        <app-drawer-layout fullbleed narrow="{{narrow}}" responsive-width="768px">
+            <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
+                <app-toolbar>
+                    <a href="[[rootPath]]main/athletes">
+                        <iron-image preload fade sizing="contain" src="../../images/app-images/wrc.png"></iron-image>
+                        <span main-title>WRC Software</span>
+                    </a>
+                </app-toolbar>
+                <div class="menu-container">
+                    <div class="user-wrapper">
+                        <div class="image-container">
+                            <iron-image preload fade sizing="contain" src="../../images/app-images/default_profile.png"></iron-image>                            
+                        </div>
+                        <paper-menu-button horizontal-align="right" vertical-align="top">
+                            <div class="user-display-name" slot="dropdown-trigger">
+                                <span>Luis P</span>
+                                <iron-icon icon="app-icons:arrow-drop-down"></iron-icon>
+                            </div>
+                            <paper-listbox slot="dropdown-content">
+                                <paper-item>Profile</paper-item>
+                                <paper-item>Settings</paper-item>
+                                <paper-item on-tap="logout">Sign out</paper-item>
+                            </paper-listbox>
+                        </paper-menu-button>
+                    </div>
+                </div>
+            </app-drawer>
+
+            <app-header-layout>
+                <app-header id="header" slot="header" fixed>
+                    <app-toolbar>
+                        <paper-icon-button icon="app-icons:menu" drawer-toggle></paper-icon-button>
+                    </app-toolbar>
+                    <div class="main-container">
+
+                    </div>
+                </app-header>
+            </app-header-layout>
+        </app-drawer-layout>
     </template>
 
     <script>
@@ -41,9 +216,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     return {
                         user: {
                             type: Object,
-                            notify: true
+                            notify: true,
+                            observer: '_userChanged'
                         }
                     };
+                }
+
+                /**
+                 * Observer for changes in user
+                 *
+                 * @param {Object} user signed in
+                 * @return {void}
+                */
+                _userChanged(user) {
+
+                }
+
+                logout() {
+                    this.$.firebaseAuth.signOut();
                 }
             }
             window.customElements.define(WrcMain.is, WrcMain);
