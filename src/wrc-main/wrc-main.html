@@ -1,0 +1,52 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+-->
+
+<!-- Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+
+<dom-module id="wrc-main">
+    <template>
+        <style></style>
+
+        <!-- Firebase Authentication Configuration -->
+        <firebase-auth id="firebaseAuth" app-name="wrc_software" user="{{user}}"></firebase-auth>
+
+        <paper-button on-tap="updateUser">Update</paper-button>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            class WrcMain extends Polymer.Element {
+                /**
+                 * Element definition
+                 */
+                 static get is() {
+                    return 'wrc-main';
+                }
+
+                /**
+                 * Element properties
+                 */
+                static get properties() {
+                    return {
+                        user: {
+                            type: Object,
+                            notify: true
+                        }
+                    };
+                }
+            }
+            window.customElements.define(WrcMain.is, WrcMain);
+        })();
+    </script>
+</dom-module>

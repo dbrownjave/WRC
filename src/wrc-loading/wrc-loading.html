@@ -1,0 +1,67 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+-->
+
+<!-- Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<dom-module id="wrc-loading">
+  <template>
+        <style>
+            /* Wrapper Style */
+            .wrapper {
+                width: 100%;
+                background-color: #fff;
+
+                @apply --layout-fullbleed;
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            /* Image Style */
+            iron-image {
+                width: 144px;
+                height: 144px;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* Progress bar style */
+            paper-progress {
+                width: 144px;
+                margin: 12px 0 0 0;
+                padding: 0;
+                box-shadow: 0 0.8px 8px 0 rgba(91, 145, 253, 0.23);
+
+                --paper-progress-active-color: var(--azul-primary);
+            }
+        </style>
+
+        <div class="wrapper">
+            <iron-image preload fade sizing="contain" src="../../images/app-images/wrc.png"></iron-image>
+            <paper-progress indeterminate></paper-progress>
+        </div>
+    </template>
+
+  <script>
+    'use strict';
+
+    (function() {
+      class WrcLoading extends Polymer.Element {
+        // Element definition
+        static get is() {
+          return 'wrc-loading';
+        }
+      }
+      window.customElements.define(WrcLoading.is, WrcLoading);
+    })();
+  </script>
+</dom-module>

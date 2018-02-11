@@ -1,0 +1,186 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+-->
+
+<!-- Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<!-- Paper Progress -->
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+
+<!-- App Elements -->
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
+<!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+
+<!-- Suji Elements -->
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
+
+<!-- WRC Element -->
+<link rel="lazy-import" href="../wrc-login/wrc-login.html">
+<link rel="lazy-import" href="../wrc-main/wrc-main.html">
+<link rel="lazy-import" href="../wrc-loading/wrc-loading.html">
+
+<!-- WRC Dialogs -->
+<link rel="import" href="../wrc-login/recover-password-dialog.html">
+
+<dom-module id="wrc-app">
+    <template>
+        <style></style>
+
+        <!-- App Routing Configuration -->
+        <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
+        <app-route
+            route="{{route}}"
+            pattern="[[rootPath]]:page"
+            data="{{routeData}}"
+            tail="{{subroute}}"></app-route>
+
+        <!-- Firebase App Configuration -->
+        <firebase-app
+            name="wrc_software"
+            api-key="AIzaSyClKG12T8HwMcQZqMaArTrKVTeWwrAJxCE"
+            auth-domain="wrc-software-dev.firebaseapp.com"
+            database-url="https://wrc-software-dev.firebaseio.com"
+            storage-bucket="wrc-software-dev.appspot.com"
+            messaging-sender-id="128792901183"></firebase-app>
+
+        <!-- Firebase Auth Configuration -->
+        <firebase-auth
+            app-name="wrc_software"
+            user="{{user}}"
+            signed-in="{{signedIn}}"></firebase-auth>
+
+        <!-- Controls views -->
+        <iron-pages
+            role="main"
+            attr-for-selected="name"
+            selected="[[page]]"
+            fallback-selection="login">
+
+            <wrc-login name="login"></wrc-login>
+            <wrc-main name="main"></wrc-main>
+            <wrc-loading name="loading"></wrc-loading>
+            <!-- <wrc-main name="main" route="[[subroute]]"></wrc-main>
+            <wrc-loading name="loading"></wrc-loading> -->
+        </iron-pages>
+    </template>
+
+    <script>
+        (function () {
+            'use strict';
+
+            class WrcApp extends Polymer.Element {
+                /**
+                 * Element definition
+                */
+                static get is() {
+                    return 'wrc-app';
+                }
+
+                /**
+                 * Element properties
+                */
+                static get properties() {
+                    return {
+                        routeData: Object,
+                        subroute: String,
+                        rootPath: String,
+                        page: {
+                            type: String,
+                            reflectToAttribute: true,
+                            observer: '_pageChanged'
+                        },
+                        user: {
+                            type: Object,
+                            notify: true
+                        },
+                        signedIn: {
+                            type: Boolean,
+                            notify: true,
+                            reflectToAttribute: true,
+                            observer: '_signedInChanged'
+                        }
+                    };
+                }
+
+                /**
+                 * Element observers
+                 *
+                 * This functions observes for changes in the specific property that is receiving as parameter
+                */
+                static get observers() {
+                    return [
+                        '_routePageChanged(routeData.page)',
+                    ];
+                }
+
+                /**
+                 * Observes for changes in the route page
+                */
+                _routePageChanged(page) {
+                    var firebaseToken = localStorage.getItem(
+                            'firebase:authUser:AIzaSyClKG12T8HwMcQZqMaArTrKVTeWwrAJxCE:wrc_software') ?
+                        true : false;
+
+                    if (page === 'main' && !firebaseToken) {
+                        this.set('route.path', 'login');
+                    } else if (page === 'login' && firebaseToken) {
+                        this.set('route.path', 'main/athletes');
+                    }
+
+                    // If no page was found in the route data, page will be an empty string.
+                    // Default to 'login' in that case.
+                    this.page = page || 'login';
+                }
+
+                /**
+                 * Observes for changes in the property page
+                */
+                _pageChanged(page) {
+                    // Load page import on demand. Show 404 page if fails
+                    var resolvedPageUrl = this.resolveUrl('../wrc-' + page + '/wrc-' + page + '.html');
+                    Polymer.importHref(
+                        resolvedPageUrl,
+                        null,
+                        this._showPage404.bind(this),
+                        true);
+                }
+
+                _showPage404() {
+                    this.page = 'login';
+                }
+
+                /**
+                 * Observers signedIn property for changes and know if user is logged in but the status has not being updated
+                 *
+                 * @param {Boolean} signedIn knows if the user is signed in or out
+                 */
+                _signedInChanged(signedIn) {
+                    var firebaseToken = localStorage.getItem(
+                            'firebase:authUser:AIzaSyClKG12T8HwMcQZqMaArTrKVTeWwrAJxCE:wrc_software') ?
+                        true : false;
+
+                    if (!signedIn && !firebaseToken) {
+                        this.page = 'login';
+                        this.set('route.path', 'login');
+                    } else if (!signedIn && firebaseToken) {
+                        this.page = 'loading';
+                    } else if (signedIn && firebaseToken) {
+                        this.page = 'main';
+                    }
+                }
+            }
+            window.customElements.define(WrcApp.is, WrcApp);
+        })();
+    </script>
+</dom-module>
