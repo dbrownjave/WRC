@@ -391,6 +391,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // App Toast
                     this._appToast = document.getElementById('appToast');
+
+                    // Verify Email Password
+                    this._verifyEmailDialog = document.getElementById('verifyEmailDialog');
                 }
 
                 /**
@@ -437,9 +440,45 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _userChanged(user) {
                     if (user) {
+                        this._checkVerifiedStatus(user.emailVerified);
                         this.$.firebaseDocument.getStoredValue(user.uid + '/info')
                         .then(function(userInfo) {
                             this.userReady = true;
+                        }.bind(this));
+                    }
+                }
+
+                /**
+                 * Verifies if the user has verified its email and depending on that opens a modal
+                 *
+                 * @param {Boolean} verified status of the user account
+                 * @return {void}
+                */
+                _checkVerifiedStatus(verified) {
+                    if (verified) {
+                        return;
+                    } else {
+                        this._verifyEmailDialog.acceptedCallback = this._sendVerificationEmail.bind(this);
+                        this._verifyEmailDialog.opened = true;
+                    }
+                }
+
+                /**
+                 * Sends verification email to logged in user
+                 *
+                 * @param {Boolean} response from verification dialog
+                 * @return {void}
+                */
+                _sendVerificationEmail(response) {
+                    if (this.user) {
+                        this.user.sendEmailVerification()
+                        .then(function() {
+                            this._appToast.text = 'Please check your inbox email and follow the instructions received.';
+                            this._appToast.open();
+                        }.bind(this))
+                        .catch(function(err) {
+                            this._appToast.text = 'An error has ocurred trying to send the verification email. Please try again.';
+                            this._appToast.open();
                         }.bind(this));
                     }
                 }
@@ -490,7 +529,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _saveNewProfileInfo(userInfo) {
                     this.$.firebaseDocument.setStoredValue(this.user.uid + '/info', userInfo)
                     .catch(function(err) {
-                        this._appToast.text = 'An error has ocurred trying to saving your personal information. Please try again.';
+                        this._appToast.text = 'An error has ocurred trying to save your personal information. Please try again.';
                         this._appToast.open();
                     }.bind(this));
                     this.userInfo = userInfo;

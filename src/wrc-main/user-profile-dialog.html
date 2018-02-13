@@ -44,8 +44,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             /* Dialog Style */
             paper-dialog {
 				border-radius: 5px;
-                -webkit-box-shadow: var(--azul-shadow-elevation-1);
-				box-shadow: var(--azul-shadow-elevation-1);
+                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
 			}
 
             paper-dialog h2 {
@@ -215,10 +214,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /**
-                 * Resets the profile form
+                 * Resets the profile info
                 */
                 _resetForm() {
-                    // this.$.profileForm.reset();
+                    this.userInfo = null;
                 }
 
                 /**

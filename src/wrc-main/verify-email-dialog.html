@@ -1,0 +1,150 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+-->
+
+<!-- Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<!-- Suji Elements -->
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
+<link rel="import" href="../suji/lib/themes/azul/azul-dialog.html">
+
+<!-- Neon Elements -->
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+
+<!-- Fa Icons -->
+<link rel="import" href="../fa-icons.html">
+
+<dom-module id="verify-email-dialog">
+    <template>
+        <style>
+            /* Dialog Style */
+            paper-dialog {
+				border-radius: 5px;
+                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+			}
+
+            paper-dialog h2 {
+				color: var(--azul-text-title);
+				font-size: 1.6em;
+                text-align: center;
+                margin: 0 0 16px;
+			}
+
+            paper-dialog .buttons paper-button {
+				color: var(--azul-primary);
+                font-weight: 500;
+			}
+
+            div.legend {
+                @apply --layout-vertical;
+            }
+
+            div.legend iron-icon {
+                margin-bottom: 24px;
+                --iron-icon-width: 80px;
+                --iron-icon-height: 80px;
+                --iron-icon-fill-color: var(--paper-red-300);
+                --iron-icon-stroke-color: var(--paper-red-400);
+
+                @apply --layout-self-center;
+            }
+
+            div.legend p {
+                color: var(--azul-text-title);
+                font-weight: lighter;
+                font-size: 1.1em;
+            }
+
+            div.legend ul {
+                margin: 0;
+                padding: 0;
+                color: var(--azul-text-title);
+                font-weight: lighter;
+                font-size: 1em;
+                margin-left: 1.1em;
+            }
+
+            /* To keep dialog larger with large screens */
+			@media screen and (min-width: 600px) {
+				paper-dialog {
+					width: 610px;
+				}
+			}
+        </style>
+
+        <paper-dialog
+            opened="{{opened}}"
+            modal
+            entry-animation="scale-up-animation"
+            exit-animation="fade-out-animation">
+
+            <paper-dialog-scrollable>
+                <div class="legend">
+                    <iron-icon icon="fa-icons:exclamation-circle"></iron-icon>
+                    <h2>Your email is not verified</h2>
+                    <p>
+                        In order to use WRC Software please follow the next instructions:
+                    </p>
+                    <ul>
+                        <li>Press <strong>VERIFY</strong> to receive the verification link.</li>
+                        <li>Check your email inbox and follow the instructions received.</li>
+                        <li>Once you have verified your email refresh to use WRC Software normally.</li>
+                    </ul>
+                </div>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button on-tap="_triggerAcceptedCallback">Verify</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            class VerifyEmailDialog extends Polymer.Element {
+                /**
+                 * Element definition
+                 */
+                 static get is() {
+                    return 'verify-email-dialog';
+                }
+
+                /**
+                 * Element properties
+                 */
+                static get properties() {
+                    return {
+                        acceptedCallback: Function,
+                        opened: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        }
+                    };
+                }
+
+                /**
+                 * Triggers the acceptedCallback to send verification email
+                */
+                _triggerAcceptedCallback() {
+                    this.acceptedCallback(true);
+                }
+            }
+            window.customElements.define(VerifyEmailDialog.is, VerifyEmailDialog);
+        })();
+    </script>
+</dom-module>
