@@ -1,0 +1,31 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+-->
+
+<!-- Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="wrc-coaches">
+    <template>
+        <style></style>
+
+        <h1>Coaches</h1>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            class WrcCoaches extends Polymer.Element {
+                 /**
+                 * Element definition
+                 */
+                 static get is() {
+                    return 'wrc-coaches';
+                }
+            }
+            window.customElements.define(WrcCoaches.is, WrcCoaches);
+        })();
+    </script>
+</dom-module>

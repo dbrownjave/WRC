@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="220px" height="380px" viewBox="0 0 220 380" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>weight icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-152.000000, -40.000000)">
+        <g id="weight-icon" transform="translate(152.000000, 40.000000)" fill="#FFFFFF">
+            <g id="weight-calc-icon">
+                <path d="M31.68,0 L188.32,3.55271368e-15 C205.816381,3.38680654e-16 220,14.1836191 220,31.68 L220,348.32 C220,365.816381 205.816381,380 188.32,380 L31.68,380 C14.1836191,380 5.69540236e-15,365.816381 3.55271368e-15,348.32 L-3.55271368e-15,31.68 C-5.69540236e-15,14.1836191 14.1836191,1.03194604e-14 31.68,7.10542736e-15 Z M25.3846154,44.1860465 L25.3846154,335.813953 L194.615385,335.813953 L194.615385,44.1860465 L25.3846154,44.1860465 Z" id="Combined-Shape"></path>
+            </g>
+            <g id="weight" transform="translate(52.800000, 159.069767)">
+                <g id="Group-2" transform="translate(9.152000, 0.000000)">
+                    <rect id="Rectangle-4" x="0" y="9.47293447" width="13.728" height="42.6282051" rx="4.460544"></rect>
+                    <rect id="Rectangle-4" x="9.152" y="0" width="13.728" height="61.5740741" rx="4.460544"></rect>
+                </g>
+                <g id="Group-2" transform="translate(89.232000, 30.787037) scale(-1, 1) translate(-89.232000, -30.787037) translate(77.792000, 0.000000)">
+                    <rect id="Rectangle-4" x="0" y="9.47293447" width="13.728" height="42.6282051" rx="4.460544"></rect>
+                    <rect id="Rectangle-4" x="9.152" y="0" width="13.728" height="61.5740741" rx="4.460544"></rect>
+                </g>
+                <rect id="Rectangle-3" x="0" y="23.6823362" width="109.824" height="14.2094017" rx="1.33816325"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

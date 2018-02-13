@@ -32,6 +32,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <!-- WRC Dialogs -->
 <link rel="import" href="../wrc-login/recover-password-dialog.html">
+<link rel="import" href="../wrc-main/user-profile-dialog.html">
 
 <dom-module id="wrc-app">
     <template>
@@ -68,7 +69,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             fallback-selection="login">
 
             <wrc-login name="login"></wrc-login>
-            <wrc-main name="main"></wrc-main>
+            <wrc-main name="main" route="[[subroute]]"></wrc-main>
             <wrc-loading name="loading"></wrc-loading>
             <!-- <wrc-main name="main" route="[[subroute]]"></wrc-main>
             <wrc-loading name="loading"></wrc-loading> -->
@@ -135,7 +136,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     if (page === 'main' && !firebaseToken) {
                         this.set('route.path', 'login');
                     } else if (page === 'login' && firebaseToken) {
-                        this.set('route.path', 'main/athletes');
+                        this.set('route.path', 'main');
                     }
 
                     // If no page was found in the route data, page will be an empty string.

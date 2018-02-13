@@ -31,7 +31,11 @@
     "paper-menu-button": "PolymerElements/paper-menu-button#^2.0.0",
     "paper-listbox": "PolymerElements/paper-listbox#^2.0.0",
     "iron-icon": "PolymerElements/iron-icon#^2.0.1",
-    "paper-item": "PolymerElements/paper-item#^2.0.0"
+    "paper-item": "PolymerElements/paper-item#^2.0.0",
+    "paper-spinner": "PolymerElements/paper-spinner#^2.0.0",
+    "paper-dialog-scrollable": "PolymerElements/paper-dialog-scrollable#^2.1.0",
+    "vaadin-combo-box": "vaadin/vaadin-combo-box#^3.0.3",
+    "paper-tooltip": "PolymerElements/paper-tooltip#^2.0.1"
   },
   "resolutions": {
     "polymer": "^2.0.0"

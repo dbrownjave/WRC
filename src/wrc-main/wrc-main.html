@@ -21,22 +21,30 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 
 <!-- Iron Elements -->
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <!-- Polymerfire Elements -->
 <link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 
 <!-- Suji Elements -->
 <link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
 <link rel="import" href="../suji/lib/colors/suji-color-palette.html">
 
-<!-- App Polymer Icon -->
+<!-- Icons -->
 <link rel="import" href="../app-icons.html">
+<link rel="import" href="../fa-icons.html">
+
+<!-- WRC Elements -->
+<link rel="lazy-import" href="../wrc-coaches/wrc-coaches.html">
 
 <dom-module id="wrc-main">
     <template>
@@ -52,6 +60,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				text-transform: none;
 				text-decoration: none;
 			}
+
+            paper-spinner {
+                --paper-spinner-layer-1-color: var(--azul-primary);
+                --paper-spinner-layer-2-color: var(--azul-primary);
+                --paper-spinner-layer-3-color: var(--azul-primary);
+                --paper-spinner-layer-4-color: var(--azul-primary);
+            }
+
+            div.user-status {
+                margin: 1em 0;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            paper-menu-button paper-item:hover {
+                cursor: pointer;
+            }
 
             /* App Drawer Style */
 			app-drawer-layout:not([narrow]) [drawer-toggle] {
@@ -124,6 +150,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 height: 120px;
                 border-radius: 300em;
                 background-color: var(--azul-background);
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
             }
 
             .user-wrapper div.image-container iron-image {
@@ -150,10 +177,71 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             div[slot='dropdown-trigger'] iron-icon:hover {
                 color: var(--paper-grey-600);
             }
+
+            /* Drawer Menu Style */
+			.drawer-list {
+				margin: 0 20px;
+			}
+
+			.drawer-list a {
+				display: block;
+				padding: 12px 20px;
+				margin-left: 5%;
+				text-decoration: none;
+				color: var(--paper-grey-700);
+				@apply --layout-horizontal;
+				@apply --layout-center;
+			}
+
+			.drawer-list a iron-icon {
+				width: 22px;
+				height: 22px;
+				margin-right: 18px;
+				color: var(--azul-icon);
+			}
+
+			.drawer-list a span {
+				font-size: 1em;
+				font-weight: lighter;
+			}
+
+			.drawer-list a:hover {
+				width: 75%;
+				border-radius: 2px;
+				background-color: var(--paper-grey-100);
+				cursor: pointer;
+			}
+
+			.drawer-list a.iron-selected {
+				color: white;
+				margin-left: 4.5%;
+				width: 75%;
+				background-color: var(--azul-primary);
+				border-radius: 2px;
+				box-shadow: 0 3.5px 12.5px 0 rgba(45, 152, 255, 0.4);
+			}
+
+			.drawer-list a.iron-selected iron-icon {
+				color: white;
+			}
         </style>
+
+        <!-- Routing configuration -->
+        <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
+        <app-route route="{{route}}" pattern="[[rootPath]]main/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
         <!-- Firebase Authentication Configuration -->
         <firebase-auth id="firebaseAuth" app-name="wrc_software" user="{{user}}"></firebase-auth>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document id="firebaseDocument" app-name="wrc_software" path="[[user.uid]]/info" data="{{userInfo}}"></firebase-document>
+
+        <!-- Firebase Query to get user information -->
+        <firebase-query
+            id="userQuery"
+            app-name="wrc_software"
+            path="[[user.uid]]/info"
+            data="{{userInfoForDisplay}}"></firebase-query>
 
         <!-- Element UI -->
         <app-drawer-layout fullbleed narrow="{{narrow}}" responsive-width="768px">
@@ -165,22 +253,44 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     </a>
                 </app-toolbar>
                 <div class="menu-container">
-                    <div class="user-wrapper">
-                        <div class="image-container">
-                            <iron-image preload fade sizing="contain" src="../../images/app-images/default_profile.png"></iron-image>                            
+                    <!-- User Profile -->
+                    <template is="dom-if" if="[[!userReady]]">
+                        <div class="user-status">
+                            <paper-spinner active></paper-spinner>
                         </div>
-                        <paper-menu-button horizontal-align="right" vertical-align="top">
-                            <div class="user-display-name" slot="dropdown-trigger">
-                                <span>Luis P</span>
-                                <iron-icon icon="app-icons:arrow-drop-down"></iron-icon>
+                    </template>
+                    <template is="dom-if" if="[[userReady]]" restamp>
+                        <div class="user-wrapper">
+                            <div class="image-container">
+                                <iron-image preload fade sizing="contain" src="[[userInfoForDisplay.6.$val]]"></iron-image>                            
                             </div>
-                            <paper-listbox slot="dropdown-content">
-                                <paper-item>Profile</paper-item>
-                                <paper-item>Settings</paper-item>
-                                <paper-item on-tap="logout">Sign out</paper-item>
-                            </paper-listbox>
-                        </paper-menu-button>
-                    </div>
+                            <paper-menu-button horizontal-align="right" vertical-align="top" opened="{{openedMenu}}">
+                                <div class="user-display-name" slot="dropdown-trigger">
+                                    <span>[[userInfoForDisplay.1.$val]] [[userInfoForDisplay.2.$val]]</span>
+                                    <iron-icon icon="app-icons:arrow-drop-[[_computeArrowIcon(openedMenu)]]"></iron-icon>
+                                </div>
+                                <paper-listbox slot="dropdown-content" selected="{{selectedUserOption}}">
+                                    <paper-item on-tap="_openUserProfileDialog">Profile</paper-item>
+                                    <paper-item>Settings</paper-item>
+                                    <paper-item on-tap="logout">Sign out</paper-item>
+                                </paper-listbox>
+                            </paper-menu-button>
+                        </div>
+
+                        <!-- Menu for admin -->
+                        <template is="dom-if" if="[[_computeMenuForAdmin(userInfoForDisplay.7.$val)]]">
+                            <iron-selector class="drawer-list" selected="[[page]]" attr-for-selected="name" role="navigation">
+                                <a name="coaches" href="[[rootPath]]main/coaches">
+                                    <iron-icon icon="fa-icons:user"></iron-icon>
+                                    <span>Coaches</span>
+                                </a>
+                                <a name="library" href="[[rootPath]]main/library">
+                                    <iron-icon icon="fa-icons:video"></iron-icon>
+                                    <span>Library</span>
+                                </a>
+                            </iron-selector>
+                        </template>
+                    </template>
                 </div>
             </app-drawer>
 
@@ -188,9 +298,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 <app-header id="header" slot="header" fixed>
                     <app-toolbar>
                         <paper-icon-button icon="app-icons:menu" drawer-toggle></paper-icon-button>
+                        <div main-title>[[mainTitle]]</div>
+						<span main-title></span>
+						<paper-icon-button class="max-calc-btn" src="../../icons/library/calculator.svg" on-tap="openMaxCalculatorDialog"></paper-icon-button>
                     </app-toolbar>
                     <div class="main-container">
-
+                        <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" role="main" fallback-selection="404">
+                            <wrc-coaches name="coaches"></wrc-coaches>
+                        </iron-pages>
                     </div>
                 </app-header>
             </app-header-layout>
@@ -214,13 +329,105 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 static get properties() {
                     return {
+                        routeData: Object,
+						subroute: String,
+						rootPath: String,
+						route: String,
+						page: {
+							type: String,
+							notify: true,
+							reflectToAttribute: true,
+							observer: '_pageChanged'
+						},
+						mainTitle: {
+							type: String,
+							notify: true,
+							value: 'Athletes'
+						},
+                        userReady: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
                         user: {
                             type: Object,
                             notify: true,
                             observer: '_userChanged'
+                        },
+                        userInfo: {
+                            type: Object,
+                            notify: true,
+                            reflectToAttribute: true
                         }
                     };
                 }
+
+                /**
+                 * Element observers
+                 *
+                 * This functions observes for changes in the specific property that is receiving as parameter
+                */
+                static get observers() {
+					return [
+						'_routePageChanged(routeData.page)',
+                        'asd(userInfoFromQuery)'
+					];
+				}
+
+                asd(a) {
+                    if (a) {
+                        console.log(a);
+                    }
+                }
+
+                ready() {
+                    super.ready();
+
+                    // User Profile Dialog
+                    this._userProfileDialog = document.getElementById('userProfileDialog');
+
+                    // App Progress Bar
+                    this._appProgressBar = document.getElementById('appProgressBar');
+
+                    // App Toast
+                    this._appToast = document.getElementById('appToast');
+                }
+
+                /**
+                 * Observes for changes in the route page
+                */
+                _routePageChanged(page) {
+					this.page = page || 'coaches';
+					if (!this.$.drawer.persistent) {
+						this.$.drawer.close();
+					}
+					switch (page) {
+						case 'coaches':
+							this.mainTitle = 'Coaches';
+							break;
+						case 'athletes':
+							this.mainTitle = 'Athletes';
+							break;
+						default:
+							break;
+					}
+				}
+
+                /**
+                 * Observes for changes in the property page
+                */
+				_pageChanged(page) {
+					var resolvedPageUrl = this.resolveUrl('../wrc-' + page + '/wrc-' + page + '.html');
+					Polymer.importHref(
+						resolvedPageUrl,
+						null,
+						this._showPage404.bind(this),
+						true);
+				}
+
+                _showPage404() {
+					this.page = '404';
+				}
 
                 /**
                  * Observer for changes in user
@@ -229,11 +436,69 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @return {void}
                 */
                 _userChanged(user) {
-
+                    if (user) {
+                        this.$.firebaseDocument.getStoredValue(user.uid + '/info')
+                        .then(function(userInfo) {
+                            this.userReady = true;
+                        }.bind(this));
+                    }
                 }
 
+                /**
+                 * Signs the user out
+                */
                 logout() {
                     this.$.firebaseAuth.signOut();
+                }
+
+                /**
+                 * Determines if the arrow should be up or down
+                 *
+                 * @param {Boolean} opened condition of the menu
+                 * @return {String} up if opened, otherwise down
+                */
+                _computeArrowIcon(opened) {
+                    return (opened) ? 'up' : 'down';
+                }
+
+                /**
+                 * Shows admin menu
+                 *
+                 * @param {String} role of the user
+                 * @return {Boolean} true if role is admin, otherwise false
+                */
+                _computeMenuForAdmin(role) {
+                    return (role === 'admin') ? true : false;
+                }
+                
+                /**
+                 * Opens the user profile dialog
+                */
+                _openUserProfileDialog() {
+                    this.selectedUserOption = null;
+                    this._userProfileDialog.acceptedCallback = this._saveNewProfileInfo.bind(this);
+                    this._userProfileDialog.userInfo = this.userInfo;
+                    this._userProfileDialog.opened = true;
+                }
+
+                /**
+                 * Receives form data from user-profile-dialog
+                 *
+                 * @param {Object} userInfo from dialog's form
+                 * @return {void}
+                */
+                _saveNewProfileInfo(userInfo) {
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/info', userInfo)
+                    .catch(function(err) {
+                        this._appToast.text = 'An error has ocurred trying to saving your personal information. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
+                    this.userInfo = userInfo;
+                    this._appProgressBar.hidden = true;
+                    this._userProfileDialog.opened = false;
+                    this._appToast.text = 'You personal information has been saved successfully.';
+                    this._appToast.open();
+                    this._userProfileDialog._resetForm();
                 }
             }
             window.customElements.define(WrcMain.is, WrcMain);

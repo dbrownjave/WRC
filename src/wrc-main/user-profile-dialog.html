@@ -1,0 +1,237 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+-->
+
+<!-- Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<!-- Vaadin Elements -->
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+
+<!-- Suji Elements -->
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
+<link rel="import" href="../suji/lib/themes/azul/azul-dialog.html">
+
+<!-- Neon Elements -->
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+
+<dom-module id="user-profile-dialog">
+    <template>
+        <style>
+            /* General Style */
+            [flex] {
+                @apply --layout-flex;
+            }
+
+            /* Dialog Style */
+            paper-dialog {
+				border-radius: 5px;
+                -webkit-box-shadow: var(--azul-shadow-elevation-1);
+				box-shadow: var(--azul-shadow-elevation-1);
+			}
+
+            paper-dialog h2 {
+				color: var(--azul-text-title);
+				font-size: 1.6em;
+			}
+
+            paper-dialog .buttons paper-button {
+				color: var(--azul-primary);
+                font-weight: 500;
+			}
+
+			paper-dialog .buttons paper-button.cancel-button {
+				color: var(--azul-primary-text);
+                font-weight: normal;
+			}
+
+            /* Profile Pic Uploader */
+			[type='file'] {
+				display: none;
+			}
+
+			div.picture-wrapper {
+				width: 100%;
+                margin-bottom: 24px;
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			div.picture-wrapper label {
+				margin-bottom: 12px;
+				background-color: #F3F4F5;
+				overflow: hidden;
+				border-radius: 10em;
+				width: 150px;
+				height: 150px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			div.picture-wrapper label:hover {
+				background-color: var(--paper-grey-300);
+			}
+
+			label iron-image {
+				width: inherit;
+				height: inherit;
+				cursor: pointer;
+			}
+
+            div.picture-wrapper p {
+                font-size: 1.1em;
+                font-weight: normal;
+                color: var(--azul-text-title);
+                margin: 0.5em 0 0;
+            }
+
+            /* To keep dialog larger with large screens */
+			@media screen and (min-width: 600px) {
+				paper-dialog {
+					width: 610px;
+				}
+			}
+
+			[hidden] {
+				display: none;
+			}
+        </style>
+
+        <paper-dialog
+            opened="{{opened}}"
+            with-backdrop
+            entry-animation="scale-up-animation"
+            exit-animation="fade-out-animation">
+
+            <h2>[[userInfo.first]] [[userInfo.last]]</h2>
+            <paper-dialog-scrollable>
+                <div class="picture-wrapper">
+                    <input type="file" name="profile_pic" id="profilePicture">
+                    <label for="profilePicture">
+                        <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
+                        <iron-image preload fade sizing="contain" src="[[userInfo.profile_pic_url]]"></iron-image>
+                    </label>
+                    <p>[[userInfo.email]]</p>
+                </div>
+                
+                <iron-form id="profileForm">
+                    <form>
+                        <vaadin-form-layout>
+                            <vaadin-text-field
+                                label="First Name"
+                                name="first"
+                                type="text"
+                                required
+                                error-message="Enter your name"
+                                value="{{userInfo.first}}"></vaadin-text-field>
+                            <vaadin-text-field
+                                label="Last Name"
+                                name="last"
+                                type="text"
+                                required
+                                error-message="Enter your last name"
+                                value="{{userInfo.last}}"></vaadin-text-field>
+                            <vaadin-text-field
+                                label="Phone"
+                                name="phone"
+                                type="text"
+                                required
+                                error-message="Enter your phone number"
+                                value="{{userInfo.phone}}"></vaadin-text-field>
+                            <vaadin-text-field
+                                label="Position"
+                                name="position"
+                                type="text"
+                                required
+                                error-message="Enter your business position"
+                                value="{{userInfo.position}}"></vaadin-text-field>
+                        </vaadin-form-layout>
+                    </form>
+                </iron-form>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button class="cancel-button" dialog-dismiss on-tap="_resetForm">Cancel</paper-button>
+                <paper-button on-tap="_serializeForm">Save</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            class UserProfileDialog extends Polymer.Element {
+                /**
+                 * Element definition
+                 */
+                 static get is() {
+                    return 'user-profile-dialog';
+                }
+
+                /**
+                 * Element properties
+                 */
+                static get properties() {
+                    return {
+                        acceptedCallback: Function,
+                        opened: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
+                        userInfo: {
+                            type: Object,
+                            notify: true
+                        }
+                    };
+                }
+
+                ready() {
+                    super.ready();
+
+                    // App Progress Bar
+                    this._appProgressBar = document.getElementById('appProgressBar');
+                }
+
+                /**
+                 * Resets the profile form
+                */
+                _resetForm() {
+                    // this.$.profileForm.reset();
+                }
+
+                /**
+                 * Serializes form data and send it to be saved trought userInfo
+                */
+                _serializeForm() {
+                    if (this.$.profileForm.validate()) {
+                        this._appProgressBar.hidden = false;
+                        this.acceptedCallback(this.userInfo);
+                    }
+                }
+            }
+            window.customElements.define(UserProfileDialog.is, UserProfileDialog);
+        })();
+    </script>
+</dom-module>
