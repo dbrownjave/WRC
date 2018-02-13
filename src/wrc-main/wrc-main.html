@@ -224,6 +224,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			.drawer-list a.iron-selected iron-icon {
 				color: white;
 			}
+
+            [hidden] {
+                display: none;
+            }
         </style>
 
         <!-- Routing configuration -->
@@ -303,7 +307,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						<paper-icon-button class="max-calc-btn" src="../../icons/library/calculator.svg" on-tap="openMaxCalculatorDialog"></paper-icon-button>
                     </app-toolbar>
                     <div class="main-container">
-                        <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" role="main" fallback-selection="404">
+                        <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" role="main" fallback-selection="404" hidden="[[!userReady]]">
                             <wrc-coaches name="coaches"></wrc-coaches>
                         </iron-pages>
                     </div>
