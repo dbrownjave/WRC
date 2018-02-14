@@ -247,6 +247,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             path="[[user.uid]]/info"
             data="{{userInfoForDisplay}}"></firebase-query>
 
+        <!-- Coaches Query -->
+        <firebase-query
+            app-name="wrc_software"
+            path="[[user.uid]]/coaches"
+            data="{{coachesData}}"></firebase-query>
+
         <!-- Element UI -->
         <app-drawer-layout fullbleed narrow="{{narrow}}" responsive-width="768px">
             <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
@@ -285,8 +291,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         <template is="dom-if" if="[[_computeMenuForAdmin(userInfoForDisplay.7.$val)]]">
                             <iron-selector class="drawer-list" selected="[[page]]" attr-for-selected="name" role="navigation">
                                 <a name="coaches" href="[[rootPath]]main/coaches">
-                                    <iron-icon icon="fa-icons:user"></iron-icon>
+                                    <iron-icon icon="app-icons:person"></iron-icon>
                                     <span>Coaches</span>
+                                </a>
+                                <a name="teams" href="[[rootPath]]main/teams">
+                                    <iron-icon icon="app-icons:people"></iron-icon>
+                                    <span>Teams</span>
                                 </a>
                                 <a name="library" href="[[rootPath]]main/library">
                                     <iron-icon icon="fa-icons:video"></iron-icon>
@@ -308,7 +318,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     </app-toolbar>
                     <div class="main-container">
                         <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" role="main" fallback-selection="404" hidden="[[!userReady]]">
-                            <wrc-coaches name="coaches"></wrc-coaches>
+                            <wrc-coaches name="coaches" user="[[user]]" coaches-data="[[coachesData]]"></wrc-coaches>
                         </iron-pages>
                     </div>
                 </app-header>

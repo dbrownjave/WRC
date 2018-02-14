@@ -1,0 +1,311 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+-->
+
+<!-- Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<!-- Vaadin Elements -->
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+
+<!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-storage-ref.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-storage-multiupload.html">
+
+<!-- Suji Elements -->
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
+<link rel="import" href="../suji/lib/themes/azul/azul-dialog.html">
+
+<!-- Neon Elements -->
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+
+<dom-module id="coaches-dialog">
+    <template>
+        <style>
+            /* Dialog */
+            paper-dialog {
+				border-radius: 5px;
+                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+			}
+
+            paper-dialog h2 {
+				color: var(--azul-text-title);
+				font-size: 1.6em;
+			}
+
+			paper-dialog div p {
+				font-weight: lighter;
+				line-height: 1em;
+			}
+
+			paper-dialog div.buttons {
+				@apply --layout-horizontal;
+				@apply --layout-end-justified;
+			}
+
+			paper-dialog .buttons paper-button {
+				color: var(--azul-primary);
+                font-weight: 500;
+			}
+
+			paper-dialog .buttons paper-button.cancel-button {
+				color: var(--paper-grey-700);
+                font-weight: normal;
+			}
+
+			paper-dialog .buttons paper-button.delete-button {
+				color: var(--paper-red-400);
+                font-weight: normal;
+			}
+
+            /* Profile Pic Uploader */
+			[type='file'] {
+				display: none;
+			}
+
+			div.picture-wrapper {
+				width: 100%;
+                margin-bottom: 24px;
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			div.picture-wrapper label {
+				margin-bottom: 12px;
+				background-color: #F3F4F5;
+				overflow: hidden;
+				border-radius: 10em;
+				width: 150px;
+				height: 150px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			div.picture-wrapper label:hover {
+				background-color: var(--paper-grey-300);
+			}
+
+			label iron-image {
+				width: inherit;
+				height: inherit;
+				cursor: pointer;
+			}
+
+            div.picture-wrapper p {
+                font-size: 1.1em;
+                font-weight: normal;
+                color: var(--azul-text-title);
+                margin: 0.5em 0 0;
+            }
+
+            /* To keep dialog larger with large screens */
+			@media screen and (min-width: 600px) {
+				paper-dialog {
+					width: 610px;
+				}
+			}
+
+			[hidden] {
+				display: none;
+			}
+        </style>
+
+        <!-- Firebase Storage Configuration -->
+        <firebase-storage-ref
+            id="storageRef"
+            app-name="wrc_software"></firebase-storage-ref>
+
+        <firebase-storage-multiupload
+            id="firebaseStorage"
+            app-name="wrc_software"
+            path="[[user.uid]]/profile-pics"></firebase-storage-multiupload>
+
+        <paper-dialog
+            opened="{{opened}}"
+            with-backdrop
+            entry-animation="scale-up-animation"
+            exit-animation="fade-out-animation">
+
+            <h2>New Coach</h2>
+            <paper-dialog-scrollable>
+                <div class="picture-wrapper">
+                    <input type="file" name="profile_pic" id="profilePicture">
+                    <label for="profilePicture">
+                        <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
+                        <iron-image id="profileImage" preload fade sizing="contain" src="[[_computeImgSrc(action)]]"></iron-image>
+                    </label>
+                </div>
+                <iron-form id="coachForm">
+                    <form>
+                        <vaadin-form-layout>
+                            <vaadin-text-field
+                                colspan="2"
+                                label="Username"
+                                placeholder="coach@domain.com"
+                                name="email"
+                                type="email"
+                                required
+                                error-message="Enter the username"
+                                value="{{coachInfo.email}}"></vaadin-text-field>
+                            <vaadin-text-field
+                                label="First Name"
+                                name="first"
+                                required
+                                error-message="This field is required"
+                                value="{{coachInfo.first}}"></vaadin-text-field>
+                            <vaadin-text-field
+                                label="Last Name"
+                                name="last"
+                                required
+                                error-message="This field is required"
+                                value="{{coachInfo.last}}"></vaadin-text-field>
+                            <vaadin-combo-box
+                                id="teams"
+                                label="Team"
+                                name="team"
+                                placeholder="Select a team"
+                                required
+                                error-message="Select a team"
+                                value="{{coachInfo.team}}"></vaadin-combo-box>
+                            <vaadin-text-field
+                                label="Phone"
+                                name="phone"
+                                value="{{coachInfo.phone}}"></vaadin-text-field>
+                        </vaadin-form-layout>
+                    </form>
+                </iron-form>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button dialog-dismiss class="cancel-button">Cancel</paper-button>
+                <paper-button on-tap="_serializeForm">Save</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            class CoachesDialog extends Polymer.Element {
+                /**
+                 * Element definition
+                */
+                static get is() { return 'coaches-dialog'; }
+
+                /**
+                 * Element properties
+                */
+                static get properties() {
+                    return {
+                        acceptedCallback: Function,
+                        opened: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
+                        user: {
+                            type: Object,
+                            notify: true
+                        },
+                        coachInfo: {
+                            type: Object,
+                            notify: true,
+                            value: {
+                                email: '',
+                                first: '',
+                                last: '',
+                                phone: '',
+                                profile_pic_name: '',
+                                profile_pic_url: '',
+                                role: 'coach',
+                                team: ''
+                            }
+                        }
+                    };
+                }
+
+                ready() {
+                    super.ready();
+
+                    this.$.teams.items = ['Yes', 'No'];
+
+                    // App Progress Bar
+					this._appProgressBar = document.getElementById('appProgressBar');
+
+                    const fileUpload = this.$.profilePicture;
+					fileUpload.addEventListener('change', function(e) {
+                        this._createImgPreview(e.target.files[0]);
+                    }.bind(this));
+                }
+
+                /**
+                 * Computes the source for the profile image
+                 *
+                 * @param {String} action that is executing the user
+                 * @return {String} the source for the image
+                */
+                _computeImgSrc(action) {
+                    if (action === 'add') {
+                        return '../../images/app-images/default_profile.png';
+                    }
+                }
+
+                /**
+                 * Serializes the data from form and save selected profile image
+                */
+                _serializeForm() {
+                    if (this.$.coachForm.validate()) {
+                        this._appProgressBar.hidden = false;
+
+						if (this.$.profilePicture.files[0]) {
+							this.$.firebaseStorage.put(this.$.profilePicture.files[0])
+								.then(function () {
+									this.$.storageRef.getDownloadURL(this.user.uid + '/profile-pics/' + this.$.profilePicture.files[0]
+											.name)
+										.then(function (url) {
+											this.coachInfo.profile_pic_url = url;
+											this.coachInfo.profile_pic_name = this.$.profilePicture.files[0].name;
+											this.acceptedCallback(this.coachInfo);
+										}.bind(this));
+								}.bind(this));
+						} else {
+							this.acceptedCallback(this.coachInfo);
+						}
+                    }
+                }
+
+                /**
+                 * Creates image preview for profile picture
+                 *
+                 * @param {String} image select by user
+                 * @return {void}
+                */
+                _createImgPreview(image) {
+                    this.$.profileImage.src = URL.createObjectURL(image);
+                }
+            }
+            window.customElements.define(CoachesDialog.is, CoachesDialog);
+        })();
+    </script>
+</dom-module>

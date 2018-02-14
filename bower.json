@@ -35,7 +35,8 @@
     "paper-spinner": "PolymerElements/paper-spinner#^2.0.0",
     "paper-dialog-scrollable": "PolymerElements/paper-dialog-scrollable#^2.1.0",
     "vaadin-combo-box": "vaadin/vaadin-combo-box#^3.0.3",
-    "paper-tooltip": "PolymerElements/paper-tooltip#^2.0.1"
+    "paper-tooltip": "PolymerElements/paper-tooltip#^2.0.1",
+    "paper-fab": "PolymerElements/paper-fab#^2.0.0"
   },
   "resolutions": {
     "polymer": "^2.0.0"

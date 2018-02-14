@@ -6,11 +6,151 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Polymer -->
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+
+<!-- Suji Elements -->
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
+
+<!-- Icons -->
+<link rel="import" href="../app-icons.html">
+<link rel="import" href="../fa-icons.html">
+
 <dom-module id="wrc-coaches">
     <template>
-        <style></style>
+        <style>
+            /* General Style */
+            main {
+                padding: 2em 3em;
+                height: calc(100vh - (64px + 4em));
+                min-height: calc(100vh - (64px + 4em));
 
-        <h1>Coaches</h1>
+                @apply --layout-vertical;
+                @apply --layout-center;
+            }
+
+            paper-spinner {
+                --paper-spinner-layer-1-color: var(--azul-primary);
+                --paper-spinner-layer-2-color: var(--azul-primary);
+                --paper-spinner-layer-3-color: var(--azul-primary);
+                --paper-spinner-layer-4-color: var(--azul-primary);
+            }
+
+            [flex] {
+                @apply --layout-flex;
+            }
+
+            /* Empty Message */
+            .empty-message {
+                width: 100%;
+                height: inherit;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .empty-message .icon-container {
+                border-radius: 300em;
+                width: 200px;
+                height: 200px;
+                background-color: var(--azul-text-title);
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .icon-container iron-icon {
+                color: #fff;
+                width: 90px;
+                height: 90px;
+            }
+
+            .empty-message p {
+                margin-top: 24px;
+                text-align: center;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .empty-message p strong {
+                font-size: 1.2em;
+                font-weight: bold;
+                color: var(--azul-text-title);
+                margin-bottom: 15px;
+                text-align: center;
+            }
+
+            .empty-message p span {
+                font-size: 1em;
+                font-weight: lighter;
+                color: var(--paper-grey-600);
+                margin-bottom: 24px;
+                text-align: center;
+            }
+
+            .empty-message p paper-button {
+                margin: 0;
+                color: #fff;
+                background-color: var(--azul-primary);
+            }
+
+            /* Fab */
+            paper-fab {
+                position: fixed;
+                bottom: 2em;
+                right: 2em;
+
+                --paper-fab-background: var(--azul-primary);
+                --paper-fab-keyboard-focus-background: var(--azul-primary);
+            }
+
+            [hidden] {
+                display: none;
+            }
+        </style>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document
+            id="firebaseDocument"
+            app-name="wrc_software"></firebase-document>
+
+        <!-- Element UI -->
+        <main>
+            <template is="dom-if" if="[[!userReady]]">
+                <paper-spinner active></paper-spinner>
+            </template>
+
+            <!-- Empty Teams Message -->
+            <div class="empty-message" hidden$="[[!_computeVisibleEmptyMessage(coachesData.length, userReady)]]">
+                <div class="icon-container">
+                    <iron-icon icon="app-icons:person"></iron-icon>
+                </div>
+                <p>
+                    <strong>You don't have coaches</strong>
+                    <span>Add a coach and it will show up here</span>
+                    <paper-button raised on-tap="_openToAdd">Add Coach</paper-button>
+                </p>
+            </div>
+
+            <!-- Teams Wrapper -->
+            <div class="coaches-wrapper" hidden$="[[!_computeVisibleData(coachesData.length, userReady)]]">
+
+            </div>
+
+            <!-- Paper Fab to add new Team -->
+            <!-- <paper-fab icon="app-icons:add" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(coachesData.length, userReady)]]"></paper-fab> -->
+        </main>
     </template>
 
     <script>
@@ -23,6 +163,114 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                  static get is() {
                     return 'wrc-coaches';
+                }
+
+                /**
+                 * Element properties
+                */
+                static get properties() {
+                    return {
+                        userReady: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
+                        user: {
+                            type: Object,
+                            notify: true,
+                            observer: '_userChanged'
+                        },
+                        coachesData: {
+                            type: Object,
+                            notify: true
+                        }
+                    };
+                }
+
+                ready() {
+                    super.ready();
+
+                    // Coaches Dialog
+                    this._coachesDialog = document.getElementById('coachesDialog');
+
+                    // App Progress Bar
+                    this._appProgressBar = document.getElementById('appProgressBar');
+
+                    // App Toast
+                    this._appToast = document.getElementById('appToast');
+                }
+
+                /**
+                 * Determines if the coaches data is empty to show the message
+                 *
+                 * @param {Number} length of the coaches array
+                 * @param {Boolean} ready status of the user
+                 * @return {Boolean}
+                */
+                _computeVisibleEmptyMessage(length, ready) {
+                    if (!ready) return false;
+                    return (length > 0) ? false : true;
+                }
+
+                /**
+                 * Determines if the coaches data has elements to show data
+                 *
+                 * @param {Number} length of the coaches array
+                 * @param {Boolean} ready status of the user
+                 * @return {Boolean}
+                */
+                _computeVisibleData(length, ready) {
+                    if (!ready) return false;
+                    return (length > 0) ? true : false;
+                }
+
+                /**
+                 * Observers the user for changes
+                 *
+                 * @param {Object} user information
+                 * @return {void}
+                */
+                _userChanged(user) {
+                    if (user) {
+                        this.userReady = false;
+						this.$.firebaseDocument.getStoredValue(user.uid + '/coaches')
+                        .then(function (snapshot) {
+                            this.userReady = true;
+                        }.bind(this));
+                    }
+                }
+
+                /**
+                 * Opens coaches dialog to add
+                */
+                _openToAdd() {
+                    this._coachesDialog.acceptedCallback = this._saveCoach.bind(this);
+                    this.action = 'add';
+                    this._coachesDialog.action = 'add';
+                    this._coachesDialog.opened = true;
+                    this._coachesDialog.user = this.user;
+                }
+
+                /**
+                 * Saves coach to database
+                 *
+                 * @param {Object} coachInfo from dialog
+                 * @return {void}
+                */
+                _saveCoach(coachInfo) {
+                    this._appProgressBar.hidden = false;
+					if (this.action === 'add') {
+						this.$.firebaseDocument.push(this.user.uid + '/coaches', coachInfo)
+                        .catch(function (err) {
+                            this._appToast.text = 'There has been an error. Please try again.';
+                            this._appToast.open();
+                        }.bind(this));
+                        
+						this._coachesDialog.opened = false;
+						this._appToast.text = 'The coach has been saved successfully.';
+						this._appToast.open();
+						this._appProgressBar.hidden = true;
+					}
                 }
             }
             window.customElements.define(WrcCoaches.is, WrcCoaches);
