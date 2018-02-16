@@ -8,18 +8,39 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <!-- Paper Elements -->
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 
 <!-- Iron Elements -->
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 
 <!-- Polymerfire Elements -->
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+
+<!-- Vaadin Elements -->
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-selection-column.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+
+<!-- Polyfilter -->
+<link rel="import" href="../../bower_components/poly-filter/poly-filter-diacritic.html">
 
 <!-- Suji Elements -->
 <link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
 <link rel="import" href="../suji/lib/colors/suji-color-palette.html">
+
+<!-- Neon Elements -->
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
 
 <!-- Icons -->
 <link rel="import" href="../app-icons.html">
@@ -115,15 +136,78 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 --paper-fab-keyboard-focus-background: var(--azul-primary);
             }
 
+            /* Coaches Wrapper */
+            div.coaches-wrapper {
+                width: 100%;
+
+                @apply --layout-vertical;
+                @apply --layout-center;
+            }
+
+            div.coaches-wrapper[hidden] {
+                display: none;
+            }
+
+            /* Search Style */
+            div.search-wrapper {
+                width: 100%;
+                margin-bottom: 24px;
+                
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            div.search-wrapper vaadin-text-field {
+                width: 100%;
+            }
+
+            div.search-wrapper vaadin-text-field [slot='prefix']{
+                margin-right: 12px;
+                color: var(--paper-grey-500);
+            }
+
+            /* Grid Wrapper */
+            div.grid-wrapper {
+                width: 100%;
+            }
+
+            div.grid-wrapper vaadin-grid {
+                width: inherit;
+                height: auto;
+                box-shadow: 0 2px 10px 0 rgba(0, 0, 20, 0.25);
+            }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
+				@apply --layout-horizontal;
+				@apply --layout-wrap;
+				@apply --layout-end-justified;
+			}
+
+			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
+				color: #737D8A;
+			}
+
+			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
+				color: #425164;
+			}
+
             [hidden] {
                 display: none;
             }
         </style>
 
+        <!-- This media query matches small screens to hide the grid and show responsive cards -->
+        <iron-media-query query="(max-width: 600px)" query-matches="{{responsiveScreen}}"></iron-media-query>
+
         <!-- Firebase Document Configuration -->
         <firebase-document
             id="firebaseDocument"
             app-name="wrc_software"></firebase-document>
+
+        <!-- Firebase Auth Configuration -->
+        <firebase-auth
+            id="firebaseAuth"
+            app-name="wrc_software"></firebase-auth>
 
         <!-- Element UI -->
         <main>
@@ -143,13 +227,85 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 </p>
             </div>
 
-            <!-- Teams Wrapper -->
+            <!-- Coaches Wrapper -->
             <div class="coaches-wrapper" hidden$="[[!_computeVisibleData(coachesData.length, userReady)]]">
+                <!-- Search filter -->
+                <div class="search-wrapper">
+                    <poly-filter-diacritic
+                        filter="[[coachFilter]]"
+                        array-to-filter="[[coachesData]]"
+                        filtered-array="{{coachesDataFiltered}}"></poly-filter-diacritic>
 
+                    <vaadin-text-field
+                        placeholder="Search"
+                        type="search"
+                        value="{{coachFilter}}">
+                        <iron-icon slot="prefix" icon="app-icons:search"></iron-icon>
+                    </vaadin-text-field>
+                </div>
+
+                <!-- Grid View -->
+                <template is="dom-if" if="[[!responsiveScreen]]">
+                    <div class="grid-wrapper">
+                        <vaadin-grid aria-label="Coaches Grid" items="[[coachesDataFiltered]]">
+                            <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
+
+                            <!-- First Name -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="first">First</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.first]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- Last Name -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="last">Last</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.last]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- Username ** this can't be edited ** -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="last">Email</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.email]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- Team -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="team">Team</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.team]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- Phone -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="last">Phone number</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.phone]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- Actions -->
+                            <vaadin-grid-column>
+                                <template class="header"></template>
+                                <template class="horizontal-layout">
+                                    <div class="actions">
+                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:player-card" on-tap="_openCoachProfileDialog"></paper-icon-button>
+                                    </div>
+                                </template>
+                            </vaadin-grid-column>
+                        </vaadin-grid>
+                    </div>
+                </template>
             </div>
 
             <!-- Paper Fab to add new Team -->
-            <!-- <paper-fab icon="app-icons:add" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(coachesData.length, userReady)]]"></paper-fab> -->
+            <paper-fab icon="app-icons:person-add" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(coachesData.length, userReady)]]"></paper-fab>
         </main>
     </template>
 
@@ -192,6 +348,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // Coaches Dialog
                     this._coachesDialog = document.getElementById('coachesDialog');
+
+                    // Coach Profile Dialog
+                    this._coachProfileDialog = document.getElementById('coachProfileDialog');
 
                     // App Progress Bar
                     this._appProgressBar = document.getElementById('appProgressBar');
@@ -244,8 +403,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * Opens coaches dialog to add
                 */
                 _openToAdd() {
-                    this._coachesDialog.acceptedCallback = this._saveCoach.bind(this);
                     this.action = 'add';
+                    this._coachesDialog.acceptedCallback = this._saveCoach.bind(this);
+                    this._coachesDialog.dialogTitle = 'New Coach';
                     this._coachesDialog.action = 'add';
                     this._coachesDialog.opened = true;
                     this._coachesDialog.user = this.user;
@@ -260,7 +420,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _saveCoach(coachInfo) {
                     this._appProgressBar.hidden = false;
 					if (this.action === 'add') {
+                        // Saves the information for admin purposes
 						this.$.firebaseDocument.push(this.user.uid + '/coaches', coachInfo)
+                        .then(function() {
+                            // Saves the information for personal coach purposes
+                            this.$.firebaseDocument.setStoredValue(coachInfo.uid + '/info', coachInfo);
+                        }.bind(this))
                         .catch(function (err) {
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
@@ -271,6 +436,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						this._appToast.open();
 						this._appProgressBar.hidden = true;
 					}
+                }
+
+                _openCoachProfileDialog(e) {
+                    this.coachId = e.target.getAttribute('id');
+                    
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/coaches/' + this.coachId)
+                    .then(function(snapshot) {
+                        this._coachProfileDialog.user = this.user;
+                        this._coachProfileDialog.coachId = this.coachId;
+                        this._coachProfileDialog.coachInfo = snapshot;
+                        this._coachProfileDialog.opened = true;
+                    }.bind(this), function(err) {
+                        this._appToast.text = 'An error has ocurred trying to retrieve that coach data. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
                 }
             }
             window.customElements.define(WrcCoaches.is, WrcCoaches);

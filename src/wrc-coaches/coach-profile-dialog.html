@@ -1,0 +1,251 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+-->
+
+<!-- Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<!-- Suji Elements -->
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
+<link rel="import" href="../suji/lib/themes/azul/azul-dialog.html">
+
+<!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-storage-ref.html">
+
+<!-- Vaadin Elements -->
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+
+<!-- Neon Elements -->
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+
+<dom-module id="coach-profile-dialog">
+    <template>
+        <style>
+            /* Dialog */
+            paper-dialog {
+				border-radius: 5px;
+                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+			}
+
+            paper-dialog h2 {
+				color: var(--azul-text-title);
+				font-size: 1.6em;
+			}
+
+			paper-dialog div.buttons {
+				@apply --layout-horizontal;
+				@apply --layout-end-justified;
+			}
+
+			paper-dialog .buttons paper-button {
+				color: var(--azul-primary);
+                font-weight: 500;
+			}
+
+			paper-dialog .buttons paper-button.cancel-button {
+				color: var(--paper-grey-700);
+                font-weight: normal;
+			}
+
+			paper-dialog .buttons paper-button.delete-button {
+				color: var(--paper-red-400);
+                font-weight: normal;
+			}
+
+            /* Profile Image */
+            div.profile-wrapper {
+				width: 100%;
+
+				@apply --layout-horizontal;
+			}
+
+			iron-image {
+				margin-bottom: 12px;
+				background-color: #F3F4F5;
+				overflow: hidden;
+				border-radius: 10em;
+				width: 150px;
+				height: 150px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+            div.info-wrapper {
+                margin-left: 24px;
+                @apply --layout-vertical;
+            }
+
+            div.info-wrapper p {
+                margin-top: 0;
+            }
+
+            div.info-wrapper p strong {
+                color: var(--azul-text-title);
+                margin-right: 8px;
+                font-size: 1.1em;
+            }
+
+            div.info-wrapper p span {
+                font-size: 1.1em;
+                font-weight: lighter;
+            }
+
+            /* To keep dialog larger with large screens */
+			@media screen and (min-width: 600px) {
+				paper-dialog {
+					width: 610px;
+				}
+			}
+
+			[hidden] {
+				display: none;
+			}
+
+            [flex] {
+                @apply --layout-flex;
+            }
+        </style>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document
+            id="firebaseDocument"
+            app-name="wrc_software"></firebase-document>
+
+        <!-- Firebase Storage Configuration -->
+        <firebase-storage-ref
+            id="storageRef"
+            app-name="wrc_software"></firebase-storage-ref>
+
+        <!-- Element UI -->
+        <paper-dialog
+            opened="{{opened}}"
+            with-backdrop
+            entry-animation="scale-up-animation"
+            exit-animation="fade-out-animation">
+            <h2>[[coachInfo.first]] [[coachInfo.last]]</h2>
+            <paper-dialog-scrollable>
+                <div class="profile-wrapper">
+                    <iron-image preload fade sizing="cover" src="[[coachInfo.profile_pic_url]]"></iron-image>
+                    <div class="info-wrapper">
+                        <p>
+                            <strong>Username:</strong>
+                            <span>[[coachInfo.email]]</span>
+                        </p>
+                        <p>
+                            <strong>Phone number:</strong>
+                            <span>[[coachInfo.phone]]</span>
+                        </p>
+                        <p>
+                            <strong>Team:</strong>
+                            <span>[[coachInfo.team]]</span>
+                        </p>
+                    </div>
+                </div>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button class="delete-button" on-tap="_openDeleteDialog">Delete</paper-button>
+                <span flex></span>
+                <paper-button dialog-dismiss on-tap="_resetCoachInfo">OK</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            class CoachProfileDialog extends Polymer.Element {
+                /**
+                 * Element definition
+                */
+                static get is() { return 'coach-profile-dialog'; }
+
+                /**
+                 * Element properties
+                */
+                static get properties() {
+                    return {
+                        user: Object,
+                        coachId: String,
+                        coachInfo: Object,
+                        opened: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        }
+                    };
+                }
+
+                ready() {
+                    super.ready();
+
+                    // Delete Coach Dialog
+                    this._deleteCoachDialog = document.getElementById('deleteCoachDialog');
+
+                    // App Progress Bar
+                    this._appProgressBar = document.getElementById('appProgressBar');
+
+                    // App Toast
+                    this._appToast = document.getElementById('appToast');
+                }
+
+                /**
+                 * Resets the coach info when closing
+                */
+                _resetCoachInfo() {
+                    this.coachInfo = null;
+                }
+
+                /**
+                 * Opens the delete confirmation dialog
+                */
+                _openDeleteDialog() {
+                    this._deleteCoachDialog.acceptedCallback = this._deleteCoach.bind(this);
+                    this._deleteCoachDialog.opened = true;
+                }
+
+                /**
+                 * Deletes the coach
+                 *
+                 * @param {Boolean} response from delete confirmation dialog
+                 * @return {void}
+                */
+                _deleteCoach(response) {
+                    if (response) {
+                        // Deletes the coach information from the administrator data
+                        this.$.firebaseDocument.destroy(this.user.uid + '/coaches/' + this.coachId)
+                        .then(function() {
+                            this._appToast.text = 'The coach has been deleted.';
+                            this._appToast.open();
+                            this._deleteCoachDialog.opened = false;
+                            this.opened = false;
+
+                            // Deletes the whole coach information
+                            this.$.firebaseDocument.destroy(this.coachInfo.uid)
+                            .then(function() {
+                                this.$.storageRef.path = this.user.uid + '/profile-pics/' + this.coachInfo.profile_pic_name;
+						        this.$.storageRef.delete();
+                            }.bind(this));
+                        }.bind(this));
+                    }
+                }
+            }
+            window.customElements.define(CoachProfileDialog.is, CoachProfileDialog);
+        })();
+    </script>
+</dom-module>

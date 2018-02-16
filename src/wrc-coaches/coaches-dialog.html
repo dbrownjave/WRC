@@ -19,9 +19,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <!-- Vaadin Elements -->
 <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 
 <!-- Polymerfire Elements -->
@@ -129,6 +127,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			[hidden] {
 				display: none;
 			}
+
+            [flex] {
+                @apply --layout-flex;
+            }
         </style>
 
         <!-- Firebase Storage Configuration -->
@@ -153,14 +155,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <input type="file" name="profile_pic" id="profilePicture">
                     <label for="profilePicture">
                         <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
-                        <iron-image id="profileImage" preload fade sizing="contain" src="[[_computeImgSrc(action)]]"></iron-image>
+                        <iron-image id="profileImage" preload fade sizing="cover" src="[[_computeImgSrc(action)]]"></iron-image>
                     </label>
                 </div>
                 <iron-form id="coachForm">
                     <form>
                         <vaadin-form-layout>
                             <vaadin-text-field
-                                colspan="2"
+                                label="User Unique ID"
+                                placeholder="Firebase Unique ID"
+                                name="uid"
+                                required
+                                error-message="Enter the uid of the coach"
+                                value="{{coachInfo.uid}}"></vaadin-text-field>
+                            <vaadin-text-field
                                 label="Username"
                                 placeholder="coach@domain.com"
                                 name="email"
@@ -180,14 +188,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 required
                                 error-message="This field is required"
                                 value="{{coachInfo.last}}"></vaadin-text-field>
-                            <vaadin-combo-box
-                                id="teams"
+                            <vaadin-text-field
                                 label="Team"
                                 name="team"
-                                placeholder="Select a team"
                                 required
-                                error-message="Select a team"
-                                value="{{coachInfo.team}}"></vaadin-combo-box>
+                                error-message="This field is required"
+                                value="{{coachInfo.team}}"></vaadin-text-field>
                             <vaadin-text-field
                                 label="Phone"
                                 name="phone"
@@ -197,7 +203,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 </iron-form>
             </paper-dialog-scrollable>
             <div class="buttons">
-                <paper-button dialog-dismiss class="cancel-button">Cancel</paper-button>
+                <paper-button dialog-dismiss class="cancel-button" on-tap="_resetForm">Cancel</paper-button>
                 <paper-button on-tap="_serializeForm">Save</paper-button>
             </div>
         </paper-dialog>
@@ -218,6 +224,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 static get properties() {
                     return {
+                        dialogTitle: String,
                         acceptedCallback: Function,
                         opened: {
                             type: Boolean,
@@ -232,6 +239,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             type: Object,
                             notify: true,
                             value: {
+                                uid: '',
                                 email: '',
                                 first: '',
                                 last: '',
@@ -248,8 +256,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 ready() {
                     super.ready();
 
-                    this.$.teams.items = ['Yes', 'No'];
-
                     // App Progress Bar
 					this._appProgressBar = document.getElementById('appProgressBar');
 
@@ -260,18 +266,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /**
-                 * Computes the source for the profile image
-                 *
-                 * @param {String} action that is executing the user
-                 * @return {String} the source for the image
-                */
-                _computeImgSrc(action) {
-                    if (action === 'add') {
-                        return '../../images/app-images/default_profile.png';
-                    }
-                }
-
-                /**
                  * Serializes the data from form and save selected profile image
                 */
                 _serializeForm() {
@@ -279,7 +273,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this._appProgressBar.hidden = false;
 
 						if (this.$.profilePicture.files[0]) {
-							this.$.firebaseStorage.put(this.$.profilePicture.files[0])
+                            this.$.firebaseStorage.put(this.$.profilePicture.files[0])
 								.then(function () {
 									this.$.storageRef.getDownloadURL(this.user.uid + '/profile-pics/' + this.$.profilePicture.files[0]
 											.name)
@@ -294,15 +288,36 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						}
                     }
                 }
+                
+                /**
+                 * Resets the form to default values
+                */
+                _resetForm() {
+                    this.$.coachForm.reset();
+                }
 
                 /**
                  * Creates image preview for profile picture
                  *
-                 * @param {String} image select by user
+                 * @param {String} image selected by user
                  * @return {void}
                 */
                 _createImgPreview(image) {
                     this.$.profileImage.src = URL.createObjectURL(image);
+                }
+
+                /**
+                 * Computes the source for the profile picture
+                 *
+                 * @param {String} action performed in the dialog
+                 * @return {String} the source of the image
+                */
+                _computeImgSrc(action) {
+                    if (action === 'add') {
+                        return '../../images/app-images/default_profile.png';
+                    } else {
+                        return this.coachInfo.profile_pic_url;
+                    }
                 }
             }
             window.customElements.define(CoachesDialog.is, CoachesDialog);
