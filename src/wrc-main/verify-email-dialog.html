@@ -43,9 +43,19 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 margin: 0 0 16px;
 			}
 
+            paper-dialog div.buttons {
+				@apply --layout-horizontal;
+				@apply --layout-end-justified;
+			}
+
             paper-dialog .buttons paper-button {
 				color: var(--azul-primary);
                 font-weight: 500;
+			}
+
+            paper-dialog .buttons paper-button.cancel-button {
+				color: var(--azul-primary-text);
+                font-weight: normal;
 			}
 
             div.legend {
@@ -83,6 +93,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					width: 610px;
 				}
 			}
+
+            [flex] {
+                @apply --layout-flex;
+            }
         </style>
 
         <paper-dialog
@@ -101,11 +115,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <ul>
                         <li>Press <strong>VERIFY</strong> to receive the verification link.</li>
                         <li>Check your email inbox and follow the instructions received.</li>
-                        <li>Once you have verified your email refresh to use WRC Software normally.</li>
+                        <li>Once you have verified your email refresh the page to use WRC Software normally.</li>
                     </ul>
                 </div>
             </paper-dialog-scrollable>
             <div class="buttons">
+                <paper-button on-tap="_closeDialog" class="cancel-button">Sign out & Close</paper-button>
+                <span flex></span>
                 <paper-button on-tap="_triggerAcceptedCallback">Verify</paper-button>
             </div>
         </paper-dialog>
@@ -142,6 +158,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _triggerAcceptedCallback() {
                     this.acceptedCallback(true);
+                }
+
+                /**
+                 * Closes the dialog and respond the action with false
+                */
+                _closeDialog() {
+                    this.acceptedCallback(false);
                 }
             }
             window.customElements.define(VerifyEmailDialog.is, VerifyEmailDialog);

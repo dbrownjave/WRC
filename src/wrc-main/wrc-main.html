@@ -470,15 +470,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _sendVerificationEmail(response) {
                     if (this.user) {
-                        this.user.sendEmailVerification()
-                        .then(function() {
-                            this._appToast.text = 'Please check your inbox email and follow the instructions received.';
-                            this._appToast.open();
-                        }.bind(this))
-                        .catch(function(err) {
-                            this._appToast.text = 'An error has ocurred trying to send the verification email. Please try again.';
-                            this._appToast.open();
-                        }.bind(this));
+                        if (response) {
+                            this.user.sendEmailVerification()
+                            .then(function() {
+                                this._appToast.text = 'Please check your inbox email and follow the instructions received.';
+                                this._appToast.open();
+                            }.bind(this))
+                            .catch(function(err) {
+                                this._appToast.text = 'An error has ocurred trying to send the verification email. Please try again.';
+                                this._appToast.open();
+                            }.bind(this));
+                        } else {
+                            this._verifyEmailDialog.opened = false;
+                            this.$.firebaseAuth.signOut();
+                        }
                     }
                 }
 
