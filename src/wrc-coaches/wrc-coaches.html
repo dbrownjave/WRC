@@ -405,7 +405,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _openToAdd() {
                     this.action = 'add';
                     this._coachesDialog.acceptedCallback = this._saveCoach.bind(this);
-                    this._coachesDialog.dialogTitle = 'New Coach';
                     this._coachesDialog.action = 'add';
                     this._coachesDialog.opened = true;
                     this._coachesDialog.user = this.user;
@@ -420,12 +419,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _saveCoach(coachInfo) {
                     this._appProgressBar.hidden = false;
 					if (this.action === 'add') {
-                        // Saves the information for admin purposes
-						this.$.firebaseDocument.push(this.user.uid + '/coaches', coachInfo)
-                        .then(function() {
-                            // Saves the information for personal coach purposes
-                            this.$.firebaseDocument.setStoredValue(coachInfo.uid + '/info', coachInfo);
-                        }.bind(this))
+						this.$.firebaseDocument.setStoredValue('users/' + coachInfo.uid, coachInfo)
                         .catch(function (err) {
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
@@ -438,17 +432,19 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					}
                 }
 
+                /**
+                 * Opens the coach's profile dialog
+                */
                 _openCoachProfileDialog(e) {
                     this.coachId = e.target.getAttribute('id');
                     
-                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/coaches/' + this.coachId)
+                    this.$.firebaseDocument.getStoredValue('users/' + this.coachId)
                     .then(function(snapshot) {
-                        this._coachProfileDialog.user = this.user;
                         this._coachProfileDialog.coachId = this.coachId;
                         this._coachProfileDialog.coachInfo = snapshot;
                         this._coachProfileDialog.opened = true;
                     }.bind(this), function(err) {
-                        this._appToast.text = 'An error has ocurred trying to retrieve that coach data. Please try again.';
+                        this._appToast.text = 'An error has ocurred trying to retrieve the coach data. Please try again.';
                         this._appToast.open();
                     }.bind(this));
                 }

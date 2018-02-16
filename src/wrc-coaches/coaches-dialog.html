@@ -141,7 +141,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <firebase-storage-multiupload
             id="firebaseStorage"
             app-name="wrc_software"
-            path="[[user.uid]]/profile-pics"></firebase-storage-multiupload>
+            path="profile-pics"></firebase-storage-multiupload>
 
         <paper-dialog
             opened="{{opened}}"
@@ -244,8 +244,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 first: '',
                                 last: '',
                                 phone: '',
-                                profile_pic_name: '',
-                                profile_pic_url: '',
+                                profile_pic_name: 'default_profile.png',
+                                profile_pic_url: '../../images/app-images/default_profile.png',
                                 role: 'coach',
                                 team: ''
                             }
@@ -275,7 +275,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						if (this.$.profilePicture.files[0]) {
                             this.$.firebaseStorage.put(this.$.profilePicture.files[0])
 								.then(function () {
-									this.$.storageRef.getDownloadURL(this.user.uid + '/profile-pics/' + this.$.profilePicture.files[0]
+									this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0]
 											.name)
 										.then(function (url) {
 											this.coachInfo.profile_pic_url = url;

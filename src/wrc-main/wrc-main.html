@@ -238,20 +238,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <firebase-auth id="firebaseAuth" app-name="wrc_software" user="{{user}}"></firebase-auth>
 
         <!-- Firebase Document Configuration -->
-        <firebase-document id="firebaseDocument" app-name="wrc_software" path="[[user.uid]]/info" data="{{userInfo}}"></firebase-document>
-
-        <!-- Firebase Query to get user information -->
-        <firebase-query
-            id="userQuery"
-            app-name="wrc_software"
-            path="[[user.uid]]/info"
-            data="{{userInfoForDisplay}}"></firebase-query>
+        <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
 
         <!-- Coaches Query -->
         <firebase-query
             app-name="wrc_software"
-            path="[[user.uid]]/coaches"
-            data="{{coachesData}}"></firebase-query>
+            path="users"
+            data="{{coachesData}}"
+            order-by-child="role"
+            equal-to="coach"></firebase-query>
 
         <!-- Element UI -->
         <app-drawer-layout fullbleed narrow="{{narrow}}" responsive-width="768px">
@@ -272,11 +267,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <template is="dom-if" if="[[userReady]]" restamp>
                         <div class="user-wrapper">
                             <div class="image-container">
-                                <iron-image preload fade sizing="contain" src="[[userInfoForDisplay.6.$val]]"></iron-image>                            
+                                <iron-image preload fade sizing="contain" src="[[userInfo.profile_pic_url]]"></iron-image>                            
                             </div>
                             <paper-menu-button horizontal-align="right" vertical-align="top" opened="{{openedMenu}}">
                                 <div class="user-display-name" slot="dropdown-trigger">
-                                    <span>[[userInfoForDisplay.1.$val]] [[userInfoForDisplay.2.$val]]</span>
+                                    <span>[[userInfo.first]] [[userInfo.last]]</span>
                                     <iron-icon icon="app-icons:arrow-drop-[[_computeArrowIcon(openedMenu)]]"></iron-icon>
                                 </div>
                                 <paper-listbox slot="dropdown-content" selected="{{selectedUserOption}}">
@@ -288,7 +283,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         </div>
 
                         <!-- Menu for admin -->
-                        <template is="dom-if" if="[[_computeMenuForAdmin(userInfoForDisplay.7.$val)]]">
+                        <template is="dom-if" if="[[_computeMenuForAdmin('admin')]]">
                             <iron-selector class="drawer-list" selected="[[page]]" attr-for-selected="name" role="navigation">
                                 <a name="coaches" href="[[rootPath]]main/coaches">
                                     <iron-icon icon="app-icons:person"></iron-icon>
@@ -380,15 +375,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 static get observers() {
 					return [
 						'_routePageChanged(routeData.page)',
-                        'asd(userInfoFromQuery)'
 					];
 				}
-
-                asd(a) {
-                    if (a) {
-                        console.log(a);
-                    }
-                }
 
                 ready() {
                     super.ready();
@@ -451,8 +439,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _userChanged(user) {
                     if (user) {
                         this._checkVerifiedStatus(user.emailVerified);
-                        this.$.firebaseDocument.getStoredValue(user.uid + '/info')
+                        this.$.firebaseDocument.getStoredValue('users/' + user.uid)
                         .then(function(userInfo) {
+                            this.userInfo = userInfo;
                             this.userReady = true;
                         }.bind(this));
                     }
