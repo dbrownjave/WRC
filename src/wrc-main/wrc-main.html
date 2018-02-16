@@ -526,11 +526,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @return {void}
                 */
                 _saveNewProfileInfo(userInfo) {
-                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/info', userInfo)
+                    this.$.firebaseDocument.setStoredValue('/users/' + userInfo.uid, userInfo)
                     .catch(function(err) {
                         this._appToast.text = 'An error has ocurred trying to save your personal information. Please try again.';
                         this._appToast.open();
                     }.bind(this));
+                    this.userInfo = null;
                     this.userInfo = userInfo;
                     this._appProgressBar.hidden = true;
                     this._userProfileDialog.opened = false;
