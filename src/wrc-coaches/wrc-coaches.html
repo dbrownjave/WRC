@@ -11,6 +11,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 
 <!-- Iron Elements -->
@@ -191,6 +192,94 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				color: #425164;
 			}
 
+            /* Cards Wrapper */
+            div.cards-wrapper {
+                width: 100%;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            div.cards-wrapper paper-card {
+                width: 100%;
+            }
+
+            div.cards-wrapper paper-card div.card-header {
+                padding: 1em;
+            }
+
+            div.cards-wrapper paper-card div.card-header h2 {
+                margin: 0;
+                color: var(--azul-text-title);
+                font-size: 1.1em;
+            }
+
+            div.cards-wrapper paper-card div.card-content {
+                padding: .5em 1em 1em;
+
+                @apply --layout-horizontal;
+                @apply --layout-center;
+            }
+
+            div.cards-wrapper paper-card div.card-content div.image-wrapper {
+				background-color: #F3F4F5;
+				overflow: hidden;
+				border-radius: 10em;
+				width: 90px;
+				height: 90px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+                margin-right: 20px;
+
+                @apply --layout-vertical;
+				@apply --layout-center-center;
+            }
+
+            div.cards-wrapper paper-card div.card-content div.image-wrapper iron-image {
+                width: inherit;
+                height: inherit;
+                border-radius: 10em;
+                z-index: 0;
+            }
+
+            div.cards-wrapper paper-card div.card-content div.coach-info p {
+                margin-top: 0;
+                margin-bottom: 8px;
+            }
+
+            div.cards-wrapper paper-card div.card-content div.coach-info p strong {
+                color: var(--azul-text-title);
+                margin-right: 5px;
+                font-size: .9em;
+            }
+
+            div.cards-wrapper paper-card div.card-content div.coach-info p span {
+                color: var(--azul-text-title);
+                font-size: .9em;
+                font-weight: lighter;
+            }
+
+            div.cards-wrapper paper-card div.card-actions {
+                @apply --layout-horizontal;
+                @apply --layout-end-justified;
+            }
+
+            div.cards-wrapper paper-card div.card-actions paper-icon-button {
+                color: #737D8A;
+            }
+
+            /* Responsive */
+            @media screen and (max-width: 425px) {
+                /* General Style */
+                main {
+                    padding: 1em;
+                    height: calc(100vh - (64px + 2em));
+                    min-height: calc(100vh - (64px + 2em));
+
+                    @apply --layout-vertical;
+                    @apply --layout-center;
+                }
+            }
+
             [hidden] {
                 display: none;
             }
@@ -300,6 +389,41 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 </template>
                             </vaadin-grid-column>
                         </vaadin-grid>
+                    </div>
+                </template>
+
+                <!-- Cards View -->
+                <template is="dom-if" if="[[responsiveScreen]]">
+                    <div class="cards-wrapper">
+                        <template is="dom-repeat" items="[[coachesDataFiltered]]" as="coach">
+                            <paper-card>
+                                <div class="card-header">
+                                    <h2>[[coach.first]] [[coach.last]]</h2>
+                                </div>
+                                <div class="card-content">
+                                    <div class="image-wrapper">
+                                        <iron-image preload fade sizing="cover" src="[[coach.profile_pic_url]]"></iron-image>
+                                    </div>
+                                    <div class="coach-info">
+                                        <p>
+                                            <strong>Username:</strong>
+                                            <span>[[coach.email]]</span>
+                                        </p>
+                                        <p>
+                                            <strong>Phone number:</strong>
+                                            <span>[[coach.phone]]</span>
+                                        </p>
+                                        <p>
+                                            <strong>Team:</strong>
+                                            <span>[[coach.team]]</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <paper-icon-button id$="[[coach.$key]]" noink icon="fa-icons:player-card" on-tap="_openCoachProfileDialog"></paper-icon-button>
+                                </div>
+                            </paper-card>
+                        </template>
                     </div>
                 </template>
             </div>
