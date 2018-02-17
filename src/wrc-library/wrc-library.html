@@ -1,0 +1,599 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+-->
+
+<!-- Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+
+<!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+
+<!-- Vaadin Elements -->
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+
+<!-- Polyfilter -->
+<link rel="import" href="../../bower_components/poly-filter/poly-filter-diacritic.html">
+
+<!-- Suji Elements -->
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
+
+<!-- Neon Elements -->
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+
+<!-- Google Elements -->
+<link rel="import" href="../../bower_components/google-youtube/google-youtube.html">
+
+<!-- Icons -->
+<link rel="import" href="../app-icons.html">
+<link rel="import" href="../fa-icons.html">
+
+<dom-module id="wrc-library">
+    <template>
+        <style>
+            /* General Style */
+            main {
+                padding: 2em 3em;
+                height: calc(100vh - (64px + 4em));
+                min-height: calc(100vh - (64px + 4em));
+                overflow-y: scroll;
+
+                @apply --layout-vertical;
+                @apply --layout-center;
+            }
+
+            paper-spinner {
+                --paper-spinner-layer-1-color: var(--azul-primary);
+                --paper-spinner-layer-2-color: var(--azul-primary);
+                --paper-spinner-layer-3-color: var(--azul-primary);
+                --paper-spinner-layer-4-color: var(--azul-primary);
+            }
+
+            [flex] {
+                @apply --layout-flex;
+            }
+
+            /* Empty Message */
+            .empty-message {
+                width: 100%;
+                height: inherit;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .empty-message .icon-container {
+                border-radius: 300em;
+                width: 200px;
+                height: 200px;
+                background-color: var(--azul-text-title);
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .icon-container iron-icon {
+                color: #fff;
+                width: 90px;
+                height: 90px;
+                margin-top: 32px;
+                margin-left: 6px;
+            }
+
+            .empty-message p {
+                margin-top: 24px;
+                text-align: center;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .empty-message p strong {
+                font-size: 1.2em;
+                font-weight: bold;
+                color: var(--azul-text-title);
+                margin-bottom: 15px;
+                text-align: center;
+            }
+
+            .empty-message p span {
+                font-size: 1em;
+                font-weight: lighter;
+                color: var(--paper-grey-600);
+                margin-bottom: 24px;
+                text-align: center;
+            }
+
+            .empty-message p paper-button {
+                margin: 0;
+                color: #fff;
+                background-color: var(--azul-primary);
+            }
+
+            /* Fab */
+            paper-fab {
+                position: fixed;
+                bottom: 2em;
+                right: 2em;
+
+                --paper-fab-background: var(--azul-primary);
+                --paper-fab-keyboard-focus-background: var(--azul-primary);
+            }
+
+            /* Library Wrapper */
+            div.library-wrapper {
+                width: 100%;
+
+                /* @apply --layout-vertical; */
+            }
+
+            div.library-wrapper[hidden] {
+                display: none;
+            }
+
+            /* Search Style */
+            div.search-wrapper {
+                width: 100%;
+                margin-bottom: 24px;
+                
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            div.search-wrapper vaadin-text-field {
+                width: 100%;
+            }
+
+            div.search-wrapper vaadin-text-field [slot='prefix']{
+                margin-right: 12px;
+                color: var(--paper-grey-500);
+            }
+
+            /* No results found */
+            div.no-results-wrapper {
+                width: 100%;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            div.no-results-wrapper iron-image {
+                width: 200px;
+                height: 200px;
+            }
+
+            div.no-results-wrapper h3 {
+                color: var(--azul-text-title);
+                margin-bottom: 0;
+            }
+
+            div.no-results-wrapper p {
+                color: var(--paper-grey-500);
+                font-size: .8em;
+                margin: 0;
+            }
+
+            /* Videos Wrapper */
+            div.videos-wrapper {
+                @apply --layout-horizontal;
+                @apply --layout-wrap;
+            }
+            
+            /* Video */
+            div.video-wrapper {
+                border-radius: 5px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+                margin-right: 32px;
+                max-width: 310px;
+                overflow: hidden;
+            }
+
+            div.video-wrapper google-youtube {
+                width: 310px;
+                height: 190px;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+                overflow: hidden;
+            }
+
+            div.video-wrapper .video-info {
+                padding: 10px;
+                padding-right: 3px;
+
+                @apply --layout-horizontal;
+                @apply --layout-center;
+            }
+
+            div.video-wrapper .video-info p {
+                margin: 0;
+                padding: 0;
+                white-space: pre-wrap;
+                
+                @apply --layout-vertical;
+            }
+
+            div.video-wrapper .video-info p strong {
+                color: var(--azul-text-title);
+                font-size: 1.1em;
+                font-weight: 400;
+                margin: 0;
+                padding: 0;
+                margin-bottom: 5px;
+            }
+
+            div.video-wrapper .video-info p span {
+                border-radius: 3px;
+                background-color: #e3e6ea;
+                padding: .2em .5em;
+                color: var(--paper-grey-600);
+                width: max-content;
+                font-weight: lighter;
+                font-size: .8em;
+            }
+
+            [hidden] {
+                display: none;
+            }
+        </style>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document
+            id="firebaseDocument"
+            app-name="wrc_software"></firebase-document>
+
+        <main>
+            <template is="dom-if" if="[[!userReady]]">
+                <paper-spinner active></paper-spinner>
+            </template>
+
+            <!-- Empty Library Message -->
+            <div class="empty-message" hidden$="[[!_computeVisibleEmptyMessage(libraryData.length, userReady)]]">
+                <div class="icon-container">
+                    <iron-icon icon="fa-icons:video"></iron-icon>
+                </div>
+                <p>
+                    <strong>The video library is empty</strong>
+                    <span>Add a new video and it will show up here</span>
+                    <paper-button raised on-tap="_openToAdd">New Video</paper-button>
+                </p>
+            </div>
+
+            <!-- Library Data -->
+            <div class="library-wrapper" hidden$="[[!_computeVisibleData(libraryData.length, userReady)]]">
+                <!-- Search filter -->
+                <div class="search-wrapper">
+                    <poly-filter-diacritic
+                        filter="[[libraryFilter]]"
+                        array-to-filter="[[libraryData]]"
+                        filtered-array="{{libraryDataFiltered}}"></poly-filter-diacritic>
+
+                    <vaadin-text-field
+                        placeholder="Search"
+                        type="search"
+                        value="{{libraryFilter}}">
+                        <iron-icon slot="prefix" icon="app-icons:search"></iron-icon>
+                    </vaadin-text-field>
+                </div>
+
+                <!-- No results found -->
+                <template is="dom-if" if="[[noResultsFiltered]]">
+                    <div class="no-results-wrapper">
+                        <iron-image
+                            preload
+                            fade
+                            sizing="contain"
+                            src="../../images/app-images/search.svg"></iron-image>
+                        <h3>No results found</h3>
+                        <p>Please update your search and try again</p>
+                    </div>
+                </template>
+
+                <!-- Filtered Data Display -->
+                <template is="dom-if" if="[[filtering]]">
+                    <div class="videos-wrapper">
+                        <template is="dom-repeat" items="[[libraryDataFiltered]]" as="video">
+                            <div class="video-wrapper">
+                                <google-youtube
+                                    video-id="[[video.id]]"
+                                    fluid></google-youtube>
+                                <div class="video-info">
+                                    <p>
+                                        <strong>[[video.title]]</strong>
+                                        <span>[[video.category]]</span>
+                                    </p>
+                                    <span flex></span>
+                                    <paper-icon-button icon="app-icons:more-vert"></paper-icon-button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- No Filtered Data Display -->
+                <template is="dom-if" if="[[!filtering]]">
+                    <!-- Recommended -->
+                    <div class="category-wrapper">
+                        <h3>Recommended</h3>
+                        <div class="videos-wrapper">
+                            <template is="dom-repeat" items="[[libraryData]]" as="video" filter="_searchRecommended">
+                                <div class="video-wrapper">
+                                    <google-youtube
+                                        video-id="[[video.id]]"
+                                        fluid></google-youtube>
+                                    <div class="video-info">
+                                        <p>
+                                            <strong>[[video.title]]</strong>
+                                            <span>[[video.category]]</span>
+                                        </p>
+                                        <span flex></span>
+                                        <paper-icon-button icon="app-icons:more-vert"></paper-icon-button>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Tutorials -->
+                    <div class="category-wrapper">
+                        <h3>Tutorials</h3>
+                        <div class="videos-wrapper">
+                            <template is="dom-repeat" items="[[libraryData]]" as="video" filter="_searchTutorials">
+                                <div class="video-wrapper">
+                                    <google-youtube
+                                        video-id="[[video.id]]"
+                                        fluid></google-youtube>
+                                    <div class="video-info">
+                                        <p>
+                                            <strong>[[video.title]]</strong>
+                                            <span>[[video.category]]</span>
+                                        </p>
+                                        <span flex></span>
+                                        <paper-icon-button icon="app-icons:more-vert"></paper-icon-button>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Recent -->
+                    <div class="category-wrapper">
+                        <h3>Recently uploaded</h3>
+                        <div class="videos-wrapper">
+                            <template is="dom-repeat" items="[[libraryData]]" as="video" filter="_searchRecent">
+                                <div class="video-wrapper">
+                                    <google-youtube
+                                        video-id="[[video.id]]"
+                                        fluid></google-youtube>
+                                    <div class="video-info">
+                                        <p>
+                                            <strong>[[video.title]]</strong>
+                                            <span>[[video.category]]</span>
+                                        </p>
+                                        <span flex></span>
+                                        <paper-icon-button icon="app-icons:more-vert"></paper-icon-button>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Paper Fab to add new Team -->
+            <paper-fab icon="app-icons:add" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(libraryData.length, userReady)]]"></paper-fab>
+        </main>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            class WrcLibrary extends Polymer.Element {
+                /**
+                 * Element definition
+                */
+                static get is() { return 'wrc-library'; }
+
+                /**
+                 * Element properties
+                */
+                static get properties() {
+                    return {
+                        userReady: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
+                        user: {
+                            type: Object,
+                            notify: true,
+                            observer: '_userChanged'
+                        },
+                        libraryData: {
+                            type: Object,
+                            notify: true
+                        },
+                        noResultsFiltered: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
+                        filtering: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        }
+                    };
+                }
+
+                /**
+                 * Element observers
+                */
+                static get observers() {
+                    return [
+                        '_filterChanged(libraryFilter)',
+                        '_filteredDataChanged(libraryFilter, libraryDataFiltered)'
+                    ];
+                }
+
+                ready() {
+                    super.ready();
+
+                    // Video Dialog
+                    this._videoDialog = document.getElementById('videoDialog');
+
+                    // App Progress Bar
+                    this._appProgressBar = document.getElementById('appProgressBar');
+
+                    // App Toast
+                    this._appToast = document.getElementById('appToast');
+                }
+
+                /**
+                 * Filter for video changed
+                 *
+                 * @param {String} filter entered
+                 * @return {void}
+                */
+                _filterChanged(filter) {
+                    this.filtering = (filter.length > 0) ? true : false;
+                }
+
+                /**
+                 * Filtered library data changed
+                 *
+                 * @param {Object} data from filtered poly-filter
+                 * @return {void}
+                */
+                _filteredDataChanged(filter, data) {
+                    if (filter.length > 0) {
+                        if (data.length < 1) {
+                            this.noResultsFiltered = true;
+                        } else {
+                            this.noResultsFiltered = false;
+                        }
+                    }
+                }
+
+                /**
+                 * Observers the user for changes
+                 *
+                 * @param {Object} user information
+                 * @return {void}
+                */
+                _userChanged(user) {
+                    if (user) {
+                        this.userReady = false;
+						this.$.firebaseDocument.getStoredValue('library')
+                        .then(function (snapshot) {
+                            this.userReady = true;
+                        }.bind(this));
+                    }
+                }
+
+                /**
+                 * Determines if the library data is empty to show the message
+                 *
+                 * @param {Number} length of the library array
+                 * @param {Boolean} ready status of the user
+                 * @return {Boolean}
+                */
+                _computeVisibleEmptyMessage(length, ready) {
+                    if (!ready) return false;
+                    return (length > 0) ? false : true;
+                }
+
+                /**
+                 * Determines if the library data has elements to show data
+                 *
+                 * @param {Number} length of the library array
+                 * @param {Boolean} ready status of the user
+                 * @return {Boolean}
+                */
+                _computeVisibleData(length, ready) {
+                    if (!ready) return false;
+                    return (length > 0) ? true : false;
+                }
+
+                /**
+                 * Opens video dialog
+                */
+                _openToAdd() {
+                    this.action = 'add';
+                    this._videoDialog.acceptedCallback = this._saveVideo.bind(this);
+                    this._videoDialog.opened = true;
+                }
+
+                /**
+                 * Saves the video in the library
+                 *
+                 * @param {Object} videoInfo from dialog
+                 * @return {video}
+                */
+                _saveVideo(videInfo) {
+                    if (this.action === 'add') {
+						this.$.firebaseDocument.push('library', videInfo)
+                        .catch(function (err) {
+                            this._appToast.text = 'There has been an error. Please try again.';
+                            this._appToast.open();
+                        }.bind(this));
+                        
+						this._videoDialog.opened = false;
+						this._appToast.text = 'The video has been saved successfully.';
+						this._appToast.open();
+						this._appProgressBar.hidden = true;
+					}
+                }
+
+                /**
+                 * Filter videos to match recommended category
+                 *
+                 * @param {Object} video from repeat template
+                 * @return {Object} videos that has recommended as category
+                */
+                _searchRecommended(video) {
+                    return video.category.match(new RegExp('recommended', 'ig'));
+                }
+
+                /**
+                 * Filter videos to match tutorial category
+                 *
+                 * @param {Object} video from repeat template
+                 * @return {Object} videos that has tutorial as category
+                */
+                _searchTutorials(video) {
+                    return video.category.match(new RegExp('tutorial', 'ig'));
+                }
+
+                /**
+                 * Filter videos to match recent category
+                 *
+                 * @param {Object} video from repeat template
+                 * @return {Object} videos that has recent as category
+                */
+                _searchRecent(video) {
+                    return video.category.match(new RegExp('recent', 'ig'));
+                }
+            }
+            window.customElements.define(WrcLibrary.is, WrcLibrary);
+        })();
+    </script>
+</dom-module>

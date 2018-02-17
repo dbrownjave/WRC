@@ -293,11 +293,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             id="firebaseDocument"
             app-name="wrc_software"></firebase-document>
 
-        <!-- Firebase Auth Configuration -->
-        <firebase-auth
-            id="firebaseAuth"
-            app-name="wrc_software"></firebase-auth>
-
         <!-- Element UI -->
         <main>
             <template is="dom-if" if="[[!userReady]]">
@@ -516,7 +511,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _userChanged(user) {
                     if (user) {
                         this.userReady = false;
-						this.$.firebaseDocument.getStoredValue(user.uid + '/coaches')
+						this.$.firebaseDocument.getStoredValue('/users')
                         .then(function (snapshot) {
                             this.userReady = true;
                         }.bind(this));
@@ -541,7 +536,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @return {void}
                 */
                 _saveCoach(coachInfo) {
-                    this._appProgressBar.hidden = false;
 					if (this.action === 'add') {
 						this.$.firebaseDocument.setStoredValue('users/' + coachInfo.uid, coachInfo)
                         .catch(function (err) {

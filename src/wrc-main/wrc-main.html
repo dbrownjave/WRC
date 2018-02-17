@@ -45,6 +45,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <!-- WRC Elements -->
 <link rel="lazy-import" href="../wrc-coaches/wrc-coaches.html">
+<link rel="lazy-import" href="../wrc-library/wrc-library.html">
 
 <dom-module id="wrc-main">
     <template>
@@ -248,6 +249,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             order-by-child="role"
             equal-to="coach"></firebase-query>
 
+        <!-- Library Query -->
+        <firebase-query
+            app-name="wrc_software"
+            path="library"
+            data="{{libraryData}}"></firebase-query>
+
         <!-- Element UI -->
         <app-drawer-layout fullbleed narrow="{{narrow}}" responsive-width="768px">
             <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
@@ -310,6 +317,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <div class="main-container">
                         <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" role="main" fallback-selection="404" hidden="[[!userReady]]">
                             <wrc-coaches name="coaches" user="[[user]]" coaches-data="[[coachesData]]"></wrc-coaches>
+                            <wrc-library name="library" user="[[user]]" library-data="[[libraryData]]"></wrc-library>
                         </iron-pages>
                     </div>
                 </app-header>
