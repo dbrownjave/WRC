@@ -53,7 +53,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 padding: 2em 3em;
                 height: calc(100vh - (64px + 4em));
                 min-height: calc(100vh - (64px + 4em));
-                overflow-y: scroll;
+                overflow-y: auto;
 
                 @apply --layout-vertical;
                 @apply --layout-center;
@@ -141,8 +141,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             /* Library Wrapper */
             div.library-wrapper {
                 width: 100%;
-
-                /* @apply --layout-vertical; */
             }
 
             div.library-wrapper[hidden] {
@@ -204,6 +202,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 margin-right: 32px;
                 max-width: 310px;
                 overflow: hidden;
+                margin-bottom: 32px;
             }
 
             div.video-wrapper google-youtube {
@@ -249,6 +248,57 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 font-size: .8em;
             }
 
+            div.category-wrapper {
+                margin-bottom: 36px;
+            }
+
+            div.category-wrapper h3 {
+                color: var(--azul-text-title);
+                font-weight: 500;
+                font-size: 1.2em;
+                
+            }
+
+            /* Responsive */
+            @media screen and (max-width: 425px) {
+                /* General Style */
+                main {
+                    padding: 1em;
+                    height: calc(100vh - (64px + 2em));
+                    min-height: calc(100vh - (64px + 2em));
+
+                    @apply --layout-vertical;
+                    @apply --layout-center;
+                }
+
+                paper-fab {
+                    bottom: 1em;
+                    right: 1em;
+                }
+
+                /* Videos Wrapper */
+                div.videos-wrapper {
+                    width: 100%;
+
+                    @apply --layout-vertical;
+                    @apply --layout-wrap;
+                }
+
+                /* Video */
+                div.video-wrapper {
+                    margin-right: 0;
+                    max-width: auto;
+                    margin-bottom: 24px;
+                    width: 100%;
+                    min-width: 100%;
+                }
+
+                div.video-wrapper google-youtube {
+                    width: 100%;
+                    height: 190px;
+                }
+            }
+
             [hidden] {
                 display: none;
             }
@@ -283,7 +333,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <poly-filter-diacritic
                         filter="[[libraryFilter]]"
                         array-to-filter="[[libraryData]]"
-                        filtered-array="{{libraryDataFiltered}}"></poly-filter-diacritic>
+                        filtered-array="{{libraryDataFiltered}}"
+                        filter-by="title"></poly-filter-diacritic>
 
                     <vaadin-text-field
                         placeholder="Search"
