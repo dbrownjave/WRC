@@ -107,6 +107,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 			app-drawer div.menu-container {
 				box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.25);
+                border-style: none;
 			}
 
 			app-header-layout div.main-container {
@@ -114,20 +115,19 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				min-height: calc(100vh - 64px);
 				min-width: 100%;
 				background-color: var(--azul-background);
-				/* box-shadow: -4px 3px 10px 0px rgba(0, 0, 0, 0.10); */
 			}
 
 			#drawer div.menu-container {
 				height: calc(100vh - 64px);
-				min-height: calc(100vh - 64px);
-				border-right: 1px solid var(--paper-grey-300);
+                min-height: calc(100vh - 64px);
 			}
 
 			#drawer app-toolbar a {
 				margin: 0;
 				padding: 0;
 				text-decoration: none;
-				color: #fff;
+                color: #fff;
+                
 				@apply --layout-horizontal;
 				@apply --layout-center;
 				@apply --layout-center-center;
@@ -315,9 +315,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						<paper-icon-button class="max-calc-btn" src="../../icons/library/calculator.svg" on-tap="_openMaxCalculatorDialog"></paper-icon-button>
                     </app-toolbar>
                     <div class="main-container">
-                        <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" role="main" fallback-selection="404" hidden="[[!userReady]]">
+                        <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" role="main" fallback-selection="404">
                             <wrc-coaches name="coaches" user="[[user]]" coaches-data="[[coachesData]]"></wrc-coaches>
-                            <wrc-library name="library" user="[[user]]" library-data="[[libraryData]]"></wrc-library>
+                            <wrc-library name="library" user="[[user]]" library-data="[[libraryData]]" user-role="[[userInfo.role]]"></wrc-library>
                         </iron-pages>
                     </div>
                 </app-header>

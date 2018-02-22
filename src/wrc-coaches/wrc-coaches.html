@@ -141,9 +141,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             /* Coaches Wrapper */
             div.coaches-wrapper {
                 width: 100%;
-
-                @apply --layout-vertical;
-                @apply --layout-center;
             }
 
             div.coaches-wrapper[hidden] {
@@ -154,9 +151,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             div.search-wrapper {
                 width: 100%;
                 margin-bottom: 24px;
-                
-                @apply --layout-vertical;
-                @apply --layout-center-center;
             }
 
             div.search-wrapper vaadin-text-field {
@@ -204,6 +198,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             div.cards-wrapper paper-card {
                 width: 100%;
                 margin-bottom: 24px;
+                
+                @apply --azul-shadow--grid-elevation-1;
             }
 
             div.cards-wrapper paper-card div.card-header {
@@ -227,8 +223,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				background-color: #F3F4F5;
 				overflow: hidden;
 				border-radius: 10em;
-				width: 90px;
-				height: 90px;
+				width: 70px;
+				height: 70px;
                 box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
                 margin-right: 20px;
 
@@ -250,7 +246,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             div.cards-wrapper paper-card div.card-content div.coach-info p strong {
                 color: var(--azul-text-title);
-                margin-right: 5px;
+                margin-right: 3px;
                 font-size: .9em;
             }
 
@@ -279,10 +275,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     @apply --layout-vertical;
                     @apply --layout-center;
-                }
-
-                div.search-wrapper {
-                    /* margin-bottom: px; */
                 }
 
                 paper-fab {
@@ -329,7 +321,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <poly-filter-diacritic
                         filter="[[coachFilter]]"
                         array-to-filter="[[coachesData]]"
-                        filtered-array="{{coachesDataFiltered}}"></poly-filter-diacritic>
+                        filtered-array="{{coachesDataFiltered}}"
+                        filter-by="first, last"></poly-filter-diacritic>
 
                     <vaadin-text-field
                         placeholder="Search"

@@ -151,9 +151,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             div.search-wrapper {
                 width: 100%;
                 margin-bottom: 24px;
-                
-                @apply --layout-vertical;
-                @apply --layout-center-center;
             }
 
             div.search-wrapper vaadin-text-field {
@@ -198,11 +195,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             /* Video */
             div.video-wrapper {
                 border-radius: 5px;
-                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
                 margin-right: 32px;
                 max-width: 310px;
                 overflow: hidden;
                 margin-bottom: 32px;
+                -webkit-box-shadow: 0 10px 60px rgba(125, 147, 178, .35);
+                box-shadow: 0 10px 60px rgba(125, 147, 178, .35);
             }
 
             div.video-wrapper google-youtube {
@@ -248,6 +246,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 font-size: .8em;
             }
 
+            div.video-wrapper .video-info paper-icon-button {
+                color: var(--paper-grey-600);
+            }
+
+            div.video-wrapper .video-info paper-icon-button:hover {
+                color: var(--paper-grey-900);
+            }
+
+            /* Category Wrapper */
             div.category-wrapper {
                 margin-bottom: 36px;
             }
@@ -371,7 +378,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                         <span>[[video.category]]</span>
                                     </p>
                                     <span flex></span>
-                                    <paper-icon-button icon="app-icons:more-vert"></paper-icon-button>
                                 </div>
                             </div>
                         </template>
@@ -395,7 +401,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                             <span>[[video.category]]</span>
                                         </p>
                                         <span flex></span>
-                                        <paper-icon-button icon="app-icons:more-vert"></paper-icon-button>
+                                        <paper-icon-button id$="[[video.$key]]" on-tap="_openToEdit" icon="app-icons:more-vert" hidden="[[!_isAdmin(userRole)]]"></paper-icon-button>
                                     </div>
                                 </div>
                             </template>
@@ -417,7 +423,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                             <span>[[video.category]]</span>
                                         </p>
                                         <span flex></span>
-                                        <paper-icon-button icon="app-icons:more-vert"></paper-icon-button>
+                                        <paper-icon-button id$="[[video.$key]]" on-tap="_openToEdit" icon="app-icons:more-vert" hidden="[[!_isAdmin(userRole)]]"></paper-icon-button>
                                     </div>
                                 </div>
                             </template>
@@ -439,7 +445,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                             <span>[[video.category]]</span>
                                         </p>
                                         <span flex></span>
-                                        <paper-icon-button icon="app-icons:more-vert"></paper-icon-button>
+                                        <paper-icon-button id$="[[video.$key]]" on-tap="_openToEdit" icon="app-icons:more-vert" hidden="[[!_isAdmin(userRole)]]"></paper-icon-button>
                                     </div>
                                 </div>
                             </template>
@@ -449,7 +455,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             </div>
 
             <!-- Paper Fab to add new Team -->
-            <paper-fab icon="app-icons:add" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(libraryData.length, userReady)]]"></paper-fab>
+            <template is="dom-if" if="[[_isAdmin(userRole)]]">
+                <paper-fab icon="app-icons:add" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(libraryData.length, userReady)]]"></paper-fab>
+            </template>
         </main>
     </template>
 
@@ -468,6 +476,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 static get properties() {
                     return {
+                        userRole: String,
                         userReady: {
                             type: Boolean,
                             notify: true,
@@ -585,12 +594,29 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /**
-                 * Opens video dialog
+                 * Opens video dialog to add
                 */
                 _openToAdd() {
                     this.action = 'add';
+                    this._videoDialog.title = 'New';
                     this._videoDialog.acceptedCallback = this._saveVideo.bind(this);
                     this._videoDialog.opened = true;
+                }
+
+                /**
+                 * Opens video dialog to edit
+                */
+                _openToEdit(e) {
+                    this.action = 'edit';
+                    this.videoId = e.target.getAttribute('id');
+                    
+                    this.$.firebaseDocument.getStoredValue('library/' + this.videoId)
+                    .then(function(videoData) {
+                        this._videoDialog.title = 'Edit';
+                        this._videoDialog.videoInfo = videoData;
+                        this._videoDialog.acceptedCallback = this._saveVideo.bind(this);
+                        this._videoDialog.opened = true;
+                    }.bind(this));
                 }
 
                 /**
@@ -611,7 +637,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						this._appToast.text = 'The video has been saved successfully.';
 						this._appToast.open();
 						this._appProgressBar.hidden = true;
-					}
+					} else {
+                        this.$.firebaseDocument.setStoredValue('library/' + this.videoId, videInfo)
+                        .catch(function (err) {
+                            this._appToast.text = 'There has been an error. Please try again.';
+                            this._appToast.open();
+                        }.bind(this));
+
+                        this._videoDialog.opened = false;
+						this._appToast.text = 'The video has been edited successfully.';
+						this._appToast.open();
+						this._appProgressBar.hidden = true;
+                    }
                 }
 
                 /**
@@ -642,6 +679,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _searchRecent(video) {
                     return video.category.match(new RegExp('recent', 'ig'));
+                }
+
+                /**
+                 * Verifies the role of the user
+                 *
+                 * @param {String} role of the user
+                 * @return {Boolean} true if the user admin, otherwise false
+                */
+                _isAdmin(role) {
+                    return (role === 'admin') ? true : false;
                 }
             }
             window.customElements.define(WrcLibrary.is, WrcLibrary);

@@ -111,7 +111,52 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				paper-dialog {
 					width: 610px;
 				}
-			}
+            }
+            
+            @media screen and (max-width: 425px) {
+                /* Profile Image */
+                div.profile-wrapper {
+                    width: 100%;
+
+                    @apply --layout-vertical;
+                    @apply --layout-center-center;
+                }
+
+                iron-image {
+                    margin-bottom: 24px;
+                    background-color: #F3F4F5;
+                    overflow: hidden;
+                    border-radius: 10em;
+                    width: 120px;
+                    height: 120px;
+                    box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+                }
+
+                div.info-wrapper {
+                    margin-left: 0;
+
+                    @apply --layout-vertical;
+                    @apply --layout-start-justified;
+                }
+
+                div.info-wrapper p {
+                    margin-top: 0;
+                    margin-bottom: 8px;
+
+                    @apply --layout-self-start;
+                }
+
+                div.info-wrapper p strong {
+                    color: var(--azul-text-title);
+                    margin-right: 3px;
+                    font-size: 1em;
+                }
+
+                div.info-wrapper p span {
+                    font-size: 1em;
+                    font-weight: lighter;
+                }
+            }
 
 			[hidden] {
 				display: none;
