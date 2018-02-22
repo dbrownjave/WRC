@@ -55,6 +55,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 padding: 2em 3em;
                 height: calc(100vh - (64px + 4em));
                 min-height: calc(100vh - (64px + 4em));
+                overflow: auto;
 
                 @apply --layout-vertical;
                 @apply --layout-center;
@@ -202,6 +203,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             div.cards-wrapper paper-card {
                 width: 100%;
+                margin-bottom: 24px;
             }
 
             div.cards-wrapper paper-card div.card-header {
@@ -277,6 +279,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     @apply --layout-vertical;
                     @apply --layout-center;
+                }
+
+                div.search-wrapper {
+                    /* margin-bottom: px; */
+                }
+
+                paper-fab {
+                    bottom: 1em;
+                    right: 1em;
                 }
             }
 

@@ -312,7 +312,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         <paper-icon-button icon="app-icons:menu" drawer-toggle></paper-icon-button>
                         <div main-title>[[mainTitle]]</div>
 						<span main-title></span>
-						<paper-icon-button class="max-calc-btn" src="../../icons/library/calculator.svg" on-tap="openMaxCalculatorDialog"></paper-icon-button>
+						<paper-icon-button class="max-calc-btn" src="../../icons/library/calculator.svg" on-tap="_openMaxCalculatorDialog"></paper-icon-button>
                     </app-toolbar>
                     <div class="main-container">
                         <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" role="main" fallback-selection="404" hidden="[[!userReady]]">
@@ -398,8 +398,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     // App Toast
                     this._appToast = document.getElementById('appToast');
 
-                    // Verify Email Password
+                    // Verify Email Dialog
                     this._verifyEmailDialog = document.getElementById('verifyEmailDialog');
+
+                    // Max Calculator Dialog
+                    this._maxCalculatorDialog = document.getElementById('maxCalculatorDialog');
                 }
 
                 /**
@@ -551,6 +554,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._appToast.text = 'You personal information has been saved successfully.';
                     this._appToast.open();
                     this._userProfileDialog._resetForm();
+                }
+
+                /**
+                 * Opens max calculator dialog
+                */
+                _openMaxCalculatorDialog() {
+                    this._maxCalculatorDialog.opened = true;
                 }
             }
             window.customElements.define(WrcMain.is, WrcMain);

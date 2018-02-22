@@ -1,0 +1,287 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+-->
+
+<!-- Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<!-- Vaadin Elements -->
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+
+<!-- Suji Elements -->
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
+<link rel="import" href="../suji/lib/themes/azul/azul-dialog.html">
+
+<!-- Neon Elements -->
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+
+<dom-module id="max-calculator-dialog">
+    <template>
+        <style>
+            /* General Style */
+            [flex] {
+                @apply --layout-flex;
+            }
+
+            /* Dialog Style */
+            paper-dialog {
+				border-radius: 5px;
+                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+			}
+
+            paper-dialog h2 {
+				color: var(--azul-text-title);
+				font-size: 1.6em;
+			}
+
+            paper-dialog .buttons paper-button {
+				color: var(--azul-primary);
+                font-weight: 500;
+			}
+
+			paper-dialog .buttons paper-button.cancel-button {
+				color: var(--azul-primary-text);
+                font-weight: normal;
+			}
+
+            /* Estimated Result */
+            .estimated-max-wrapper {
+                margin: 1em 0;
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			.estimated-max-wrapper p {
+				font-size: 6.5em;
+				text-align: center;
+				font-weight: 500;
+				color: #86919f;
+                margin: 30px 0;
+			}
+
+            /* Form */
+            vaadin-form-layout {
+				@apply --layout-vertical;
+			}
+
+			div.horizontal-wrapper {
+				@apply --layout-horizontal;
+                @apply --layout-wrap;
+			}
+
+			div.horizontal-wrapper vaadin-text-field {
+				width: 48%;
+			}
+
+			div.horizontal-wrapper vaadin-combo-box {
+				width: 48%;
+			}
+
+			[slot='suffix'] {
+				color: var(--paper-grey-500);
+			}
+
+            /* To keep dialog larger with large screens */
+			@media screen and (min-width: 435px) {
+				paper-dialog {
+					width: 425px;
+				}
+			}
+
+            @media screen and (max-width: 425px) {
+				.estimated-max-wrapper p {
+					font-size: 4.5em;
+				}
+
+				paper-dialog h2 {
+					font-size: 1.2em;
+				}
+			}
+
+			[hidden] {
+				display: none;
+			}
+        </style>
+
+        <paper-dialog
+            opened="{{opened}}"
+            with-backdrop
+            entry-animation="slide-from-top-animation"
+            exit-animation="fade-out-animation">
+
+            <h2>1 Rep Max Calculator</h2>
+            <paper-dialog-scrollable>
+                <!-- Estimated Max Result -->
+				<div class="estimated-max-wrapper">
+                    <p>[[equationResult]] lbs</p>
+                </div>
+
+                <!-- Form -->
+                <iron-form id="calculatorForm">
+                    <form>
+                        <vaadin-form-layout>
+                            <div class="horizontal-wrapper" colspan="2">
+                                <vaadin-text-field
+                                    label="Weight"
+                                    name="weight"
+                                    required
+                                    error-message="Enter the weight"
+                                    value="{{weight}}">
+                                    <span slot="suffix">lbs</span>
+                                </vaadin-text-field>
+                                <span flex></span>
+                                <vaadin-combo-box
+                                    id="repsCombo"
+                                    label="Reps"
+                                    name="reps"
+                                    required
+                                    error-message="Select the amount of reps"
+                                    value="{{reps}}"></vaadin-combo-box>
+                            </div>
+                            <vaadin-combo-box
+                                colspan="2"
+                                id="exerciseCombo"
+                                label="Exercise"
+                                name="exercise"
+                                required
+                                error-message="Select the exercise"
+                                value="{{exercise}}"></vaadin-combo-box>
+                        </vaadin-form-layout>
+                    </form>
+                </iron-form>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button class="cancel-button" dialog-dismiss on-tap="_resetForm">Cancel</paper-button>
+                <paper-button on-tap="_calculateMaxReps">Calculate</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            class MaxCalculatorDialog extends Polymer.Element {
+                /**
+                 * Element definition
+                */
+                static get is() { return 'max-calculator-dialog'; }
+
+                /**
+                 * Element properties
+                */
+                static get properties() {
+                    return {
+                        opened: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
+                        equationResult: {
+                            type: String,
+                            notify: true,
+                            value: '0'
+                        },
+                        weight: Number,
+                        reps: Number,
+                        exercise: String,
+                        rawEquationResult: {
+                            type: Number,
+                            notify: true,
+                            value: '0'
+                        },
+                    };
+                }
+
+                ready() {
+                    super.ready();
+
+                    this.$.repsCombo.items = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+                    this.$.exerciseCombo.items = ['Bench Press', 'Front-Squat', 'Back-Squat'];
+                }
+
+                /**
+                 * Resets the form
+                */
+                _resetForm() {
+                    this.equationResult = 0;
+                    this.$.calculatorForm.reset();
+                }
+
+                /**
+                 * Based on form data calculates the max reps
+                */
+                _calculateMaxReps() {
+                    if (this.$.calculatorForm.validate()) {
+                        // inital variable values
+                        var e = parseFloat(0.0333);
+                        this.rawEquationResult = 0;
+                        this.equationResult = 0;
+
+                        if (this.exercise) { // if exercise has a value then & :
+                            if (this.exercise == 'Bench Press') {
+                                // the raw results =  to this, if ('weight and reps' have a value) [equation] else result = '0'
+                                this.rawEquationResult = (this.weight && this.reps) ? (parseInt(this.weight) * parseInt(this.reps) * e) + parseInt(this.weight) : '0';
+                                this.equationResult = this.roundMaxResult();
+
+                            // Testing: Display compare results to determine the correctness of calculation
+                            //alert(this.equationResult);
+                            } else if (this.exercise == 'Front-Squat') {
+                                this.rawEquationResult = (this.weight && this.reps) ? (parseInt(this.weight) * parseInt(this.reps) * e) + parseInt(this.weight) : '0';
+                                this.equationResult = this.roundMaxResult();
+                            } else if (this.exercise == 'Back-Squat') {
+                                this.rawEquationResult = (this.weight && this.reps) ? (parseInt(this.weight) * parseInt(this.reps) * e) + parseInt(this.weight) : '0';
+                                this.equationResult = this.roundMaxResult();
+                            }
+                        } else {
+                            this.equationResult = '0';
+                        }
+                    }
+                }
+
+                // Weight Rounding Method to round the equation results; (e.g. floats/decimals) since weight's are (5,10,15...)
+                roundMaxResult() {
+                    // Display before: rawEquationResult
+                    //alert(this.rawEquationResult);
+                    var rawEquationResult = parseInt(Math.round(this.rawEquationResult));
+
+                    // Display after: rawEquationResult
+                    //alert(rawEquationResult);
+
+                    // find last digit of number
+                    var lastDigit = rawEquationResult.toString().split('').pop();
+
+                    // Testing: Display last digit
+                    //alert(lastDigit);
+
+                    // Conditional statement to determine the rounding method
+                    if (lastDigit >= 5) {
+                        return ((rawEquationResult - lastDigit) + 5);
+                    } else if (lastDigit <= 4) {
+                        return (rawEquationResult - lastDigit);
+                    }
+                }
+            }
+            window.customElements.define(MaxCalculatorDialog.is, MaxCalculatorDialog);
+        })();
+    </script>
+</dom-module>
