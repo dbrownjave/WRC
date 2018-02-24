@@ -1,0 +1,252 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+-->
+
+<!-- Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<!-- Suji Elements -->
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
+<link rel="import" href="../suji/lib/themes/azul/azul-dialog.html">
+
+<!-- Vaadin Elements -->
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+
+<!-- Neon Elements -->
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+
+<!-- Icons -->
+<link rel="import" href="../app-icons.html">
+<link rel="import" href="../fa-icons.html">
+
+<dom-module id="athlete-profile-dialog">
+    <template>
+        <style>
+            /* Dialog */
+            paper-dialog {
+				border-radius: 5px;
+                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+			}
+
+            paper-dialog h2 {
+				color: var(--azul-text-title);
+				font-size: 1.6em;
+			}
+
+			paper-dialog div p {
+				font-weight: lighter;
+				line-height: 1em;
+			}
+
+			paper-dialog div.buttons {
+				@apply --layout-horizontal;
+				@apply --layout-end-justified;
+			}
+
+			paper-dialog .buttons paper-button {
+				color: var(--azul-primary);
+                font-weight: 500;
+			}
+
+			paper-dialog .buttons paper-button.cancel-button {
+				color: var(--paper-grey-700);
+                font-weight: normal;
+			}
+
+			paper-dialog .buttons paper-button.delete-button {
+				color: var(--paper-red-400);
+                font-weight: normal;
+            }
+
+            /* Profile */
+            div.horizontal-layout {
+                @apply --layout-horizontal;
+                @apply --layout-start-justified;
+            }
+
+            div.vertical-layout {
+                @apply --layout-vertical;
+            }
+
+            .athlete-info {
+                margin-left: 24px;
+                width: 50%;
+            }
+
+            .athlete-info h3 {
+                margin-top: 0;
+                color: var(--azul-text-title);
+                font-size: 1.4em;
+            }
+
+            .athlete-info p {
+                margin: 0;
+                font-size: 1.1em;
+                margin-bottom: 16px;
+            }
+
+            .athlete-info iron-icon {
+                color: var(--azul-text-title);
+            }
+
+            .athlete-info p strong {
+                color: var(--azul-text-title);
+            }
+
+            .athlete-contact h3 {
+                margin-top: 0;
+                color: var(--azul-text-title);
+                font-size: 1.4em;
+            }
+
+            .athlete-contact p {
+                margin: 0;
+                font-size: 1.1em;
+                margin-bottom: 16px;
+            }
+
+            .athlete-contact iron-icon {
+                color: var(--azul-text-title);
+            }
+
+            .athlete-contact p strong {
+                margin-right: 3px;
+                color: var(--azul-text-title);
+            }
+
+            iron-image {
+				background-color: #F3F4F5;
+				overflow: hidden;
+				border-radius: 10em;
+				width: 150px;
+				height: 150px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+            }
+            
+            /* To keep dialog larger with large screens */
+			@media screen and (min-width: 500px) {
+				paper-dialog {
+					width: 510px;
+				}
+            }
+            
+            [hidden] {
+                display: none;
+            }
+
+            [flex] {
+                @apply --layout-flex;
+            }
+        </style>
+
+        <paper-dialog
+            opened="{{opened}}"
+            with-backdrop
+            entry-animation="scale-up-animation"
+            exit-animation="fade-out-animation">
+
+            <h2>[[athleteInfo.first]] [[athleteInfo.last]]</h2>
+            <paper-dialog-scrollable>
+                <div class="horizontal-layout">
+                    <iron-image preload fade sizing="cover" src="[[athleteInfo.profile_pic_url]]"></iron-image>
+                    <div class="athlete-info vertical-layout">
+                        <h3>#[[athleteInfo.number]]</h3>
+                        <div class="horizontal-layout">
+                            <p>
+                                <strong>POS:</strong>
+                                <span>[[athleteInfo.pos]]</span>
+                            </p>
+                            <span flex></span>
+                            <p f>
+                                <strong>HT:</strong>
+                                <span>[[athleteInfo.height]]</span>
+                            </p>
+                        </div>
+                        <div class="horizontal-layout">
+                            <p>
+                                <strong>YR:</strong>
+                                <span>[[athleteInfo.year]]</span>
+                            </p>
+                            <span flex></span>
+                            <p>
+                                <strong>WT:</strong>
+                                <span>[[athleteInfo.weight]] lbs</span>
+                            </p>
+                        </div>
+                        <p hidden="[[!athleteInfo.instagram]]">
+                            <iron-icon icon="fa-icons:instagram"></iron-icon>
+                            <span>@[[athleteInfo.instagram]]</span>
+                        </p>
+                        <p hidden="[[!athleteInfo.twitter]]">
+                            <iron-icon icon="fa-icons:twitter"></iron-icon>
+                            <span>@[[athleteInfo.twitter]]</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="athlete-contact vertical-layout">
+                    <h3>Contact</h3>
+                    <p>
+                        <strong>Email:</strong>
+                        <span>[[athleteInfo.email]]</span>
+                    </p>
+                    <p hidden="[[!athleteInfo.phone]]">
+                        <strong>Phone:</strong>
+                        <span>[[athleteInfo.phone]]</span>
+                    </p>
+                    <p hidden="[[!athleteInfo.hudl]]">
+                        <iron-icon icon="app-icons:link"></iron-icon>
+                        <strong>Hudl:</strong>
+                        <span>[[athleteInfo.hudl]]</span>
+                    </p>
+                </div>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button class="cancel-button" dialog-dismiss>Close</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            class AthleteProfileDialog extends Polymer.Element {
+                /**
+                 * Element definition
+                */
+                static get is() { return 'athlete-profile-dialog'; }
+
+                /**
+                 * Element properties
+                */
+                static get properties() {
+                    return {
+                        opened: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
+                        athleteInfo: {
+                            type: Object,
+                            notify: true
+                        }
+                    };
+                }
+            }
+            window.customElements.define(AthleteProfileDialog.is, AthleteProfileDialog);
+        })();
+    </script>
+</dom-module>

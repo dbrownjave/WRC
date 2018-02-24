@@ -46,6 +46,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- WRC Elements -->
 <link rel="lazy-import" href="../wrc-coaches/wrc-coaches.html">
 <link rel="lazy-import" href="../wrc-library/wrc-library.html">
+<link rel="lazy-import" href="../wrc-athletes/wrc-athletes.html">
 
 <dom-module id="wrc-main">
     <template>
@@ -255,11 +256,19 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             path="library"
             data="{{libraryData}}"></firebase-query>
 
+        <!-- Athletes Query -->
+        <firebase-query
+            app-name="wrc_software"
+            path="users"
+            data="{{athletesData}}"
+            order-by-child="role"
+            equal-to="athlete"></firebase-query>
+
         <!-- Element UI -->
         <app-drawer-layout fullbleed narrow="{{narrow}}" responsive-width="768px">
             <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
                 <app-toolbar>
-                    <a href="[[rootPath]]main/athletes">
+                    <a href="[[rootPath]]main">
                         <iron-image preload fade sizing="contain" src="../../images/app-images/wrc.png"></iron-image>
                         <span main-title>WRC Software</span>
                     </a>
@@ -290,11 +299,29 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         </div>
 
                         <!-- Menu for admin -->
-                        <template is="dom-if" if="[[_computeMenuForAdmin('admin')]]">
+                        <template is="dom-if" if="[[_isAdmin(userInfo.role)]]">
                             <iron-selector class="drawer-list" selected="[[page]]" attr-for-selected="name" role="navigation">
                                 <a name="coaches" href="[[rootPath]]main/coaches">
                                     <iron-icon icon="app-icons:person"></iron-icon>
                                     <span>Coaches</span>
+                                </a>
+                                <a name="library" href="[[rootPath]]main/library">
+                                    <iron-icon icon="fa-icons:video"></iron-icon>
+                                    <span>Library</span>
+                                </a>
+                            </iron-selector>
+                        </template>
+
+                        <!-- Menu for coaches -->
+                        <template is="dom-if" if="[[_isCoach(userInfo.role)]]">
+                            <iron-selector class="drawer-list" selected="[[page]]" attr-for-selected="name" role="navigation">
+                                <a name="athletes" href="[[rootPath]]main/athletes">
+                                    <iron-icon icon="app-icons:person"></iron-icon>
+                                    <span>Athletes</span>
+                                </a>
+                                <a name="workouts" href="[[rootPath]]main/workouts">
+                                    <iron-icon icon="app-icons:workout"></iron-icon>
+                                    <span>Workouts</span>
                                 </a>
                                 <a name="library" href="[[rootPath]]main/library">
                                     <iron-icon icon="fa-icons:video"></iron-icon>
@@ -318,6 +345,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" role="main" fallback-selection="404">
                             <wrc-coaches name="coaches" user="[[user]]" coaches-data="[[coachesData]]"></wrc-coaches>
                             <wrc-library name="library" user="[[user]]" library-data="[[libraryData]]" user-role="[[userInfo.role]]"></wrc-library>
+                            <wrc-athletes name="athletes" user="[[user]]" athletes-data="[[athletesData]]"></wrc-athletes>
                         </iron-pages>
                     </div>
                 </app-header>
@@ -382,7 +410,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 static get observers() {
 					return [
-						'_routePageChanged(routeData.page)',
+						'_routePageChanged(routeData.page, userInfo)',
 					];
 				}
 
@@ -408,8 +436,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 /**
                  * Observes for changes in the route page
                 */
-                _routePageChanged(page) {
-					this.page = page || 'coaches';
+                _routePageChanged(page, user) {
+                    if (user) {
+                        if (user.role === 'admin') {
+                            this.page = page || 'coaches';
+                        } else if (user.role === 'coach') {
+                            this.page = page || 'athletes';
+                        }
+                    }
+
 					if (!this.$.drawer.persistent) {
 						this.$.drawer.close();
 					}
@@ -503,6 +538,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 logout() {
                     this.$.firebaseAuth.signOut();
+                    this.set('page', null);
+                    this.set('routData.page', null);
                 }
 
                 /**
@@ -521,8 +558,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {String} role of the user
                  * @return {Boolean} true if role is admin, otherwise false
                 */
-                _computeMenuForAdmin(role) {
+                _isAdmin(role) {
                     return (role === 'admin') ? true : false;
+                }
+                
+                /**
+                 * Shows coach menu
+                 *
+                 * @param {String} role of the user
+                 * @return {Boolean} true if role is coach, otherwise false
+                */
+                _isCoach(role) {
+                    return (role === 'coach') ? true : false;
                 }
                 
                 /**
