@@ -341,6 +341,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 static get properties() {
                     return {
+                        userInfo: Object,
                         userReady: {
                             type: Boolean,
                             notify: true,
@@ -419,6 +420,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _openToAdd() {
                     this.action = 'add';
+                    this._athletesDialog.coachTeam = this.userInfo.team;
                     this._athletesDialog.dialogTitle = 'New Athlete';
                     this._athletesDialog.acceptedCallback = this._saveAthlete.bind(this);
                     this._athletesDialog.action = 'add';

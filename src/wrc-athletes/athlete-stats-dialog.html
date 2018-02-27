@@ -35,9 +35,48 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <dom-module id="athlete-stats-dialog">
     <template>
         <style></style>
+
+        <paper-dialog
+            opened="{{opened}}"
+            with-backdrop
+            entry-animation="scale-up-animation"
+            exit-animation="fade-out-animation">
+
+            <h2>
+                <iron-image
+                    fade
+                    preload
+                    sizing="cover"
+                    src="[[athleteInfo.profile_pic_url]]"></iron-image>
+            </h2>
+        </paper-dialog>
     </template>
 
     <script>
-        
+        (function() {
+            'use strict';
+
+            class AthleteStatsDialog extends Polymer.Element {
+                /**
+                 * Element definition
+                */
+                static get is() { return 'athlete-stats-dialog'; }
+
+                /**
+                 * Element properties
+                */
+                static get properties() {
+                    return {
+                        athleteInfo: Object,
+                        opened: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        }
+                    };
+                }
+            }
+            window.customElements.define(AthleteStatsDialog.is, AthleteStatsDialog);
+        })();
     </script>
 </dom-module>

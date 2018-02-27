@@ -331,6 +331,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 static get properties() {
                     return {
+                        coachTeam: String,
                         dialogTitle: String,
                         acceptedCallback: Function,
                         opened: {
@@ -399,6 +400,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _serializeForm() {
                     if (this.$.athleteForm.validate()) {
                         this._appProgressBar.hidden = false;
+                        this.athleteInfo.team = this.coachTeam;
 
 						if (this.$.profilePicture.files[0]) {
                             this.$.firebaseStorage.put(this.$.profilePicture.files[0])
