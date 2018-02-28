@@ -21,7 +21,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../suji/lib/themes/azul/azul-dialog.html">
 
 <!-- Polymerfire Elements -->
-<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-storage-ref.html">
 
 <!-- Vaadin Elements -->
@@ -167,11 +166,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
         </style>
 
-        <!-- Firebase Document Configuration -->
-        <firebase-document
-            id="firebaseDocument"
-            app-name="wrc_software"></firebase-document>
-
         <!-- Firebase Storage Configuration -->
         <firebase-storage-ref
             id="storageRef"
@@ -204,8 +198,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 </div>
             </paper-dialog-scrollable>
             <div class="buttons">
-                <paper-button class="delete-button" on-tap="_openDeleteDialog">Delete</paper-button>
-                <span flex></span>
                 <paper-button dialog-dismiss on-tap="_resetCoachInfo">OK</paper-button>
             </div>
         </paper-dialog>
@@ -239,9 +231,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 ready() {
                     super.ready();
 
-                    // Delete Coach Dialog
-                    this._deleteCoachDialog = document.getElementById('deleteCoachDialog');
-
                     // App Progress Bar
                     this._appProgressBar = document.getElementById('appProgressBar');
 
@@ -254,40 +243,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _resetCoachInfo() {
                     this.coachInfo = null;
-                }
-
-                /**
-                 * Opens the delete confirmation dialog
-                */
-                _openDeleteDialog() {
-                    this._deleteCoachDialog.acceptedCallback = this._deleteCoach.bind(this);
-                    this._deleteCoachDialog.opened = true;
-                }
-
-                /**
-                 * Deletes the coach
-                 *
-                 * @param {Boolean} response from delete confirmation dialog
-                 * @return {void}
-                */
-                _deleteCoach(response) {
-                    if (response) {
-                        // Deletes the coach information from the administrator data
-                        this.$.firebaseDocument.destroy('users/' + this.coachId)
-                        .then(function() {
-                            this._appToast.text = 'The coach has been deleted.';
-                            this._appToast.open();
-                            this._deleteCoachDialog.opened = false;
-                            this.opened = false;
-
-                            // Deletes the whole coach information
-                            this.$.firebaseDocument.destroy(this.coachInfo.uid)
-                            .then(function() {
-                                this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
-						        this.$.storageRef.delete();
-                            }.bind(this));
-                        }.bind(this));
-                    }
                 }
             }
             window.customElements.define(CoachProfileDialog.is, CoachProfileDialog);

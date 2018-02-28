@@ -384,6 +384,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 <template class="horizontal-layout">
                                     <div class="actions">
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:player-card" on-tap="_openCoachProfileDialog"></paper-icon-button>
+                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button>
                                     </div>
                                 </template>
                             </vaadin-grid-column>
@@ -527,10 +528,31 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _openToAdd() {
                     this.action = 'add';
+                    this._coachesDialog._resetForm();
                     this._coachesDialog.acceptedCallback = this._saveCoach.bind(this);
                     this._coachesDialog.action = 'add';
                     this._coachesDialog.opened = true;
                     this._coachesDialog.user = this.user;
+                }
+
+                /**
+                 * Opens coaches dialog to edit
+                 *
+                 * @param {Event} evt from tapped button
+                 * @return {void}
+                */
+                _openToEdit(evt) {
+                    this.coachId = evt.target.getAttribute('id');
+                    this.action = 'edit';
+
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/coaches/' + this.coachId)
+                    .then(function(snapshot) {
+                        this._coachesDialog.coachInfo = snapshot;
+                        this._coachesDialog.acceptedCallback = this._saveCoach.bind(this);
+                        this._coachesDialog.action = 'edit';
+                        this._coachesDialog.opened = true;
+                        this._coachesDialog.user = this.user;
+                    }.bind(this));
                 }
 
                 /**
@@ -541,7 +563,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _saveCoach(coachInfo) {
 					if (this.action === 'add') {
-						this.$.firebaseDocument.setStoredValue('users/' + coachInfo.uid, coachInfo)
+                        // Saves coach into admin private info
+						this.$.firebaseDocument.setStoredValue(this.user.uid + '/coaches/' + coachInfo.uid, coachInfo)
+                        .then(function() {
+                            // Saves coach metadata
+                            this.$.firebaseDocument.setStoredValue(coachInfo.uid + '/metadata', {'path': this.user.uid + '/coaches/' + coachInfo.uid, 'role': 'coach'});
+                        }.bind(this))
                         .catch(function (err) {
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
@@ -551,7 +578,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						this._appToast.text = 'The coach has been saved successfully.';
 						this._appToast.open();
 						this._appProgressBar.hidden = true;
-					}
+					} else {
+						this.$.firebaseDocument.setStoredValue(this.user.uid + '/coaches/' + coachInfo.uid, coachInfo)
+                        .catch(function (err) {
+                            this._appToast.text = 'There has been an error. Please try again.';
+                            this._appToast.open();
+                        }.bind(this));
+                        
+						this._coachesDialog.opened = false;
+						this._appToast.text = 'The coach has been modified successfully.';
+						this._appToast.open();
+						this._appProgressBar.hidden = true;
+                    }
                 }
 
                 /**
@@ -560,7 +598,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _openCoachProfileDialog(e) {
                     this.coachId = e.target.getAttribute('id');
                     
-                    this.$.firebaseDocument.getStoredValue('users/' + this.coachId)
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/coaches/' + this.coachId)
                     .then(function(snapshot) {
                         this._coachProfileDialog.coachId = this.coachId;
                         this._coachProfileDialog.coachInfo = snapshot;

@@ -245,10 +245,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <!-- Coaches Query -->
         <firebase-query
             app-name="wrc_software"
-            path="users"
-            data="{{coachesData}}"
-            order-by-child="role"
-            equal-to="coach"></firebase-query>
+            path="[[user.uid]]/coaches"
+            data="{{coachesData}}"></firebase-query>
 
         <!-- Library Query -->
         <firebase-query
@@ -299,7 +297,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         </div>
 
                         <!-- Menu for admin -->
-                        <template is="dom-if" if="[[_isAdmin(userInfo.role)]]">
+                        <template is="dom-if" if="[[_isAdmin(userRole)]]">
                             <iron-selector class="drawer-list" selected="[[page]]" attr-for-selected="name" role="navigation">
                                 <a name="coaches" href="[[rootPath]]main/coaches">
                                     <iron-icon icon="app-icons:person"></iron-icon>
@@ -313,7 +311,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         </template>
 
                         <!-- Menu for coaches -->
-                        <template is="dom-if" if="[[_isCoach(userInfo.role)]]">
+                        <template is="dom-if" if="[[_isCoach(userRole)]]">
                             <iron-selector class="drawer-list" selected="[[page]]" attr-for-selected="name" role="navigation">
                                 <a name="athletes" href="[[rootPath]]main/athletes">
                                     <iron-icon icon="app-icons:person"></iron-icon>
@@ -399,7 +397,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             type: Object,
                             notify: true,
                             reflectToAttribute: true
-                        }
+                        },
+                        userRole: String
                     };
                 }
 
@@ -410,7 +409,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 static get observers() {
 					return [
-						'_routePageChanged(routeData.page, userInfo)',
+						'_routePageChanged(routeData.page, userRole)',
 					];
 				}
 
@@ -436,11 +435,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 /**
                  * Observes for changes in the route page
                 */
-                _routePageChanged(page, user) {
-                    if (user) {
-                        if (user.role === 'admin') {
+                _routePageChanged(page, role) {
+                    if (role) {
+                        if (role === 'admin') {
                             this.page = page || 'coaches';
-                        } else if (user.role === 'coach') {
+                        } else if (role === 'coach') {
                             this.page = page || 'athletes';
                         }
                     }
@@ -485,10 +484,22 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _userChanged(user) {
                     if (user) {
                         this._checkVerifiedStatus(user.emailVerified);
-                        this.$.firebaseDocument.getStoredValue('users/' + user.uid)
-                        .then(function(userInfo) {
-                            this.userInfo = userInfo;
-                            this.userReady = true;
+                        this.$.firebaseDocument.getStoredValue(user.uid + '/metadata')
+                        .then(function(userMetadata) {
+                            this.userRole = userMetadata.role;
+                            if (userMetadata.role !== 'admin') {
+                                this.$.firebaseDocument.getStoredValue(userMetadata.path)
+                                .then(function(userInfo) {
+                                    this.userInfo = userInfo;
+                                    this.userReady = true;
+                                }.bind(this));
+                            } else {
+                                this.$.firebaseDocument.getStoredValue(user.uid + '/profile')
+                                .then(function(userInfo) {
+                                    this.userInfo = userInfo;
+                                    this.userReady = true;
+                                }.bind(this));
+                            }
                         }.bind(this));
                     }
                 }
