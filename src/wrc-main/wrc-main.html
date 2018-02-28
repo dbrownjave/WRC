@@ -281,7 +281,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <template is="dom-if" if="[[userReady]]" restamp>
                         <div class="user-wrapper">
                             <div class="image-container">
-                                <iron-image preload fade sizing="contain" src="[[userInfo.profile_pic_url]]"></iron-image>                            
+                                <iron-image preload fade sizing="cover" src="[[userInfo.profile_pic_url]]"></iron-image>                            
                             </div>
                             <paper-menu-button horizontal-align="right" vertical-align="top" opened="{{openedMenu}}">
                                 <div class="user-display-name" slot="dropdown-trigger">
@@ -487,6 +487,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this.$.firebaseDocument.getStoredValue(user.uid + '/metadata')
                         .then(function(userMetadata) {
                             this.userRole = userMetadata.role;
+                            this.userPath = userMetadata.path;
                             if (userMetadata.role !== 'admin') {
                                 this.$.firebaseDocument.getStoredValue(userMetadata.path)
                                 .then(function(userInfo) {
@@ -588,27 +589,59 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _openUserProfileDialog() {
                     this.selectedUserOption = null;
-                    this._userProfileDialog.acceptedCallback = this._saveNewProfileInfo.bind(this);
-                    this._userProfileDialog.userInfo = this.userInfo;
-                    this._userProfileDialog.opened = true;
+
+                    if (this.userRole === 'admin') {
+                        this._userProfileDialog.acceptedCallback = this._saveAdminProfile.bind(this);
+                        this._userProfileDialog.adminInfo = this.userInfo;
+                        this._userProfileDialog.openedAdmin = true;
+                    } else if (this.userRole === 'coach') {
+                        this._userProfileDialog.acceptedCallback = this._saveCoachProfile.bind(this);
+                        this._userProfileDialog.coachInfo = this.userInfo;
+                        this._userProfileDialog.openedCoach = true;
+                    } else if (this.userRole === 'player') {
+                        this._userProfileDialog.acceptedCallback = this._savePlayerProfile.bind(this);
+                        this._userProfileDialog.playerInfo = this.userInfo;
+                        this._userProfileDialog.openedPlayer = true;
+                    }
                 }
 
                 /**
                  * Receives form data from user-profile-dialog
                  *
-                 * @param {Object} userInfo from dialog's form
+                 * @param {Object} adminInfo from dialog's form
                  * @return {void}
                 */
-                _saveNewProfileInfo(userInfo) {
-                    this.$.firebaseDocument.setStoredValue('/users/' + userInfo.uid, userInfo)
+                _saveAdminProfile(adminInfo) {
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/profile', adminInfo)
                     .catch(function(err) {
                         this._appToast.text = 'An error has ocurred trying to save your personal information. Please try again.';
                         this._appToast.open();
                     }.bind(this));
                     this.userInfo = null;
-                    this.userInfo = userInfo;
+                    this.userInfo = adminInfo;
                     this._appProgressBar.hidden = true;
-                    this._userProfileDialog.opened = false;
+                    this._userProfileDialog.openedAdmin = false;
+                    this._appToast.text = 'You personal information has been saved successfully.';
+                    this._appToast.open();
+                    this._userProfileDialog._resetForm();
+                }
+
+                /**
+                 * Receives form data from user-profile-dialog
+                 *
+                 * @param {Object} coachInfo from dialog's form
+                 * @return {void}
+                */
+                _saveCoachProfile(coachInfo) {
+                    this.$.firebaseDocument.setStoredValue(this.userPath, coachInfo)
+                    .catch(function(err) {
+                        this._appToast.text = 'An error has ocurred trying to save your personal information. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
+                    this.userInfo = null;
+                    this.userInfo = coachInfo;
+                    this._appProgressBar.hidden = true;
+                    this._userProfileDialog.openedCoach = false;
                     this._appToast.text = 'You personal information has been saved successfully.';
                     this._appToast.open();
                     this._userProfileDialog._resetForm();

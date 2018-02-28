@@ -131,23 +131,25 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             app-name="wrc_software"
             path="profile-pics"></firebase-storage-multiupload>
 
+        <!-- Admin Dialog -->
         <paper-dialog
-            opened="{{opened}}"
+            id="adminDialog"
+            opened="{{openedAdmin}}"
             with-backdrop
             entry-animation="scale-up-animation"
             exit-animation="fade-out-animation">
 
             <paper-dialog-scrollable>
                 <div class="picture-wrapper">
-                    <input type="file" name="profile_pic" id="profilePicture">
-                    <label for="profilePicture">
+                    <input type="file" name="profile_pic" id="adminProfilePicture">
+                    <label for="adminProfilePicture">
                         <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
-                        <iron-image id="profileImage" preload fade sizing="cover" src="[[userInfo.profile_pic_url]]"></iron-image>
+                        <iron-image id="adminProfileImage" preload fade sizing="cover" src="[[adminInfo.profile_pic_url]]"></iron-image>
                     </label>
-                    <p>[[userInfo.email]]</p>
+                    <p>[[adminInfo.email]]</p>
                 </div>
                 
-                <iron-form id="profileForm">
+                <iron-form id="adminForm">
                     <form>
                         <vaadin-form-layout>
                             <vaadin-text-field
@@ -156,35 +158,95 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 type="text"
                                 required
                                 error-message="Enter your name"
-                                value="{{userInfo.first}}"></vaadin-text-field>
+                                value="{{adminInfo.first}}"></vaadin-text-field>
                             <vaadin-text-field
                                 label="Last Name"
                                 name="last"
                                 type="text"
                                 required
                                 error-message="Enter your last name"
-                                value="{{userInfo.last}}"></vaadin-text-field>
+                                value="{{adminInfo.last}}"></vaadin-text-field>
                             <vaadin-text-field
                                 label="Phone"
                                 name="phone"
                                 type="text"
                                 required
                                 error-message="Enter your phone number"
-                                value="{{userInfo.phone}}"></vaadin-text-field>
+                                value="{{adminInfo.phone}}"></vaadin-text-field>
                             <vaadin-text-field
                                 label="Position"
                                 name="position"
                                 type="text"
                                 required
                                 error-message="Enter your business position"
-                                value="{{userInfo.position}}"></vaadin-text-field>
+                                value="{{adminInfo.position}}"></vaadin-text-field>
                         </vaadin-form-layout>
                     </form>
                 </iron-form>
             </paper-dialog-scrollable>
             <div class="buttons">
                 <paper-button class="cancel-button" dialog-dismiss on-tap="_resetForm">Cancel</paper-button>
-                <paper-button on-tap="_serializeForm">Update</paper-button>
+                <paper-button on-tap="_serializeAdminForm">Update</paper-button>
+            </div>
+        </paper-dialog>
+
+        <!-- Coach Dialog -->
+        <paper-dialog
+            id="coachDialog"
+            opened="{{openedCoach}}"
+            with-backdrop
+            entry-animation="scale-up-animation"
+            exit-animation="fade-out-animation">
+
+            <paper-dialog-scrollable>
+                <div class="picture-wrapper">
+                    <input type="file" name="profile_pic" id="coachProfilePicture">
+                    <label for="coachProfilePicture">
+                        <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
+                        <iron-image id="coachProfileImage" preload fade sizing="cover" src="[[coachInfo.profile_pic_url]]"></iron-image>
+                    </label>
+                    <p>[[coachInfo.email]]</p>
+                </div>
+                
+                <iron-form id="coachForm">
+                    <form>
+                        <vaadin-form-layout>
+                            <vaadin-text-field
+                                label="First Name"
+                                name="first"
+                                type="text"
+                                required
+                                error-message="Enter your name"
+                                value="{{coachInfo.first}}"></vaadin-text-field>
+                            <vaadin-text-field
+                                label="Last Name"
+                                name="last"
+                                type="text"
+                                required
+                                error-message="Enter your last name"
+                                value="{{coachInfo.last}}"></vaadin-text-field>
+                            <vaadin-text-field
+                                label="Phone"
+                                name="phone"
+                                type="text"
+                                required
+                                error-message="Enter your phone number"
+                                value="{{coachInfo.phone}}"></vaadin-text-field>
+                            <vaadin-text-field
+                                label="Team"
+                                name="team"
+                                type="text"
+                                required
+                                readonly
+                                error-message="Enter your team"
+                                value="{{coachInfo.team}}"></vaadin-text-field>
+                        </vaadin-form-layout>
+                    </form>
+                </iron-form>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button class="cancel-button" dialog-dismiss on-tap="_resetForm">Cancel</paper-button>
+                <paper-button on-tap="_serializeCoachForm">Update</paper-button>
             </div>
         </paper-dialog>
     </template>
@@ -207,12 +269,30 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 static get properties() {
                     return {
                         acceptedCallback: Function,
-                        opened: {
+                        openedAdmin: {
                             type: Boolean,
                             notify: true,
                             value: false
                         },
-                        userInfo: {
+                        openedCoach: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
+                        openedPlayer: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
+                        adminInfo: {
+                            type: Object,
+                            notify: true
+                        },
+                        coachInfo: {
+                            type: Object,
+                            notify: true
+                        },
+                        playerInfo: {
                             type: Object,
                             notify: true
                         }
@@ -225,43 +305,85 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     // App Progress Bar
                     this._appProgressBar = document.getElementById('appProgressBar');
 
-                    const fileUpload = this.$.profilePicture;
-					fileUpload.addEventListener('change', function(e) {
-                        this._createImgPreview(e.target.files[0]);
+                    const adminUpload = this.$.adminProfilePicture;
+					adminUpload.addEventListener('change', function(e) {
+                        this._createImgPreview(e.target.files[0], this.$.adminProfileImage);
                     }.bind(this));
+
+                    const coachUpload = this.$.coachProfilePicture;
+					coachUpload.addEventListener('change', function(e) {
+                        this._createImgPreview(e.target.files[0], this.$.coachProfileImage);
+                    }.bind(this));
+
+                    // const playerUpload = this.$.adminProfilePicture;
+					// playerUpload.addEventListener('change', function(e) {
+                    //     this._createImgPreview(e.target.files[0], this.$.playerProfileImage);
+                    // }.bind(this));
                 }
 
                 /**
                  * Resets the profile info
                 */
                 _resetForm() {
-                    this.userInfo = null;
+                    this.adminInfo = null;
+                    this.coachInfo = null;
+                    this.playerInfo = null;
                 }
 
                 /**
-                 * Serializes form data and send it to be saved trought userInfo
+                 * Serializes form data and send it to be saved trought adminInfo
                 */
-                _serializeForm() {
-                    if (this.$.profileForm.validate()) {
+                _serializeAdminForm() {
+                    if (this.$.adminForm.validate()) {
                         this._appProgressBar.hidden = false;
 
-                        if (this.$.profilePicture.files[0]) {
+                        if (this.$.adminProfilePicture.files[0]) {
 
-                            this.$.storageRef.path = '/profile-pics/' + this.userInfo.profile_pic_name;
+                            this.$.storageRef.path = '/profile-pics/' + this.adminInfo.profile_pic_name;
                             this.$.storageRef.delete();
+                            this.$.storageRef.path = null;
 
-                            this.$.firebaseStorage.put(this.$.profilePicture.files[0])
+                            this.$.firebaseStorage.put(this.$.adminProfilePicture.files[0])
 								.then(function () {
-									this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0]
+									this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.adminProfilePicture.files[0]
 											.name)
 										.then(function (url) {
-											this.userInfo.profile_pic_url = url;
-											this.userInfo.profile_pic_name = this.$.profilePicture.files[0].name;
-											this.acceptedCallback(this.userInfo);
+											this.adminInfo.profile_pic_url = url;
+											this.adminInfo.profile_pic_name = this.$.adminProfilePicture.files[0].name;
+											this.acceptedCallback(this.adminInfo);
 										}.bind(this));
 								}.bind(this));
 						} else {
-							this.acceptedCallback(this.userInfo);
+							this.acceptedCallback(this.adminInfo);
+						}
+                    }
+                }
+
+                /**
+                 * Serializes form data and send it to be saved trought coachInfo
+                */
+                _serializeCoachForm() {
+                    if (this.$.coachForm.validate()) {
+                        this._appProgressBar.hidden = false;
+
+                        if (this.$.coachProfilePicture.files[0]) {
+
+                            this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
+                            this.$.storageRef.delete();
+                            this.$.storageRef.path = null;
+
+                            this.$.firebaseStorage.put(this.$.coachProfilePicture.files[0])
+								.then(function () {
+									this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.coachProfilePicture.files[0]
+											.name)
+										.then(function (url) {
+											this.coachInfo.profile_pic_url = url;
+											this.coachInfo.profile_pic_name = this.$.coachProfilePicture.files[0].name;
+											this.acceptedCallback(this.coachInfo);
+										}.bind(this));
+								}.bind(this));
+						} else {
+							this.acceptedCallback(this.coachInfo);
 						}
                     }
                 }
@@ -272,8 +394,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {String} image selected by user
                  * @return {void}
                 */
-                _createImgPreview(image) {
-                    this.$.profileImage.src = URL.createObjectURL(image);
+                _createImgPreview(image, ironImage) {
+                    ironImage.src = URL.createObjectURL(image);
                 }
             }
             window.customElements.define(UserProfileDialog.is, UserProfileDialog);
