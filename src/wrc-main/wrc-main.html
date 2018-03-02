@@ -398,7 +398,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             notify: true,
                             reflectToAttribute: true
                         },
-                        userRole: String
+                        userRole: String,
+                        userPath: String
                     };
                 }
 
@@ -409,7 +410,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 static get observers() {
 					return [
-						'_routePageChanged(routeData.page, userRole)',
+						'_routePageChanged(routeData.page, userRole)'
 					];
 				}
 
@@ -661,6 +662,23 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * Opens settings dialog
                 */
                 _openSettingsDialog() {
+                    this._settingsDialog.userInfo = this.userInfo;
+
+                    /**
+                        TODO:
+                        
+                        Preguntar el role.
+                        Si el role es admin pasa path = profile
+                        si el role es coach o athlete pasa path = this.userPath
+
+                        Entonces, en el dialogo cuando se cambia el usuario
+                        se debe hace un setStoredValue dependiendo del path pasado
+                    */
+
+                    if (this.userRole !== 'admin') {
+                        this._settingsDialog.userPath = this.userPath;
+                    }
+                    this._settingsDialog.userRole = this.userRole;
                     this._settingsDialog.opened = true;
                 }
             }

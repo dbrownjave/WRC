@@ -25,6 +25,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-password-field.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 
+<!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+
 <!-- Suji Elements -->
 <link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
 <link rel="import" href="../suji/lib/colors/suji-color-palette.html">
@@ -78,6 +82,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 font-weight: 500;
             }
 
+            div.container p {
+                font-weight: lighter;
+                font-size: .95em;
+                color: var(--azul-text-title);
+                margin-top: 0;
+            }
+
             div.container vaadin-password-field {
                 width: 100%;
             }
@@ -107,6 +118,19 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
         </style>
 
+        <!-- Firebase Auth Configuration -->
+        <firebase-auth
+            id="firebaseAuth"
+            app-name="wrc_software"
+            user="{{user}}"
+            on-success="_handleSuccess"
+            on-error="_handleError"></firebase-auth>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document
+            id="firebaseDocument"
+            app-name="wrc_software"></firebase-document>
+
         <paper-dialog
             opened="{{opened}}"
             with-backdrop
@@ -121,29 +145,51 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <iron-form id="passwordForm">
                         <form>
                             <vaadin-password-field
-                                label="Current password"></vaadin-password-field>
+                                id="currentPassword"
+                                label="Current password"
+                                name="current"
+                                required
+                                error-message="Enter your current password"></vaadin-password-field>
                             <vaadin-password-field
-                                label="New password"></vaadin-password-field>
+                                id="newPassword"
+                                label="New password"
+                                name="new"
+                                required
+                                error-message="Enter your new password"></vaadin-password-field>
                             <vaadin-password-field
-                                label="Confirm password"></vaadin-password-field>
+                                id="confirmPassword"
+                                label="Confirm password"
+                                name="confirm"
+                                required
+                                error-message="Confirm your new password"></vaadin-password-field>
                         </form>
                     </iron-form>
-                    <paper-button raised>Change</paper-button>
+                    <paper-button raised on-tap="_updatePassword">Update</paper-button>
                 </div>
 
                 <!-- Email -->
                 <div class="container">
                     <h3>Change username</h3>
+                    <p>By changing your username you will be logged out in order to update your new username and make sure that you verify your new email.</p>
                     <iron-form id="emailForm">
                         <form>
                             <vaadin-password-field
-                                label="Password"></vaadin-password-field>
+                                id="password"
+                                label="Password"
+                                name="password"
+                                required
+                                error-message="Enter your current password"></vaadin-password-field>
                             <vaadin-text-field
+                                id="email"
                                 label="New username"
-                                placeholder="username@domain.com"></vaadin-text-field>
+                                placeholder="username@domain.com"
+                                name="email"
+                                type="email"
+                                required
+                                error-message="Enter your new username"></vaadin-text-field>
                         </form>
                     </iron-form>
-                    <paper-button raised>Update</paper-button>
+                    <paper-button raised on-tap="_updateUsername">Update</paper-button>
                 </div>
             </paper-dialog-scrollable>
             <div class="buttons">
@@ -167,13 +213,160 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 static get properties() {
                     return {
+                        userRole: String,
+                        userPath: String,
+                        userInfo: Object,
                         acceptedCallback: Function,
                         opened: {
                             type: Boolean,
                             notify: true,
                             value: false
+                        },
+                        user: {
+                            type: Object,
+                            notify: true
                         }
                     };
+                }
+
+                ready() {
+                    super.ready();
+
+                    // App Toast
+                    this._appToast = document.getElementById('appToast');
+
+                    // App Progress Bar
+                    this._appProgressBar = document.getElementById('appProgressBar');
+                }
+
+                /**
+                 * Updates user password
+                */
+                _updatePassword() {
+                    if (this.$.passwordForm.validate()) {
+                        this.$.confirmPassword.errorMessage = 'Confirm your new password';
+                        this.$.confirmPassword.invalid = false;
+                        this._appProgressBar.hidden = false;
+                        this.passwordData = this.$.passwordForm.serializeForm();
+                        this.action = 'password';
+                        this.$.firebaseAuth.signInWithEmailAndPassword(this.user.email, this.passwordData.current);
+                    }
+                }
+
+                /**
+                 * Handles success from firebase authentication actions
+                */
+                _handleSuccess() {
+                    if (this.action === 'password') {
+                        if (this.passwordData.new === this.passwordData.confirm) {
+                            this.user.updatePassword(this.passwordData.new)
+                            .then(function() {
+                                this._appProgressBar.hidden = true;
+                                this.$.passwordForm.reset();
+                                this._appToast.text = 'Your password has been updated successfully.';
+                                this._appToast.open();
+                            }.bind(this));
+                        } else {
+                            this.$.confirmPassword.errorMessage = 'Wrong confirmation';
+                            this.$.confirmPassword.invalid = true;
+                        }
+                    } else if (this.action === 'email') {
+                        this.user.updateEmail(this.emailData.email)
+                        .then(function() {
+                            if (this.userRole === 'admin') {
+                                // Edits email in profile information for admin
+                                this.$.firebaseDocument.setStoredValue(this.user.uid + '/profile/email', this.emailData.email);
+                            } else {
+                                // Edits email in profile information for coach and athlete
+                                this.$.firebaseDocument.setStoredValue(this.userPath + '/email', this.emailData.email);
+                            }
+
+                            this._appProgressBar.hidden = true;
+                            this.$.emailForm.reset();
+                            this._appToast.text = 'Your username has been updated successfully.';
+                            this._appToast.open();
+
+                            setTimeout(function() {
+                                this.opened = false;
+                                this.$.firebaseAuth.signOut();
+                            }.bind(this), 4000);
+                        }.bind(this))
+                        .catch(function(error) {
+                            this._appProgressBar.hidden = true;
+                            this.$.password.errorMessage = 'Enter your current password';
+                            this.$.password.invalid = false;
+                            this.$.email.errorMessage = 'Enter your new username';
+                            this.$.email.invalid = false;
+
+                            switch (error.code) {
+                                case 'auth/invalid-email':
+                                    this.$.email.errorMessage = 'Invalid email format';
+                                    this.$.email.invalid = true;
+                                    break;
+                                default:
+                                    this._appToast.text = 'An error has ocurred with our app. Please try again later and if the problem persists please contact support.';
+                                    this._appToast.open();
+                                    break;
+                            }
+                        }.bind(this));
+                    }
+                }
+
+                /**
+                 * Handles error from firebase authentication actions
+                 *
+                 * @param {Object} error from firebase auth action
+                 * @return {void}
+                */
+                _handleError(error) {
+                    console.log(error.detail.code);
+                    this._appProgressBar.hidden = true;
+                    this.$.currentPassword.errorMessage = 'Enter your current password';
+                    this.$.currentPassword.invalid = false;
+
+                    switch (error.detail.code) {
+                        case 'auth/operation-not-allowed':
+                            this._appToast.text =
+                                'We are sorry. The app is disabled. Please try again later and if the problem persists please contact support.';
+                            this._appToast.open();
+                            break;
+                        case 'auth/wrong-password':
+                            if (this.action === 'password') {
+                                this.$.currentPassword.invalid = true;
+                                this.$.currentPassword.errorMessage = 'Incorrect password';
+                            } else {
+                                this.$.password.invalid = true;
+                                this.$.password.errorMessage = 'Incorrect password';
+                            }
+                            break;
+                        case 'auth/network-request-failed':
+                            this._appToast.text =
+                                'Cannot stablish connection with the app. Please make sure you are connected to an internet provider.';
+                            this._appToast.open();
+                            break;
+                        case 'auth/too-many-requests':
+                            this._appToast.text =
+                                'You have made too many attempts. Please wait a moment and try again.';
+                            this._appToast.open();
+                            break;
+                        default:
+                            this._appToast.text =
+                                'An error has ocurred with our app. Please try again later and if the problem persists please contact support.';
+                            this._appToast.open();
+                            break;
+                    }
+                }
+
+                /**
+                 * Updates username
+                */
+                _updateUsername() {
+                    if (this.$.emailForm.validate()) {
+                        this._appProgressBar.hidden = false;
+                        this.action = 'email';
+                        this.emailData = this.$.emailForm.serializeForm();
+                        this.$.firebaseAuth.signInWithEmailAndPassword(this.user.email, this.emailData.password);
+                    }
                 }
             }
             window.customElements.define(SettingsDialog.is, SettingsDialog);
