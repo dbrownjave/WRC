@@ -257,10 +257,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <!-- Athletes Query -->
         <firebase-query
             app-name="wrc_software"
-            path="users"
-            data="{{athletesData}}"
-            order-by-child="role"
-            equal-to="athlete"></firebase-query>
+            path="[[user.uid]]/athletes"
+            data="{{athletesData}}"></firebase-query>
 
         <!-- Element UI -->
         <app-drawer-layout fullbleed narrow="{{narrow}}" responsive-width="768px">
@@ -663,18 +661,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _openSettingsDialog() {
                     this._settingsDialog.userInfo = this.userInfo;
-
-                    /**
-                        TODO:
-                        
-                        Preguntar el role.
-                        Si el role es admin pasa path = profile
-                        si el role es coach o athlete pasa path = this.userPath
-
-                        Entonces, en el dialogo cuando se cambia el usuario
-                        se debe hace un setStoredValue dependiendo del path pasado
-                    */
-
                     if (this.userRole !== 'admin') {
                         this._settingsDialog.userPath = this.userPath;
                     }

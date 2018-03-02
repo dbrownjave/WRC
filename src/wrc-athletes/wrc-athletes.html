@@ -259,7 +259,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 <template class="header">
                                     <vaadin-grid-sorter path="number">#</vaadin-grid-sorter>
                                 </template>
-                                <template>[[item.number]]</template>
+                                <template>[[item.profile.number]]</template>
                             </vaadin-grid-column>
                             
                             <vaadin-grid-column width="100px" flex-grow="0">
@@ -267,7 +267,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <vaadin-grid-sorter path="active">Active</vaadin-grid-sorter>
                                 </template>
                                 <template>
-                                    <iron-icon icon="app-icons:dot" active$="[[item.active]]"></iron-icon>
+                                    <iron-icon icon="app-icons:dot" active$="[[item.profile.active]]"></iron-icon>
                                 </template>
                             </vaadin-grid-column>
 
@@ -276,7 +276,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 <template class="header">
                                     <vaadin-grid-sorter path="first">First</vaadin-grid-sorter>
                                 </template>
-                                <template>[[item.first]]</template>
+                                <template>[[item.profile.first]]</template>
                             </vaadin-grid-column>
 
                             <!-- Last Name -->
@@ -284,7 +284,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 <template class="header">
                                     <vaadin-grid-sorter path="last">Last</vaadin-grid-sorter>
                                 </template>
-                                <template>[[item.last]]</template>
+                                <template>[[item.profile.last]]</template>
                             </vaadin-grid-column>
 
                             <!-- Position -->
@@ -292,7 +292,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 <template class="header">
                                     <vaadin-grid-sorter path="pos">Position</vaadin-grid-sorter>
                                 </template>
-                                <template>[[item.pos]]</template>
+                                <template>[[item.profile.pos]]</template>
                             </vaadin-grid-column>
 
                             <!-- Year -->
@@ -300,7 +300,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 <template class="header">
                                     <vaadin-grid-sorter path="year">Year</vaadin-grid-sorter>
                                 </template>
-                                <template>[[item.year]]</template>
+                                <template>[[item.profile.year]]</template>
                             </vaadin-grid-column>
 
                             <!-- Actions -->
@@ -310,7 +310,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:clipboard" on-tap="_openCoachProfileDialog"></paper-icon-button>
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:pdf" on-tap="_openCoachProfileDialog"></paper-icon-button>
-                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:file-edit" on-tap="_openCoachProfileDialog"></paper-icon-button>
+                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button>
                                     </div>
                                 </template>
                             </vaadin-grid-column>
@@ -416,16 +416,36 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /**
-                 * Opens coaches dialog to add
+                 * Opens athlete dialog to add
                 */
                 _openToAdd() {
                     this.action = 'add';
-                    this._athletesDialog.coachTeam = this.userInfo.team;
-                    this._athletesDialog.dialogTitle = 'New Athlete';
+                    this._athletesDialog._resetForm();
                     this._athletesDialog.acceptedCallback = this._saveAthlete.bind(this);
                     this._athletesDialog.action = 'add';
                     this._athletesDialog.opened = true;
                     this._athletesDialog.user = this.user;
+                }
+                
+                /**
+                 * Opens athlete dialog to edit
+                 *
+                 * @param {Event} evt from tapped button
+                 * @return {void}
+                */
+                _openToEdit(evt) {
+                    this.athleteId = evt.target.getAttribute('id');
+                    this.action = 'edit';
+                    this._athletesDialog.athleteInfo = null;
+
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
+                    .then(function(snapshot) {
+                        this._athletesDialog.athleteInfo = snapshot;
+                        this._athletesDialog.acceptedCallback = this._saveAthlete.bind(this);
+                        this._athletesDialog.action = 'edit';
+                        this._athletesDialog.opened = true;
+                        this._athletesDialog.user = this.user;
+                    }.bind(this));
                 }
 
                 /**
@@ -436,7 +456,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _saveAthlete(athleteInfo) {
 					if (this.action === 'add') {
-						this.$.firebaseDocument.setStoredValue('users/' + athleteInfo.uid, athleteInfo)
+                        // Saves athlete in coach's private path
+						this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', athleteInfo)
+                        .then(function() {
+                            // Creates athlete private node
+                            this.$.firebaseDocument.setStoredValue(athleteInfo.uid + '/metadata', {'path': this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', 'role': 'athlete'});
+                        }.bind(this))
                         .catch(function (err) {
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
@@ -446,7 +471,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						this._appToast.text = 'The athlete has been saved successfully.';
 						this._appToast.open();
 						this._appProgressBar.hidden = true;
-					}
+					} else {
+						this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', athleteInfo)
+                        .catch(function (err) {
+                            this._appToast.text = 'There has been an error. Please try again.';
+                            this._appToast.open();
+                        }.bind(this));
+                        
+						this._athletesDialog.opened = false;
+						this._appToast.text = 'The athlete has been modified successfully.';
+						this._appToast.open();
+						this._appProgressBar.hidden = true;
+                    }
                 }
 
                 /**
@@ -455,7 +491,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _openAthleteProfileDialog(e) {
                     this.athleteId = e.target.getAttribute('id');
 
-                    this.$.firebaseDocument.getStoredValue('users/' + this.athleteId)
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
                     .then(function(athleteInfo) {
                         this._athleteProfileDialog.athleteInfo = athleteInfo;
                         this._athleteProfileDialog.opened = true;

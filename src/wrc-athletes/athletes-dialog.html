@@ -25,6 +25,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 
 <!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-storage-ref.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-storage-multiupload.html">
 
@@ -90,7 +91,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 
 			div.picture-wrapper label {
-				margin-bottom: 12px;
 				background-color: #F3F4F5;
 				overflow: hidden;
 				border-radius: 10em;
@@ -117,6 +117,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 font-weight: normal;
                 color: var(--azul-text-title);
                 margin: 0.5em 0 0;
+            }
+
+            div.email-wrapper {
+                width: 100%;
+                text-align: center;
+            }
+
+            div.email-wrapper p {
+                color: var(--azul-text-title);
+                font-size: 1.1em;
+                margin-top: 0;
+                font-weight: 400;
             }
 
             /* Form */
@@ -165,6 +177,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
         </style>
 
+        <!-- Firebase Document Configuration -->
+        <firebase-document
+            id="firebaseDocument"
+            app-name="wrc_software"></firebase-document>
+
         <!-- Firebase Storage Configuration -->
         <firebase-storage-ref
             id="storageRef"
@@ -181,7 +198,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             entry-animation="scale-up-animation"
             exit-animation="fade-out-animation">
 
-            <h2>[[dialogTitle]]</h2>
+            <h2>[[_computeDialogTitle(action)]]</h2>
             <paper-dialog-scrollable>
                 <div class="picture-wrapper">
                     <input type="file" name="profile_pic" id="profilePicture">
@@ -190,10 +207,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         <iron-image id="profileImage" preload fade sizing="cover" src="[[_computeImgSrc(action)]]"></iron-image>
                     </label>
                 </div>
+                <div class="email-wrapper" hidden="[[!_hideActions(action)]]">
+                    <p>[[athleteInfo.email]]</p>
+                </div>
                 <iron-form id="athleteForm">
                     <form>
                         <vaadin-form-layout>
                             <vaadin-text-field
+                                hidden="[[_hideActions(action)]]"
                                 colspan="2"
                                 label="User Unique ID"
                                 placeholder="Firebase Unique ID"
@@ -275,11 +296,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             </div>
                             <br>
                             <vaadin-text-field
+                                colspan="2"
                                 label="Contact"
                                 placeholder="Phone"
                                 name="phone"
                                 value="{{athleteInfo.phone}}"></vaadin-text-field>
                             <vaadin-text-field
+                                hidden="[[_hideActions(action)]]"
                                 colspan="2"
                                 placeholder="Email"
                                 name="email"
@@ -310,6 +333,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 </iron-form>
             </paper-dialog-scrollable>
             <div class="buttons">
+                <paper-button hidden="[[!_hideActions(action)]]" class="delete-button" on-tap="_openDeleteDialog">Delete</paper-button>
+                <span flex></span>
                 <paper-button dialog-dismiss class="cancel-button" on-tap="_resetForm">Cancel</paper-button>
                 <paper-button on-tap="_serializeForm">Save</paper-button>
             </div>
@@ -331,7 +356,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 static get properties() {
                     return {
-                        coachTeam: String,
+                        action: String,
                         dialogTitle: String,
                         acceptedCallback: Function,
                         opened: {
@@ -362,9 +387,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 twitter: '',
                                 hudl: '',
                                 profile_pic_name: 'default_profile.png',
-                                profile_pic_url: '../../images/app-images/default_profile.png',
-                                role: 'athlete',
-                                team: ''
+                                profile_pic_url: '../../images/app-images/default_profile.png'
                             }
                         }
                     };
@@ -388,6 +411,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     // App Progress Bar
 					this._appProgressBar = document.getElementById('appProgressBar');
 
+                    // App Toast
+                    this._appToast = document.getElementById('appToast');
+
+                    // Delete Athlete Dialog
+                    this._deleteAthleteDialog = document.getElementById('deleteAthleteDialog');
+
                     const fileUpload = this.$.profilePicture;
 					fileUpload.addEventListener('change', function(e) {
                         this._createImgPreview(e.target.files[0]);
@@ -400,9 +429,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _serializeForm() {
                     if (this.$.athleteForm.validate()) {
                         this._appProgressBar.hidden = false;
-                        this.athleteInfo.team = this.coachTeam;
 
 						if (this.$.profilePicture.files[0]) {
+                            if (this.action === 'edit' && this.athleteInfo.profile_pic_name !== 'default_profile.png') {
+                                this.$.storageRef.path = '/profile-pics/' + this.athleteInfo.profile_pic_name;
+                                this.$.storageRef.delete();
+                            }
                             this.$.firebaseStorage.put(this.$.profilePicture.files[0])
 								.then(function () {
 									this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0]
@@ -424,6 +456,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _resetForm() {
                     this.$.athleteForm.reset();
+                    this.athleteInfo.profile_pic_name = 'default_profile.png';
+                    this.athleteInfo.profile_pic_url = '../../images/app-images/default_profile.png';
                 }
 
                 /**
@@ -443,10 +477,60 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @return {String} the source of the image
                 */
                 _computeImgSrc(action) {
-                    if (action === 'add') {
-                        return '../../images/app-images/default_profile.png';
-                    } else {
-                        return this.athleteInfo.profile_pic_url;
+                    return (action === 'add') ? '../../images/app-images/default_profile.png' : this.athleteInfo.profile_pic_url;
+                }
+
+                /**
+                 * Computes the title of the dialog depending if the user is adding or editting
+                 *
+                 * @param {String} action being performed by user
+                 * @return {String} the title of the dialog
+                */
+                _computeDialogTitle(action) {
+                    return (action === 'add') ? 'New Athlete' : this.athleteInfo.first + ' ' + this.athleteInfo.last;
+                }
+
+                /**
+                 * If action is 'edit' some elements have to be hidden
+                 *
+                 * @param {String} action being performed by user
+                 * @return {Boolean} true if action is editting, otherwise false
+                */
+                _hideActions(action) {
+                    return (action === 'edit') ? true : false;
+                }
+
+                /**
+                 * Opens the delete confirmation dialog
+                */
+                _openDeleteDialog() {
+                    this._deleteAthleteDialog.acceptedCallback = this._deleteAthlete.bind(this);
+                    this._deleteAthleteDialog.opened = true;
+                }
+
+                /**
+                 * Deletes the athlete
+                 *
+                 * @param {Boolean} response from delete confirmation dialog
+                 * @return {void}
+                */
+                _deleteAthlete(response) {
+                    if (response) {
+                        // Deletes the athlete information from the coach's data
+                        this.$.firebaseDocument.destroy(this.user.uid + '/athletes/' + this.athleteInfo.uid)
+                        .then(function() {
+                            // Deletes the profile picture
+                            if (this.athleteInfo.profile_pic_name !== 'default_profile.png') {
+                                this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
+                                this.$.storageRef.delete();
+                            }
+                            this._resetForm();
+                        }.bind(this));
+
+                        this._appToast.text = 'The athlete has been deleted.';
+                        this._appToast.open();
+                        this._deleteAthleteDialog.opened = false;
+                        this.opened = false;
                     }
                 }
             }

@@ -404,17 +404,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         // Deletes the coach information from the administrator data
                         this.$.firebaseDocument.destroy(this.user.uid + '/coaches/' + this.coachInfo.uid)
                         .then(function() {
-                            this._appToast.text = 'The coach has been deleted.';
-                            this._appToast.open();
-                            this._deleteCoachDialog.opened = false;
-                            this.opened = false;
-
+                            // Deletes profile picture
                             if (this.coachInfo.profile_pic_name !== 'default_profile.png') {
                                 this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
                                 this.$.storageRef.delete();
                             }
+                            this._resetForm();
                         }.bind(this));
-                        this._resetForm();
+                        
+                        this._appToast.text = 'The coach has been deleted.';
+                        this._appToast.open();
+                        this._deleteCoachDialog.opened = false;
+                        this.opened = false;
                     }
                 }
             }
