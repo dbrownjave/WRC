@@ -290,7 +290,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 </div>
                                 <paper-listbox slot="dropdown-content" selected="{{selectedUserOption}}">
                                     <paper-item on-tap="_openUserProfileDialog">Profile</paper-item>
-                                    <paper-item>Settings</paper-item>
+                                    <paper-item on-tap="_openSettingsDialog">Settings</paper-item>
                                     <paper-item on-tap="logout">Sign out</paper-item>
                                 </paper-listbox>
                             </paper-menu-button>
@@ -342,7 +342,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <div class="main-container">
                         <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" role="main" fallback-selection="404">
                             <wrc-coaches name="coaches" user="[[user]]" coaches-data="[[coachesData]]"></wrc-coaches>
-                            <wrc-library name="library" user="[[user]]" library-data="[[libraryData]]" user-role="[[userInfo.role]]"></wrc-library>
+                            <wrc-library name="library" user="[[user]]" library-data="[[libraryData]]" user-role="[[userRole]]"></wrc-library>
                             <wrc-athletes name="athletes" user="[[user]]" athletes-data="[[athletesData]]" user-info="[[userInfo]]"></wrc-athletes>
                         </iron-pages>
                     </div>
@@ -418,6 +418,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // User Profile Dialog
                     this._userProfileDialog = document.getElementById('userProfileDialog');
+
+                    // Settings Dialog
+                    this._settingsDialog = document.getElementById('settingsDialog');
 
                     // App Progress Bar
                     this._appProgressBar = document.getElementById('appProgressBar');
@@ -652,6 +655,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _openMaxCalculatorDialog() {
                     this._maxCalculatorDialog.opened = true;
+                }
+
+                /**
+                 * Opens settings dialog
+                */
+                _openSettingsDialog() {
+                    this._settingsDialog.opened = true;
                 }
             }
             window.customElements.define(WrcMain.is, WrcMain);

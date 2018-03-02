@@ -64,7 +64,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             /* Description */
             div.description-wrapper {
                 @apply --layout-vertical;
-                @apply --layout-center;
+                /* @apply --layout-center; */
             }
 
             div.description-wrapper iron-icon {
@@ -72,6 +72,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 height: 100px;
                 color: var(--paper-grey-600);
                 margin-bottom: 24px;
+
+                @apply --layout-self-center;
             }
 
             div.description-wrapper p {
@@ -106,7 +108,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <paper-dialog-scrollable>
                 <div class="description-wrapper">
                     <iron-icon icon="fa-icons:trash"></iron-icon>
-                    <p class="description">The coach could be active and have information associated.</p>
+                    <p class="description">
+                        The coach could be active and have information associated.
+                        <br><br>
+                        Also, remember that to delete or disable the coach's account it has to be done from the Firebase Console.
+                    </p>
                     <p class="question">Are you sure want to delete it?</p>
                 </div>
             </paper-dialog-scrollable>

@@ -8,8 +8,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <!-- Paper Elements -->
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 
 <!-- Iron Elements -->
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
@@ -24,13 +24,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../../bower_components/neon-animation/web-animations.html">
 
-<!-- Fa Icons -->
+<!-- Icons -->
 <link rel="import" href="../fa-icons.html">
 
-<dom-module id="verify-email-dialog">
+<dom-module id="delete-video-dialog">
     <template>
         <style>
-            /* Dialog Style */
+            /* Dialog */
             paper-dialog {
 				border-radius: 5px;
                 box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
@@ -39,52 +39,44 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             paper-dialog h2 {
 				color: var(--azul-text-title);
 				font-size: 1.6em;
-                text-align: center;
-                margin: 0 0 16px;
 			}
 
-            paper-dialog div.buttons {
+			paper-dialog div.buttons {
 				@apply --layout-horizontal;
 				@apply --layout-end-justified;
 			}
 
-            paper-dialog .buttons paper-button {
-				color: var(--azul-primary);
+			paper-dialog .buttons paper-button {
+				color: var(--paper-red-400);
                 font-weight: 500;
 			}
 
-            paper-dialog .buttons paper-button.cancel-button {
-				color: var(--azul-primary-text);
+			paper-dialog .buttons paper-button.cancel-button {
+				color: var(--paper-grey-700);
                 font-weight: normal;
 			}
 
-            div.legend {
+			paper-dialog .buttons paper-button.delete-button {
+				color: var(--paper-red-400);
+                font-weight: normal;
+			}
+
+            /* Description */
+            div.description-wrapper {
                 @apply --layout-vertical;
+                @apply --layout-center;
             }
 
-            div.legend iron-icon {
+            div.description-wrapper iron-icon {
+                width: 100px;
+                height: 100px;
+                color: var(--paper-grey-600);
                 margin-bottom: 24px;
-                --iron-icon-width: 80px;
-                --iron-icon-height: 80px;
-                --iron-icon-fill-color: var(--paper-red-300);
-                --iron-icon-stroke-color: var(--paper-red-400);
-
-                @apply --layout-self-center;
             }
 
-            div.legend p {
+            div.description-wrapper p {
                 color: var(--azul-text-title);
-                font-weight: lighter;
-                font-size: 1.1em;
-            }
-
-            div.legend ul {
-                margin: 0;
-                padding: 0;
-                color: var(--azul-text-title);
-                font-weight: lighter;
-                font-size: 1em;
-                margin-left: 1.1em;
+                margin-top: 0;
             }
 
             /* To keep dialog larger with large screens */
@@ -94,35 +86,32 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				}
 			}
 
+			[hidden] {
+				display: none;
+			}
+
             [flex] {
                 @apply --layout-flex;
             }
         </style>
 
+        <!-- Element UI -->
         <paper-dialog
             opened="{{opened}}"
-            modal
-            entry-animation="scale-up-animation"
+            with-backdrop
+            entry-animation="slide-from-bottom-animation"
             exit-animation="fade-out-animation">
 
+            <h2>Delete Video</h2>
             <paper-dialog-scrollable>
-                <div class="legend">
-                    <iron-icon icon="fa-icons:exclamation-circle"></iron-icon>
-                    <h2>Your email is not verified</h2>
-                    <p>
-                        In order to use WRC Software please follow the next instructions:
-                    </p>
-                    <ul>
-                        <li>Press <strong>VERIFY</strong> to receive the verification link.</li>
-                        <li>Check your email inbox and follow the instructions received.</li>
-                        <li>Once you have verified your email refresh the page to use WRC Software normally.</li>
-                    </ul>
+                <div class="description-wrapper">
+                    <iron-icon icon="fa-icons:trash"></iron-icon>
+                    <p class="question">Are you sure you want to delete this video?</p>
                 </div>
             </paper-dialog-scrollable>
             <div class="buttons">
-                <paper-button on-tap="_closeDialog" class="cancel-button">Sign out</paper-button>
-                <span flex></span>
-                <paper-button on-tap="_triggerAcceptedCallback">Verify</paper-button>
+                <paper-button dialog-dismiss class="cancel-button">Cancel</paper-button>
+                <paper-button on-tap="_triggerAcceptedCallback">Delete</paper-button>
             </div>
         </paper-dialog>
     </template>
@@ -131,17 +120,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         (function() {
             'use strict';
 
-            class VerifyEmailDialog extends Polymer.Element {
+            class DeleteVideoDialog extends Polymer.Element {
                 /**
                  * Element definition
-                 */
-                 static get is() {
-                    return 'verify-email-dialog';
-                }
+                */
+                static get is() { return 'delete-video-dialog'; }
 
                 /**
                  * Element properties
-                 */
+                */
                 static get properties() {
                     return {
                         acceptedCallback: Function,
@@ -154,20 +141,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /**
-                 * Triggers the acceptedCallback to send verification email
+                 * Triggers the accepted callback with the response
                 */
                 _triggerAcceptedCallback() {
                     this.acceptedCallback(true);
                 }
-
-                /**
-                 * Closes the dialog and respond the action with false
-                */
-                _closeDialog() {
-                    this.acceptedCallback(false);
-                }
             }
-            window.customElements.define(VerifyEmailDialog.is, VerifyEmailDialog);
+            window.customElements.define(DeleteVideoDialog.is, DeleteVideoDialog);
         })();
     </script>
 </dom-module>

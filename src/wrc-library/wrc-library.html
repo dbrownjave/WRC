@@ -12,6 +12,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 
 <!-- Iron Elements -->
@@ -68,6 +71,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             [flex] {
                 @apply --layout-flex;
+            }
+
+            paper-item {
+                cursor: pointer;
             }
 
             /* Empty Message */
@@ -401,7 +408,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                             <span>[[video.category]]</span>
                                         </p>
                                         <span flex></span>
-                                        <paper-icon-button id$="[[video.$key]]" on-tap="_openToEdit" icon="app-icons:more-vert" hidden="[[!_isAdmin(userRole)]]"></paper-icon-button>
+                                        <paper-menu-button
+                                            hidden="[[!_isAdmin(userRole)]]"
+                                            horizontal-align="right"
+                                            vertical-align="top"
+                                            horizontal-offset="10"
+                                            vertical-offset="10">
+                                            <paper-icon-button slot="dropdown-trigger" icon="app-icons:more-vert"></paper-icon-button>
+                                            <paper-listbox slot="dropdown-content">
+                                                <paper-item id$="[[video.$key]]" on-tap="_openToEdit">Edit</paper-item>
+                                                <paper-item id$="[[video.$key]]" on-tap="_openDeleteVideoDialog">Delete</paper-item>
+                                            </paper-listbox>
+                                        </paper-menu-button>
                                     </div>
                                 </div>
                             </template>
@@ -423,7 +441,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                             <span>[[video.category]]</span>
                                         </p>
                                         <span flex></span>
-                                        <paper-icon-button id$="[[video.$key]]" on-tap="_openToEdit" icon="app-icons:more-vert" hidden="[[!_isAdmin(userRole)]]"></paper-icon-button>
+                                        <paper-menu-button
+                                            hidden="[[!_isAdmin(userRole)]]"
+                                            horizontal-align="right"
+                                            vertical-align="top"
+                                            horizontal-offset="10"
+                                            vertical-offset="10">
+                                            <paper-icon-button slot="dropdown-trigger" icon="app-icons:more-vert"></paper-icon-button>
+                                            <paper-listbox slot="dropdown-content">
+                                                <paper-item id$="[[video.$key]]" on-tap="_openToEdit">Edit</paper-item>
+                                                <paper-item id$="[[video.$key]]" on-tap="_openDeleteVideoDialog">Delete</paper-item>
+                                            </paper-listbox>
+                                        </paper-menu-button>
                                     </div>
                                 </div>
                             </template>
@@ -445,7 +474,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                             <span>[[video.category]]</span>
                                         </p>
                                         <span flex></span>
-                                        <paper-icon-button id$="[[video.$key]]" on-tap="_openToEdit" icon="app-icons:more-vert" hidden="[[!_isAdmin(userRole)]]"></paper-icon-button>
+                                        <paper-menu-button
+                                            hidden="[[!_isAdmin(userRole)]]"
+                                            horizontal-align="right"
+                                            vertical-align="top"
+                                            horizontal-offset="10"
+                                            vertical-offset="10">
+                                            <paper-icon-button slot="dropdown-trigger" icon="app-icons:more-vert"></paper-icon-button>
+                                            <paper-listbox slot="dropdown-content">
+                                                <paper-item id$="[[video.$key]]" on-tap="_openToEdit">Edit</paper-item>
+                                                <paper-item id$="[[video.$key]]" on-tap="_openDeleteVideoDialog">Delete</paper-item>
+                                            </paper-listbox>
+                                        </paper-menu-button>
                                     </div>
                                 </div>
                             </template>
@@ -519,6 +559,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // Video Dialog
                     this._videoDialog = document.getElementById('videoDialog');
+
+                    // Delete video dialog
+                    this._deleteVideoDialog = document.getElementById('deleteVideoDialog');
 
                     // App Progress Bar
                     this._appProgressBar = document.getElementById('appProgressBar');
@@ -598,6 +641,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _openToAdd() {
                     this.action = 'add';
+                    this._videoDialog._resetForm();
                     this._videoDialog.title = 'New';
                     this._videoDialog.acceptedCallback = this._saveVideo.bind(this);
                     this._videoDialog.opened = true;
@@ -689,6 +733,36 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _isAdmin(role) {
                     return (role === 'admin') ? true : false;
+                }
+
+                /**
+                 * Opens delete video dialog
+                */
+                _openDeleteVideoDialog(e) {
+                    this.videoId = e.target.getAttribute('id');
+                    this._deleteVideoDialog.acceptedCallback = this._deleteVideo.bind(this);
+                    this._deleteVideoDialog.opened = true;
+                }
+
+                /**
+                 * Deletes video from library
+                 *
+                 * @param {Boolean} response from delete dialog
+                 * @return {void}
+                */
+                _deleteVideo(response) {
+                    if (response) {
+                        this.$.firebaseDocument.destroy('/library/' + this.videoId)
+                        .catch(function (err) {
+                            this._appToast.text = 'There has been an error. Please try again.';
+                            this._appToast.open();
+                        }.bind(this));
+
+                        this._deleteVideoDialog.opened = false;
+						this._appToast.text = 'The video has been deleted successfully.';
+						this._appToast.open();
+						this._appProgressBar.hidden = true;
+                    }
                 }
             }
             window.customElements.define(WrcLibrary.is, WrcLibrary);

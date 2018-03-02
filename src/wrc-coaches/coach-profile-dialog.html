@@ -50,18 +50,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 
 			paper-dialog .buttons paper-button {
-				color: var(--azul-primary);
-                font-weight: 500;
-			}
-
-			paper-dialog .buttons paper-button.cancel-button {
 				color: var(--paper-grey-700);
-                font-weight: normal;
-			}
-
-			paper-dialog .buttons paper-button.delete-button {
-				color: var(--paper-red-400);
-                font-weight: normal;
+                font-weight: 500;
 			}
 
             /* Profile Image */
@@ -96,7 +86,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             div.info-wrapper p strong {
                 color: var(--azul-text-title);
-                margin-right: 8px;
+                margin-right: 3px;
                 font-size: 1.1em;
             }
 
@@ -198,7 +188,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 </div>
             </paper-dialog-scrollable>
             <div class="buttons">
-                <paper-button dialog-dismiss on-tap="_resetCoachInfo">OK</paper-button>
+                <paper-button dialog-dismiss on-tap="_resetCoachInfo">Close</paper-button>
             </div>
         </paper-dialog>
     </template>
