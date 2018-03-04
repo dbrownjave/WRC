@@ -45,10 +45,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <style>
             /* Dialog */
             paper-dialog {
-                /* position: absolute;
-                top: 15%;
-                left: 30%; */
-				border-radius: 5px;
+                border-radius: 5px;
                 box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
 			}
 
@@ -109,6 +106,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 margin-bottom: 0;
                 margin-top: 18px;
                 font-size: 1.1em;
+            }
+
+            div.maxes-wrapper p span {
+                font-size: 1.05em;
             }
 
             div.form-wrapper {
@@ -417,6 +418,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     // App Toast
                     this._appToast = document.getElementById('appToast');
 
+                    // Sets items for all reps combos
                     this.$.benchPressCombo.items =
                     this.$.backSquatCombo.items =
                     this.$.frontSquatCombo.items =
