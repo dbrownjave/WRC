@@ -109,6 +109,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 margin: 0.5em 0 0;
             }
 
+            [slot='prefix'], [slot='suffix'] {
+                color: var(--paper-grey-600);
+            }
+
             /* To keep dialog larger with large screens */
 			@media screen and (min-width: 600px) {
 				paper-dialog {
@@ -248,6 +252,83 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 <paper-button on-tap="_serializeCoachForm">Update</paper-button>
             </div>
         </paper-dialog>
+
+        <!-- Athlete Dialog -->
+        <paper-dialog
+            id="athleteDialog"
+            opened="{{openedAthlete}}"
+            with-backdrop
+            entry-animation="scale-up-animation"
+            exit-animation="fade-out-animation">
+            <paper-dialog-scrollable>
+                <div class="picture-wrapper">
+                    <input type="file" name="profile_pic" id="athleteProfilePicture">
+                    <label for="athleteProfilePicture">
+                        <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
+                        <iron-image id="athleteProfileImage" preload fade sizing="cover" src="[[athleteInfo.profile_pic_url]]"></iron-image>
+                    </label>
+                    <p>[[athleteInfo.email]]</p>
+                </div>
+                
+                <iron-form id="coachForm">
+                    <form>
+                        <vaadin-form-layout>
+                            <vaadin-text-field
+                                label="First Name"
+                                name="first"
+                                type="text"
+                                required
+                                error-message="Enter your name"
+                                value="{{athleteInfo.first}}"></vaadin-text-field>
+                            <vaadin-text-field
+                                label="Last Name"
+                                name="last"
+                                type="text"
+                                required
+                                error-message="Enter your last name"
+                                value="{{athleteInfo.last}}"></vaadin-text-field>
+                            <vaadin-text-field
+                                label="Phone"
+                                name="phone"
+                                type="text"
+                                required
+                                error-message="Enter your phone number"
+                                value="{{athleteInfo.phone}}"></vaadin-text-field>
+                            <br>
+                            <vaadin-text-field
+                                label="Instagram"
+                                name="instagram"
+                                type="text"
+                                required
+                                error-message="Enter your instagram"
+                                value="{{athleteInfo.instagram}}">
+                                <span slot="prefix">@</span>
+                            </vaadin-text-field>
+                            <vaadin-text-field
+                                label="Twitter"
+                                name="twitter"
+                                type="text"
+                                required
+                                error-message="Enter your twitter"
+                                value="{{athleteInfo.twitter}}">
+                                <span slot="prefix">@</span>
+                            </vaadin-text-field>
+                            <vaadin-text-field
+                                colspan="2"
+                                label="Hudl"
+                                placeholder="www.hudle.com/"
+                                name="hudl"
+                                type="text"
+                                value="{{athleteInfo.hudl}}"></vaadin-text-field>
+                        </vaadin-form-layout>
+                    </form>
+                </iron-form>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button class="cancel-button" dialog-dismiss on-tap="_resetForm">Cancel</paper-button>
+                <paper-button on-tap="_serializeCoachForm">Update</paper-button>
+            </div>
+        </paper-dialog>
     </template>
 
     <script>
@@ -278,7 +359,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             notify: true,
                             value: false
                         },
-                        openedPlayer: {
+                        openedAthlete: {
                             type: Boolean,
                             notify: true,
                             value: false
@@ -291,7 +372,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             type: Object,
                             notify: true
                         },
-                        playerInfo: {
+                        athleteInfo: {
                             type: Object,
                             notify: true
                         }
@@ -314,10 +395,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this._createImgPreview(e.target.files[0], this.$.coachProfileImage);
                     }.bind(this));
 
-                    // const playerUpload = this.$.adminProfilePicture;
-					// playerUpload.addEventListener('change', function(e) {
-                    //     this._createImgPreview(e.target.files[0], this.$.playerProfileImage);
-                    // }.bind(this));
+                    const playerUpload = this.$.athleteProfilePicture;
+					playerUpload.addEventListener('change', function(e) {
+                        this._createImgPreview(e.target.files[0], this.$.athleteProfileImage);
+                    }.bind(this));
                 }
 
                 /**
@@ -326,7 +407,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _resetForm() {
                     this.adminInfo = null;
                     this.coachInfo = null;
-                    this.playerInfo = null;
+                    this.athleteInfo = null;
                 }
 
                 /**

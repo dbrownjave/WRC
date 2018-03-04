@@ -325,6 +325,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 </a>
                             </iron-selector>
                         </template>
+
+                        <!-- Menu for athletes -->
+                        <template is="dom-if" if="[[_isAthlete(userRole)]]">
+                            <iron-selector class="drawer-list" selected="[[page]]" attr-for-selected="name" role="navigation">
+                                <a name="my-workouts" href="[[rootPath]]main/my-workouts">
+                                    <iron-icon icon="app-icons:workout"></iron-icon>
+                                    <span>My Workouts</span>
+                                </a>
+                                <a name="library" href="[[rootPath]]main/library">
+                                    <iron-icon icon="fa-icons:video"></iron-icon>
+                                    <span>Library</span>
+                                </a>
+                            </iron-selector>
+                        </template>
                     </template>
                 </div>
             </app-drawer>
@@ -443,6 +457,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this.page = page || 'coaches';
                         } else if (role === 'coach') {
                             this.page = page || 'athletes';
+                        } else if (role === 'athlete') {
+                            this.page = page || 'library';
                         }
                     }
 
@@ -456,7 +472,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						case 'athletes':
 							this.mainTitle = 'Athletes';
 							break;
+                        case 'library':
+                            this.mainTitle = 'Library';
+                            break;
 						default:
+                            this.mainTitle = 'WRC Software';
 							break;
 					}
 				}
@@ -585,6 +605,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _isCoach(role) {
                     return (role === 'coach') ? true : false;
                 }
+
+                /**
+                 * Shows athlete menu
+                 *
+                 * @param {String} role of the user
+                 * @return {Boolean} true if role is athlete, otherwise false
+                */
+                _isAthlete(role) {
+                    return (role === 'athlete') ? true : false;
+                }
                 
                 /**
                  * Opens the user profile dialog
@@ -600,10 +630,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this._userProfileDialog.acceptedCallback = this._saveCoachProfile.bind(this);
                         this._userProfileDialog.coachInfo = this.userInfo;
                         this._userProfileDialog.openedCoach = true;
-                    } else if (this.userRole === 'player') {
-                        this._userProfileDialog.acceptedCallback = this._savePlayerProfile.bind(this);
-                        this._userProfileDialog.playerInfo = this.userInfo;
-                        this._userProfileDialog.openedPlayer = true;
+                    } else if (this.userRole === 'athlete') {
+                        this._userProfileDialog.acceptedCallback = this._saveAthleteProfile.bind(this);
+                        this._userProfileDialog.athleteInfo = this.userInfo;
+                        this._userProfileDialog.openedAthlete = true;
                     }
                 }
 
@@ -647,6 +677,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._appToast.text = 'You personal information has been saved successfully.';
                     this._appToast.open();
                     this._userProfileDialog._resetForm();
+                }
+
+                _saveAthleteProfile(athleteInfo) {
+
                 }
 
                 /**
