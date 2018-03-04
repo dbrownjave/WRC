@@ -14,7 +14,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Iron Elements -->
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 
 <!-- Suji Elements -->
 <link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
@@ -22,6 +26,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../suji/lib/themes/azul/azul-dialog.html">
 
 <!-- Vaadin Elements -->
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 
 <!-- Neon Elements -->
@@ -34,13 +42,110 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <dom-module id="athlete-stats-dialog">
     <template>
-        <style></style>
+        <style>
+            /* Dialog */
+            paper-dialog {
+                /* position: absolute;
+                top: 15%;
+                left: 30%; */
+				border-radius: 5px;
+                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+			}
+
+            paper-dialog h2 {
+				color: var(--azul-text-title);
+				font-size: 1.6em;
+
+                @apply --layout-horizontal;
+                @apply --layout-center;
+			}
+
+            paper-dialog h2 iron-image {
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+                overflow: hidden;
+                border-radius: 10em;
+            }
+
+			paper-dialog div p {
+				font-weight: lighter;
+				line-height: 1em;
+			}
+
+			paper-dialog div.buttons {
+				@apply --layout-horizontal;
+				@apply --layout-end-justified;
+			}
+
+			paper-dialog .buttons paper-button {
+				color: var(--azul-primary);
+                font-weight: 500;
+			}
+
+			paper-dialog .buttons paper-button.cancel-button {
+				color: var(--paper-grey-700);
+                font-weight: normal;
+			}
+
+            /* Maxes */
+            h3 {
+                color: var(--azul-text-title);
+                margin-top: 0;
+                font-weight: 400;
+                font-size: 1.3em;
+            }
+
+            div.horizontal {
+                margin: 0;
+                padding: 0;
+                width: 60%;
+
+                @apply --layout-horizontal;
+            }
+
+            div.maxes-wrapper p {
+                color: var(--azul-text-title);
+                margin-bottom: 0;
+                margin-top: 18px;
+                font-size: 1.1em;
+            }
+
+            div.form-wrapper {
+                margin-bottom: 12px;
+            }
+
+            /* To keep dialog larger with large screens */
+			@media screen and (min-width: 600px) {
+				paper-dialog {
+					width: 610px;
+				}
+            }
+
+            [flex] {
+                @apply --layout-flex;
+            }
+
+            [hidden] {
+                display: none;
+            }
+
+            div.buttons[hidden] {
+                display: none;
+            }
+        </style>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document
+            id="firebaseDocument"
+            app-name="wrc_software"></firebase-document>
 
         <paper-dialog
             opened="{{opened}}"
             with-backdrop
             entry-animation="scale-up-animation"
-            exit-animation="fade-out-animation">
+            exit-animation="fade-out-animation"
+            editing$="[[editMaxes]]">
 
             <h2>
                 <iron-image
@@ -48,7 +153,227 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     preload
                     sizing="cover"
                     src="[[athleteInfo.profile_pic_url]]"></iron-image>
+                [[athleteInfo.first]] [[athleteInfo.last]] #[[athleteInfo.number]]
             </h2>
+            <paper-dialog-scrollable>
+                <h3>Maxes</h3>
+                <template is="dom-if" if="[[!editMaxes]]">
+                    <div class="maxes-wrapper">
+                        <p>
+                            <strong class="title">Bench Press:</strong>
+                            <span>[[athleteStats.bench_press_value]]lbs</span>
+                            <strong>x</strong>
+                            <span>[[athleteStats.bench_press_reps]] reps</span>
+                        </p>
+                        <p>
+                            <strong class="title">Back Squat:</strong>
+                            <span>[[athleteStats.back_squat_value]]lbs</span>
+                            <strong>x</strong>
+                            <span>[[athleteStats.back_squat_reps]] reps</span>
+                        </p>
+                        <p>
+                            <strong class="title">Front Squat:</strong>
+                            <span>[[athleteStats.front_squat_value]]lbs</span>
+                            <strong>x</strong>
+                            <span>[[athleteStats.front_squat_reps]] reps</span>
+                        </p>
+                        <p>
+                            <strong class="title">Deadlift:</strong>
+                            <span>[[athleteStats.deadlift_value]]lbs</span>
+                            <strong>x</strong>
+                            <span>[[athleteStats.deadlift_reps]] reps</span>
+                        </p>
+                        <p>
+                            <strong class="title">Hang / Power Clean:</strong>
+                            <span>[[athleteStats.hang_power_clean_value]]lbs</span>
+                            <strong>x</strong>
+                            <span>[[athleteStats.hang_power_clean_reps]] reps</span>
+                        </p>
+                        <p>
+                            <strong class="title">Pull-ups:</strong>
+                            <span>[[athleteStats.pull_ups]] reps</span>
+                        </p>
+                        <p>
+                            <strong class="title">40 Yard Dash:</strong>
+                            <span>[[athleteStats.40_yard_dash]]</span>
+                        </p>
+                        <p>
+                            <strong class="title">3 Cone Drill:</strong>
+                            <span>[[athleteStats.3_cone_drill]]</span>
+                        </p>
+                        <div class="horizontal">
+                            <p>
+                                <strong class="title">20 Yard Shuttle:</strong>
+                                <span>[[athleteStats.20_yard_shuttle]]</span>
+                            </p>
+                            <span flex></span>
+                            <p>
+                                <strong class="title">60 Yard Shuttle:</strong>
+                                <span>[[athleteStats.60_yard_shuttle]]</span>
+                            </p>
+                        </div>
+                        <div class="horizontal">
+                            <p>
+                                <strong class="title">Vertical Jump:</strong>
+                                <span>[[athleteStats.vertical_jump]]</span>
+                            </p>
+                            <span flex></span>
+                            <p>
+                                <strong class="title">Broad Jump:</strong>
+                                <span>[[athleteStats.broad_jump]]</span>
+                            </p>
+                        </div>
+                    </div>
+                </template>
+                <div class="form-wrapper" hidden="[[!editMaxes]]">
+                    <iron-form id="maxesForm">
+                        <form>
+                            <vaadin-form-layout>
+                                <vaadin-text-field
+                                    label="Bench"
+                                    name="bench_press_value"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{athleteStats.bench_press_value}}">
+                                    <span slot="suffix">lbs</span>
+                                </vaadin-text-field>
+                                <vaadin-combo-box
+                                    id="benchPressCombo"
+                                    label="Reps"
+                                    name="bench_press_reps"
+                                    required
+                                    error-message="Select the reps"
+                                    value="{{athleteStats.bench_press_reps}}"></vaadin-combo-box>
+                                <vaadin-text-field
+                                    label="Back Squat"
+                                    name="back_squat_value"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{athleteStats.back_squat_value}}">
+                                    <span slot="suffix">lbs</span>
+                                </vaadin-text-field>
+                                <vaadin-combo-box
+                                    id="backSquatCombo"
+                                    label="Reps"
+                                    name="back_squat_reps"
+                                    required
+                                    error-message="Select the reps"
+                                    value="{{athleteStats.back_squat_reps}}"></vaadin-combo-box>
+                                <vaadin-text-field
+                                    label="Front Squat"
+                                    name="front_squat_value"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{athleteStats.front_squat_reps}}">
+                                    <span slot="suffix">lbs</span>
+                                </vaadin-text-field>
+                                <vaadin-combo-box
+                                    id="frontSquatCombo"
+                                    label="Reps"
+                                    name="front_squat_reps"
+                                    required
+                                    error-message="Select the reps"
+                                    value="{{athleteStats.front_squat_reps}}"></vaadin-combo-box>
+                                <vaadin-text-field
+                                    label="Deadlift"
+                                    name="deadlift_value"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{athleteStats.deadlift_value}}">
+                                    <span slot="suffix">lbs</span>
+                                </vaadin-text-field>
+                                <vaadin-combo-box
+                                    id="deadliftCombo"
+                                    label="Reps"
+                                    name="deadlift_reps"
+                                    required
+                                    error-message="Select the reps"
+                                    value="{{athleteStats.deadlift_reps}}"></vaadin-combo-box>
+                                <vaadin-text-field
+                                    label="Hang / Power Clean"
+                                    name="hang_power_clean_value"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{athleteStats.hang_power_clean_value}}">
+                                    <span slot="suffix">lbs</span>
+                                </vaadin-text-field>
+                                <vaadin-combo-box
+                                    id="hangPowerCleanCombo"
+                                    label="Reps"
+                                    name="hang_power_clean_reps"
+                                    required
+                                    error-message="Select the reps"
+                                    value="{{athleteStats.hang_power_clean_reps}}"></vaadin-combo-box>
+                                <vaadin-text-field
+                                    colspan="2"
+                                    label="Pull ups"
+                                    name="pull_ups"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{athleteStats.pull_ups}}">
+                                    <span slot="suffix">reps</span>
+                                </vaadin-text-field>
+                                <vaadin-text-field
+                                    colspan="2"
+                                    label="40 Yard Dash"
+                                    name="40_yard_dash"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{athleteStats.40_yard_dash}}">
+                                </vaadin-text-field>
+                                <vaadin-text-field
+                                    colspan="2"
+                                    label="3 Cone Drill"
+                                    name="3_cone_drill"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{athleteStats.3_cone_drill}}">
+                                </vaadin-text-field>
+                                <vaadin-text-field
+                                    colspan="2"
+                                    label="20 Yard Shuttle"
+                                    name="20_yard_shuttle"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{athleteStats.20_yard_shuttle}}">
+                                </vaadin-text-field>
+                                <vaadin-text-field
+                                    colspan="2"
+                                    label="60 Yard Shuttle"
+                                    name="60_yard_shuttle"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{athleteStats.60_yard_shuttle}}">
+                                </vaadin-text-field>
+                                <vaadin-text-field
+                                    colspan="2"
+                                    label="Vertical Jump"
+                                    name="vertical_jump"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{athleteStats.vertical_jump}}">
+                                </vaadin-text-field>
+                                <vaadin-text-field
+                                    colspan="2"
+                                    label="Broad Jump"
+                                    name="broad_jump"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{athleteStats.broad_jump}}">
+                                </vaadin-text-field>
+                            </vaadin-form-layout>
+                        </form>
+                    </iron-form>
+                </div> 
+            </paper-dialog-scrollable>
+            <div class="buttons" hidden="[[editMaxes]]">
+                <paper-button class="cancel-button" dialog-dismiss>Close</paper-button>
+                <paper-button on-tap="_switchToEditView">Edit</paper-button>
+            </div>
+            <div class="buttons" hidden="[[!editMaxes]]">
+                <paper-button class="cancel-button" on-tap="_switchToEditView">Back</paper-button>
+                <paper-button on-tap="_saveNewMaxes">Save</paper-button>
+            </div>
         </paper-dialog>
     </template>
 
@@ -67,13 +392,68 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 static get properties() {
                     return {
+                        user: Object,
                         athleteInfo: Object,
+                        athleteStats: Object,
                         opened: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
+                        editMaxes: {
                             type: Boolean,
                             notify: true,
                             value: false
                         }
                     };
+                }
+
+                ready() {
+                    super.ready();
+
+                    // App Progress Bar
+                    this._appProgressBar = document.getElementById('appProgressBar');
+
+                    // App Toast
+                    this._appToast = document.getElementById('appToast');
+
+                    this.$.benchPressCombo.items =
+                    this.$.backSquatCombo.items =
+                    this.$.frontSquatCombo.items =
+                    this.$.deadliftCombo.items =
+                    this.$.hangPowerCleanCombo.items = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+                }
+
+                /**
+                 * Switch edit view
+                */
+                _switchToEditView() {
+                    this.editMaxes = !this.editMaxes;
+                    this.opened = false;
+                    this.opened = true;
+                }
+
+                /**
+                 * Saves new maxes
+                */
+                _saveNewMaxes() {
+                    if (this.$.maxesForm.validate()) {
+                        this._appProgressBar.hidden = false;
+                        var newMaxes = this.$.maxesForm.serializeForm();
+                        this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + this.athleteInfo.uid + '/stats', newMaxes)
+                        .catch(function(err) {
+                            this._appToast.text = 'There has been an error. Please try again.';
+                            this._appToast.open();
+                        }.bind(this));
+
+                        this._appToast.text = 'The new stats for the athlete has been saved.';
+						this._appToast.open();
+						this._appProgressBar.hidden = true;
+                        this.athleteStats = newMaxes;
+                        this.editMaxes = false;
+                        this.opened = false;
+                        this.opened = true;
+                    }
                 }
             }
             window.customElements.define(AthleteStatsDialog.is, AthleteStatsDialog);

@@ -308,7 +308,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 <template class="horizontal-layout">
                                     <div class="actions">
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
-                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:clipboard" on-tap="_openCoachProfileDialog"></paper-icon-button>
+                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:pdf" on-tap="_openCoachProfileDialog"></paper-icon-button>
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button>
                                     </div>
@@ -367,6 +367,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // Athlete Profile Dialog
                     this._athleteProfileDialog = document.getElementById('athleteProfileDialog');
+
+                    // Athlete Stats Dialog
+                    this._athleteStatsDialog = document.getElementById('athleteStatsDialog');
 
                     // App Progress Bar
                     this._appProgressBar = document.getElementById('appProgressBar');
@@ -461,6 +464,28 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         .then(function() {
                             // Creates athlete private node
                             this.$.firebaseDocument.setStoredValue(athleteInfo.uid + '/metadata', {'path': this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', 'role': 'athlete'});
+
+                            // Saves default maxes in athletes info
+                            this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/stats', 
+                            {
+                                'bench_press_value': '0',
+                                'bench_press_reps': '0',
+                                'back_squat_value': '0',
+                                'back_squat_reps': '0',
+                                'front_squat_value': '0',
+                                'front_squat_reps': '0',
+                                'deadlift_value': '0',
+                                'deadlift_reps': '0',
+                                'hang_power_clean_value': '0',
+                                'hang_power_clean_reps': '0',
+                                'pull_ups': '0',
+                                '40_yard_dash': '0',
+                                '3_cone_drill': '0',
+                                '20_yard_shuttle': '0',
+                                '60_yard_shuttle': '0',
+                                'vertical_jump': '0',
+                                'broad_jump': '0'
+                            });
                         }.bind(this))
                         .catch(function (err) {
                             this._appToast.text = 'There has been an error. Please try again.';
@@ -495,6 +520,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     .then(function(athleteInfo) {
                         this._athleteProfileDialog.athleteInfo = athleteInfo;
                         this._athleteProfileDialog.opened = true;
+                    }.bind(this));
+                }
+
+                /**
+                 * Athlete' stats dialog
+                */
+                _openStatsDialog(e) {
+                    this.athleteId = e.target.getAttribute('id');
+
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
+                    .then(function(athleteInfo) {
+                        this._athleteStatsDialog.athleteInfo = athleteInfo;
+                        this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/stats')
+                        .then(function(athleteStats) {
+                            this._athleteStatsDialog.user = this.user;
+                            this._athleteStatsDialog.athleteStats = athleteStats;
+                            this._athleteStatsDialog.opened = true;
+                        }.bind(this));
                     }.bind(this));
                 }
             }
