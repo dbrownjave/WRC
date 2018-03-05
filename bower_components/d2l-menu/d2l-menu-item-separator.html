@@ -1,0 +1,29 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`d2l-menu-item-separator`
+Polymer-based web component for menu item separators.
+-->
+
+<dom-module id="d2l-menu-item-separator">
+
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+		</style>
+	</template>
+
+	<script>
+		Polymer({
+			is: 'd2l-menu-item-separator',
+
+			hostAttributes: {
+				'role': 'separator'
+			}
+
+		});
+	</script>
+
+</dom-module>

@@ -1,0 +1,48 @@
+{
+  "name": "d2l-button",
+  "description": "Polymer-based web components and Sass mixins for D2L buttons",
+  "main": "d2l-button.html",
+  "license": "Apache-2.0",
+  "ignore": [
+    "test",
+    "screenshots",
+    ".editorconfig",
+    ".eslintrc.json",
+    ".gitignore",
+    ".travis.yml",
+    "package.json",
+    "polymer.json",
+    "wct.conf.json"
+  ],
+  "dependencies": {
+    "d2l-colors": "^3.1.2",
+    "polymer": "1 - 2",
+    "iron-media-query": "1 - 2"
+  },
+  "devDependencies": {
+    "d2l-typography": "^6.0.0",
+    "iron-component-page": "1 - 2",
+    "iron-demo-helpers": "1 - 2",
+    "iron-test-helpers": "1 - 2",
+    "web-component-tester": "6.0.1"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.9.0",
+        "iron-media-query": "^1.0.8"
+      },
+      "devDependencies": {
+        "iron-component-page": "^1.1.9",
+        "iron-demo-helpers": "^1.2.6",
+        "iron-test-helpers": "^1.1.5"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7"
+      }
+    }
+  },
+  "resolutions": {
+    "webcomponentsjs": "^v1.0.0"
+  }
+}

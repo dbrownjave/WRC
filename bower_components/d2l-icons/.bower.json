@@ -1,0 +1,69 @@
+{
+  "name": "d2l-icons",
+  "description": "SVGs, Polymer web components, iron-iconset collections and SASS mixins for D2L icons",
+  "main": [
+    "d2l-icons.html",
+    "icons.scss"
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "d2l",
+    "ui",
+    "icons",
+    "scss",
+    "sass",
+    "mixins",
+    "polymer",
+    "iconset"
+  ],
+  "ignore": [
+    "cli",
+    "demo",
+    "test",
+    ".csslintrc",
+    ".editorconfig",
+    ".eslintrc.json",
+    ".gitattributes",
+    ".gitignore",
+    ".travis.yml",
+    "package.json",
+    "polymer.json",
+    "wct.conf.json"
+  ],
+  "dependencies": {
+    "d2l-colors": "^3.1.2",
+    "d2l-offscreen": "^3.0.3",
+    "iron-iconset-svg": "^2.1.0",
+    "polymer": "1.9 - 2"
+  },
+  "devDependencies": {
+    "d2l-typography": "^6.0.0",
+    "iron-component-page": "^2.0.0",
+    "iron-demo-helpers": "^2.0.0",
+    "web-component-tester": "^6.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.9.1"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7"
+      }
+    }
+  },
+  "resolutions": {
+    "webcomponentsjs": "^v1.0.0"
+  },
+  "homepage": "https://github.com/BrightspaceUI/icons",
+  "version": "4.9.0",
+  "_release": "4.9.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v4.9.0",
+    "commit": "ffa72f53a3a34a403ba02808f20bbfb391abe18e"
+  },
+  "_source": "https://github.com/BrightspaceUI/icons.git",
+  "_target": "^4.5.1",
+  "_originalSource": "d2l-icons"
+}

@@ -1,0 +1,65 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../d2l-colors/d2l-colors.html">
+<link rel="import" href="../d2l-icons/d2l-icon.html">
+<link rel="import" href="../d2l-icons/tier1-icons.html">
+<link rel="import" href="d2l-dropdown-opener-behavior.html">
+
+<!--
+`d2l-dropdown-more`
+Polymer-based web component for dropdown using a "more" opener.
+
+@demo demo/dropdown-more.html More Opener
+-->
+
+<dom-module id="d2l-dropdown-more">
+	<template>
+		<style include="d2l-dropdown-opener-styles">
+			:host .d2l-dropdown-more-container {
+				display: flex;
+			}
+			:host button {
+				border: none;
+				border-radius: 5px;
+				background: rgba(0,0,0,0.5);
+				color: white;
+				cursor: pointer;
+				height: 35px;
+				width: 35px;
+				transition: background 0.5s;
+			}
+			:host button:hover, :host button:focus {
+				background: var(--d2l-color-celestine);
+				outline: 0;
+			}
+			:host d2l-icon {
+				color: white;
+				--d2l-icon-width: 18px;
+				--d2l-icon-height: 18px;
+			}
+		</style>
+		<div class="d2l-dropdown-more-container">
+			<button aria-label$="[[label]]">
+				<d2l-icon icon="d2l-tier1:more"></d2l-icon>
+			</button>
+		</div>
+		<slot></slot>
+	</template>
+	<script>
+		Polymer({
+			is: 'd2l-dropdown-more',
+
+			behaviors: [
+				D2L.PolymerBehaviors.DropdownOpenerBehavior
+			],
+
+			properties: {
+
+				/**
+				 * Label for the "more" button (required for accessibility).
+				 */
+				label: String
+
+			}
+		});
+	</script>
+</dom-module>

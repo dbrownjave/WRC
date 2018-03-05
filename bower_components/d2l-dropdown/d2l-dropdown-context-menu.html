@@ -1,0 +1,107 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../d2l-colors/d2l-colors.html">
+<link rel="import" href="../d2l-icons/d2l-icon.html">
+<link rel="import" href="../d2l-icons/tier1-icons.html">
+<link rel="import" href="../d2l-offscreen/d2l-offscreen-shared-styles.html">
+<link rel="import" href="d2l-dropdown-opener-behavior.html">
+
+<!--
+`d2l-dropdown-context-menu`
+Polymer-based web component for dropdown using a context-menu opener.
+
+@demo demo/dropdown-context-menu.html Context-Menu Opener
+-->
+
+<dom-module id="d2l-dropdown-context-menu">
+	<template>
+		<style include="d2l-dropdown-opener-styles d2l-offscreen-shared-styles">
+			:host {
+				display: inline-block;
+			}
+			:host button {
+				background-color: transparent;
+				border: 1px solid transparent;
+				border-radius: 0.3rem;
+				box-sizing: border-box;
+				cursor: pointer;
+				height: calc(1.4rem + 2px);
+				outline-style: none;
+				width: calc(1.4rem + 2px);
+			}
+			:host button:focus,
+			:host button:hover {
+				border-color: var(--d2l-color-corundum);
+				color: var(--d2l-color-celestine-minus-1);
+			}
+			:host button:focus d2l-icon,
+			:host button:hover d2l-icon {
+				color: var(--d2l-color-celestine-minus-1);
+			}
+			:host([opened]) button {
+				border-color: var(--d2l-color-corundum);
+				color: var(--d2l-color-celestine);
+			}
+			:host([opened]) button d2l-icon {
+				color: var(--d2l-color-celestine);
+			}
+			:host button > div {
+				@apply --d2l-offscreen;
+			}
+			:host(:dir(rtl)) button > div {
+				@apply --d2l-offscreen-rtl;
+			}
+			:host-context([dir="rtl"]) button > div {
+				@apply --d2l-offscreen-rtl;
+			}
+			:host d2l-icon {
+				height: 0.8rem;
+				width: 0.8rem;
+			}
+		</style>
+		<button>
+			<div>[[text]]</div>
+			<d2l-icon icon="d2l-tier1:chevron-down"></d2l-icon>
+		</button>
+		<slot></slot>
+	</template>
+	<script>
+		Polymer({
+			is: 'd2l-dropdown-context-menu',
+
+			behaviors: [
+				D2L.PolymerBehaviors.DropdownOpenerBehavior
+			],
+
+			properties: {
+
+				/**
+				 * Label for the context-menu button (required for accessibility).
+				 */
+				text: String
+
+			},
+
+			listeners: {
+				'd2l-dropdown-close': '_onClose',
+				'd2l-dropdown-open': '_onOpen'
+			},
+
+			/**
+			 * Gets the opener element (required by d2l-dropdown behavior).
+			 * @return {HTMLElement}
+			 */
+			getOpenerElement: function() {
+				return this.$$('button');
+			},
+
+			_onClose: function() {
+				this.removeAttribute('opened');
+			},
+
+			_onOpen: function() {
+				this.setAttribute('opened', '');
+			}
+
+		});
+	</script>
+</dom-module>
