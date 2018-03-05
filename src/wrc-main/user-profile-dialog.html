@@ -109,9 +109,27 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 margin: 0.5em 0 0;
             }
 
-            [slot='prefix'], [slot='suffix'] {
-                color: var(--paper-grey-600);
-            }
+            /* Form */
+            vaadin-form-layout {
+				@apply --layout-vertical;
+			}
+
+			div.horizontal-wrapper {
+				@apply --layout-horizontal;
+                @apply --layout-wrap;
+			}
+
+			div.horizontal-wrapper vaadin-text-field {
+				width: 48%;
+			}
+
+			div.horizontal-wrapper vaadin-combo-box {
+				width: 48%;
+			}
+
+			[slot='suffix'], [slot='prefix'] {
+				color: var(--paper-grey-500);
+			}
 
             /* To keep dialog larger with large screens */
 			@media screen and (min-width: 600px) {
@@ -270,55 +288,94 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <p>[[athleteInfo.email]]</p>
                 </div>
                 
-                <iron-form id="coachForm">
+                <iron-form id="athleteForm">
                     <form>
                         <vaadin-form-layout>
                             <vaadin-text-field
                                 label="First Name"
                                 name="first"
-                                type="text"
                                 required
-                                error-message="Enter your name"
+                                error-message="This field is required"
                                 value="{{athleteInfo.first}}"></vaadin-text-field>
                             <vaadin-text-field
                                 label="Last Name"
                                 name="last"
-                                type="text"
                                 required
-                                error-message="Enter your last name"
+                                error-message="This field is required"
                                 value="{{athleteInfo.last}}"></vaadin-text-field>
-                            <vaadin-text-field
-                                label="Phone"
-                                name="phone"
-                                type="text"
+                            <vaadin-combo-box
+                                id="yearCombo"
+                                label="Year"
+                                name="year"
                                 required
-                                error-message="Enter your phone number"
-                                value="{{athleteInfo.phone}}"></vaadin-text-field>
+                                error-message="Select the year"
+                                value="{{athleteInfo.year}}"></vaadin-combo-box>
+                            <vaadin-text-field
+                                label="Number"
+                                name="number"
+                                type="number"
+                                maxlength="2"
+                                pattern="[0-9]*"
+                                prevent-invalid-input
+                                required
+                                error-message="This field is required"
+                                value="{{athleteInfo.number}}">
+                                <span slot="prefix">#</span>
+                            </vaadin-text-field>
+                            <vaadin-combo-box
+                                id="posCombo"
+                                label="Position"
+                                name="pos"
+                                required
+                                error-message="Select the position"
+                                value="{{athleteInfo.pos}}"></vaadin-combo-box>
                             <br>
+                            <div class="horizontal-wrapper">
+                                <vaadin-combo-box
+                                    id="heightCombo"
+                                    label="Height"
+                                    name="height"
+                                    required
+                                    error-message="Select the height"
+                                    value="{{athleteInfo.height}}"></vaadin-combo-box>
+                                <span flex></span>
+                                <vaadin-text-field
+                                    label="Weight"
+                                    name="weight"
+                                    type="number"
+                                    maxlength="3"
+                                    pattern="[0-9]*"
+                                    prevent-invalid-input
+                                    required
+                                    error-message="This field is required"
+                                    value="{{athleteInfo.weight}}">
+                                    <span slot="suffix">lbs</span>
+                                </vaadin-text-field>
+                            </div>
+                            <br>
+                            <vaadin-text-field
+                                colspan="2"
+                                label="Contact"
+                                placeholder="Phone"
+                                name="phone"
+                                value="{{athleteInfo.phone}}"></vaadin-text-field>
                             <vaadin-text-field
                                 label="Instagram"
                                 name="instagram"
-                                type="text"
-                                required
-                                error-message="Enter your instagram"
                                 value="{{athleteInfo.instagram}}">
                                 <span slot="prefix">@</span>
                             </vaadin-text-field>
                             <vaadin-text-field
                                 label="Twitter"
                                 name="twitter"
-                                type="text"
-                                required
-                                error-message="Enter your twitter"
                                 value="{{athleteInfo.twitter}}">
                                 <span slot="prefix">@</span>
                             </vaadin-text-field>
                             <vaadin-text-field
                                 colspan="2"
                                 label="Hudl"
-                                placeholder="www.hudle.com/"
+                                placeholder="www.hudl.com/"
                                 name="hudl"
-                                type="text"
                                 value="{{athleteInfo.hudl}}"></vaadin-text-field>
                         </vaadin-form-layout>
                     </form>
@@ -326,7 +383,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             </paper-dialog-scrollable>
             <div class="buttons">
                 <paper-button class="cancel-button" dialog-dismiss on-tap="_resetForm">Cancel</paper-button>
-                <paper-button on-tap="">Update</paper-button>
+                <paper-button on-tap="_serializeAthleteForm">Update</paper-button>
             </div>
         </paper-dialog>
     </template>
@@ -381,6 +438,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 ready() {
                     super.ready();
+
+                    this.$.yearCombo.items = ['FR', 'SO', 'JR', 'SR'];
+
+                    this.$.posCombo.items = ['Quarterback (QB)', 'Running Back (RB)', 'Fullback (FB)', 'Wide Receiver (WR)', 'Tight End (TE)', 'Offensive Lineman (OL)', 'Center (C)', 'Guard (G)', 'Left Guard (LG)', 'Right Guard (RG)', 'Tackle (T)',
+                        'Left Tackle (LT)', 'Right Tackle (RT)', 'Kicker (K)', 'Kick Returner(KR)', 'Defensive Lineman (DL)', 'Defensive End (DE)', 'Defensive Tackle (DT)', '	Nose Tackle (NT)', 'Linebacker (LB)', 'Inside Linebacker (ILB)',
+                        'Outside Linebacker (OLB)', 'Middle Linebacker (MLB)', 'Defensive Back (DB)', 'Cornerback (CB)', '	Free Safety (FS)', 'Strong Safety (SS)', 'Safety (S)', 'Punter (P)', 'Punt Returner (PR)'];
+
+                    this.$.heightCombo.items = ['5’0', '5’1', '5’2', '5’3', '5’4', '5’5', '5’6', '5’7', '5’8', '5’9', '6’0', '6’1',
+                        '6’2', '6’3', '6’4', '6’5', '6’6', '6’7', '6’8', '6’9', '7’0'];
 
                     // App Progress Bar
                     this._appProgressBar = document.getElementById('appProgressBar');
@@ -464,6 +530,35 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								}.bind(this));
 						} else {
 							this.acceptedCallback(this.coachInfo);
+						}
+                    }
+                }
+
+                /**
+                 * Serializes form data and send it to be saved trought athleteInfo
+                */
+                _serializeAthleteForm() {
+                    if (this.$.athleteForm.validate()) {
+                        this._appProgressBar.hidden = false;
+
+                        if (this.$.athleteProfilePicture.files[0]) {
+
+                            this.$.storageRef.path = '/profile-pics/' + this.athleteInfo.profile_pic_name;
+                            this.$.storageRef.delete();
+                            this.$.storageRef.path = null;
+
+                            this.$.firebaseStorage.put(this.$.athleteProfilePicture.files[0])
+								.then(function () {
+									this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.athleteProfilePicture.files[0]
+											.name)
+										.then(function (url) {
+											this.athleteInfo.profile_pic_url = url;
+											this.athleteInfo.profile_pic_name = this.$.athleteProfilePicture.files[0].name;
+											this.acceptedCallback(this.athleteInfo);
+										}.bind(this));
+								}.bind(this));
+						} else {
+							this.acceptedCallback(this.athleteInfo);
 						}
                     }
                 }

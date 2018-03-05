@@ -230,9 +230,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 _handleSuccess(action) {
                     if (action.detail === 'auth') {
+                        this.$.loginForm.reset();
                         this._appProgressBar.hidden = true;
                         this.set('route.path', 'main');
-                        this.$.loginForm.reset();
                     }
                 }
 

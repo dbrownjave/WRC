@@ -679,8 +679,25 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._userProfileDialog._resetForm();
                 }
 
+                /**
+                 * Receives form data from user-profile-dialog
+                 *
+                 * @param {Object} athleteInfo from dialog's form
+                 * @return {void}
+                */
                 _saveAthleteProfile(athleteInfo) {
-
+                    this.$.firebaseDocument.setStoredValue(this.userPath, athleteInfo)
+                    .catch(function(err) {
+                        this._appToast.text = 'An error has ocurred trying to save your personal information. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
+                    this.userInfo = null;
+                    this.userInfo = athleteInfo;
+                    this._appProgressBar.hidden = true;
+                    this._userProfileDialog.openedAthlete = false;
+                    this._appToast.text = 'You personal information has been saved successfully.';
+                    this._appToast.open();
+                    this._userProfileDialog._resetForm();
                 }
 
                 /**
