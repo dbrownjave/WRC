@@ -374,7 +374,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 <!-- Filtered Data Display -->
                 <template is="dom-if" if="[[filtering]]">
                     <div class="videos-wrapper">
-                        <template is="dom-repeat" items="[[libraryDataFiltered]]" as="video">
+                        <template id="videoRepeater" is="dom-repeat" items="[[libraryDataFiltered]]" as="video">
                             <div class="video-wrapper">
                                 <google-youtube
                                     video-id="[[video.id]]"
