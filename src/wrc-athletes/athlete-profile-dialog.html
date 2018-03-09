@@ -9,20 +9,31 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Paper Elements -->
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 
 <!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<!-- Vaadin Elements -->
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+
+<!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-storage-ref.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-storage-multiupload.html">
 
 <!-- Suji Elements -->
 <link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
 <link rel="import" href="../suji/lib/colors/suji-color-palette.html">
 <link rel="import" href="../suji/lib/themes/azul/azul-dialog.html">
-
-<!-- Vaadin Elements -->
-<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 
 <!-- Neon Elements -->
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
@@ -73,6 +84,54 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			paper-dialog .buttons paper-button.delete-button {
 				color: var(--paper-red-400);
                 font-weight: normal;
+            }
+
+            /* Profile Pic Uploader */
+			[type='file'] {
+				display: none;
+			}
+
+			div.picture-wrapper {
+				width: 100%;
+                margin-bottom: 12px;
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			div.picture-wrapper label {
+				background-color: #F3F4F5;
+				overflow: hidden;
+				border-radius: 10em;
+				width: 150px;
+				height: 150px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			div.picture-wrapper label:hover {
+				background-color: var(--paper-grey-300);
+			}
+
+			label iron-image {
+				width: inherit;
+				height: inherit;
+				cursor: pointer;
+			}
+
+            /* Email Wrapper */
+            div.email-wrapper {
+                width: 100%;
+                text-align: center;
+            }
+
+            div.email-wrapper p {
+                color: var(--azul-text-title);
+                font-size: 1.1em;
+                margin-top: 0;
+                font-weight: 400;
             }
 
             /* Profile */
@@ -134,7 +193,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 color: var(--azul-text-title);
             }
 
-            iron-image {
+            .profile-wrapper iron-image {
 				background-color: #F3F4F5;
 				overflow: hidden;
 				border-radius: 10em;
@@ -142,6 +201,32 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				height: 150px;
                 box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
             }
+
+            /* Form Wrapper */
+            div.form-wrapper {
+                width: 100%;
+            }
+
+            vaadin-form-layout {
+				@apply --layout-vertical;
+			}
+
+			div.horizontal-wrapper {
+				@apply --layout-horizontal;
+                @apply --layout-wrap;
+			}
+
+			div.horizontal-wrapper vaadin-text-field {
+				width: 48%;
+			}
+
+			div.horizontal-wrapper vaadin-combo-box {
+				width: 48%;
+			}
+
+			[slot='suffix'], [slot='prefix'] {
+				color: var(--paper-grey-500);
+			}
             
             /* To keep dialog larger with large screens */
 			@media screen and (min-width: 600px) {
@@ -158,6 +243,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 @apply --layout-flex;
             }
         </style>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document
+            id="firebaseDocument"
+            app-name="wrc_software"></firebase-document>
+
+        <!-- Firebase Storage Configuration -->
+        <firebase-storage-ref
+            id="storageRef"
+            app-name="wrc_software"></firebase-storage-ref>
+
+        <firebase-storage-multiupload
+            id="firebaseStorage"
+            app-name="wrc_software"
+            path="profile-pics"></firebase-storage-multiupload>
 
         <paper-dialog
             opened="{{opened}}"
@@ -221,16 +321,133 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         </p>
                     </div>
                 </div>
+
+                <!-- Form Wrapper -->
+                <div class="form-wrapper" hidden="[[!editing]]">
+                    <div class="picture-wrapper">
+                        <input type="file" name="profile_pic" id="profilePicture">
+                        <label for="profilePicture">
+                            <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
+                            <iron-image id="profileImage" preload fade sizing="cover" src="[[newAthleteInfo.profile_pic_url]]"></iron-image>
+                        </label>
+                    </div>
+                    <div class="email-wrapper">
+                        <p>[[newAthleteInfo.email]]</p>
+                    </div>
+                    <iron-form id="athleteForm">
+                        <form>
+                            <vaadin-form-layout>
+                                <vaadin-text-field
+                                    label="First Name"
+                                    name="first"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{newAthleteInfo.first}}"></vaadin-text-field>
+                                <vaadin-text-field
+                                    label="Last Name"
+                                    name="last"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{newAthleteInfo.last}}"></vaadin-text-field>
+                                <vaadin-combo-box
+                                    id="yearCombo"
+                                    label="Year"
+                                    name="year"
+                                    required
+                                    error-message="Select the year"
+                                    value="{{newAthleteInfo.year}}"></vaadin-combo-box>
+                                <vaadin-text-field
+                                    label="Number"
+                                    name="number"
+                                    type="number"
+                                    maxlength="2"
+                                    pattern="[0-9]*"
+                                    prevent-invalid-input
+                                    required
+                                    error-message="This field is required"
+                                    value="{{newAthleteInfo.number}}">
+                                    <span slot="prefix">#</span>
+                                </vaadin-text-field>
+                                <vaadin-combo-box
+                                    id="posCombo"
+                                    label="Position"
+                                    name="pos"
+                                    required
+                                    error-message="Select the position"
+                                    value="{{newAthleteInfo.pos}}"></vaadin-combo-box>
+                                <br>
+                                <div class="horizontal-wrapper">
+                                    <vaadin-combo-box
+                                        id="heightCombo"
+                                        label="Height"
+                                        name="height"
+                                        required
+                                        error-message="Select the height"
+                                        value="{{newAthleteInfo.height}}"></vaadin-combo-box>
+                                    <span flex></span>
+                                    <vaadin-text-field
+                                        label="Weight"
+                                        name="weight"
+                                        type="number"
+                                        maxlength="3"
+                                        pattern="[0-9]*"
+                                        prevent-invalid-input
+                                        required
+                                        error-message="This field is required"
+                                        value="{{newAthleteInfo.weight}}">
+                                        <span slot="suffix">lbs</span>
+                                    </vaadin-text-field>
+                                </div>
+                                <br>
+                                <div class="horizontal-wrapper">
+                                    <vaadin-combo-box
+                                        id="activeCombo"
+                                        label="Active"
+                                        name="active"
+                                        required
+                                        error-message="Select the status"
+                                        value="{{newAthleteInfo.active}}"></vaadin-combo-box>
+                                    <span flex></span>
+                                </div>
+                                <br>
+                                <vaadin-text-field
+                                    colspan="2"
+                                    label="Contact"
+                                    placeholder="Phone"
+                                    name="phone"
+                                    value="{{newAthleteInfo.phone}}"></vaadin-text-field>
+                                <vaadin-text-field
+                                    label="Instagram"
+                                    name="instagram"
+                                    value="{{newAthleteInfo.instagram}}">
+                                    <span slot="prefix">@</span>
+                                </vaadin-text-field>
+                                <vaadin-text-field
+                                    label="Twitter"
+                                    name="twitter"
+                                    value="{{newAthleteInfo.twitter}}">
+                                    <span slot="prefix">@</span>
+                                </vaadin-text-field>
+                                <vaadin-text-field
+                                    colspan="2"
+                                    label="Hudl"
+                                    placeholder="www.hudl.com/"
+                                    name="hudl"
+                                    value="{{newAthleteInfo.hudl}}"></vaadin-text-field>
+                            </vaadin-form-layout>
+                        </form>
+                    </iron-form>
+                </div>
             </paper-dialog-scrollable>
             <div class="buttons" hidden="[[editing]]">
-                <paper-button class="delete-button">Delete</paper-button>
+                <paper-button class="delete-button" on-tap="_openDeleteDialog">Delete</paper-button>
                 <span flex></span>
                 <paper-button class="cancel-button" dialog-dismiss>Close</paper-button>
                 <paper-button on-tap="_toggleEditView">Edit</paper-button>
             </div>
             <div class="buttons" hidden="[[!editing]]">
-                <paper-button class="cancel-button" on-tap="_toggleEditView">Back</paper-button>
-                <paper-button>Save</paper-button>
+                <paper-button class="cancel-button" on-tap="_toggleEditView">Cancel</paper-button>
+                <paper-button on-tap="_serializeAthleteForm">Save</paper-button>
             </div>
         </paper-dialog>
     </template>
@@ -250,6 +467,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 static get properties() {
                     return {
+                        user: Object,
+                        athleteId: String,
                         athleteInfo: Object,
                         newAthleteInfo: Object,
                         opened: {
@@ -267,13 +486,136 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 ready() {
                     super.ready();
+
+                    this.$.yearCombo.items = ['FR', 'SO', 'JR', 'SR'];
+
+                    this.$.posCombo.items = ['Quarterback (QB)', 'Running Back (RB)', 'Fullback (FB)', 'Wide Receiver (WR)', 'Tight End (TE)', 'Offensive Lineman (OL)', 'Center (C)', 'Guard (G)', 'Left Guard (LG)', 'Right Guard (RG)', 'Tackle (T)',
+                        'Left Tackle (LT)', 'Right Tackle (RT)', 'Kicker (K)', 'Kick Returner(KR)', 'Defensive Lineman (DL)', 'Defensive End (DE)', 'Defensive Tackle (DT)', '	Nose Tackle (NT)', 'Linebacker (LB)', 'Inside Linebacker (ILB)',
+                        'Outside Linebacker (OLB)', 'Middle Linebacker (MLB)', 'Defensive Back (DB)', 'Cornerback (CB)', '	Free Safety (FS)', 'Strong Safety (SS)', 'Safety (S)', 'Punter (P)', 'Punt Returner (PR)'];
+
+                    this.$.heightCombo.items = ['5’0', '5’1', '5’2', '5’3', '5’4', '5’5', '5’6', '5’7', '5’8', '5’9', '6’0', '6’1',
+                        '6’2', '6’3', '6’4', '6’5', '6’6', '6’7', '6’8', '6’9', '7’0'];
+
+                    this.$.activeCombo.items = ['Yes', 'No'];
+
+                    // App Progress Bar
+					this._appProgressBar = document.getElementById('appProgressBar');
+
+                    // App Toast
+                    this._appToast = document.getElementById('appToast');
+
+                    // Delete Athlete Dialog
+                    this._deleteAthleteDialog = document.getElementById('deleteAthleteDialog');
+
+                    const fileUpload = this.$.profilePicture;
+                    fileUpload.addEventListener('change', function(e) {
+                        this._createImgPreview(e.target.files[0]);
+                    }.bind(this));
                 }
 
                 /**
                  * Toggles profile/edit view
                 */
                 _toggleEditView() {
+                    this.newAthleteInfo = (this.editing) ? null : this.athleteInfo;
+
                     this.editing = !this.editing;
+                    this.opened = false;
+                    this.opened = true;
+                }
+
+                /**
+                 * Creates image preview for profile picture
+                 *
+                 * @param {String} image selected by user
+                 * @return {void}
+                */
+                _createImgPreview(image) {
+                    this.$.profileImage.src = URL.createObjectURL(image);
+                }
+
+                /**
+                 * Serializes form data and saves into athlete data
+                */
+                _serializeAthleteForm() {
+                    if (this.$.athleteForm.validate()) {
+                        this._appProgressBar.hidden = false;
+
+                        if (this.$.profilePicture.files[0]) {
+                            this.$.storageRef.path = '/profile-pics/' + this.athleteInfo.profile_pic_name;
+                            this.$.storageRef.delete();
+
+                            this.$.firebaseStorage.put(this.$.profilePicture.files[0])
+                            .then(function() {
+                                this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0].name)
+                                .then(function (url) {
+                                    this.newAthleteInfo.profile_pic_url = url;
+                                    this.newAthleteInfo.profile_pic_name = this.$.profilePicture.files[0].name;
+                                    this._saveAthleteInfo();
+                                }.bind(this));
+                            }.bind(this));
+                        } else {
+                            this._saveAthleteInfo();
+                        }
+                    }
+                }
+
+                /**
+                 * Execute saving script
+                 *
+                 * This is neeed to do not duplicate function, due to when we are saving
+                 * new profile picture we have to wait for firebase response until save info because we need
+                 * downloadURL from new profile pic.
+                */
+                _saveAthleteInfo() {
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile', this.newAthleteInfo)
+                    .catch(function(err) {
+                        this._appToast.text = 'There has been an error. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
+
+                    this._appToast.text = 'The athlete has been modified successfully.';
+                    this._appToast.open();
+                    this._appProgressBar.hidden = true;
+                    this.editing = false;
+                    this.opened = false;
+                    this.athleteInfo = null;
+                    this.athleteInfo = this.newAthleteInfo;
+                    this.opened = true;
+                }
+
+                /**
+                 * Opens the delete confirmation dialog
+                */
+                _openDeleteDialog() {
+                    this._deleteAthleteDialog.acceptedCallback = this._deleteAthlete.bind(this);
+                    this._deleteAthleteDialog.opened = true;
+                }
+
+                /**
+                 * Deletes the athlete
+                 *
+                 * @param {Boolean} response from delete confirmation dialog
+                 * @return {void}
+                */
+                _deleteAthlete(response) {
+                    if (response) {
+                        // Deletes the athlete information from the coach's data
+                        this.$.firebaseDocument.destroy(this.user.uid + '/athletes/' + this.athleteId)
+                        .then(function() {
+                            // Deletes the profile picture
+                            if (this.athleteInfo.profile_pic_name !== 'default_profile.png') {
+                                this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
+                                this.$.storageRef.delete();
+                            }
+                            this._resetForm();
+                        }.bind(this));
+
+                        this._appToast.text = 'The athlete has been deleted.';
+                        this._appToast.open();
+                        this._deleteAthleteDialog.opened = false;
+                        this.opened = false;
+                    }
                 }
             }
             window.customElements.define(AthleteProfileDialog.is, AthleteProfileDialog);

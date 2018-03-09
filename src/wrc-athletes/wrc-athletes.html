@@ -515,11 +515,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _openAthleteProfileDialog(e) {
                     this.athleteId = e.target.getAttribute('id');
-
+                    
                     this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
-                    .then(function(athleteInfo) {
-                        this._athleteProfileDialog.athleteInfo = athleteInfo;
+                    .then(function(snapshot) {
+                        this._athleteProfileDialog.user = this.user;
+                        this._athleteProfileDialog.athleteId = this.athleteId;
+                        this._athleteProfileDialog.athleteInfo = snapshot;
                         this._athleteProfileDialog.opened = true;
+                    }.bind(this), function(err) {
+                        this._appToast.text = 'An error has ocurred trying to retrieve the coach data. Please try again.';
+                        this._appToast.open();
                     }.bind(this));
                 }
 

@@ -524,7 +524,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
                                 this.$.storageRef.delete();
                             }
-                            this._resetForm();
+                            this.athleteInfo = null;
                         }.bind(this));
 
                         this._appToast.text = 'The athlete has been deleted.';
