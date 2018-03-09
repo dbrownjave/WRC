@@ -56,6 +56,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				@apply --layout-end-justified;
 			}
 
+            paper-dialog div.buttons[hidden] {
+                display: none;
+            }
+
 			paper-dialog .buttons paper-button {
 				color: var(--azul-primary);
                 font-weight: 500;
@@ -72,6 +76,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             /* Profile */
+            div.profile-wrapper {
+                width: 100%;
+            }
+
             div.horizontal-layout {
                 @apply --layout-horizontal;
                 @apply --layout-start-justified;
@@ -83,7 +91,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             .athlete-info {
                 margin-left: 24px;
-                width: 50%;
+                width: 55%;
             }
 
             .athlete-info h3 {
@@ -136,9 +144,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
             
             /* To keep dialog larger with large screens */
-			@media screen and (min-width: 500px) {
+			@media screen and (min-width: 600px) {
 				paper-dialog {
-					width: 510px;
+					width: 610px;
 				}
             }
             
@@ -159,61 +167,70 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             <h2>[[athleteInfo.first]] [[athleteInfo.last]]</h2>
             <paper-dialog-scrollable>
-                <div class="horizontal-layout">
-                    <iron-image preload fade sizing="cover" src="[[athleteInfo.profile_pic_url]]"></iron-image>
-                    <div class="athlete-info vertical-layout">
-                        <h3>#[[athleteInfo.number]]</h3>
-                        <div class="horizontal-layout">
-                            <p>
-                                <strong>POS:</strong>
-                                <span>[[athleteInfo.pos]]</span>
+                <div class="profile-wrapper" hidden="[[editing]]">
+                    <div class="horizontal-layout">
+                        <iron-image preload fade sizing="cover" src="[[athleteInfo.profile_pic_url]]"></iron-image>
+                        <div class="athlete-info vertical-layout">
+                            <h3>#[[athleteInfo.number]]</h3>
+                            <div class="horizontal-layout">
+                                <p>
+                                    <strong>POS:</strong>
+                                    <span>[[athleteInfo.pos]]</span>
+                                </p>
+                                <span flex></span>
+                                <p f>
+                                    <strong>HT:</strong>
+                                    <span>[[athleteInfo.height]]</span>
+                                </p>
+                            </div>
+                            <div class="horizontal-layout">
+                                <p>
+                                    <strong>YR:</strong>
+                                    <span>[[athleteInfo.year]]</span>
+                                </p>
+                                <span flex></span>
+                                <p>
+                                    <strong>WT:</strong>
+                                    <span>[[athleteInfo.weight]] lbs</span>
+                                </p>
+                            </div>
+                            <p hidden="[[!athleteInfo.instagram]]">
+                                <iron-icon icon="fa-icons:instagram"></iron-icon>
+                                <span>@[[athleteInfo.instagram]]</span>
                             </p>
-                            <span flex></span>
-                            <p f>
-                                <strong>HT:</strong>
-                                <span>[[athleteInfo.height]]</span>
+                            <p hidden="[[!athleteInfo.twitter]]">
+                                <iron-icon icon="fa-icons:twitter"></iron-icon>
+                                <span>@[[athleteInfo.twitter]]</span>
                             </p>
                         </div>
-                        <div class="horizontal-layout">
-                            <p>
-                                <strong>YR:</strong>
-                                <span>[[athleteInfo.year]]</span>
-                            </p>
-                            <span flex></span>
-                            <p>
-                                <strong>WT:</strong>
-                                <span>[[athleteInfo.weight]] lbs</span>
-                            </p>
-                        </div>
-                        <p hidden="[[!athleteInfo.instagram]]">
-                            <iron-icon icon="fa-icons:instagram"></iron-icon>
-                            <span>@[[athleteInfo.instagram]]</span>
+                    </div>
+                    <div class="athlete-contact vertical-layout">
+                        <h3>Contact</h3>
+                        <p>
+                            <strong>Email:</strong>
+                            <span>[[athleteInfo.email]]</span>
                         </p>
-                        <p hidden="[[!athleteInfo.twitter]]">
-                            <iron-icon icon="fa-icons:twitter"></iron-icon>
-                            <span>@[[athleteInfo.twitter]]</span>
+                        <p hidden="[[!athleteInfo.phone]]">
+                            <strong>Phone:</strong>
+                            <span>[[athleteInfo.phone]]</span>
+                        </p>
+                        <p hidden="[[!athleteInfo.hudl]]">
+                            <!-- <iron-icon icon="app-icons:link"></iron-icon> -->
+                            <strong>Hudl:</strong>
+                            <span>[[athleteInfo.hudl]]</span>
                         </p>
                     </div>
                 </div>
-                <div class="athlete-contact vertical-layout">
-                    <h3>Contact</h3>
-                    <p>
-                        <strong>Email:</strong>
-                        <span>[[athleteInfo.email]]</span>
-                    </p>
-                    <p hidden="[[!athleteInfo.phone]]">
-                        <strong>Phone:</strong>
-                        <span>[[athleteInfo.phone]]</span>
-                    </p>
-                    <p hidden="[[!athleteInfo.hudl]]">
-                        <iron-icon icon="app-icons:link"></iron-icon>
-                        <strong>Hudl:</strong>
-                        <span>[[athleteInfo.hudl]]</span>
-                    </p>
-                </div>
             </paper-dialog-scrollable>
-            <div class="buttons">
+            <div class="buttons" hidden="[[editing]]">
+                <paper-button class="delete-button">Delete</paper-button>
+                <span flex></span>
                 <paper-button class="cancel-button" dialog-dismiss>Close</paper-button>
+                <paper-button on-tap="_toggleEditView">Edit</paper-button>
+            </div>
+            <div class="buttons" hidden="[[!editing]]">
+                <paper-button class="cancel-button" on-tap="_toggleEditView">Back</paper-button>
+                <paper-button>Save</paper-button>
             </div>
         </paper-dialog>
     </template>
@@ -233,16 +250,30 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 static get properties() {
                     return {
+                        athleteInfo: Object,
+                        newAthleteInfo: Object,
                         opened: {
                             type: Boolean,
                             notify: true,
                             value: false
                         },
-                        athleteInfo: {
-                            type: Object,
-                            notify: true
+                        editing: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
                         }
                     };
+                }
+
+                ready() {
+                    super.ready();
+                }
+
+                /**
+                 * Toggles profile/edit view
+                */
+                _toggleEditView() {
+                    this.editing = !this.editing;
                 }
             }
             window.customElements.define(AthleteProfileDialog.is, AthleteProfileDialog);

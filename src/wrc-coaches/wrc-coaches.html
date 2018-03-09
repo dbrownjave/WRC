@@ -384,7 +384,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 <template class="horizontal-layout">
                                     <div class="actions">
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:player-card" on-tap="_openCoachProfileDialog"></paper-icon-button>
-                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button>
+                                        <!-- <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button> -->
                                     </div>
                                 </template>
                             </vaadin-grid-column>
@@ -421,7 +421,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 </div>
                                 <div class="card-actions">
                                     <paper-icon-button id$="[[coach.$key]]" noink icon="fa-icons:player-card" on-tap="_openCoachProfileDialog"></paper-icon-button>
-                                    <paper-icon-button id$="[[coach.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button>
+                                    <!-- <paper-icon-button id$="[[coach.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button> -->
                                 </div>
                             </paper-card>
                         </template>
@@ -601,6 +601,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     
                     this.$.firebaseDocument.getStoredValue(this.user.uid + '/coaches/' + this.coachId)
                     .then(function(snapshot) {
+                        this._coachProfileDialog.user = this.user;
                         this._coachProfileDialog.coachId = this.coachId;
                         this._coachProfileDialog.coachInfo = snapshot;
                         this._coachProfileDialog.opened = true;

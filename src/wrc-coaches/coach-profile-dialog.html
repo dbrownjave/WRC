@@ -8,23 +8,29 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <!-- Paper Elements -->
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 
 <!-- Iron Elements -->
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<!-- Vaadin Elements -->
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+
+<!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-storage-ref.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-storage-multiupload.html">
 
 <!-- Suji Elements -->
 <link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
 <link rel="import" href="../suji/lib/colors/suji-color-palette.html">
 <link rel="import" href="../suji/lib/themes/azul/azul-dialog.html">
-
-<!-- Polymerfire Elements -->
-<link rel="import" href="../../bower_components/polymerfire/firebase-storage-ref.html">
-
-<!-- Vaadin Elements -->
-<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 
 <!-- Neon Elements -->
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
@@ -49,20 +55,39 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				@apply --layout-end-justified;
 			}
 
+            paper-dialog div.buttons[hidden] {
+                display: none;
+            }
+
 			paper-dialog .buttons paper-button {
-				color: var(--paper-grey-700);
+				color: var(--azul-primary);
                 font-weight: 500;
+                margin: 0;
 			}
 
-            /* Profile Image */
-            div.profile-wrapper {
+			paper-dialog .buttons paper-button.cancel-button {
+				color: var(--paper-grey-700);
+                font-weight: normal;
+			}
+
+			paper-dialog .buttons paper-button.delete-button {
+				color: var(--paper-red-400);
+                font-weight: normal;
+			}
+
+            /* Image Wrapper */
+            div.image-wrapper {
 				width: 100%;
 
-				@apply --layout-horizontal;
+				@apply --layout-vertical;
                 @apply --layout-center;
 			}
 
-			iron-image {
+            div.image-wrapper[hidden] {
+                display: none;
+            }
+
+			div.image-wrapper iron-image {
 				margin-bottom: 12px;
 				background-color: #F3F4F5;
 				overflow: hidden;
@@ -75,24 +100,80 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				@apply --layout-center-center;
 			}
 
+            /* Profile Pic Uploader */
+			[type='file'] {
+				display: none;
+			}
+
+			div.picture-wrapper {
+				width: 100%;
+                margin-bottom: 12px;
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+            div.picture-wrapper[hidden] {
+                display: none;
+            }
+
+			div.picture-wrapper label {
+				background-color: #F3F4F5;
+				overflow: hidden;
+				border-radius: 10em;
+				width: 150px;
+				height: 150px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			div.picture-wrapper label:hover {
+				background-color: var(--paper-grey-300);
+			}
+
+			label iron-image {
+				width: inherit;
+				height: inherit;
+				cursor: pointer;
+			}
+
+            /* Email Wrapper */
+            div.email-wrapper {
+                width: 100%;
+                text-align: center;
+            }
+
+            div.email-wrapper p {
+                color: var(--azul-text-title);
+                font-size: 1.1em;
+                margin-top: 0;
+                font-weight: 400;
+            }
+
+            /* Info Wrapper */
             div.info-wrapper {
-                margin-left: 24px;
                 @apply --layout-vertical;
             }
 
+            div.info-wrapper[hidden] {
+                display: none;
+            }
+
             div.info-wrapper p {
-                margin-top: 0;
+                margin-bottom: 0;
+                font-size: 1.1em;
+                color: var(--azul-text-title);
             }
 
             div.info-wrapper p strong {
-                color: var(--azul-text-title);
                 margin-right: 3px;
-                font-size: 1.1em;
             }
 
-            div.info-wrapper p span {
-                font-size: 1.1em;
-                font-weight: lighter;
+            /* Form Wrapper */
+            div.form-wrapper {
+                width: 100%;
             }
 
             /* To keep dialog larger with large screens */
@@ -101,65 +182,26 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					width: 610px;
 				}
             }
-            
-            @media screen and (max-width: 425px) {
-                /* Profile Image */
-                div.profile-wrapper {
-                    width: 100%;
-
-                    @apply --layout-vertical;
-                    @apply --layout-center-center;
-                }
-
-                iron-image {
-                    margin-bottom: 24px;
-                    background-color: #F3F4F5;
-                    overflow: hidden;
-                    border-radius: 10em;
-                    width: 120px;
-                    height: 120px;
-                    box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
-                }
-
-                div.info-wrapper {
-                    margin-left: 0;
-
-                    @apply --layout-vertical;
-                    @apply --layout-start-justified;
-                }
-
-                div.info-wrapper p {
-                    margin-top: 0;
-                    margin-bottom: 8px;
-
-                    @apply --layout-self-start;
-                }
-
-                div.info-wrapper p strong {
-                    color: var(--azul-text-title);
-                    margin-right: 3px;
-                    font-size: 1em;
-                }
-
-                div.info-wrapper p span {
-                    font-size: 1em;
-                    font-weight: lighter;
-                }
-            }
-
-			[hidden] {
-				display: none;
-			}
 
             [flex] {
                 @apply --layout-flex;
             }
         </style>
 
+        <!-- Firebase Document Configuration -->
+        <firebase-document
+            id="firebaseDocument"
+            app-name="wrc_software"></firebase-document>
+
         <!-- Firebase Storage Configuration -->
         <firebase-storage-ref
             id="storageRef"
             app-name="wrc_software"></firebase-storage-ref>
+
+        <firebase-storage-multiupload
+            id="firebaseStorage"
+            app-name="wrc_software"
+            path="profile-pics"></firebase-storage-multiupload>
 
         <!-- Element UI -->
         <paper-dialog
@@ -169,26 +211,80 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             exit-animation="fade-out-animation">
             <h2>[[coachInfo.first]] [[coachInfo.last]]</h2>
             <paper-dialog-scrollable>
-                <div class="profile-wrapper">
+                <!-- Info image -->
+                <div class="image-wrapper" hidden="[[editing]]">
                     <iron-image preload fade sizing="cover" src="[[coachInfo.profile_pic_url]]"></iron-image>
-                    <div class="info-wrapper">
-                        <p>
-                            <strong>Username:</strong>
-                            <span>[[coachInfo.email]]</span>
-                        </p>
-                        <p>
-                            <strong>Phone number:</strong>
-                            <span>[[coachInfo.phone]]</span>
-                        </p>
-                        <p>
-                            <strong>Team:</strong>
-                            <span>[[coachInfo.team]]</span>
-                        </p>
-                    </div>
+                </div>
+
+                <!-- Profile image that allows user to change it -->
+                <div class="picture-wrapper" hidden="[[!editing]]">
+                    <input type="file" name="profile_pic" id="profilePicture">
+                    <label for="profilePicture">
+                        <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
+                        <iron-image id="profileImage" preload fade sizing="cover" src="[[coachInfo.profile_pic_url]]"></iron-image>
+                    </label>
+                </div>
+
+                <div class="email-wrapper">
+                    <p>[[coachInfo.email]]</p>
+                </div>
+                <!-- Info -->
+                <div class="info-wrapper" hidden="[[editing]]">
+                    <p>
+                        <strong>Email:</strong>
+                        <span>[[coachInfo.email]]</span>
+                    </p>
+                    <p>
+                       <strong>Phone:</strong>
+                       <span>[[coachInfo.phone]]</span>
+                    </p>
+                    <p>
+                        <strong>Team:</strong>
+                        <span>[[coachInfo.team]]</span>
+                    </p>
+                </div>
+
+                <!-- Edit Form -->
+                <div class="form-wrapper" hidden="[[!editing]]">
+                    <iron-form id="coachForm">
+                        <form>
+                            <vaadin-form-layout>
+                                <vaadin-text-field
+                                    label="First Name"
+                                    name="first"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{newCoachInfo.first}}"></vaadin-text-field>
+                                <vaadin-text-field
+                                    label="Last Name"
+                                    name="last"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{newCoachInfo.last}}"></vaadin-text-field>
+                                <vaadin-text-field
+                                    label="Team"
+                                    name="team"
+                                    required
+                                    error-message="This field is required"
+                                    value="{{newCoachInfo.team}}"></vaadin-text-field>
+                                <vaadin-text-field
+                                    label="Phone"
+                                    name="phone"
+                                    value="{{newCoachInfo.phone}}"></vaadin-text-field>
+                            </vaadin-form-layout>
+                        </form>
+                    </iron-form>
                 </div>
             </paper-dialog-scrollable>
-            <div class="buttons">
-                <paper-button dialog-dismiss on-tap="_resetCoachInfo">Close</paper-button>
+            <div class="buttons" hidden="[[editing]]">
+                <paper-button class="delete-button" on-tap="_openDeleteDialog">Delete</paper-button>
+                <span flex></span>
+                <paper-button class="cancel-button" dialog-dismiss on-tap="_resetCoachInfo">Close</paper-button>
+                <paper-button on-tap="_toggleEditView">Edit</paper-button>
+            </div>
+            <div class="buttons" hidden="[[!editing]]">
+                <paper-button class="cancel-button" on-tap="_toggleEditView">Back</paper-button>
+                <paper-button on-tap="_serializeCoachForm">Save</paper-button>
             </div>
         </paper-dialog>
     </template>
@@ -208,9 +304,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 static get properties() {
                     return {
+                        user: Object,
                         coachId: String,
                         coachInfo: Object,
+                        newCoachInfo: Object,
                         opened: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
+                        editing: {
                             type: Boolean,
                             notify: true,
                             value: false
@@ -226,6 +329,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // App Toast
                     this._appToast = document.getElementById('appToast');
+
+                    // Delete Coach Dialog
+                    this._deleteCoachDialog = document.getElementById('deleteCoachDialog');
+
+                    const fileUpload = this.$.profilePicture;
+					fileUpload.addEventListener('change', function(e) {
+                        this._createImgPreview(e.target.files[0]);
+                    }.bind(this));
                 }
 
                 /**
@@ -233,6 +344,111 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _resetCoachInfo() {
                     this.coachInfo = null;
+                }
+
+                /**
+                 * Creates image preview for profile picture
+                 *
+                 * @param {String} image selected by user
+                 * @return {void}
+                */
+                _createImgPreview(image) {
+                    this.$.profileImage.src = URL.createObjectURL(image);
+                }
+
+                /**
+                 * Switch to edit view
+                */
+                _toggleEditView() {
+                    this.newCoachInfo = (this.editing) ? null : this.coachInfo;
+
+                    this.editing = !this.editing;
+                    this.opened = false;
+                    this.opened = true;
+                }
+
+                /**
+                 * Serializes form data and saves into coach data
+                */
+                _serializeCoachForm() {
+                    if (this.$.coachForm.validate()) {
+                        this._appProgressBar.hidden = false;
+
+                        if (this.$.profilePicture.files[0]) {
+                            this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
+                            this.$.storageRef.delete();
+
+                            this.$.firebaseStorage.put(this.$.profilePicture.files[0])
+                            .then(function() {
+                                this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0].name)
+                                .then(function (url) {
+                                    this.newCoachInfo.profile_pic_url = url;
+                                    this.newCoachInfo.profile_pic_name = this.$.profilePicture.files[0].name;
+                                    this._saveCoachInfo();
+                                }.bind(this));
+                            }.bind(this));
+                        } else {
+                            this._saveCoachInfo();
+                        }
+                    }
+                }
+
+                /**
+                 * Execute saving script
+                 *
+                 * This is neeed to do not duplicate function, due to when we are saving
+                 * new profile picture we have to wait for firebase response until save info because we need
+                 * downloadURL from new profile pic.
+                */
+                _saveCoachInfo() {
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/coaches/' + this.coachId, this.newCoachInfo)
+                    .catch(function(err) {
+                        this._appToast.text = 'There has been an error. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
+
+                    this._appToast.text = 'The coach has been modified successfully.';
+                    this._appToast.open();
+                    this._appProgressBar.hidden = true;
+                    this.editing = false;
+                    this.opened = false;
+                    this.coachInfo = null;
+                    this.coachInfo = this.newCoachInfo;
+                    this.opened = true;
+                }
+
+                /**
+                 * Opens the delete confirmation dialog
+                */
+                _openDeleteDialog() {
+                    this._deleteCoachDialog.acceptedCallback = this._deleteCoach.bind(this);
+                    this._deleteCoachDialog.opened = true;
+                }
+
+                /**
+                 * Deletes the coach
+                 *
+                 * @param {Boolean} response from delete confirmation dialog
+                 * @return {void}
+                */
+                _deleteCoach(response) {
+                    if (response) {
+                        // Deletes the coach information from the administrator data
+                        this.$.firebaseDocument.destroy(this.user.uid + '/coaches/' + this.coachId)
+                        .then(function() {
+                            // Deletes profile picture
+                            if (this.coachInfo.profile_pic_name !== 'default_profile.png') {
+                                this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
+                                this.$.storageRef.delete();
+                            }
+                            this.coachInfo = null;
+                        }.bind(this));
+                        
+                        this._appToast.text = 'The coach has been deleted.';
+                        this._appToast.open();
+                        this._deleteCoachDialog.opened = false;
+                        this.opened = false;
+                    }
                 }
             }
             window.customElements.define(CoachProfileDialog.is, CoachProfileDialog);
