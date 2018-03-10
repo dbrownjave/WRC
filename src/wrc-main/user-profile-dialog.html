@@ -487,7 +487,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                             this.$.storageRef.path = '/profile-pics/' + this.adminInfo.profile_pic_name;
                             this.$.storageRef.delete();
-                            this.$.storageRef.path = null;
 
                             this.$.firebaseStorage.put(this.$.adminProfilePicture.files[0])
 								.then(function () {
@@ -516,7 +515,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                             this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
                             this.$.storageRef.delete();
-                            this.$.storageRef.path = null;
 
                             this.$.firebaseStorage.put(this.$.coachProfilePicture.files[0])
 								.then(function () {
@@ -545,7 +543,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                             this.$.storageRef.path = '/profile-pics/' + this.athleteInfo.profile_pic_name;
                             this.$.storageRef.delete();
-                            this.$.storageRef.path = null;
 
                             this.$.firebaseStorage.put(this.$.athleteProfilePicture.files[0])
 								.then(function () {
