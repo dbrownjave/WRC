@@ -234,6 +234,34 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					width: 610px;
 				}
             }
+
+            @media screen and (max-width: 425px) {
+                /* PRofile */
+                div.main-horizontal-wrapper {
+                    @apply --layout-vertical;
+                }
+
+                div.main-horizontal-wrapper iron-image {
+                    width: 130px;
+                    height: 130px;
+                    margin-bottom: 12px;
+
+                    @apply --layout-self-center;
+                }
+
+                div.athlete-info {
+                    margin-left: 0;
+                    width: 100%;
+                }
+
+                div.data-container {
+                    @apply --layout-vertical;
+                }
+
+                div.data-container span[flex] {
+                    display: none;
+                }
+            }
             
             [hidden] {
                 display: none;
@@ -268,11 +296,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <h2>[[athleteInfo.first]] [[athleteInfo.last]]</h2>
             <paper-dialog-scrollable>
                 <div class="profile-wrapper" hidden="[[editing]]">
-                    <div class="horizontal-layout">
+                    <div class="horizontal-layout main-horizontal-wrapper">
                         <iron-image preload fade sizing="cover" src="[[athleteInfo.profile_pic_url]]"></iron-image>
                         <div class="athlete-info vertical-layout">
                             <h3>#[[athleteInfo.number]]</h3>
-                            <div class="horizontal-layout">
+                            <div class="horizontal-layout data-container">
                                 <p>
                                     <strong>POS:</strong>
                                     <span>[[athleteInfo.pos]]</span>
@@ -283,7 +311,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <span>[[athleteInfo.height]]</span>
                                 </p>
                             </div>
-                            <div class="horizontal-layout">
+                            <div class="horizontal-layout data-container">
                                 <p>
                                     <strong>YR:</strong>
                                     <span>[[athleteInfo.year]]</span>
