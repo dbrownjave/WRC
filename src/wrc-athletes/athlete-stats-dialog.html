@@ -112,6 +112,30 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 font-size: 1.05em;
             }
 
+            /* Form Wrapper */
+            vaadin-form-layout {
+				@apply --layout-vertical;
+			}
+
+			div.horizontal-fields {
+                width: 100%;
+
+				@apply --layout-horizontal;
+                @apply --layout-wrap;
+			}
+
+			div.horizontal-fields vaadin-text-field {
+				width: 47.5%;
+			}
+
+			div.horizontal-fields vaadin-combo-box {
+				width: 47.5%;
+			}
+
+            [slot='suffix'], [slot='prefix'] {
+				color: var(--paper-grey-500);
+			}
+
             div.form-wrapper {
                 margin-bottom: 12px;
             }
@@ -121,6 +145,33 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				paper-dialog {
 					width: 610px;
 				}
+            }
+
+            @media screen and (max-width: 425px) {
+                /* Maxes */
+                div.horizontal {
+                    width: 100%;
+
+                    @apply --layout-vertical;
+                }
+
+                div.maxes-wrapper p {
+                    margin-top: 18px;
+                    font-size: 1em;
+                }
+
+                div.maxes-wrapper p span {
+                    font-size: .95em;
+                }
+
+                /* Form */
+                div.horizontal-fields vaadin-text-field {
+                    width: 60%;
+                }
+
+                div.horizontal-fields vaadin-combo-box {
+                    width: 35%;
+                }
             }
 
             [flex] {
@@ -226,85 +277,107 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         </div>
                     </div>
                 </template>
+
+                <!-- Form Wrapper -->
                 <div class="form-wrapper" hidden="[[!editMaxes]]">
                     <iron-form id="maxesForm">
                         <form>
                             <vaadin-form-layout>
-                                <vaadin-text-field
-                                    label="Bench"
-                                    name="bench_press_value"
-                                    required
-                                    error-message="This field is required"
-                                    value="{{athleteStats.bench_press_value}}">
-                                    <span slot="suffix">lbs</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    id="benchPressCombo"
-                                    label="Reps"
-                                    name="bench_press_reps"
-                                    required
-                                    error-message="Select the reps"
-                                    value="{{athleteStats.bench_press_reps}}"></vaadin-combo-box>
-                                <vaadin-text-field
-                                    label="Back Squat"
-                                    name="back_squat_value"
-                                    required
-                                    error-message="This field is required"
-                                    value="{{athleteStats.back_squat_value}}">
-                                    <span slot="suffix">lbs</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    id="backSquatCombo"
-                                    label="Reps"
-                                    name="back_squat_reps"
-                                    required
-                                    error-message="Select the reps"
-                                    value="{{athleteStats.back_squat_reps}}"></vaadin-combo-box>
-                                <vaadin-text-field
-                                    label="Front Squat"
-                                    name="front_squat_value"
-                                    required
-                                    error-message="This field is required"
-                                    value="{{athleteStats.front_squat_reps}}">
-                                    <span slot="suffix">lbs</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    id="frontSquatCombo"
-                                    label="Reps"
-                                    name="front_squat_reps"
-                                    required
-                                    error-message="Select the reps"
-                                    value="{{athleteStats.front_squat_reps}}"></vaadin-combo-box>
-                                <vaadin-text-field
-                                    label="Deadlift"
-                                    name="deadlift_value"
-                                    required
-                                    error-message="This field is required"
-                                    value="{{athleteStats.deadlift_value}}">
-                                    <span slot="suffix">lbs</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    id="deadliftCombo"
-                                    label="Reps"
-                                    name="deadlift_reps"
-                                    required
-                                    error-message="Select the reps"
-                                    value="{{athleteStats.deadlift_reps}}"></vaadin-combo-box>
-                                <vaadin-text-field
-                                    label="Hang / Power Clean"
-                                    name="hang_power_clean_value"
-                                    required
-                                    error-message="This field is required"
-                                    value="{{athleteStats.hang_power_clean_value}}">
-                                    <span slot="suffix">lbs</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    id="hangPowerCleanCombo"
-                                    label="Reps"
-                                    name="hang_power_clean_reps"
-                                    required
-                                    error-message="Select the reps"
-                                    value="{{athleteStats.hang_power_clean_reps}}"></vaadin-combo-box>
+                                <div class="horizontal-fields" colspan="2">
+                                    <vaadin-text-field
+                                        label="Bench"
+                                        name="bench_press_value"
+                                        required
+                                        error-message="This field is required"
+                                        value="{{athleteStats.bench_press_value}}">
+                                        <span slot="suffix">lbs</span>
+                                    </vaadin-text-field>
+                                    <span flex></span>
+                                    <vaadin-combo-box
+                                        id="benchPressCombo"
+                                        label="Reps"
+                                        name="bench_press_reps"
+                                        required
+                                        error-message="Select the reps"
+                                        value="{{athleteStats.bench_press_reps}}"></vaadin-combo-box>
+                                </div>
+                                <br>
+                                <div class="horizontal-fields" colspan="2">
+                                    <vaadin-text-field
+                                        label="Back Squat"
+                                        name="back_squat_value"
+                                        required
+                                        error-message="This field is required"
+                                        value="{{athleteStats.back_squat_value}}">
+                                        <span slot="suffix">lbs</span>
+                                    </vaadin-text-field>
+                                    <span flex></span>
+                                    <vaadin-combo-box
+                                        id="backSquatCombo"
+                                        label="Reps"
+                                        name="back_squat_reps"
+                                        required
+                                        error-message="Select the reps"
+                                        value="{{athleteStats.back_squat_reps}}"></vaadin-combo-box>
+                                </div>
+                                <br>
+                                <div class="horizontal-fields" colspan="2">
+                                    <vaadin-text-field
+                                        label="Front Squat"
+                                        name="front_squat_value"
+                                        required
+                                        error-message="This field is required"
+                                        value="{{athleteStats.front_squat_reps}}">
+                                        <span slot="suffix">lbs</span>
+                                    </vaadin-text-field>
+                                    <span flex></span>
+                                    <vaadin-combo-box
+                                        id="frontSquatCombo"
+                                        label="Reps"
+                                        name="front_squat_reps"
+                                        required
+                                        error-message="Select the reps"
+                                        value="{{athleteStats.front_squat_reps}}"></vaadin-combo-box>
+                                </div>
+                                <br>
+                                <div class="horizontal-fields" colspan="2">
+                                    <vaadin-text-field
+                                        label="Deadlift"
+                                        name="deadlift_value"
+                                        required
+                                        error-message="This field is required"
+                                        value="{{athleteStats.deadlift_value}}">
+                                        <span slot="suffix">lbs</span>
+                                    </vaadin-text-field>
+                                    <span flex></span>
+                                    <vaadin-combo-box
+                                        id="deadliftCombo"
+                                        label="Reps"
+                                        name="deadlift_reps"
+                                        required
+                                        error-message="Select the reps"
+                                        value="{{athleteStats.deadlift_reps}}"></vaadin-combo-box>
+                                </div>
+                                <br>
+                                <div class="horizontal-fields" colspan="2">
+                                    <vaadin-text-field
+                                        label="Hang / Power Clean"
+                                        name="hang_power_clean_value"
+                                        required
+                                        error-message="This field is required"
+                                        value="{{athleteStats.hang_power_clean_value}}">
+                                        <span slot="suffix">lbs</span>
+                                    </vaadin-text-field>
+                                    <span flex></span>
+                                    <vaadin-combo-box
+                                        id="hangPowerCleanCombo"
+                                        label="Reps"
+                                        name="hang_power_clean_reps"
+                                        required
+                                        error-message="Select the reps"
+                                        value="{{athleteStats.hang_power_clean_reps}}"></vaadin-combo-box>
+                                </div>
+                                <br>
                                 <vaadin-text-field
                                     colspan="2"
                                     label="Pull ups"
