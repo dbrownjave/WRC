@@ -190,6 +190,84 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				color: #425164;
 			}
 
+            /* Cards Wrapper */
+            div.cards-wrapper {
+                width: 100%;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            div.cards-wrapper paper-card {
+                width: 100%;
+                margin-bottom: 24px;
+                
+                @apply --azul-shadow--grid-elevation-1;
+            }
+
+            div.cards-wrapper paper-card div.card-content {
+                padding: 1em 1em;
+
+                @apply --layout-horizontal;
+                @apply --layout-center;
+            }
+
+            div.cards-wrapper paper-card div.card-actions {
+                @apply --layout-horizontal;
+                @apply --layout-end-justified;
+            }
+
+            div.cards-wrapper paper-card div.card-actions paper-icon-button {
+                color: #737D8A;
+            }
+
+            paper-card div.card-content div.profile-picture {
+                background-color: #F3F4F5;
+				overflow: hidden;
+				border-radius: 10em;
+				width: 70px;
+				height: 70px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+                margin-right: 12px;
+            }
+
+            paper-card div.card-content div.profile-picture iron-image {
+                overflow: hidden;
+                border-radius: 10em;
+                width: 100%;
+                height: 100%;
+                z-index: 0;
+            }
+
+            paper-card div.card-content div.legend h3 {
+                margin: 0;
+                color: var(--azul-text-title);
+                font-size: 1.1em;
+
+                @apply --layout-horizontal;
+                @apply --layout-center;
+            }
+
+            paper-card div.card-content div.legend h3 iron-icon {
+                width: 15px;
+                height: 15px;
+                margin-right: 5px;
+            }
+
+            paper-card div.card-content div.legend h3 iron-icon[active='Yes'] {
+				color: #35BF2E;
+			}
+
+			paper-card div.card-content div.legend h3 iron-icon[active='No'] {
+				color: var(--paper-grey-500);
+			}
+
+            paper-card div.card-content div.legend p {
+                margin: 0;
+                font-size: .9em;
+                color: var(--paper-grey-700);
+            }
+
             /* Fab */
             paper-fab {
                 position: fixed;
@@ -198,6 +276,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 --paper-fab-background: var(--azul-primary);
                 --paper-fab-keyboard-focus-background: var(--azul-primary);
+            }
+
+            /* Responsive */
+            @media screen and (max-width: 425px) {
+                /* General Style */
+                main {
+                    padding: 1em;
+                    height: calc(100vh - (64px + 2em));
+                    min-height: calc(100vh - (64px + 2em));
+
+                    @apply --layout-vertical;
+                    @apply --layout-center;
+                }
+
+                paper-fab {
+                    bottom: 1em;
+                    right: 1em;
+                }
             }
 
             [hidden] {
@@ -310,7 +406,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:pdf" on-tap="_openCoachProfileDialog"></paper-icon-button>
-                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button>
+                                        <!-- <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button> -->
                                     </div>
                                 </template>
                             </vaadin-grid-column>
@@ -318,7 +414,36 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     </div>
                 </template>
 
-
+                <!-- Cards View -->
+                <template is="dom-if" if="[[responsiveScreen]]">
+                    <div class="cards-wrapper">
+                        <template is="dom-repeat" items="[[athletesDataFiltered]]" as="athlete">
+                            <paper-card>
+                                <div class="card-content">
+                                    <div class="profile-picture">
+                                        <iron-image
+                                            fade
+                                            preload
+                                            sizing="cover"
+                                            src="[[athlete.profile.profile_pic_url]]"></iron-image>
+                                    </div>
+                                    <div class="legend">
+                                        <h3>
+                                            <iron-icon icon="app-icons:dot" active$="[[athlete.profile.active]]"></iron-icon>
+                                            [[athlete.profile.first]] [[athlete.profile.last]]
+                                        </h3>
+                                        <p>#[[athlete.profile.number]] - [[athlete.profile.year]] - [[athlete.profile.pos]]</p>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
+                                    <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
+                                    <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:pdf" on-tap="_openCoachProfileDialog"></paper-icon-button>
+                                </div>
+                            </paper-card>
+                        </template>
+                    </div>
+                </template>
             </div>
 
             <!-- Paper Fab to add new athlete -->
