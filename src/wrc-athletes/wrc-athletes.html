@@ -405,7 +405,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <div class="actions">
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
-                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:pdf" on-tap="_openCoachProfileDialog"></paper-icon-button>
+                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:pdf" on-tap="_generateStatsPDF" first$="[[item.profile.first]]" last$="[[item.profile.last]]" number$="[[item.profile.number]]"></paper-icon-button>
                                         <!-- <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button> -->
                                     </div>
                                 </template>
@@ -438,7 +438,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 <div class="card-actions">
                                     <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
                                     <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
-                                    <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:pdf" on-tap="_openCoachProfileDialog"></paper-icon-button>
+                                    <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:pdf" on-tap="_generateStatsPDF"></paper-icon-button>
                                 </div>
                             </paper-card>
                         </template>
@@ -450,6 +450,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <paper-fab icon="app-icons:person-add" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(athletesData.length, userReady)]]"></paper-fab>
         </main>
     </template>
+
+    <!-- pdfMake script -->
+    <script src="../../bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="../../bower_components/pdfmake/build/vfs_fonts.js"></script>
 
     <script>
         (function() {
@@ -604,10 +608,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 'hang_power_clean_value': '0',
                                 'hang_power_clean_reps': '0',
                                 'pull_ups': '0',
-                                '40_yard_dash': '0',
-                                '3_cone_drill': '0',
-                                '20_yard_shuttle': '0',
-                                '60_yard_shuttle': '0',
+                                'forty_yard_dash': '0',
+                                'three_cone_drill': '0',
+                                'twenty_yard_shuttle': '0',
+                                'sixty_yard_shuttle': '0',
                                 'vertical_jump': '0',
                                 'broad_jump': '0'
                             });
@@ -668,6 +672,71 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._athleteStatsDialog.athleteStats = athleteStats;
                             this._athleteStatsDialog.opened = true;
                         }.bind(this));
+                    }.bind(this));
+                }
+
+                /**
+                 * Test to create PDF
+                */
+                _generateStatsPDF(e) {
+                    this.athleteId = e.target.getAttribute('id');
+                    var first = e.target.getAttribute('first');
+                    var last = e.target.getAttribute('last');
+                    var number = e.target.getAttribute('number');
+
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/stats')
+                    .then(function(athleteStats) {
+                        // This defines the content of the PDF. For more info read: http://pdfmake.org/index.html#/gettingstarted
+                        var statsPDF = {
+                            content: [
+                                {
+                                    text: first + ' ' + last + ' #' + number,
+                                    style: 'header'
+                                },
+                                {
+                                    text: [
+                                        {text: 'Bech Press: ', bold: true},
+                                        athleteStats.bench_press_value + 'lbs x ' + athleteStats.bench_press_reps + 'reps\n\n',
+                                        {text: 'Back Squat: ', bold: true},
+                                        athleteStats.back_squat_value + 'lbs x ' + athleteStats.back_squat_reps + 'reps\n\n',
+                                        {text: 'Front Squat: ', bold: true},
+                                        athleteStats.front_squat_value + 'lbs x ' + athleteStats.front_squat_reps + 'reps\n\n',
+                                        {text: 'Deadlift: ', bold: true},
+                                        athleteStats.deadlift_value + 'lbs x ' + athleteStats.deadlift_reps + 'reps\n\n',
+                                        {text: 'Hang / Power Clean: ', bold: true},
+                                        athleteStats.hang_power_clean_value + 'lbs x ' + athleteStats.hang_power_clean_reps + 'reps\n\n',
+                                        {text: 'Pull ups: ', bold: true},
+                                        athleteStats.pull_ups + 'reps\n\n',
+                                        {text: '40 Yard Dash: ', bold: true},
+                                        athleteStats.forty_yard_dash + '\n\n',
+                                        {text: '3 Cone Drill: ', bold: true},
+                                        athleteStats.three_cone_drill + '\n\n',
+                                        {text: '20 Yard Shuttle: ', bold: true},
+                                        athleteStats.twenty_yard_shuttle + '\n\n',
+                                        {text: '60 Yard Shuttle: ', bold: true},
+                                        athleteStats.sixty_yard_shuttle + '\n\n',
+                                        {text: 'Vertical Jump: ', bold: true},
+                                        athleteStats.vertical_jump + '\n\n',
+                                        {text: 'Broad Jump: ', bold: true},
+                                        athleteStats.broad_jump,
+                                    ]
+                                }
+                            ],
+                            styles: {
+                                header: {
+                                    fontSize: 20,
+                                    margin: [0, 0, 0, 14],
+                                    bold: true,
+                                    color: 'darkcyan'
+                                }
+                            }
+                        };
+                        
+                        // This creates and opens the PDF in a new tab
+                        pdfMake.createPdf(statsPDF).open();
+
+                        // If you want to download the PDF directly, use this:
+                        // pdfMake.createPdf(docDefinition).download('workouts.pdf');
                     }.bind(this));
                 }
             }

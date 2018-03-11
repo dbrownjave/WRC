@@ -39,7 +39,8 @@
     "paper-fab": "PolymerElements/paper-fab#^2.0.0",
     "vaadin-grid": "vaadin/vaadin-grid#^4.1.5",
     "google-youtube": "GoogleWebComponents/google-youtube#^2.0.0",
-    "paper-tabs": "PolymerElements/paper-tabs#^2.0.0"
+    "paper-tabs": "PolymerElements/paper-tabs#^2.0.0",
+    "pdfmake": "^0.1.36"
   },
   "resolutions": {
     "polymer": "^2.0.0"
