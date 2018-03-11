@@ -47,6 +47,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="lazy-import" href="../wrc-coaches/wrc-coaches.html">
 <link rel="lazy-import" href="../wrc-library/wrc-library.html">
 <link rel="lazy-import" href="../wrc-athletes/wrc-athletes.html">
+<link rel="lazy-import" href="../wrc-workouts/wrc-workouts.html">
 
 <dom-module id="wrc-main">
     <template>
@@ -356,6 +357,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <wrc-coaches name="coaches" user="[[user]]" coaches-data="[[coachesData]]"></wrc-coaches>
                             <wrc-library name="library" user="[[user]]" library-data="[[libraryData]]" user-role="[[userRole]]"></wrc-library>
                             <wrc-athletes name="athletes" user="[[user]]" athletes-data="[[athletesData]]" user-info="[[userInfo]]"></wrc-athletes>
+                            <wrc-workouts name="workouts" user="[[user]]" user-role="[[userRole]]"></wrc-workouts>
                         </iron-pages>
                     </div>
                 </app-header>
@@ -474,6 +476,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							break;
                         case 'library':
                             this.mainTitle = 'Library';
+                            break;
+                        case 'workouts':
+                            this.mainTitle = 'Workouts';
                             break;
 						default:
                             this.mainTitle = 'WRC Software';
