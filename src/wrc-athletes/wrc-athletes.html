@@ -26,11 +26,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Vaadin Elements -->
 <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
+<!-- <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-checkbox.html">-->
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-selection-column.html">
+<!--<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-selection-column.html"> -->
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-search/paper-search-bar.html">
+<link rel="import" href="../../bower_components/paper-search/paper-search-panel.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 
 <!-- Polyfilter -->
 <link rel="import" href="../../bower_components/poly-filter/poly-filter-diacritic.html">
@@ -164,31 +170,64 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             div.grid-wrapper vaadin-grid iron-icon {
-				width: 17px;
+				        width: 17px;
                 height: 17px;
-			}
+			      }
 
-			div.grid-wrapper vaadin-grid iron-icon[active='Yes'] {
-				color: #35BF2E;
-			}
+      			div.grid-wrapper vaadin-grid iron-icon[active='Yes'] {
+      				color: #35BF2E;
+      			}
 
-			div.grid-wrapper vaadin-grid iron-icon[active='No'] {
-				color: var(--paper-grey-500);
-			}
+      			div.grid-wrapper vaadin-grid iron-icon[active='No'] {
+      				color: var(--paper-grey-500);
+      			}
 
             div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
-				@apply --layout-horizontal;
-				@apply --layout-wrap;
-				@apply --layout-end-justified;
-			}
+      				@apply --layout-horizontal;
+      				@apply --layout-wrap;
+      				@apply --layout-end-justified;
+    			  }
 
-			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
-				color: #737D8A;
-			}
+      			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
+      				color: #737D8A;
+      			}
 
-			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
-				color: #425164;
-			}
+      			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
+      				color: #425164;
+      			}
+
+            /* Vaadin Grid  */
+            div.athletes-wrapper vaadin-grid {
+              height: auto;
+              @apply --azul-shadow--grid-elevation-1;
+            }
+
+            div.athletes-wrapper vaadin-grid iron-icon {
+              width: 15px;
+              height: 15px;
+            }
+
+            div.athletes-wrapper vaadin-grid iron-icon[active='Yes'] {
+              color: #35BF2E;
+            }
+
+            div.athletes-wrapper vaadin-grid iron-icon[active='No'] {
+              color: var(--paper-grey-500);
+            }
+
+            div.athletes-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
+              @apply --layout-horizontal;
+              @apply --layout-wrap;
+              @apply --layout-end-justified;
+            }
+
+            div.athletes-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
+              color: #737D8A;
+            }
+
+            div.athletes-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
+              color: #425164;
+            }
 
             /* Cards Wrapper */
             div.cards-wrapper {
@@ -201,7 +240,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             div.cards-wrapper paper-card {
                 width: 100%;
                 margin-bottom: 24px;
-                
+
                 @apply --azul-shadow--grid-elevation-1;
             }
 
@@ -223,10 +262,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             paper-card div.card-content div.profile-picture {
                 background-color: #F3F4F5;
-				overflow: hidden;
-				border-radius: 10em;
-				width: 70px;
-				height: 70px;
+				        overflow: hidden;
+				        border-radius: 10em;
+				        width: 70px;
+				        height: 70px;
                 box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
                 margin-right: 12px;
             }
@@ -255,12 +294,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             paper-card div.card-content div.legend h3 iron-icon[active='Yes'] {
-				color: #35BF2E;
-			}
+				      color: #35BF2E;
+			      }
 
-			paper-card div.card-content div.legend h3 iron-icon[active='No'] {
-				color: var(--paper-grey-500);
-			}
+			      paper-card div.card-content div.legend h3 iron-icon[active='No'] {
+				      color: var(--paper-grey-500);
+			      }
 
             paper-card div.card-content div.legend p {
                 margin: 0;
@@ -330,25 +369,32 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <div class="athletes-wrapper" hidden$="[[!_computeVisibleData(athletesData.length, userReady)]]">
                 <!-- Search filter -->
                 <div class="search-wrapper">
+                    <!-- Polyfilter configuration -->
                     <poly-filter-diacritic
                         filter="[[athleteFilter]]"
                         array-to-filter="[[athletesData]]"
                         filtered-array="{{athletesDataFiltered}}"
                         filter-by="first, last"></poly-filter-diacritic>
-
-                    <vaadin-text-field
-                        placeholder="Search"
-                        type="search"
-                        value="{{athleteFilter}}">
-                        <iron-icon slot="prefix" icon="app-icons:search"></iron-icon>
-                    </vaadin-text-field>
+                    <!-- Search bar -->
+                    <paper-search-bar query="{{athleteFilter}}" hideFilterButton=true> </paper-search-bar>
                 </div>
 
                 <!-- Grid View -->
                 <template is="dom-if" if="[[!responsiveScreen]]">
                     <div class="grid-wrapper">
                         <vaadin-grid aria-label="Coaches Grid" items="[[athletesDataFiltered]]">
-                            <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
+                          <!-- Active -->
+                          <vaadin-grid-column width="100px" flex-grow="0">
+                              <template class="header">
+
+                                  <vaadin-grid-sorter path="active" active$="[[item.profile.active]]">Active</vaadin-grid-sorter>
+                              </template>
+                              <template>
+
+                                 <paper-toggle-button noink unchecked="{{item.profile.active}}" ></paper-toggle-button>
+                                  <!--<toggle-icon icon="app-icons:dot" active$="[[item.profile.active]]"></toggle-icon> -->
+                              </template>
+                          </vaadin-grid-column>
 
                             <!-- Athlete number -->
                             <vaadin-grid-column width="70px" flex-grow="0">
@@ -356,15 +402,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <vaadin-grid-sorter path="number">#</vaadin-grid-sorter>
                                 </template>
                                 <template>[[item.profile.number]]</template>
-                            </vaadin-grid-column>
-                            
-                            <vaadin-grid-column width="100px" flex-grow="0">
-                                <template class="header">
-                                    <vaadin-grid-sorter path="active">Active</vaadin-grid-sorter>
-                                </template>
-                                <template>
-                                    <iron-icon icon="app-icons:dot" active$="[[item.profile.active]]"></iron-icon>
-                                </template>
                             </vaadin-grid-column>
 
                             <!-- First Name -->
@@ -436,8 +473,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     </div>
                                 </div>
                                 <div class="card-actions">
-                                    <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
-                                    <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
+                                    <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
+                                    <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
                                     <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:pdf" on-tap="_openCoachProfileDialog"></paper-icon-button>
                                 </div>
                             </paper-card>
@@ -536,7 +573,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _userChanged(user) {
                     if (user) {
                         this.userReady = false;
-						this.$.firebaseDocument.getStoredValue('/users')
+						            this.$.firebaseDocument.getStoredValue('/users')
                         .then(function (snapshot) {
                             this.userReady = true;
                         }.bind(this));
@@ -554,7 +591,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._athletesDialog.opened = true;
                     this._athletesDialog.user = this.user;
                 }
-                
+
                 /**
                  * Opens athlete dialog to edit
                  *
@@ -591,7 +628,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this.$.firebaseDocument.setStoredValue(athleteInfo.uid + '/metadata', {'path': this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', 'role': 'athlete'});
 
                             // Saves default maxes in athletes info
-                            this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/stats', 
+                            this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/stats',
                             {
                                 'bench_press_value': '0',
                                 'bench_press_reps': '0',
@@ -616,7 +653,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
                         }.bind(this));
-                        
+
 						this._athletesDialog.opened = false;
 						this._appToast.text = 'The athlete has been saved successfully.';
 						this._appToast.open();
@@ -627,7 +664,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
                         }.bind(this));
-                        
+
 						this._athletesDialog.opened = false;
 						this._appToast.text = 'The athlete has been modified successfully.';
 						this._appToast.open();
@@ -640,7 +677,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _openAthleteProfileDialog(e) {
                     this.athleteId = e.target.getAttribute('id');
-                    
+
                     this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
                     .then(function(snapshot) {
                         this._athleteProfileDialog.user = this.user;

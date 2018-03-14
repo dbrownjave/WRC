@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+	<head>
+		<title>polymer-cordova-inappbrowser-html</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+		<script src="../../web-component-tester/browser.js"></script>
+		<script src="../../test-fixture/test-fixture-mocha.js"></script>
+
+		<link rel="import" href="../polymer-cordova-inappbrowser-html.html">
+		<link rel="import" href="../../test-fixture/test-fixture.html">
+	</head>
+	<body>
+
+		<test-fixture id="TrivialElement">
+			<template>
+				<polymer-cordova-inappbrowser-html></polymer-cordova-inappbrowser-html>
+			</template>
+		</test-fixture>
+
+		<script>
+			suite('<polymer-cordova-inappbrowser-html>', function() {
+				suite('content behavior', function() {
+					var element;
+
+					setup(function() {
+						element = fixture('TrivialElement');
+					});
+
+					test('sets initial inner HTML', function() {
+						element.html = '<b>Test</b>';
+						expect(element.$.container.innerHTML).to.be.eql('<b>Test</b>');
+					});
+
+					test('changes element inner HTML when html attribute changes', function() {
+						element.html = '<b>Test</b>';
+
+						// Pre-condition
+						expect(element.$.container.innerHTML).to.be.eql('<b>Test</b>');
+
+						element.html = '<i>Changed</i>';
+
+						expect(element.$.container.innerHTML).to.be.eql('<i>Changed</i>');
+					});
+
+					test('detects external links', function() {
+						expect(element._isExternalLink('http://www.server.com')).to.be.true;
+					});
+					test('detects internal links', function() {
+						expect(element._isExternalLink('#hash')).to.be.false;
+					});
+					test('default to not-external for unexpected values', function() {
+						expect(element._isExternalLink('')).to.be.false;
+						expect(element._isExternalLink(null)).to.be.false;
+						expect(element._isExternalLink(undefined)).to.be.false;
+						expect(element._isExternalLink(42)).to.be.false;
+					});
+
+					test('combines all windows options into an URL options string', function() {
+						const windowOptions = {
+							'location': 'yes',
+							'enableViewPortScale': 'yes',
+						};
+
+						const windowOptionsString = element._calculateWindowOptionsString(windowOptions);
+						expect(windowOptionsString).to.be.equal('location=yes,enableViewPortScale=yes');
+					});
+
+					test('sets inner HTML to empty for undefined', function() {
+						element.html = undefined;
+						expect(element.innerHTML).to.be.eql('');
+					});
+
+					test('sets inner HTML to empty for null', function() {
+						element.html = null;
+						expect(element.innerHTML).to.be.eql('');
+					});
+				});
+			});
+		</script>
+
+	</body>
+</html>

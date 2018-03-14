@@ -64,15 +64,14 @@
     "iron-doc-viewer": "^3.0.0"
   },
   "homepage": "https://github.com/vaadin/vaadin-grid",
-  "version": "4.1.5",
-  "_release": "4.1.5",
+  "version": "4.1.7",
+  "_release": "4.1.7",
   "_resolution": {
     "type": "version",
-    "tag": "v4.1.5",
-    "commit": "365af9054824a7d87c2f0a249ccbd13d9678a865"
+    "tag": "v4.1.7",
+    "commit": "4074e442528b35aa70080b44577c822cf53fbffd"
   },
   "_source": "https://github.com/vaadin/vaadin-grid.git",
   "_target": "^4.1.5",
-  "_originalSource": "vaadin/vaadin-grid",
-  "_direct": true
+  "_originalSource": "vaadin/vaadin-grid"
 }

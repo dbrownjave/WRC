@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="384px" height="254px" viewBox="0 0 384 254" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>002-video-camera</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Artboard-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(0.000000, -129.000000)">
+        <g id="002-video-camera" transform="translate(-2.000000, 129.000000)" fill="#000000" fill-rule="nonzero">
+            <path d="M386.446012,46.2897196 L386.446012,206.998131 C386.446012,219.421184 372.992025,227.175701 362.228834,221.003738 L295.27546,182.389408 L295.27546,193.388162 C295.27546,226.463551 268.446626,253.28785 235.365644,253.28785 L59.909816,253.28785 C26.8288344,253.28785 0,226.463551 0,193.388162 L0,60.0579439 C0,26.9825545 26.8288344,0.158255452 59.909816,0.158255452 L235.444785,0.158255452 C268.525767,0.158255452 295.354601,26.9825545 295.354601,60.0579439 L295.354601,71.0566978 L362.307975,32.4423676 C372.992025,26.1121495 386.446012,33.9457944 386.446012,46.2897196 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

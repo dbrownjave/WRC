@@ -1,0 +1,47 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<script>
+	window.Polymer = window.Polymer || {};
+
+	/**
+	 * Mixin that provides information about the current Cordova environment.
+	 *
+	 * @polymerMixinClass Polymer.CordovaAwareMixin
+	 * @param {Polymer.Element} parent The polymer parent element.
+	 * @return {Function} CordovaAwareMixin mixed class.
+	 */	
+	Polymer.CordovaAwareMixin = parent => class CordovaAwareMixin extends parent {
+
+		static get properties() {
+			return {
+				/**
+				* If `true` then the application is running inside a Cordova environment, otherwise `false`.
+				*
+				* Note that the value is also `false` when we have not yet been able to determine whether this
+				* is a Cordova environment.
+				*/
+				isCordovaEnvironment: {
+					type: Boolean,
+					readOnly: true,
+					notify: true,
+					value: false
+				}
+			};
+		}
+		
+		attached() {
+			super.attached();
+
+			// Event lister must be registered to the document root to be called
+			// by Cordova
+			window.document.addEventListener('deviceready', this._onDeviceReady.bind(this), false);
+		}
+		
+		_onDeviceReady() {
+			this._setIsCordovaEnvironment(true);
+		}
+
+	};
+
+</script>
+
