@@ -53,16 +53,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
     <template>
         <style>
             /* General Style */
-            .flex {
-				@apply --layout-flex;
-			}
 
-			a,
-			a:hover,
-			a:active {
-				text-transform: none;
-				text-decoration: none;
-			}
+            .flex {
+                @apply --layout-flex;
+            }
+
+            a,
+            a:hover,
+            a:active {
+                text-transform: none;
+                text-decoration: none;
+            }
 
             paper-spinner {
                 --paper-spinner-layer-1-color: var(--azul-primary);
@@ -83,65 +84,67 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             /* App Drawer Style */
-			app-drawer-layout:not([narrow]) [drawer-toggle] {
-				display: none;
-			}
 
-			app-drawer-layout:not([narrow]) #header div[main-title] {
-				display: none;
-			}
+            app-drawer-layout:not([narrow]) [drawer-toggle] {
+                display: none;
+            }
 
-      app-toolbar {
-        color: #fff;
-        background-color: var(--azul-primary);
-        box-shadow: -4px 3px 10px 0px rgba(0, 0, 0, 0.20);
-      }
+            app-drawer-layout:not([narrow]) #header div[main-title] {
+                display: none;
+            }
 
-			app-header paper-icon-button {
-				--paper-icon-button-ink-color: white;
-			}
+            app-toolbar {
+                color: #fff;
+                background-color: var(--azul-primary);
+                box-shadow: -4px 3px 10px 0px rgba(0, 0, 0, 0.20);
+            }
 
-			app-drawer app-toolbar {
-				@apply --layout-horizontal;
-				@apply --layout-center-center;
-				@apply --layout-center;
-			}
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: white;
+            }
 
-			app-drawer div.menu-container {
-				box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.25);
-        border-style: none;
-			}
+            app-drawer app-toolbar {
+                @apply --layout-horizontal;
+                @apply --layout-center-center;
+                @apply --layout-center;
+            }
 
-			app-header-layout div.main-container {
-				height: calc(100vh - 64px);
-				min-height: calc(100vh - 64px);
-				min-width: 100%;
-				background-color: var(--azul-background);
-			}
+            app-drawer div.menu-container {
+                box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.25);
+                border-style: none;
+            }
 
-			#drawer div.menu-container {
-				height: calc(100vh - 64px);
-        min-height: calc(100vh - 64px);
-			}
+            app-header-layout div.main-container {
+                height: calc(100vh - 64px);
+                min-height: calc(100vh - 64px);
+                min-width: 100%;
+                background-color: var(--azul-background);
+            }
 
-			#drawer app-toolbar a {
-				margin: 0;
-				padding: 0;
-				text-decoration: none;
-        color: #fff;
+            #drawer div.menu-container {
+                height: calc(100vh - 64px);
+                min-height: calc(100vh - 64px);
+            }
 
-				@apply --layout-horizontal;
-				@apply --layout-center;
-				@apply --layout-center-center;
-			}
+            #drawer app-toolbar a {
+                margin: 0;
+                padding: 0;
+                text-decoration: none;
+                color: #fff;
 
-			#drawer app-toolbar a iron-image {
-				width: 50px;
-				height: 50px;
-				margin-right: 14px;
-			}
+                @apply --layout-horizontal;
+                @apply --layout-center;
+                @apply --layout-center-center;
+            }
+
+            #drawer app-toolbar a iron-image {
+                width: 50px;
+                height: 50px;
+                margin-right: 14px;
+            }
 
             /* User Wrapper */
+
             div.user-wrapper {
                 padding: 1.5em 0 0;
                 @apply --layout-vertical;
@@ -182,51 +185,52 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             /* Drawer Menu Style */
-			.drawer-list {
-				margin: 0 20px;
-			}
 
-			.drawer-list a {
-				display: block;
-				padding: 12px 20px;
-				margin-left: 5%;
-				text-decoration: none;
-				color: var(--paper-grey-700);
-				@apply --layout-horizontal;
-				@apply --layout-center;
-			}
+            .drawer-list {
+                margin: 0 20px;
+            }
 
-			.drawer-list a iron-icon {
-				width: 22px;
-				height: 22px;
-				margin-right: 18px;
-				color: var(--azul-icon);
-			}
+            .drawer-list a {
+                display: block;
+                padding: 12px 20px;
+                margin-left: 5%;
+                text-decoration: none;
+                color: var(--paper-grey-700);
+                @apply --layout-horizontal;
+                @apply --layout-center;
+            }
 
-			.drawer-list a span {
-				font-size: 1em;
-				font-weight: lighter;
-			}
+            .drawer-list a iron-icon {
+                width: 22px;
+                height: 22px;
+                margin-right: 18px;
+                color: var(--azul-icon);
+            }
 
-			.drawer-list a:hover {
-				width: 75%;
-				border-radius: 2px;
-				background-color: var(--paper-grey-100);
-				cursor: pointer;
-			}
+            .drawer-list a span {
+                font-size: 1em;
+                font-weight: lighter;
+            }
 
-			.drawer-list a.iron-selected {
-				color: white;
-				margin-left: 4.5%;
-				width: 75%;
-				background-color: var(--azul-primary);
-				border-radius: 2px;
-				box-shadow: 0 3.5px 12.5px 0 #d4d9dd;
-			}
+            .drawer-list a:hover {
+                width: 75%;
+                border-radius: 2px;
+                background-color: var(--paper-grey-100);
+                cursor: pointer;
+            }
 
-			.drawer-list a.iron-selected iron-icon {
-				color: white;
-			}
+            .drawer-list a.iron-selected {
+                color: white;
+                margin-left: 4.5%;
+                width: 75%;
+                background-color: var(--azul-primary);
+                border-radius: 2px;
+                box-shadow: 0 3.5px 12.5px 0 #d4d9dd;
+            }
+
+            .drawer-list a.iron-selected iron-icon {
+                color: white;
+            }
 
             [hidden] {
                 display: none;
@@ -244,29 +248,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
 
         <!-- Coaches Query -->
-        <firebase-query
-            app-name="wrc_software"
-            path="[[user.uid]]/coaches"
-            data="{{coachesData}}"></firebase-query>
+        <firebase-query app-name="wrc_software" path="[[user.uid]]/coaches" data="{{coachesData}}"></firebase-query>
 
         <!-- Library Query -->
-        <firebase-query
-            app-name="wrc_software"
-            path="library"
-            data="{{libraryData}}"></firebase-query>
+        <firebase-query app-name="wrc_software" path="library" data="{{libraryData}}"></firebase-query>
 
         <!-- Athletes Query -->
-        <firebase-query
-            app-name="wrc_software"
-            path="[[user.uid]]/athletes"
-            data="{{athletesData}}"></firebase-query>
+        <firebase-query app-name="wrc_software" path="[[user.uid]]/athletes" data="{{athletesData}}"></firebase-query>
 
         <!-- Element UI -->
         <app-drawer-layout fullbleed narrow="{{narrow}}" responsive-width="768px">
             <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
                 <app-toolbar>
                     <a href="[[rootPath]]main">
-                      <!--  Software logo and Title-->
+                        <!--  Software logo and Title-->
                         <iron-image preload fade sizing="contain" src="../../images/app-images/wrc.png"></iron-image>
                         <span main-title>WRC</span>
                     </a>
@@ -350,8 +345,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <app-toolbar>
                         <paper-icon-button icon="app-icons:menu" drawer-toggle></paper-icon-button>
                         <div main-title>[[mainTitle]]</div>
-						<span main-title></span>
-						<!--<paper-icon-button class="max-calc-btn" src="../../icons/library/calculator.svg" on-tap="_openMaxCalculatorDialog"></paper-icon-button> -->
+                        <span main-title></span>
+                        <!--<paper-icon-button class="max-calc-btn" src="../../icons/library/calculator.svg" on-tap="_openMaxCalculatorDialog"></paper-icon-button> -->
                     </app-toolbar>
                     <div class="main-container">
                         <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" role="main" fallback-selection="404">
@@ -367,14 +362,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
     </template>
 
     <script>
-        (function() {
+        (function () {
             'use strict';
 
             class WrcMain extends Polymer.Element {
                 /**
                  * Element definition
                  */
-                 static get is() {
+                static get is() {
                     return 'wrc-main';
                 }
 
@@ -384,20 +379,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 static get properties() {
                     return {
                         routeData: Object,
-						subroute: String,
-						rootPath: String,
-						route: String,
-						page: {
-							type: String,
-							notify: true,
-							reflectToAttribute: true,
-							observer: '_pageChanged'
-						},
-						mainTitle: {
-							type: String,
-							notify: true,
-							value: 'Athletes'
-						},
+                        subroute: String,
+                        rootPath: String,
+                        route: String,
+                        page: {
+                            type: String,
+                            notify: true,
+                            reflectToAttribute: true,
+                            observer: '_pageChanged'
+                        },
+                        mainTitle: {
+                            type: String,
+                            notify: true,
+                            value: 'Athletes'
+                        },
                         userReady: {
                             type: Boolean,
                             notify: true,
@@ -422,12 +417,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * Element observers
                  *
                  * This functions observes for changes in the specific property that is receiving as parameter
-                */
+                 */
                 static get observers() {
-					return [
-						'_routePageChanged(routeData.page, userRole)'
-					];
-				}
+                    return [
+                        '_routePageChanged(routeData.page, userRole)'
+                    ];
+                }
 
                 ready() {
                     super.ready();
@@ -453,7 +448,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 /**
                  * Observes for changes in the route page
-                */
+                 */
                 _routePageChanged(page, role) {
                     if (role) {
                         if (role === 'admin') {
@@ -465,71 +460,71 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         }
                     }
 
-					if (!this.$.drawer.persistent) {
-						this.$.drawer.close();
-					}
-					switch (page) {
-						case 'coaches':
-							this.mainTitle = 'Coaches';
-							break;
-						case 'athletes':
-							this.mainTitle = 'Athletes';
-							break;
+                    if (!this.$.drawer.persistent) {
+                        this.$.drawer.close();
+                    }
+                    switch (page) {
+                        case 'coaches':
+                            this.mainTitle = 'Coaches';
+                            break;
+                        case 'athletes':
+                            this.mainTitle = 'Athletes';
+                            break;
                         case 'library':
                             this.mainTitle = 'Library';
                             break;
                         case 'workouts':
                             this.mainTitle = 'Workouts';
                             break;
-						default:
+                        default:
                             this.mainTitle = 'WRC Software';
-							break;
-					}
-				}
+                            break;
+                    }
+                }
 
                 /**
                  * Observes for changes in the property page
-                */
-				_pageChanged(page) {
-					var resolvedPageUrl = this.resolveUrl('../wrc-' + page + '/wrc-' + page + '.html');
-					Polymer.importHref(
-						resolvedPageUrl,
-						null,
-						this._showPage404.bind(this),
-						true);
-				}
+                 */
+                _pageChanged(page) {
+                    var resolvedPageUrl = this.resolveUrl('../wrc-' + page + '/wrc-' + page + '.html');
+                    Polymer.importHref(
+                        resolvedPageUrl,
+                        null,
+                        this._showPage404.bind(this),
+                        true);
+                }
 
                 _showPage404() {
-					this.page = '404';
-				}
+                    this.page = '404';
+                }
 
                 /**
                  * Observer for changes in user
                  *
                  * @param {Object} user signed in
                  * @return {void}
-                */
+                 */
                 _userChanged(user) {
                     if (user) {
                         this._checkVerifiedStatus(user.emailVerified);
                         this.$.firebaseDocument.getStoredValue(user.uid + '/metadata')
-                        .then(function(userMetadata) {
-                            this.userRole = userMetadata.role;
-                            this.userPath = userMetadata.path;
-                            if (userMetadata.role !== 'admin') {
-                                this.$.firebaseDocument.getStoredValue(userMetadata.path)
-                                .then(function(userInfo) {
-                                    this.userInfo = userInfo;
-                                    this.userReady = true;
-                                }.bind(this));
-                            } else {
-                                this.$.firebaseDocument.getStoredValue(user.uid + '/profile')
-                                .then(function(userInfo) {
-                                    this.userInfo = userInfo;
-                                    this.userReady = true;
-                                }.bind(this));
-                            }
-                        }.bind(this));
+                            .then(function (userMetadata) {
+                                this.userRole = userMetadata.role;
+                                this.userPath = userMetadata.path;
+                                if (userMetadata.role !== 'admin') {
+                                    this.$.firebaseDocument.getStoredValue(userMetadata.path)
+                                        .then(function (userInfo) {
+                                            this.userInfo = userInfo;
+                                            this.userReady = true;
+                                        }.bind(this));
+                                } else {
+                                    this.$.firebaseDocument.getStoredValue(user.uid + '/profile')
+                                        .then(function (userInfo) {
+                                            this.userInfo = userInfo;
+                                            this.userReady = true;
+                                        }.bind(this));
+                                }
+                            }.bind(this));
                     }
                 }
 
@@ -538,7 +533,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {Boolean} verified status of the user account
                  * @return {void}
-                */
+                 */
                 _checkVerifiedStatus(verified) {
                     if (verified) {
                         return;
@@ -553,19 +548,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {Boolean} response from verification dialog
                  * @return {void}
-                */
+                 */
                 _sendVerificationEmail(response) {
                     if (this.user) {
                         if (response) {
                             this.user.sendEmailVerification()
-                            .then(function() {
-                                this._appToast.text = 'Please check your inbox email and follow the instructions received.';
-                                this._appToast.open();
-                            }.bind(this))
-                            .catch(function(err) {
-                                this._appToast.text = 'An error has ocurred trying to send the verification email. Please try again.';
-                                this._appToast.open();
-                            }.bind(this));
+                                .then(function () {
+                                    this._appToast.text =
+                                        'Please check your inbox email and follow the instructions received.';
+                                    this._appToast.open();
+                                }.bind(this))
+                                .catch(function (err) {
+                                    this._appToast.text =
+                                        'An error has ocurred trying to send the verification email. Please try again.';
+                                    this._appToast.open();
+                                }.bind(this));
                         } else {
                             this._verifyEmailDialog.opened = false;
                             this.$.firebaseAuth.signOut();
@@ -575,7 +572,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 /**
                  * Signs the user out
-                */
+                 */
                 logout() {
                     this.$.firebaseAuth.signOut();
                     this.set('page', null);
@@ -587,7 +584,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {Boolean} opened condition of the menu
                  * @return {String} up if opened, otherwise down
-                */
+                 */
                 _computeArrowIcon(opened) {
                     return (opened) ? 'up' : 'down';
                 }
@@ -597,7 +594,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {String} role of the user
                  * @return {Boolean} true if role is admin, otherwise false
-                */
+                 */
                 _isAdmin(role) {
                     return (role === 'admin') ? true : false;
                 }
@@ -607,7 +604,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {String} role of the user
                  * @return {Boolean} true if role is coach, otherwise false
-                */
+                 */
                 _isCoach(role) {
                     return (role === 'coach') ? true : false;
                 }
@@ -617,14 +614,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {String} role of the user
                  * @return {Boolean} true if role is athlete, otherwise false
-                */
+                 */
                 _isAthlete(role) {
                     return (role === 'athlete') ? true : false;
                 }
 
                 /**
                  * Opens the user profile dialog
-                */
+                 */
                 _openUserProfileDialog() {
                     this.selectedUserOption = null;
 
@@ -648,13 +645,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {Object} adminInfo from dialog's form
                  * @return {void}
-                */
+                 */
                 _saveAdminProfile(adminInfo) {
                     this.$.firebaseDocument.setStoredValue(this.user.uid + '/profile', adminInfo)
-                    .catch(function(err) {
-                        this._appToast.text = 'An error has ocurred trying to save your personal information. Please try again.';
-                        this._appToast.open();
-                    }.bind(this));
+                        .catch(function (err) {
+                            this._appToast.text =
+                                'An error has ocurred trying to save your personal information. Please try again.';
+                            this._appToast.open();
+                        }.bind(this));
                     this.userInfo = null;
                     this.userInfo = adminInfo;
                     this._appProgressBar.hidden = true;
@@ -669,13 +667,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {Object} coachInfo from dialog's form
                  * @return {void}
-                */
+                 */
                 _saveCoachProfile(coachInfo) {
                     this.$.firebaseDocument.setStoredValue(this.userPath, coachInfo)
-                    .catch(function(err) {
-                        this._appToast.text = 'An error has ocurred trying to save your personal information. Please try again.';
-                        this._appToast.open();
-                    }.bind(this));
+                        .catch(function (err) {
+                            this._appToast.text =
+                                'An error has ocurred trying to save your personal information. Please try again.';
+                            this._appToast.open();
+                        }.bind(this));
                     this.userInfo = null;
                     this.userInfo = coachInfo;
                     this._appProgressBar.hidden = true;
@@ -690,13 +689,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {Object} athleteInfo from dialog's form
                  * @return {void}
-                */
+                 */
                 _saveAthleteProfile(athleteInfo) {
                     this.$.firebaseDocument.setStoredValue(this.userPath, athleteInfo)
-                    .catch(function(err) {
-                        this._appToast.text = 'An error has ocurred trying to save your personal information. Please try again.';
-                        this._appToast.open();
-                    }.bind(this));
+                        .catch(function (err) {
+                            this._appToast.text =
+                                'An error has ocurred trying to save your personal information. Please try again.';
+                            this._appToast.open();
+                        }.bind(this));
                     this.userInfo = null;
                     this.userInfo = athleteInfo;
                     this._appProgressBar.hidden = true;
@@ -708,14 +708,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 /**
                  * Opens max calculator dialog
-                */
+                 */
                 _openMaxCalculatorDialog() {
                     this._maxCalculatorDialog.opened = true;
                 }
 
                 /**
                  * Opens settings dialog
-                */
+                 */
                 _openSettingsDialog() {
                     this._settingsDialog.userInfo = this.userInfo;
                     if (this.userRole !== 'admin') {
