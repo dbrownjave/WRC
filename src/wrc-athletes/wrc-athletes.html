@@ -391,7 +391,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                               </template>
                               <template>
 
-                                 <paper-toggle-button noink unchecked="{{item.profile.active}}" ></paper-toggle-button>
+                                 <paper-toggle-button id$="[[item.$key]]" noink checked="{{_computeActiveToggle(item.profile.active)}}" status$="[[item.profile.active]]" on-change="_changeAthleteActiveStatus"></paper-toggle-button>
                                   <!--<toggle-icon icon="app-icons:dot" active$="[[item.profile.active]]"></toggle-icon> -->
                               </template>
                           </vaadin-grid-column>
@@ -473,8 +473,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     </div>
                                 </div>
                                 <div class="card-actions">
-                                    <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
-                                    <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
+                                    <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
+                                    <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
                                     <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:pdf" on-tap="_openCoachProfileDialog"></paper-icon-button>
                                 </div>
                             </paper-card>
@@ -706,6 +706,42 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._athleteStatsDialog.opened = true;
                         }.bind(this));
                     }.bind(this));
+                }
+
+                /**
+                 * Changes active status of the athlete in real-time from toggle-button
+                */
+                _changeAthleteActiveStatus(e) {
+                    this.athleteId = e.target.getAttribute('id');
+
+                    // Gets athlete's current status
+                    var currentStatus = e.target.getAttribute('status');
+                    var newStatus = null;
+                    
+                    // Set new status depending on current status
+                    newStatus = (currentStatus === 'Yes') ? 'No' : 'Yes';
+
+                    // Save new status into firebase
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile/active', newStatus)
+                    .catch(function(err) {
+                        // Catch any error from firebase
+                        this._appToast.text = 'There has been an error trying to change the active status';
+                        this._appToast.open();
+                    }.bind(this));
+
+                    // Open toast with successful message
+                    this._appToast.text = 'Active status has been changed successfully.';
+                    this._appToast.open();
+                }
+
+                /**
+                 * Computes boolean status to toggle-button
+                 *
+                 * @param {String} active status of the athlete
+                 * @return {Boolean} true if status is Yes, otherwise false
+                */
+                _computeActiveToggle(active) {
+                    return (active === 'Yes') ? true : false;
                 }
             }
             window.customElements.define(WrcAthletes.is, WrcAthletes);
