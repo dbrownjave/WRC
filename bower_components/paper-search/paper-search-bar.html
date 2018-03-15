@@ -1,0 +1,244 @@
+<!doctype html>
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-icons/image-icons.html">
+<link rel="import" href="../iron-input/iron-input.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../paper-badge/paper-badge.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-styles/default-theme.html">
+
+<!-- Font Awesome  -->
+<link rel="import" href="../../icons/font-awesome/font-awesome.html">
+
+<!-- Azul Theme -->
+<link rel="import" href="../../src/suji/lib/themes/azul/azul-theme.html">
+
+<!--
+Bar in which the user can enter search terms and filter
+
+@demo demo/paper-search-bar.html
+-->
+<dom-module id="paper-search-bar">
+
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+
+			.horizontal-holder {
+				color: #475162;
+				background: var(--background-color, white);
+				box-shadow: 0 1px 14px rgba(125, 147, 178, .10);
+				display: block;
+				padding: 0 16px;
+				@apply --layout-horizontal;
+				@apply --layout-center-center;
+				height: var(--paper-search-bar-height, 40px); /* To resolve `min-height` bug on IE 11 */
+				border-radius: 6px;
+				-webkit-box-sizing: border-box;
+				        box-sizing: border-box;
+			}
+
+			iron-input {
+				@apply --layout-flex;
+				@apply --layout-vertical;
+				height: 100%; /* To resolve `min-height` bug on IE 11 */
+			}
+
+			/* The :focus-within pseudo-class will NOT style the elements within the .my-element selector, like the
+  			 normal :focus above, but will style the .my-element containerwhen its focusable children receive focus. */
+			.horizontal-holder:focus-within{
+				-webkit-box-shadow: 0 5px 20px rgba(125, 147, 178, .25);
+				        box-shadow: 0 5px 20px rgba(125, 147, 178, .25);
+			}
+
+			.horizontal-holder:hover {
+				box-shadow: 0 5px 30px rgba(125, 147, 178, .25);
+				-webkit-box-shadow: 0 5px 30px rgba(125, 147, 178, .25);
+			}
+
+
+			.horizontal-holder:focus {
+				-webkit-box-shadow: 0 5px 20px rgba(125, 147, 178, .25);
+				        box-shadow: 0 5px 20px rgba(125, 147, 178, .25);
+			}
+
+			.transition-smooth-fade {
+				-webkit-transition: all 2s cubic-bezier(0.2, 0.2, 0, 1.0);
+				transition: all 2s cubic-bezier(0.2, 0.2, 0, 1.0);
+			}
+
+			.icon {
+				margin-top: 5px;
+				color: var(--azul-color-shuttleGray);
+				@apply --icon-styles;
+			}
+
+			::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+				letter-spacing: .5px;
+			    color: var(--azul-color-grayishBlue);
+			    opacity: .6; /* Firefox */
+			}
+
+			:-ms-input-placeholder { /* Internet Explorer 10-11 */
+				color: var(--azul-color-grayishBlue);
+				opacity: .6; /* Firefox */
+			}
+
+			#input {
+				@apply --layout-flex;
+				margin: 0 10px;
+				padding: 12px 0;
+				cursor: text;
+				background: transparent;
+				color: inherit;
+				@apply --input-styles;
+				border: 0;
+				outline: 0;
+				font-size: 16px;
+			}
+			#input::-ms-clear {
+				display: none;
+			}
+
+			#input[disabled] {
+				@apply --disabled-input-styles;
+			}
+
+			.badge {
+				--paper-badge-background: var(--paper-red-500);
+				--paper-badge-opacity: 1;
+				--paper-badge-width: 18px;
+				--paper-badge-height: 18px;
+				--paper-badge-margin-left: -5px;
+				--paper-badge-margin-bottom: -25px;
+			}
+
+			.badge[invisible] {
+				visibility: hidden;
+			}
+		</style>
+
+		<div class="horizontal-holder transition-smooth-fade">
+			<iron-icon icon="fa-icons:search" class="icon"></iron-icon>
+			<iron-input bind-value="{{query}}">
+				<!-- Define is="iron-input" for backwards compatibility with Polymer 1.x -->
+				<input id="input" is="iron-input" placeholder="[[placeholder]]" value="{{value::input}}"></input>
+			</iron-input>
+
+			<template is="dom-if" if="{{query}}">
+				<paper-icon-button icon="clear" on-tap="_clear" class="icon"></paper-icon-button>
+			</template>
+			<template is="dom-if" if="{{!hideFilterButton}}">
+				<template is="dom-if" if="{{!disableFilterButton}}">
+					<paper-icon-button id="filter" icon="image:tune" on-tap="_filter" class="icon"></paper-icon-button>
+				</template>
+				<paper-badge for="filter" label="[[nrSelectedFilters]]" class="badge" invisible$="[[!nrSelectedFilters]]"></paper-badge>
+			</template>
+		</div>
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+	Polymer({
+		is: 'paper-search-bar',
+
+		/**
+		 * Fired when the user requests to open the filtering dialog
+		 *
+		 * @event paper-search-filter
+		 */
+		 /**
+		 * Fired when the user requests to search for a query
+		 *
+		 * @event paper-search-search
+		 */
+		 /**
+		 * Fired when the user taps the clear icon
+		 *
+		 * @event paper-search-clear
+		 */
+
+		properties: {
+			/**
+			 * Text for which the user is searching
+			 */
+			query: {
+				type: String,
+				notify: true,
+				value: ''
+			},
+			/**
+			 * Whether to hide the Filter button. Set attribute "hide-filter-button" to do so.
+			 */
+			hideFilterButton: {
+				type: Boolean,
+				value: true
+			},
+			/**
+			 * Whether to disable the Filter button. Set attribute "disable-filter-button" to do so.
+			 */
+			disableFilterButton: {
+				type: Boolean,
+				value: false
+			},
+			/**
+			 * Number of filters the user has been selected (shown in the badge) (optional)
+			 */
+			nrSelectedFilters: {
+				type: Number,
+				value: 0
+			},
+			/**
+			 * Icon shown in the search background
+			 */
+			icon: {
+				type: String,
+				value: 'search'
+			},
+			/**
+			 * Text shown in the search box if the user didn't enter any query
+			 */
+			placeholder: {
+				type: String,
+				value: 'Search'
+			},
+		},
+
+		behaviors: [
+			Polymer.IronA11yKeysBehavior
+		],
+
+		keyBindings: {
+			'enter': '_search'
+		},
+
+
+		focus: function() {
+			this.$.input.focus();
+		},
+
+		// Private methods
+		_filter: function(e) {
+			this.fire('paper-search-filter');
+		},
+		_clear: function() {
+			this.query = "";
+			this.$.input.focus();
+			this.fire('paper-search-clear');
+		},
+		_search: function() {
+			this.fire('paper-search-search');
+		}
+	});
+
+})();
+
+</script>

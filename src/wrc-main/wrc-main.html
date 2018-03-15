@@ -91,11 +91,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				display: none;
 			}
 
-			app-toolbar {
-				color: #fff;
-				background-color: var(--azul-primary);
-				box-shadow: -4px 3px 5px 0px rgba(0, 0, 0, 0.25);
-			}
+      app-toolbar {
+        color: #fff;
+        background-color: var(--azul-primary);
+        box-shadow: -4px 3px 10px 0px rgba(0, 0, 0, 0.20);
+      }
 
 			app-header paper-icon-button {
 				--paper-icon-button-ink-color: white;
@@ -109,7 +109,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 			app-drawer div.menu-container {
 				box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.25);
-                border-style: none;
+        border-style: none;
 			}
 
 			app-header-layout div.main-container {
@@ -121,15 +121,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 			#drawer div.menu-container {
 				height: calc(100vh - 64px);
-                min-height: calc(100vh - 64px);
+        min-height: calc(100vh - 64px);
 			}
 
 			#drawer app-toolbar a {
 				margin: 0;
 				padding: 0;
 				text-decoration: none;
-                color: #fff;
-                
+        color: #fff;
+
 				@apply --layout-horizontal;
 				@apply --layout-center;
 				@apply --layout-center-center;
@@ -221,7 +221,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				width: 75%;
 				background-color: var(--azul-primary);
 				border-radius: 2px;
-				box-shadow: 0 3.5px 12.5px 0 rgba(45, 152, 255, 0.4);
+				box-shadow: 0 3.5px 12.5px 0 #d4d9dd;
 			}
 
 			.drawer-list a.iron-selected iron-icon {
@@ -266,8 +266,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
                 <app-toolbar>
                     <a href="[[rootPath]]main">
+                      <!--  Software logo and Title-->
                         <iron-image preload fade sizing="contain" src="../../images/app-images/wrc.png"></iron-image>
-                        <span main-title>WRC Software</span>
+                        <span main-title>WRC</span>
                     </a>
                 </app-toolbar>
                 <div class="menu-container">
@@ -280,7 +281,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <template is="dom-if" if="[[userReady]]" restamp>
                         <div class="user-wrapper">
                             <div class="image-container">
-                                <iron-image preload fade sizing="cover" src="[[userInfo.profile_pic_url]]"></iron-image>                            
+                                <iron-image preload fade sizing="cover" src="[[userInfo.profile_pic_url]]"></iron-image>
                             </div>
                             <paper-menu-button horizontal-align="right" vertical-align="top" opened="{{openedMenu}}">
                                 <div class="user-display-name" slot="dropdown-trigger">
@@ -350,7 +351,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         <paper-icon-button icon="app-icons:menu" drawer-toggle></paper-icon-button>
                         <div main-title>[[mainTitle]]</div>
 						<span main-title></span>
-						<paper-icon-button class="max-calc-btn" src="../../icons/library/calculator.svg" on-tap="_openMaxCalculatorDialog"></paper-icon-button>
+						<!--<paper-icon-button class="max-calc-btn" src="../../icons/library/calculator.svg" on-tap="_openMaxCalculatorDialog"></paper-icon-button> -->
                     </app-toolbar>
                     <div class="main-container">
                         <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" role="main" fallback-selection="404">
@@ -600,7 +601,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _isAdmin(role) {
                     return (role === 'admin') ? true : false;
                 }
-                
+
                 /**
                  * Shows coach menu
                  *
@@ -620,7 +621,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _isAthlete(role) {
                     return (role === 'athlete') ? true : false;
                 }
-                
+
                 /**
                  * Opens the user profile dialog
                 */

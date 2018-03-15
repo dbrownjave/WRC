@@ -1,0 +1,148 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../shadycss/apply-shim.html">
+<link rel="import" href="../polymer-cordova-aware/polymer-cordova-aware-mixin.html">
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
+
+
+<!--
+Web component that opens external links InAppBrowser [Polymer 1.x](https://www.polymer-project.org). This avoids in native Cordova apps that the
+WebView replaces the app with the content of the external link.
+
+Similar like [html-echo](https://github.com/Collaborne/html-echo), the element uses the `html` to dump HTML bound to a String property directly into the DOM because Polymer
+doesn't allow this otherwise right now.
+
+### Example
+
+```html
+<polymer-cordova-inappbrowser-html
+  html='<a href="https://www.google.com">External link</a><a href="#test">Internal link</a>'>
+</polymer-cordova-inappbrowser-html>
+```
+
+@demo demo/index.html
+-->
+<dom-module id="polymer-cordova-inappbrowser-html">
+
+	<template>
+		<style>
+			#container {
+				@apply --polymer-cordova-inappbrowser-html-container;
+			}
+
+			/* Customize link attribute  */
+			#container a {
+				color: var(--azul-primary-text);
+				text-decoration:none;
+				@apply --polymer-cordova-inappbrowser-html-anchor;
+			}
+
+			#container a:hover {
+				color: var(--azul-link-text-hover)
+			}
+
+		</style>
+		<span id="container"></span>
+	</template>
+
+	<script>
+
+		class PolymerCordovaInappbrowserHtml extends Polymer.CordovaAwareMixin(Polymer.Element) {
+
+			static get is() {
+				return 'polymer-cordova-inappbrowser-html';
+			}
+
+			static get properties() {
+				return {
+					/**
+					* Plain HTML that is directly dumped into the DOM
+					*/
+					html: {
+						type: String,
+						value: '',
+						observer: '_refreshHtml'
+					},
+
+					/**
+					* Options for the new window.
+					*/
+					windowOptions: {
+						type: Object,
+					}
+				};
+			}
+
+			static get observers() {
+				return [
+					'_setDefaultWindowOptions(isCordovaEnvironment)'
+				];
+			}
+
+			// Private methods
+			_refreshHtml(html) {
+				this.$.container.innerHTML = html || '';
+
+				// Calculate the actual options string for window.open
+				const linkOptions = this._calculateWindowOptionsString(this.windowOptions);
+
+				// Wait until the DOM is updated
+				setTimeout(() => {
+					// Iterate over all anchors to manipulate the external links
+					const anchors = this.shadowRoot.querySelectorAll('a');
+					for (let anchor of anchors) {
+						// Is this an external link?
+						const href = anchor.getAttribute('href');
+						if (this._isExternalLink(href)) {
+							// External links need to be opened in the InAppBrowser. This avoids in native Cordova apps that the WebView replaces the app with the content of the external link.
+							anchor.onclick = () => {
+								// Open in InAppBrowser
+								// @see https://github.com/apache/cordova-plugin-inappbrowser
+								window.open(href, '_blank', linkOptions);
+
+								// Block the browsers default behavior
+								return false;
+							};
+						}
+					}
+					this.updateStyles();
+				}, 1);
+			}
+
+			_calculateWindowOptionsString(windowOptions) {
+				if (!windowOptions) {
+					return '';
+				}
+
+				return Object.keys(windowOptions)
+					// Create URL components
+					.map(key => `${key}=${windowOptions[key]}`)
+					// Join all components
+					.join(',');
+			}
+
+			_setDefaultWindowOptions(isCordovaEnvironment) {
+				if (isCordovaEnvironment && !this.windowOptions) {
+					this.windowOptions = {
+						'location': 'yes',
+						'enableViewPortScale': 'yes',
+					};
+
+					// Force an update, if we already rendered the links once before.
+					this._refreshHtml(this.html);
+				}
+			}
+
+			/**
+			* Checks if this is an external link
+			*/
+			_isExternalLink(href) {
+				return typeof href === 'string' && href.length > 0 && href[0] !== '#';
+			}
+
+		}
+		customElements.define(PolymerCordovaInappbrowserHtml.is, PolymerCordovaInappbrowserHtml);
+
+	</script>
+
+</dom-module>

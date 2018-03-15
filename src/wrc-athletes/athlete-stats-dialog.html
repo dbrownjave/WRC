@@ -47,15 +47,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             paper-dialog {
                 border-radius: 5px;
                 box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
-			}
+  			    }
 
             paper-dialog h2 {
-				color: var(--azul-text-title);
-				font-size: 1.6em;
+  				      color: var(--azul-text-title);
+  				      font-size: 1.6em;
 
                 @apply --layout-horizontal;
                 @apply --layout-center;
-			}
+  			    }
 
             paper-dialog h2 iron-image {
                 width: 40px;
@@ -65,25 +65,25 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 border-radius: 10em;
             }
 
-			paper-dialog div p {
-				font-weight: lighter;
-				line-height: 1em;
-			}
+      			paper-dialog div p {
+      				  font-weight: lighter;
+      				  line-height: 1em;
+      			}
 
-			paper-dialog div.buttons {
-				@apply --layout-horizontal;
-				@apply --layout-end-justified;
-			}
+      			paper-dialog div.buttons {
+      				  @apply --layout-horizontal;
+      				  @apply --layout-end-justified;
+      			}
 
-			paper-dialog .buttons paper-button {
-				color: var(--azul-primary);
+            paper-dialog .buttons paper-button {
+                color: var(--azul-primary-button);
                 font-weight: 500;
-			}
+            }
 
-			paper-dialog .buttons paper-button.cancel-button {
-				color: var(--paper-grey-700);
-                font-weight: normal;
-			}
+      			paper-dialog .buttons paper-button.cancel-button {
+      				  color: var(--paper-grey-700);
+                font-weight: 500;
+      			}
 
             /* Maxes */
             h3 {
@@ -91,6 +91,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 margin-top: 0;
                 font-weight: 400;
                 font-size: 1.3em;
+            }
+
+            .header {
+              color: var(--azul-text-title);
+              margin-top: 0;
+              font-weight: 400;
+              font-size: 1.3em;
             }
 
             div.horizontal {
@@ -114,33 +121,67 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             /* Form Wrapper */
             vaadin-form-layout {
-				@apply --layout-vertical;
-			}
+				        @apply --layout-vertical;
+			      }
 
-			div.horizontal-fields {
-                width: 100%;
+			    div.horizontal-fields {
+              width: 100%;
 
-				@apply --layout-horizontal;
-                @apply --layout-wrap;
-			}
+				      @apply --layout-horizontal;
+              @apply --layout-wrap;
+			    }
 
-			div.horizontal-fields vaadin-text-field {
-				width: 47.5%;
-			}
+    			div.horizontal-fields vaadin-text-field {
+    				  width: 47.5%;
+    			}
 
-			div.horizontal-fields vaadin-combo-box {
-				width: 47.5%;
-			}
+    			div.horizontal-fields vaadin-combo-box {
+    				  width: 47.5%;
+    			}
 
-            [slot='suffix'], [slot='prefix'] {
-				color: var(--paper-grey-500);
-			}
+          [slot='suffix'], [slot='prefix'] {
+    				  color: var(--paper-grey-500);
+    			}
 
-            div.form-wrapper {
-                margin-bottom: 12px;
-            }
+          div.form-wrapper {
+              margin-bottom: 12px;
+          }
 
-            /* To keep dialog larger with large screens */
+          /* Stat Modal */
+          div.stat-wrapper {
+              color: var(--azul-text-title);
+              margin-bottom: 0;
+              margin-top: 18px;
+              font-size: 1.1em;
+
+              @apply --layout-horizontal;
+              @apply --layout-justified;
+              @apply --layout-around-justified;
+              @apply --layout-start-justified;
+              @apply --layout-start;
+          }
+
+          div.stat-wrapper .title {}
+
+          div.stat-wrapper > .weight-container {
+              width: 110px;
+          }
+
+          div.stat-wrapper .reps-container {
+              margin-left: 50px;
+              margin-right: 50px;
+          }
+
+          div.stat-wrapper .equal-container {
+              margin-right: 50px;
+          }
+
+          div.stat-wrapper .max-container {
+
+          }
+
+
+      /* To keep dialog larger with large screens */
 			@media screen and (min-width: 600px) {
 				paper-dialog {
 					width: 610px;
@@ -208,43 +249,169 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 [[athleteInfo.first]] [[athleteInfo.last]] #[[athleteInfo.number]]
             </h2>
             <paper-dialog-scrollable>
-                <h3>Maxes</h3>
+              <div class="header">
+                  <span> Exercise</span>
+                  <span style="margin-left: 60px">Weight</span>
+                  <span style="margin-left: 104px">Reps</span>
+                  <span style="margin-left: 105px">Est. Max</span>
+                </div>
+
                 <template is="dom-if" if="[[!editMaxes]]">
                     <div class="maxes-wrapper">
-                        <p>
-                            <strong class="title">Bench Press:</strong>
+
+                        <!-- Bench -->
+                        <div class="stat-wrapper">
+                          <div>
+                            <strong class="title" style="margin-right: 42px;">Bench Press:</strong>
+                          </div>
+
+                          <div class="weight-container">
                             <span>[[athleteStats.bench_press_value]]lbs</span>
+                          </div>
+
+                          <div>
                             <strong>x</strong>
-                            <span>[[athleteStats.bench_press_reps]] reps</span>
-                        </p>
-                        <p>
-                            <strong class="title">Back Squat:</strong>
-                            <span>[[athleteStats.back_squat_value]]lbs</span>
-                            <strong>x</strong>
-                            <span>[[athleteStats.back_squat_reps]] reps</span>
-                        </p>
-                        <p>
-                            <strong class="title">Front Squat:</strong>
-                            <span>[[athleteStats.front_squat_value]]lbs</span>
-                            <strong>x</strong>
-                            <span>[[athleteStats.front_squat_reps]] reps</span>
-                        </p>
-                        <p>
-                            <strong class="title">Deadlift:</strong>
-                            <span>[[athleteStats.deadlift_value]]lbs</span>
-                            <strong>x</strong>
-                            <span>[[athleteStats.deadlift_reps]] reps</span>
-                        </p>
-                        <p>
-                            <strong class="title">Hang / Power Clean:</strong>
-                            <span>[[athleteStats.hang_power_clean_value]]lbs</span>
-                            <strong>x</strong>
-                            <span>[[athleteStats.hang_power_clean_reps]] reps</span>
-                        </p>
-                        <p>
-                            <strong class="title">Pull-ups:</strong>
-                            <span>[[athleteStats.pull_ups]] reps</span>
-                        </p>
+                          </div>
+
+                          <div>
+                            <span class="reps-container">[[athleteStats.bench_press_reps]] reps</span>
+                          </div>
+
+                          <div>
+                            <strong class="equal-container">=</strong>
+                          </div>
+
+                          <div>
+                            <strong class="max-container">344lbs</strong>
+                          </div>
+                        </div>
+
+                          <!-- BackSqaut -->
+                          <div class="stat-wrapper">
+                            <div>
+                              <strong class="title" style="margin-right: 50px;">Back Squat:</strong>
+                            </div>
+
+                            <div class="weight-container">
+                              <span>[[athleteStats.back_squat_value]]lbs</span>
+                            </div>
+
+                            <div>
+                              <strong>x</strong>
+                            </div>
+
+                            <div>
+                              <span class="reps-container">[[athleteStats.back_squat_reps]] reps</span>
+                            </div>
+
+                            <div>
+                              <strong class="equal-container">=</strong>
+                            </div>
+
+                            <div>
+                              <strong class="max-container">344lbs</strong>
+                            </div>
+                          </div>
+
+                         <!--  Front Squat -->
+                         <div class="stat-wrapper">
+                           <div>
+                             <strong class="title" style="margin-right: 50px;">Back Squat:</strong>
+                           </div>
+
+                           <div class="weight-container">
+                             <span>[[athleteStats.front_squat_value]]lbs</span>
+                           </div>
+
+                           <div>
+                             <strong>x</strong>
+                           </div>
+
+                           <div>
+                             <span class="reps-container">[[athleteStats.front_squat_reps]] reps</span>
+                           </div>
+
+                           <div>
+                             <strong class="equal-container">=</strong>
+                           </div>
+
+                           <div>
+                             <strong class="max-container">344lbs</strong>
+                           </div>
+                         </div>
+
+                         <!--  Deadlift -->
+                         <div class="stat-wrapper">
+                           <div>
+                             <strong class="title" style="margin-right: 75px;">Deadlift:</strong>
+                           </div>
+
+                           <div class="weight-container">
+                             <span>[[athleteStats.deadlift_value]]lbs</span>
+                           </div>
+
+                           <div>
+                             <strong>x</strong>
+                           </div>
+
+                           <div>
+                             <span class="reps-container">[[athleteStats.deadlift_reps]] reps</span>
+                           </div>
+
+                           <div>
+                             <strong class="equal-container">=</strong>
+                           </div>
+
+                           <div>
+                             <strong class="max-container">344lbs</strong>
+                           </div>
+                         </div>
+
+                         <!--  Hang / Power Clean: -->
+                         <div class="stat-wrapper">
+                           <div style="width: 100px">
+                             <strong class="title" >Hang / Power Clean:</strong>
+                           </div>
+
+                           <div class="weight-container">
+                             <span>[[athleteStats.hang_power_clean_value]]lbs</span>
+                           </div>
+
+                           <div>
+                             <strong>x</strong>
+                           </div>
+
+                           <div class="reps-container">
+                             <span>[[athleteStats.hang_power_clean_reps]] reps</span>
+                           </div>
+
+                           <div>
+                             <strong class="equal-container">=</strong>
+                           </div>
+
+                           <div>
+                             <strong class="max-container">344lbs</strong>
+                           </div>
+                         </div>
+
+                         <!--  Pull-ups -->
+                         <div class="stat-wrapper">
+                           <p>
+                               <strong class="title">Pull-ups:</strong>
+                               <span>[[athleteStats.pull_ups]] reps</span>
+                           </p>
+                         </div>
+
+
+
+
+
+
+
+
+
+
+
                         <p>
                             <strong class="title">40 Yard Dash:</strong>
                             <span>[[athleteStats.forty_yard_dash]]</span>
@@ -285,7 +452,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <vaadin-form-layout>
                                 <div class="horizontal-fields" colspan="2">
                                     <vaadin-text-field
-                                        label="Bench"
+                                        label="Bench Press"
                                         name="bench_press_value"
                                         required
                                         error-message="This field is required"
@@ -361,7 +528,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 <br>
                                 <div class="horizontal-fields" colspan="2">
                                     <vaadin-text-field
-                                        label="Hang / Power Clean"
+                                        label="Hang Power / Clean"
                                         name="hang_power_clean_value"
                                         required
                                         error-message="This field is required"
@@ -438,7 +605,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             </vaadin-form-layout>
                         </form>
                     </iron-form>
-                </div> 
+                </div>
             </paper-dialog-scrollable>
             <div class="buttons" hidden="[[editMaxes]]">
                 <paper-button class="cancel-button" dialog-dismiss>Close</paper-button>

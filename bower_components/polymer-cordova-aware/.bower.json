@@ -1,0 +1,40 @@
+{
+  "name": "polymer-cordova-aware",
+  "authors": [
+    "collaborne"
+  ],
+  "description": "Glue for using Cordova with Polymer",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "cordova"
+  ],
+  "main": "polymer-cordova-aware-mixin.html",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/Collaborne/polymer-cordova-aware/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
+    "web-component-tester": "*",
+    "iron-test-helpers": "PolymerElements/iron-test-helpers#^2.0.0",
+    "paper-input": "PolymerElements/paper-input#^2.0.0"
+  },
+  "version": "2.1.3",
+  "_release": "2.1.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.1.3",
+    "commit": "205c48e7b636e66178d1d4cfbc8650c82c3a3068"
+  },
+  "_source": "https://github.com/Collaborne/polymer-cordova-aware.git",
+  "_target": "^2.1.0",
+  "_originalSource": "Collaborne/polymer-cordova-aware"
+}

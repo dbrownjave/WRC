@@ -26,6 +26,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
 
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-search/paper-search-bar.html">
+<link rel="import" href="../../bower_components/paper-search/paper-search-panel.html">
+
 <!-- Vaadin Elements -->
 <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
@@ -180,6 +184,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             div.no-results-wrapper iron-image {
                 width: 200px;
                 height: 200px;
+                margin-top: 15%;
             }
 
             div.no-results-wrapper h3 {
@@ -190,7 +195,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             div.no-results-wrapper p {
                 color: var(--paper-grey-500);
                 font-size: .8em;
-                margin: 0;
             }
 
             /* Videos Wrapper */
@@ -198,7 +202,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 @apply --layout-horizontal;
                 @apply --layout-wrap;
             }
-            
+
             /* Video */
             div.video-wrapper {
                 border-radius: 5px;
@@ -230,7 +234,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 margin: 0;
                 padding: 0;
                 white-space: pre-wrap;
-                
+
                 @apply --layout-vertical;
             }
 
@@ -270,7 +274,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 color: var(--azul-text-title);
                 font-weight: 500;
                 font-size: 1.2em;
-                
+
             }
 
             /* Responsive */
@@ -342,20 +346,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             <!-- Library Data -->
             <div class="library-wrapper" hidden$="[[!_computeVisibleData(libraryData.length, userReady)]]">
+
                 <!-- Search filter -->
                 <div class="search-wrapper">
+                    <!-- Polyfilter configuration -->
                     <poly-filter-diacritic
                         filter="[[libraryFilter]]"
                         array-to-filter="[[libraryData]]"
                         filtered-array="{{libraryDataFiltered}}"
                         filter-by="title"></poly-filter-diacritic>
-
-                    <vaadin-text-field
-                        placeholder="Search"
-                        type="search"
-                        value="{{libraryFilter}}">
-                        <iron-icon slot="prefix" icon="app-icons:search"></iron-icon>
-                    </vaadin-text-field>
+                    <!-- Search bar -->
+                    <paper-search-bar query="{{libraryFilter}}" hideFilterButton=true> </paper-search-bar>
                 </div>
 
                 <!-- No results found -->
@@ -653,7 +654,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _openToEdit(e) {
                     this.action = 'edit';
                     this.videoId = e.target.getAttribute('id');
-                    
+
                     this.$.firebaseDocument.getStoredValue('library/' + this.videoId)
                     .then(function(videoData) {
                         this._videoDialog.title = 'Edit';
@@ -676,7 +677,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
                         }.bind(this));
-                        
+
 						this._videoDialog.opened = false;
 						this._appToast.text = 'The video has been saved successfully.';
 						this._appToast.open();

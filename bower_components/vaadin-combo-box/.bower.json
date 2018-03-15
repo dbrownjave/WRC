@@ -48,15 +48,14 @@
     "vaadin-demo-helpers": "^1.0.0"
   },
   "homepage": "https://github.com/vaadin/vaadin-combo-box",
-  "version": "3.0.3",
-  "_release": "3.0.3",
+  "version": "3.0.4",
+  "_release": "3.0.4",
   "_resolution": {
     "type": "version",
-    "tag": "v3.0.3",
-    "commit": "3623944802a7350568036e20b87781e340532779"
+    "tag": "v3.0.4",
+    "commit": "fc037d32210188d8cbcfec87e37370dcdec370c8"
   },
   "_source": "https://github.com/vaadin/vaadin-combo-box.git",
   "_target": "^3.0.3",
-  "_originalSource": "vaadin/vaadin-combo-box",
-  "_direct": true
+  "_originalSource": "vaadin/vaadin-combo-box"
 }

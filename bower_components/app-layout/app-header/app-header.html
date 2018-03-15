@@ -247,7 +247,6 @@ Mixin | Description | Default
         transition: opacity 0.4s;
         pointer-events: none;
         opacity: 0;
-        box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
         will-change: opacity;
         @apply --app-header-shadow;
       }
@@ -481,7 +480,7 @@ Mixin | Description | Default
         this._stickyElRef = null;
         this.disabled = true;
         // prepare for measurement
-        if  (!firstSetup) {
+        if (!firstSetup) {
           this._updateScrollState(0, true);
         }
         if (this._mayMove()) {
@@ -605,7 +604,7 @@ Mixin | Description | Default
        */
       isContentBelow: function() {
         return this._top === 0 ? this._clampedScrollTop > 0 :
-            this._clampedScrollTop - this._maxHeaderTop >= 0;
+          this._clampedScrollTop - this._maxHeaderTop >= 0;
       },
 
       /**
@@ -617,7 +616,7 @@ Mixin | Description | Default
         this.translate3d(0, (-y) + 'px', 0);
         if (this._stickyEl) {
           this.translate3d(0, this.condenses && y >= this._stickyElTop ?
-              (Math.min(y, this._dHeight) - this._stickyElTop) + 'px' : 0,  0, this._stickyEl);
+            (Math.min(y, this._dHeight) - this._stickyElTop) + 'px' : 0, 0, this._stickyEl);
         }
       },
 
@@ -666,7 +665,10 @@ Mixin | Description | Default
        * @return {Object}
        */
       getScrollState: function() {
-        return { progress: this._progress, top: this._top };
+        return {
+          progress: this._progress,
+          top: this._top
+        };
       }
     });
   </script>

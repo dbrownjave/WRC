@@ -26,11 +26,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Vaadin Elements -->
 <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
+<!-- <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-checkbox.html">-->
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-selection-column.html">
+<!--<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-selection-column.html"> -->
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-search/paper-search-bar.html">
+<link rel="import" href="../../bower_components/paper-search/paper-search-panel.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 
 <!-- Polyfilter -->
 <link rel="import" href="../../bower_components/poly-filter/poly-filter-diacritic.html">
@@ -164,31 +170,64 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             div.grid-wrapper vaadin-grid iron-icon {
-				width: 17px;
+				        width: 17px;
                 height: 17px;
-			}
+			      }
 
-			div.grid-wrapper vaadin-grid iron-icon[active='Yes'] {
-				color: #35BF2E;
-			}
+      			div.grid-wrapper vaadin-grid iron-icon[active='Yes'] {
+      				color: #35BF2E;
+      			}
 
-			div.grid-wrapper vaadin-grid iron-icon[active='No'] {
-				color: var(--paper-grey-500);
-			}
+      			div.grid-wrapper vaadin-grid iron-icon[active='No'] {
+      				color: var(--paper-grey-500);
+      			}
 
             div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
-				@apply --layout-horizontal;
-				@apply --layout-wrap;
-				@apply --layout-end-justified;
-			}
+      				@apply --layout-horizontal;
+      				@apply --layout-wrap;
+      				@apply --layout-end-justified;
+    			  }
 
-			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
-				color: #737D8A;
-			}
+      			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
+      				color: #737D8A;
+      			}
 
-			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
-				color: #425164;
-			}
+      			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
+      				color: #425164;
+      			}
+
+            /* Vaadin Grid  */
+            div.athletes-wrapper vaadin-grid {
+              height: auto;
+              @apply --azul-shadow--grid-elevation-1;
+            }
+
+            div.athletes-wrapper vaadin-grid iron-icon {
+              width: 15px;
+              height: 15px;
+            }
+
+            div.athletes-wrapper vaadin-grid iron-icon[active='Yes'] {
+              color: #35BF2E;
+            }
+
+            div.athletes-wrapper vaadin-grid iron-icon[active='No'] {
+              color: var(--paper-grey-500);
+            }
+
+            div.athletes-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
+              @apply --layout-horizontal;
+              @apply --layout-wrap;
+              @apply --layout-end-justified;
+            }
+
+            div.athletes-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
+              color: #737D8A;
+            }
+
+            div.athletes-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
+              color: #425164;
+            }
 
             /* Cards Wrapper */
             div.cards-wrapper {
@@ -201,7 +240,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             div.cards-wrapper paper-card {
                 width: 100%;
                 margin-bottom: 24px;
-                
+
                 @apply --azul-shadow--grid-elevation-1;
             }
 
@@ -223,10 +262,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             paper-card div.card-content div.profile-picture {
                 background-color: #F3F4F5;
-				overflow: hidden;
-				border-radius: 10em;
-				width: 70px;
-				height: 70px;
+				        overflow: hidden;
+				        border-radius: 10em;
+				        width: 70px;
+				        height: 70px;
                 box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
                 margin-right: 12px;
             }
@@ -255,12 +294,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             paper-card div.card-content div.legend h3 iron-icon[active='Yes'] {
-				color: #35BF2E;
-			}
+				      color: #35BF2E;
+			      }
 
-			paper-card div.card-content div.legend h3 iron-icon[active='No'] {
-				color: var(--paper-grey-500);
-			}
+			      paper-card div.card-content div.legend h3 iron-icon[active='No'] {
+				      color: var(--paper-grey-500);
+			      }
 
             paper-card div.card-content div.legend p {
                 margin: 0;
@@ -330,25 +369,32 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <div class="athletes-wrapper" hidden$="[[!_computeVisibleData(athletesData.length, userReady)]]">
                 <!-- Search filter -->
                 <div class="search-wrapper">
+                    <!-- Polyfilter configuration -->
                     <poly-filter-diacritic
                         filter="[[athleteFilter]]"
                         array-to-filter="[[athletesData]]"
                         filtered-array="{{athletesDataFiltered}}"
                         filter-by="first, last"></poly-filter-diacritic>
-
-                    <vaadin-text-field
-                        placeholder="Search"
-                        type="search"
-                        value="{{athleteFilter}}">
-                        <iron-icon slot="prefix" icon="app-icons:search"></iron-icon>
-                    </vaadin-text-field>
+                    <!-- Search bar -->
+                    <paper-search-bar query="{{athleteFilter}}" hideFilterButton=true> </paper-search-bar>
                 </div>
 
                 <!-- Grid View -->
                 <template is="dom-if" if="[[!responsiveScreen]]">
                     <div class="grid-wrapper">
                         <vaadin-grid aria-label="Coaches Grid" items="[[athletesDataFiltered]]">
-                            <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
+                          <!-- Active -->
+                          <vaadin-grid-column width="100px" flex-grow="0">
+                              <template class="header">
+
+                                  <vaadin-grid-sorter path="active" active$="[[item.profile.active]]">Active</vaadin-grid-sorter>
+                              </template>
+                              <template>
+
+                                 <paper-toggle-button id$="[[item.$key]]" noink checked="{{_computeActiveToggle(item.profile.active)}}" status$="[[item.profile.active]]" on-change="_changeAthleteActiveStatus"></paper-toggle-button>
+                                  <!--<toggle-icon icon="app-icons:dot" active$="[[item.profile.active]]"></toggle-icon> -->
+                              </template>
+                          </vaadin-grid-column>
 
                             <!-- Athlete number -->
                             <vaadin-grid-column width="70px" flex-grow="0">
@@ -356,15 +402,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <vaadin-grid-sorter path="number">#</vaadin-grid-sorter>
                                 </template>
                                 <template>[[item.profile.number]]</template>
-                            </vaadin-grid-column>
-                            
-                            <vaadin-grid-column width="100px" flex-grow="0">
-                                <template class="header">
-                                    <vaadin-grid-sorter path="active">Active</vaadin-grid-sorter>
-                                </template>
-                                <template>
-                                    <iron-icon icon="app-icons:dot" active$="[[item.profile.active]]"></iron-icon>
-                                </template>
                             </vaadin-grid-column>
 
                             <!-- First Name -->
@@ -540,7 +577,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _userChanged(user) {
                     if (user) {
                         this.userReady = false;
-						this.$.firebaseDocument.getStoredValue('/users')
+						            this.$.firebaseDocument.getStoredValue('/users')
                         .then(function (snapshot) {
                             this.userReady = true;
                         }.bind(this));
@@ -558,7 +595,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._athletesDialog.opened = true;
                     this._athletesDialog.user = this.user;
                 }
-                
+
                 /**
                  * Opens athlete dialog to edit
                  *
@@ -595,7 +632,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this.$.firebaseDocument.setStoredValue(athleteInfo.uid + '/metadata', {'path': this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', 'role': 'athlete'});
 
                             // Saves default maxes in athletes info
-                            this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/stats', 
+                            this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/stats',
                             {
                                 'bench_press_value': '0',
                                 'bench_press_reps': '0',
@@ -620,7 +657,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
                         }.bind(this));
-                        
+
 						this._athletesDialog.opened = false;
 						this._appToast.text = 'The athlete has been saved successfully.';
 						this._appToast.open();
@@ -631,7 +668,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
                         }.bind(this));
-                        
+
 						this._athletesDialog.opened = false;
 						this._appToast.text = 'The athlete has been modified successfully.';
 						this._appToast.open();
@@ -644,7 +681,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _openAthleteProfileDialog(e) {
                     this.athleteId = e.target.getAttribute('id');
-                    
+
                     this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
                     .then(function(snapshot) {
                         this._athleteProfileDialog.user = this.user;
@@ -676,68 +713,39 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /**
-                 * Test to create PDF
+                 * Changes active status of the athlete in real-time from toggle-button
                 */
-                _generateStatsPDF(e) {
+                _changeAthleteActiveStatus(e) {
                     this.athleteId = e.target.getAttribute('id');
-                    var first = e.target.getAttribute('first');
-                    var last = e.target.getAttribute('last');
-                    var number = e.target.getAttribute('number');
 
-                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/stats')
-                    .then(function(athleteStats) {
-                        // This defines the content of the PDF. For more info read: http://pdfmake.org/index.html#/gettingstarted
-                        var statsPDF = {
-                            content: [
-                                {
-                                    text: first + ' ' + last + ' #' + number,
-                                    style: 'header'
-                                },
-                                {
-                                    text: [
-                                        {text: 'Bech Press: ', bold: true},
-                                        athleteStats.bench_press_value + 'lbs x ' + athleteStats.bench_press_reps + 'reps\n\n',
-                                        {text: 'Back Squat: ', bold: true},
-                                        athleteStats.back_squat_value + 'lbs x ' + athleteStats.back_squat_reps + 'reps\n\n',
-                                        {text: 'Front Squat: ', bold: true},
-                                        athleteStats.front_squat_value + 'lbs x ' + athleteStats.front_squat_reps + 'reps\n\n',
-                                        {text: 'Deadlift: ', bold: true},
-                                        athleteStats.deadlift_value + 'lbs x ' + athleteStats.deadlift_reps + 'reps\n\n',
-                                        {text: 'Hang / Power Clean: ', bold: true},
-                                        athleteStats.hang_power_clean_value + 'lbs x ' + athleteStats.hang_power_clean_reps + 'reps\n\n',
-                                        {text: 'Pull ups: ', bold: true},
-                                        athleteStats.pull_ups + 'reps\n\n',
-                                        {text: '40 Yard Dash: ', bold: true},
-                                        athleteStats.forty_yard_dash + '\n\n',
-                                        {text: '3 Cone Drill: ', bold: true},
-                                        athleteStats.three_cone_drill + '\n\n',
-                                        {text: '20 Yard Shuttle: ', bold: true},
-                                        athleteStats.twenty_yard_shuttle + '\n\n',
-                                        {text: '60 Yard Shuttle: ', bold: true},
-                                        athleteStats.sixty_yard_shuttle + '\n\n',
-                                        {text: 'Vertical Jump: ', bold: true},
-                                        athleteStats.vertical_jump + '\n\n',
-                                        {text: 'Broad Jump: ', bold: true},
-                                        athleteStats.broad_jump,
-                                    ]
-                                }
-                            ],
-                            styles: {
-                                header: {
-                                    fontSize: 20,
-                                    margin: [0, 0, 0, 14],
-                                    bold: true,
-                                    color: 'darkcyan'
-                                }
-                            }
-                        };
-                        
-                        // This creates and opens the PDF in a new tab
-                        pdfMake.createPdf(statsPDF).open();
+                    // Gets athlete's current status
+                    var currentStatus = e.target.getAttribute('status');
+                    var newStatus = null;
+                    
+                    // Set new status depending on current status
+                    newStatus = (currentStatus === 'Yes') ? 'No' : 'Yes';
 
-                        // If you want to download the PDF directly, use this:
-                        // pdfMake.createPdf(docDefinition).download('workouts.pdf');
+                    // Save new status into firebase
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile/active', newStatus)
+                    .catch(function(err) {
+                        // Catch any error from firebase
+                        this._appToast.text = 'There has been an error trying to change the active status';
+                        this._appToast.open();
                     }.bind(this));
+
+                    // Open toast with successful message
+                    this._appToast.text = 'Active status has been changed successfully.';
+                    this._appToast.open();
+                }
+
+                /**
+                 * Computes boolean status to toggle-button
+                 *
+                 * @param {String} active status of the athlete
+                 * @return {Boolean} true if status is Yes, otherwise false
+                */
+                _computeActiveToggle(active) {
+                    return (active === 'Yes') ? true : false;
                 }
             }
             window.customElements.define(WrcAthletes.is, WrcAthletes);
