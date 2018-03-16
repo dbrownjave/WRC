@@ -6,11 +6,56 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Polymer -->
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
 <dom-module id="wrc-workouts">
     <template>
-        <style></style>
+        <style>
+            main {
+                @apply --layout-vertical;
+                @apply --layout-fullbleed;
+            }
 
-        <h1>Workouts</h1>
+            /* Grid Wrapper */
+            .workout-grid-wrapper {
+                height: 60vh;
+                max-height: 60vh;
+                width: 100%;
+                overflow: auto;
+
+                @apply --layout-horizontal;
+                @apply --layout-wrap;
+                @apply --layout-flex;
+            }
+
+            .workout-grid-wrapper .day {
+                width: 33.33%;
+                height: 100%;
+            }
+
+            /* Workout creator */
+            .workout-creator-wrapper {
+                height: 40vh;
+                width: 100%;
+                background: darkcyan;
+            }
+        </style>
+
+        <!-- Element UI -->
+        <main>
+            <div class="workout-grid-wrapper">
+                <div class="day" style="background-color: red;"></div>
+                <div class="day" style="background-color: green;"></div>
+                <div class="day" style="background-color: yellow;"></div>
+                <div class="day" style="background-color: blue;"></div>
+                <div class="day" style="background-color: orange;"></div>
+                <div class="day" style="background-color: pink;"></div>
+            </div>
+            <div class="workout-creator-wrapper">
+
+            </div>
+        </main>
     </template>
 
     <script>
