@@ -48,15 +48,14 @@
     "webcomponentsjs": "^v1.0.0"
   },
   "homepage": "https://github.com/BrightspaceUI/dropdown",
-  "version": "6.0.8",
-  "_release": "6.0.8",
+  "version": "6.0.10",
+  "_release": "6.0.10",
   "_resolution": {
     "type": "version",
-    "tag": "v6.0.8",
-    "commit": "1177516158bae3841a3ac77b76167d9ace566736"
+    "tag": "v6.0.10",
+    "commit": "18caaa44e9e882a8b98a61662555ed49ffb30a1d"
   },
   "_source": "https://github.com/BrightspaceUI/dropdown.git",
   "_target": "^6.0.8",
-  "_originalSource": "d2l-dropdown",
-  "_direct": true
+  "_originalSource": "d2l-dropdown"
 }

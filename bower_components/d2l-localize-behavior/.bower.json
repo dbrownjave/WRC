@@ -4,38 +4,32 @@
   "main": "d2l-localize-behavior.html",
   "license": "Apache-2.0",
   "ignore": [
+    "demo",
     "test",
     ".editorconfig",
     ".eslintrc.json",
     ".gitignore",
     ".travis.yml",
     "package.json",
+    "polymer.json",
     "wct.conf.json"
   ],
   "dependencies": {
-    "app-localize-behavior": "PolymerElements/app-localize-behavior#1 - 2",
-    "polymer": "Polymer/polymer#1.9 - 2",
-    "d2l-intl-import": "^1.0.0"
+    "app-localize-behavior": "1 - 2",
+    "d2l-intl-import": "^1.0.0",
+    "polymer": "1 - 2"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#1 - 2",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#1 - 2",
-    "web-component-tester": "^6.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
-    "iron-test-helpers": "^2.0.0"
+    "iron-component-page": "^2.0.0",
+    "iron-demo-helpers": "^2.0.0",
+    "iron-test-helpers": "^2.0.0",
+    "web-component-tester": "^6.0.0"
   },
   "variants": {
     "1.x": {
       "dependencies": {
-        "app-localize-behavior": "PolymerElements/app-localize-behavior#1.0.2",
-        "polymer": "Polymer/polymer#^1.9"
-      },
-      "devDependencies": {
-        "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
-        "web-component-tester": "^4.0.0",
-        "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-        "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
-        "iron-test-helpers": "^2.0.0"
+        "app-localize-behavior": "^1.0.2",
+        "polymer": "^1.9.1"
       },
       "resolutions": {
         "webcomponentsjs": "^0.7"
@@ -46,12 +40,12 @@
     "webcomponentsjs": "^1.0.0"
   },
   "homepage": "https://github.com/BrightspaceUI/d2l-localize-behavior",
-  "version": "1.1.0",
-  "_release": "1.1.0",
+  "version": "1.1.1",
+  "_release": "1.1.1",
   "_resolution": {
     "type": "version",
-    "tag": "v1.1.0",
-    "commit": "9c2bd14c0f48fec507d54cc59c0acf66d06af8b9"
+    "tag": "v1.1.1",
+    "commit": "ffb5086e883fafa526b449c31020c4be1a324774"
   },
   "_source": "https://github.com/BrightspaceUI/d2l-localize-behavior.git",
   "_target": "^1.0.0",
