@@ -572,6 +572,9 @@
 		__position: function(ignoreVertical) {
 
 			var opener = this.__getOpener();
+			if (!opener) {
+				return;
+			}
 			var target = opener.getOpenerElement();
 			if (!target) {
 				return;

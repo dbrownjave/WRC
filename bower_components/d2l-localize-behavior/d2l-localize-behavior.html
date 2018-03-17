@@ -41,7 +41,7 @@
 			this._observer = new MutationObserver(function(mutations) {
 				for (var i = 0; i < mutations.length; i++) {
 					var mutation = mutations[i];
-					if (mutation.attributeName === 'lang' ) {
+					if (mutation.attributeName === 'lang') {
 						this.__documentLanguage = htmlElem.getAttribute('lang');
 					} else if (mutation.attributeName === 'data-lang-default') {
 						this.__documentLanguageFallback = htmlElem.getAttribute('data-lang-default');
