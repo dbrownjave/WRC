@@ -92,12 +92,12 @@ declare namespace Polymer {
     /**
      * The backdrop element.
      */
-    readonly backdropElement: Element;
+    backdropElement(): Element;
 
     /**
      * Returns the node to give focus to.
      */
-    readonly _focusNode: Node;
+    _focusNode(): Node;
 
     /**
      * Array of nodes that can receive focus (overlay included), ordered by `tabindex`.
@@ -107,110 +107,110 @@ declare namespace Polymer {
      * If you know what is your content (specifically the first and last focusable children),
      * you can override this method to return only `[firstFocusable, lastFocusable];`
      */
-    readonly _focusableNodes: Node[];
-    ready(): void;
-    attached(): void;
-    detached(): void;
+    _focusableNodes(): Node[];
+    ready(): any;
+    attached(): any;
+    detached(): any;
 
     /**
      * Toggle the opened state of the overlay.
      */
-    toggle(): void;
+    toggle(): any;
 
     /**
      * Open the overlay.
      */
-    open(): void;
+    open(): any;
 
     /**
      * Close the overlay.
      */
-    close(): void;
+    close(): any;
 
     /**
      * Cancels the overlay.
      *
      * @param event The original event
      */
-    cancel(event?: Event|null): void;
+    cancel(event?: Event|null): any;
 
     /**
      * Invalidates the cached tabbable nodes. To be called when any of the focusable
      * content changes (e.g. a button is disabled).
      */
-    invalidateTabbables(): void;
-    _ensureSetup(): void;
+    invalidateTabbables(): any;
+    _ensureSetup(): any;
 
     /**
      * Called when `opened` changes.
      */
-    _openedChanged(opened?: boolean): void;
-    _canceledChanged(): void;
-    _withBackdropChanged(): void;
+    _openedChanged(opened?: boolean): any;
+    _canceledChanged(): any;
+    _withBackdropChanged(): any;
 
     /**
      * tasks which must occur before opening; e.g. making the element visible.
      */
-    _prepareRenderOpened(): void;
+    _prepareRenderOpened(): any;
 
     /**
      * Tasks which cause the overlay to actually open; typically play an animation.
      */
-    _renderOpened(): void;
+    _renderOpened(): any;
 
     /**
      * Tasks which cause the overlay to actually close; typically play an animation.
      */
-    _renderClosed(): void;
+    _renderClosed(): any;
 
     /**
      * Tasks to be performed at the end of open action. Will fire `iron-overlay-opened`.
      */
-    _finishRenderOpened(): void;
+    _finishRenderOpened(): any;
 
     /**
      * Tasks to be performed at the end of close action. Will fire `iron-overlay-closed`.
      */
-    _finishRenderClosed(): void;
-    _preparePositioning(): void;
-    _finishPositioning(): void;
+    _finishRenderClosed(): any;
+    _preparePositioning(): any;
+    _finishPositioning(): any;
 
     /**
      * Applies focus according to the opened state.
      */
-    _applyFocus(): void;
+    _applyFocus(): any;
 
     /**
      * Cancels (closes) the overlay. Call when click happens outside the overlay.
      */
-    _onCaptureClick(event: Event): void;
+    _onCaptureClick(event: Event): any;
 
     /**
      * Keeps track of the focused child. If withBackdrop, traps focus within overlay.
      */
-    _onCaptureFocus(event: Event): void;
+    _onCaptureFocus(event: Event): any;
 
     /**
      * Handles the ESC key event and cancels (closes) the overlay.
      */
-    _onCaptureEsc(event: Event): void;
+    _onCaptureEsc(event: Event): any;
 
     /**
      * Handles TAB key events to track focus changes.
      * Will wrap focus for overlays withBackdrop.
      */
-    _onCaptureTab(event: Event): void;
+    _onCaptureTab(event: Event): any;
 
     /**
      * Refits if the overlay is opened and not animating.
      */
-    _onIronResize(): void;
+    _onIronResize(): any;
 
     /**
      * Will call notifyResize if overlay is opened.
      * Can be overridden in order to avoid multiple observers on the same node.
      */
-    _onNodesChange(): void;
+    _onNodesChange(): any;
   }
 
   const IronOverlayBehaviorImpl: object;

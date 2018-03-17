@@ -118,7 +118,7 @@ Custom property | Description | Default
         @apply --paper-tabs;
       }
 
-      :host(:dir(rtl)) {
+      :host-context([dir=rtl]) {
         @apply --layout-horizontal-reverse;
       }
 
@@ -354,7 +354,6 @@ Custom property | Description | Default
         }
       },
 
-      /** @private */
       hostAttributes: {
         role: 'tablist'
       },
@@ -366,9 +365,6 @@ Custom property | Description | Default
         'iron-deselect': '_onIronDeselect'
       },
 
-      /**
-       * @type {!Object}
-       */
       keyBindings: {
         'left:keyup right:keyup': '_onArrowKeyup'
       },

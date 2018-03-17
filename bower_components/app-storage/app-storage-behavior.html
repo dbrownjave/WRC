@@ -84,7 +84,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * Override this getter to return true if the value has never been
        * persisted to storage.
        *
-       * @return {boolean}
+       * @type {boolean}
        */
       get isNew() {
         return true;
@@ -100,7 +100,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        *
        * This promise never rejects.
        *
-       * @return {Promise}
+       * @type {Promise}
        */
       get transactionsComplete() {
         return this.__transactionQueueAdvances;
@@ -110,7 +110,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * Override this getter to define the default value to use when
        * there's no data stored.
        *
-       * @return {*}
+       * @type {*}
        */
       get zeroValue() {
         return undefined;

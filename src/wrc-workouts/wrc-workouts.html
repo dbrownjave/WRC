@@ -19,11 +19,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 
-<!-- Vaadin Elements -->
-<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
-<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
-
 <!-- Icons -->
 <link rel="import" href="../app-icons.html">
 <link rel="import" href="../fa-icons.html">
@@ -59,15 +54,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             .motivation-title {
               color: #AFB7C1;
-              font-size: 4.5em;
+              font-size: 5em;
               font-weight: 500;
               text-align: center;
               opacity: .70;
             }
 
             .biceps-icon {
-              width: 175px;
-              height: 175px;
+              width: 195px;
+              height: 195px;
               display: block;
               margin: 1cm auto 0 auto;
             }
@@ -119,6 +114,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /* Empty Workout State */
+
                 .motivation-msg {
                   margin: 2cm 0cm 0cm 0cm;
                 }
@@ -158,6 +154,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /* Empty Workout State */
+
                 .motivation-msg {
                   margin: 2cm 0cm 0cm 0cm;
                 }
@@ -186,164 +183,41 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                   bottom: 2.5em;
                   position: absolute;
                 }
+
             }
 
-                /* PDF Workout */
-                .paper-form {
-                  width: 210px;
-                  height: 290px;
-                  border-radius: 6.6px;
-                  background-color: #ffffff;
-                  box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 
-                  transition: all .5s;
-                  -webkit-transition: all .5s;
-                  -moz-transition: all .5s;
-                  -o-transition: all .5s;
-                  -ms-transition: all .5s;
 
-                }
-
-                .paper-form:hover {
-                  margin-top: -1vh;
-                  margin-bottom: 2vh;
-
-                  box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
-
-                  transition: all .5s;
-                  -webkit-transition: all .5s;
-                  -moz-transition: all .5s;
-                  -o-transition: all .5s;
-                  -ms-transition: all .5s;
-                }
-
-                 .pdf-wrapper {
-                  margin-top: 70px;
-
-                  @apply --layout-vertical;
-                  @apply --layout-center;
-                }
-
-                .season-title {
-                  font-size: 1.6em;
-                  font-weight: 400;
-                  letter-spacing: 0.7px;
-                  text-align: center;
-                  color: #86919f;
-                }
-
-                .program-title {
-                  font-size: .9em;
-                  font-weight: 400;
-                  letter-spacing: 0.5px;
-                  text-align: center;
-                  color: #86919f;
-                }
-
-                .week-title {
-                  font-size: .7em;
-                  font-weight: 300;
-                  letter-spacing: 0.4px;
-                  text-align: center;
-                  color: white;
-                }
-
-                .tag {
-                  width: 70px;
-                  height: 21px;
-                  border-radius: 12.6px;
-                  background-color: #86919f;
-                  text-align: center;
-                  margin-top: 10px;
-
-                  @apply --layout-vertical
-                  @apply --layout-center-center
-                }
-
-                .start-button {
-
-                  width: 180px;
-                  height: 40px;
-                  border-radius: 3.1px;
-                  background-color: #5ac381;
-                  box-shadow: 0 4px 15px 0 rgba(90, 195, 129, 0.54);
-
-                  margin: 20px 0 0 0;
-
-                  @apply --layout-vertical
-                  @apply --layout-center-center
-                }
-
-                .start-button .title {
-                  font-size: 1.3em;
-                  font-weight: 400;
-                  letter-spacing: 0.4px;
-                  text-align: center;
-                  color: white;
-                }
-
-                [hidden] {
-                    display: none;
-                }
-
-                [flex] {
-                    @apply --layout-flex;
-                }
 
         </style>
 
 
         <main>
 
-            <!-- Loading Indicator  -->
-            <template is="dom-if" if="[[!userReady]]">
-                <paper-spinner active></paper-spinner>
-            </template>
-
-            <!--  Empty Workout Message  -->
-            <!--  Testing Hidden Functionalitie: true -->
-            <div hidden$=[[isHidden()]]>
-                <div class="motivation-msg center-layout">
-                    <!-- motivatonal message  -->
-                    <div class="motivation-title">
-                      Lets Get Started!
-                    </div>
-
-                    <!--  biceps-icon -->
-                    <div class="biceps-icon">
-                        <img class="biceps-icon" src="../images/app-images/flexed-biceps.png" alt="Biceps Icon">
-                    </div>
+            <!--  Empty Workout State  -->
+            <div class="motivation-msg center-layout">
+                <!-- motivatonal message  -->
+                <div class="motivation-title">
+                  Lets Get Started!
                 </div>
 
-                <!--  add workout helper -->
-                  <div class="add-workout-title">Add Workout</div>
-                    <div>
-                      <img class="arrow-curve" src="../images/app-images/arrow-curve.png" alt="arrow">
-                    </div>
-
-                    <div>
-                      <!-- Paper Fab to add new workout -->
-                      <paper-fab icon="fab-icons:add" on-tap="_openToAdd"></paper-fab>
-                    </div>
-            </div>
-
-            <!--  Display Workouts  -->
-
-            <div class="paper-form">
-                <div class="pdf-wrapper">
-                    <div class="season-title">OFF-SEASON</div>
-                    <div class="program-title">10 Week Program</div>
-
-                    <div class="tag">
-                      <div class="week-title">Week 1</div>
-                    </div>
+                <!--  biceps-icon -->
+                <div class="biceps-icon">
+                    <img class="biceps-icon" src="../images/app-images/flexed-biceps.png" alt="Biceps Icon">
                 </div>
             </div>
-<!--
-            <div class="start-button">
-              <span class="title">Get Started</span>
+
+            <!--  add workout helper -->
+              <div class="add-workout-title">Add Workout</div>
+                <div>
+                  <img class="arrow-curve" src="../images/app-images/arrow-curve.png" alt="arrow">
+                </div>
+            <div>
+
+              <!-- Paper Fab to add new workout -->
+              <paper-fab icon="fab-icons:add" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(athletesData.length, userReady)]]"></paper-fab>
             </div>
--->
+
         </main>
 
 
@@ -375,8 +249,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 ready() {
                     super.ready();
 
-                    // Add Workout Dialog
-                    this._addWorkoutDialog = document.getElementById('addWorkoutDialog');
+                    // Athletes Dialog
+                    this._athletesDialog = document.getElementById('addWorkoutDialog');
 
                     // App Progress Bar
                     this._appProgressBar = document.getElementById('appProgressBar');
@@ -386,33 +260,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /**
-                 * Determines if the coaches workout palette is empty to show the message
-                 *
-                 * @param {Number} length of the workoutsheet array
-                 * @param {Boolean} ready status of the user
-                 * @return {Boolean}
-                */
-                _computeVisibleEmptyMessage(length, ready) {
-                    if (!ready) return false;
-                    return (length > 0) ? false : true;
-                }
-
-
-                /**
-                 * Testing hidden functionality
-                 *
-                 * @param {Boolean} return true to hide content
-                 * @return {Boolean}
-                */
-                isHidden() {
-                  return true
-                }
-
-                /**
                  * Opens workout dialog to add
                 */
                 _openToAdd() {
-                    this._addWorkoutDialog.opened = true;
+                    this.action = 'add';
+                    this._athletesDialog._resetForm();
+                    /*this._athletesDialog.acceptedCallback = this._saveAthlete.bind(this);*/
+                    this._athletesDialog.action = 'add';
+                    this._athletesDialog.opened = true;
+                    /*this._athletesDialog.user = this.user;*/
                 }
             }
             window.customElements.define(WrcWorkouts.is, WrcWorkouts);

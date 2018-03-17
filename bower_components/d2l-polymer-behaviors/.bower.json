@@ -34,12 +34,12 @@
     "webcomponentsjs": "^v1.0.0"
   },
   "homepage": "https://github.com/Brightspace/d2l-polymer-behaviors-ui",
-  "version": "1.3.0",
-  "_release": "1.3.0",
+  "version": "1.2.0",
+  "_release": "1.2.0",
   "_resolution": {
     "type": "version",
-    "tag": "v1.3.0",
-    "commit": "56c67eff13ff86998b6b86f6462f4ca977c27db3"
+    "tag": "v1.2.0",
+    "commit": "ca03a7cc3267feb5e3e10cd413bfa9cbbb09f95f"
   },
   "_source": "https://github.com/Brightspace/d2l-polymer-behaviors-ui.git",
   "_target": "^1.2.0",

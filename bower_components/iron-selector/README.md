@@ -1,5 +1,4 @@
 [![Build status](https://travis-ci.org/PolymerElements/iron-selector.svg?branch=master)](https://travis-ci.org/PolymerElements/iron-selector)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/PolymerElements/iron-selector)
 
 _[Demo and API docs](https://elements.polymer-project.org/elements/iron-selector)_
 

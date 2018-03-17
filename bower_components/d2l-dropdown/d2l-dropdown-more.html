@@ -53,20 +53,13 @@ Polymer-based web component for dropdown using a "more" opener.
 			],
 
 			properties: {
+
 				/**
 				 * Label for the "more" button (required for accessibility).
 				 */
 				label: String
-			},
 
-			/**
-			 * Gets the opener element (required by d2l-dropdown behavior).
-			 * @return {HTMLElement}
-			 */
-			getOpenerElement: function() {
-				return this.$$('button');
 			}
-
 		});
 	</script>
 </dom-module>
