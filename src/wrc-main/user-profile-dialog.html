@@ -47,24 +47,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             /* Dialog Style */
             paper-dialog {
-				border-radius: 5px;
+				        border-radius: 5px;
                 box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
-			}
+			      }
 
             paper-dialog h2 {
-				color: var(--azul-text-title);
-				font-size: 1.6em;
-			}
+        				color: var(--azul-text-title);
+        				font-size: 1.6em;
+      			}
 
             paper-dialog .buttons paper-button {
-				color: var(--azul-primary);
-                font-weight: 500;
-			}
-
-			paper-dialog .buttons paper-button.cancel-button {
-				color: var(--azul-primary-text);
+				        color: var(--azul-primary-button);
                 font-weight: normal;
-			}
+			      }
+
+      			paper-dialog .buttons paper-button.cancel-button {
+      				color: var(--paper-grey-700);
+              font-weight: normal;
+      			}
 
             /* Profile Pic Uploader */
 			[type='file'] {
@@ -170,7 +170,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     </label>
                     <p>[[adminInfo.email]]</p>
                 </div>
-                
+
                 <iron-form id="adminForm">
                     <form>
                         <vaadin-form-layout>
@@ -206,7 +206,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     </form>
                 </iron-form>
             </paper-dialog-scrollable>
-            <div class="buttons">
+            <div class="buttons" style="margin-top: 1em">
                 <paper-button class="cancel-button" dialog-dismiss on-tap="_resetForm">Cancel</paper-button>
                 <paper-button on-tap="_serializeAdminForm">Update</paper-button>
             </div>
@@ -229,7 +229,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     </label>
                     <p>[[coachInfo.email]]</p>
                 </div>
-                
+
                 <iron-form id="coachForm">
                     <form>
                         <vaadin-form-layout>
@@ -265,7 +265,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     </form>
                 </iron-form>
             </paper-dialog-scrollable>
-            <div class="buttons">
+            <div class="buttons" style="margin-top: 1em">
                 <paper-button class="cancel-button" dialog-dismiss on-tap="_resetForm">Cancel</paper-button>
                 <paper-button on-tap="_serializeCoachForm">Update</paper-button>
             </div>
@@ -287,7 +287,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     </label>
                     <p>[[athleteInfo.email]]</p>
                 </div>
-                
+
                 <iron-form id="athleteForm">
                     <form>
                         <vaadin-form-layout>

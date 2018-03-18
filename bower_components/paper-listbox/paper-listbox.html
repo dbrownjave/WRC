@@ -12,6 +12,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-menu-behavior/iron-menu-behavior.html">
 <link rel="import" href="../paper-styles/default-theme.html">
 
+<!-- Suji Elements -->
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
 <!--
 Material design: [Menus](https://www.google.com/design/spec/components/menus.html)
 
@@ -67,9 +70,10 @@ of a listbox item will also focus it.
       :host {
         display: block;
         padding: 8px 0;
+        border: none;
 
         background: var(--paper-listbox-background-color, var(--primary-background-color));
-        color: var(--paper-listbox-color, var(--primary-text-color));
+        color: var(--paper-listbox-color,  var(--azul-third-text));
 
         @apply --paper-listbox;
       }

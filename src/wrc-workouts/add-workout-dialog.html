@@ -1,11 +1,3 @@
-<!--
-@license
-Code developed by Dorian Brown in collaboration with Codeself, Inc.
--->
-
-<!-- Polymer -->
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
-
 <!-- Paper Elements -->
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
@@ -13,15 +5,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 
 <!-- Iron Elements -->
-<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
-
-<!-- Suji Elements -->
-<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
-<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
-<link rel="import" href="../suji/lib/themes/azul/azul-dialog.html">
-
-<!-- Neon Elements -->
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../../bower_components/neon-animation/web-animations.html">
 
@@ -35,157 +18,156 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <dom-module id="add-workout-dialog">
     <template>
         <style>
-              /* Dialog */
-              paper-dialog {
-  				        border-radius: 5px;
-                  box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
-  			      }
+        /* Dialog */
+      paper-dialog {
+          border-radius: 5px;
+          box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+      }
 
-              paper-dialog h2 {
-        				color: var(--azul-text-title);
-        				font-size: 1.6em;
-        			}
+      paper-dialog h2 {
+        color: var(--azul-text-title);
+        font-size: 1.6em;
+      }
 
-              /* Paper dialog buttons */
-        			paper-dialog div.buttons {
-          				@apply --layout-horizontal;
-          				@apply --layout-end-justified;
-        			}
+      /* Paper dialog buttons */
+      paper-dialog div.buttons {
+          @apply --layout-horizontal;
+          @apply --layout-end-justified;
+      }
 
-        			paper-dialog .buttons paper-button.cancel-button {
-        				  color: var(--paper-grey-700);
-                  font-weight: normal;
-        			}
+      paper-dialog .buttons paper-button.cancel-button {
+          color: var(--paper-grey-700);
+          font-weight: normal;
+      }
 
-        			paper-dialog .buttons paper-button.save-button {
-        				  color: var(--azul-primary-button-text);
-                  font-weight: normal;
-        			}
+      paper-dialog .buttons paper-button.save-button {
+          color: var(--azul-primary-button-text);
+          font-weight: normal;
+      }
 
-              paper-spinner {
-                  --paper-spinner-layer-1-color: var(--azul-primary);
-                  --paper-spinner-layer-2-color: var(--azul-primary);
-                  --paper-spinner-layer-3-color: var(--azul-primary);
-                  --paper-spinner-layer-4-color: var(--azul-primary);
-              }
+      paper-spinner {
+          --paper-spinner-layer-1-color: var(--azul-primary);
+          --paper-spinner-layer-2-color: var(--azul-primary);
+          --paper-spinner-layer-3-color: var(--azul-primary);
+          --paper-spinner-layer-4-color: var(--azul-primary);
+      }
 
-              .horizontal-layout {
-                @apply --layout-horizontal
-                margin: 0 0 0 0;
-              }
-
-
-              .dayCombo {
-                  width: 125px;
-                  margin-bottom: 10px;
-              }
-
-              .weekCombo {
-                  width: 175px;
-              }
-
-              .info-icon {
-                top: 15px;
-                right: 15px;
-                position: absolute;
-              }
-
-              /* To keep dialog larger with large screens */
-        			@media screen and (min-width: 600px) {
-        				  paper-dialog {
-        					width: 350px;
-        				}
-        			}
-
-          </style>
+      .horizontal-layout {
+        @apply --layout-horizontal
+        margin: 0 0 0 0;
+      }
 
 
-          <!-- Element UI -->
-          <paper-dialog
-              opened="{{opened}}"
-              modal
-              entry-animation="scale-up-animation"
-              exit-animation="fade-out-animation">
+      .dayCombo {
+          width: 125px;
+          margin-bottom: 10px;
+      }
 
-              <!-- title + info icon-->
-              <h2>Select Workout</h2>
-              <div>
-                  <!-- TODO: Implement Paper Tool-tip -->
-                  <img class="info-icon" src="../images/app-images/info-icon.svg" alt="info. button">
-              </div>
+      .weekCombo {
+          width: 175px;
+      }
 
-              <!-- modal conent  -->
-              <paper-dialog-scrollable>
-                  <iron-form id="athleteForm">
-                      <form>
-                          <vaadin-form-layout>
-                            <!-- Programs  -->
-                              <vaadin-combo-box
-                                  id="programCombo"
-                                  label="Program"
-                                  name="program"
-                                  required
-                                  error-message="Select a program"
-                                  value=""></vaadin-combo-box>
-                              <!-- Program Duration  -->
-                              <div>
-                                <vaadin-combo-box
-                                    id="durationCombo"
-                                    class="weekCombo"
-                                    label="Program Duration"
-                                    name="duration"
-                                    required
-                                    error-message="Select the duration"
-                                    value=""></vaadin-combo-box>
-                              </div>
-                              <!--  Days -->
-                              <div>
-                                  <vaadin-combo-box
-                                    id="dayCombo"
-                                    class="dayCombo"
-                                    label="Days Per Week"
-                                    name="day"
-                                    required
-                                    error-message="Select number of days"
-                                    value=""></vaadin-combo-box>
-                              </div>
-                      </form>
-                  </iron-form>
-              </paper-dialog-scrollable>
+      .info-icon {
+        top: 15px;
+        right: 15px;
+        position: absolute;
+      }
 
-              <!-- buttons  -->
-              <div class="buttons">
-                  <paper-button dialog-dismiss class="cancel-button">Cancel</paper-button>
-                  <paper-button class="save-button" on-tap="">Download</paper-button>
-              </div>
-          </paper-dialog>
-      </template>
+      /* To keep dialog larger with large screens */
+      @media screen and (min-width: 600px) {
+          paper-dialog {
+          width: 350px;
+        }
+      }
+
+  </style>
 
 
+  <!-- Element UI -->
+  <paper-dialog
+      opened="{{opened}}"
+      modal
+      entry-animation="scale-up-animation"
+      exit-animation="fade-out-animation">
 
-    <script>
-        (function() {
-            'use strict';
+      <!-- title + info icon-->
+      <h2>Select Workout</h2>
+      <div>
+          <!-- TODO: Implement Paper Tool-tip -->
+          <img class="info-icon" src="../images/app-images/info-icon.svg" alt="info. button">
+      </div>
 
-            class AddWorkoutDialog extends Polymer.Element {
-                /**
-                 * Element definition
-                */
-                static get is() { return 'add-workout-dialog'; }
+      <!-- modal conent  -->
+      <paper-dialog-scrollable>
+          <iron-form id="addWorkoutForm">
+              <form>
+                  <vaadin-form-layout>
+                    <!-- Programs  -->
+                      <vaadin-combo-box
+                          id="programCombo"
+                          label="Program"
+                          name="program"
+                          required
+                          error-message="Select a program"
+                          value=""></vaadin-combo-box>
+                      <!-- Program Duration  -->
+                      <div>
+                        <vaadin-combo-box
+                            id="durationCombo"
+                            class="weekCombo"
+                            label="Program Duration"
+                            name="duration"
+                            required
+                            error-message="Select the duration"
+                            value=""></vaadin-combo-box>
+                      </div>
+                      <!--  Days -->
+                      <div>
+                          <vaadin-combo-box
+                            id="dayCombo"
+                            class="dayCombo"
+                            label="Days Per Week"
+                            name="day"
+                            required
+                            error-message="Select number of days"
+                            value=""></vaadin-combo-box>
+                      </div>
+              </form>
+          </iron-form>
+      </paper-dialog-scrollable>
 
-                /**
-                 * Element properties
-                */
-                static get properties() {
-                    return {
-                        acceptedCallback: Function,
-                        opened: {
-                            type: Boolean,
-                            notify: true,
-                            value: false
-                        }
-                    };
-                }
+      <!-- buttons  -->
+      <div class="buttons">
+          <paper-button dialog-dismiss class="cancel-button" on-tap="_resetForm" >Cancel</paper-button>
+          <paper-button class="save-button" on-tap="">Download</paper-button>
+      </div>
+  </paper-dialog>
+</template>
+
+
+<script>
+    (function() {
+        'use strict';
+
+        class AddWorkoutDialog extends Polymer.Element {
+            /**
+             * Element definition
+            */
+            static get is() { return 'add-workout-dialog'; }
+
+            /**
+             * Element properties
+            */
+            static get properties() {
+                return {
+                    opened: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    }
+                };
+            }
+
 
                 ready() {
                     super.ready()
@@ -199,13 +181,19 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /**
+                 * Resets the form
+                */
+                _resetForm() {
+                    this.equationResult = 0;
+                    this.$.addWorkoutForm.reset();
+                }
+
+                /**
                  * Triggers the accepted callback with the response
                 */
-                _triggerAcceptedCallback() {
-                    this.acceptedCallback(true);
-                }
-            }
-            window.customElements.define(AddWorkoutDialog.is, AddWorkoutDialog);
-        })();
-    </script>
-</dom-module>
+
+              }
+              window.customElements.define(AddWorkoutDialog.is, AddWorkoutDialog);
+          })();
+      </script>
+  </dom-module>

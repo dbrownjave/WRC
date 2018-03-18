@@ -76,13 +76,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       			}
 
             paper-dialog .buttons paper-button {
-                color: var(--azul-primary-button);
-                font-weight: 500;
+                color: var(--azul-third-button-text);
             }
 
       			paper-dialog .buttons paper-button.cancel-button {
       				  color: var(--paper-grey-700);
-                font-weight: 500;
       			}
 
             /* Maxes */
@@ -249,14 +247,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 [[athleteInfo.first]] [[athleteInfo.last]] #[[athleteInfo.number]]
             </h2>
             <paper-dialog-scrollable>
-              <div class="header">
-                  <span> Exercise</span>
-                  <span style="margin-left: 60px">Weight</span>
-                  <span style="margin-left: 104px">Reps</span>
-                  <span style="margin-left: 105px">Est. Max</span>
-                </div>
 
                 <template is="dom-if" if="[[!editMaxes]]">
+                  <!-- Header  -->
+                  <div class="header">
+                      <span> Exercise</span>
+                      <span style="margin-left: 60px">Weight</span>
+                      <span style="margin-left: 104px">Reps</span>
+                      <span style="margin-left: 105px">Est. Max</span>
+                    </div>
+
                     <div class="maxes-wrapper">
 
                         <!-- Bench -->
@@ -394,23 +394,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                            </div>
                          </div>
 
-                         <!--  Pull-ups -->
-                         <div class="stat-wrapper">
-                           <p>
-                               <strong class="title">Pull-ups:</strong>
-                               <span>[[athleteStats.pull_ups]] reps</span>
-                           </p>
-                         </div>
-
-
-
-
-
-
-
-
-
-
+                         <!-- Header  -->
+                         <div class="header" style="margin: 1.5em 0 0 0">
+                             <span> Agility</span>
+                           </div>
 
                         <p>
                             <strong class="title">40 Yard Dash:</strong>
@@ -530,8 +517,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <vaadin-text-field
                                         label="Hang Power / Clean"
                                         name="hang_power_clean_value"
-                                        required
-                                        error-message="This field is required"
                                         value="{{athleteStats.hang_power_clean_value}}">
                                         <span slot="suffix">lbs</span>
                                     </vaadin-text-field>
@@ -558,48 +543,36 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     colspan="2"
                                     label="40 Yard Dash"
                                     name="forty_yard_dash"
-                                    required
-                                    error-message="This field is required"
                                     value="{{athleteStats.forty_yard_dash}}">
                                 </vaadin-text-field>
                                 <vaadin-text-field
                                     colspan="2"
                                     label="3 Cone Drill"
                                     name="three_cone_drill"
-                                    required
-                                    error-message="This field is required"
                                     value="{{athleteStats.three_cone_drill}}">
                                 </vaadin-text-field>
                                 <vaadin-text-field
                                     colspan="2"
                                     label="20 Yard Shuttle"
                                     name="twenty_yard_shuttle"
-                                    required
-                                    error-message="This field is required"
                                     value="{{athleteStats.twenty_yard_shuttle}}">
                                 </vaadin-text-field>
                                 <vaadin-text-field
                                     colspan="2"
                                     label="60 Yard Shuttle"
                                     name="sixty_yard_shuttle"
-                                    required
-                                    error-message="This field is required"
                                     value="{{athleteStats.sixty_yard_shuttle}}">
                                 </vaadin-text-field>
                                 <vaadin-text-field
                                     colspan="2"
                                     label="Vertical Jump"
                                     name="vertical_jump"
-                                    required
-                                    error-message="This field is required"
                                     value="{{athleteStats.vertical_jump}}">
                                 </vaadin-text-field>
                                 <vaadin-text-field
                                     colspan="2"
                                     label="Broad Jump"
                                     name="broad_jump"
-                                    required
-                                    error-message="This field is required"
                                     value="{{athleteStats.broad_jump}}">
                                 </vaadin-text-field>
                             </vaadin-form-layout>

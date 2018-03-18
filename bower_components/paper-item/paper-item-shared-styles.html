@@ -13,6 +13,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../paper-styles/default-theme.html">
 <link rel="import" href="../paper-styles/typography.html">
 
+<!-- Suji Elements -->
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
+
 <dom-module id="paper-item-shared-styles">
   <template>
     <style>
@@ -30,6 +34,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background: white;
         width: 100%;
         text-align: left;
+        cursor: pointer;
+        font-weight: 400;
       }
 
       :host([hidden]), .paper-item[hidden] {
@@ -37,7 +43,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       :host(.iron-selected), .paper-item.iron-selected {
-        font-weight: var(--paper-item-selected-weight, bold);
+        font-weight: var(--paper-item-selected-weight, 500);
 
         @apply --paper-item-selected;
       }

@@ -90,8 +90,8 @@ Custom property | Description | Default
         @apply --layout-center-center;
         position: relative;
         box-sizing: border-box;
-        min-width: 5.14em;
-        margin: 0 0.29em;
+        min-width: 8.14em;
+        margin: 0 0.10em;
         background: transparent;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         -webkit-tap-highlight-color: transparent;
@@ -105,30 +105,31 @@ Custom property | Description | Default
         user-select: none;
         cursor: pointer;
         z-index: 0;
-        padding: 0.7em 0.57em;
+        padding: 0.4em 0.37em;
 
         @apply --paper-font-common-base;
         @apply --paper-button;
       }
 
       :host([elevation="1"]) {
-        @apply --paper-material-elevation-1;
-      }
 
+      }
       :host([elevation="2"]) {
-        @apply --paper-material-elevation-2;
+
       }
 
       :host([elevation="3"]) {
-        @apply --paper-material-elevation-3;
+
       }
 
+      /* Pressed */
       :host([elevation="4"]) {
-        @apply --paper-material-elevation-4;
       }
 
       :host([elevation="5"]) {
-        @apply --paper-material-elevation-5;
+      }
+
+      :host:hover {
       }
 
       :host([hidden]) {
@@ -136,12 +137,12 @@ Custom property | Description | Default
       }
 
       :host([raised].keyboard-focus) {
-        font-weight: bold;
+        font-weight: 500;
         @apply --paper-button-raised-keyboard-focus;
       }
 
       :host(:not([raised]).keyboard-focus) {
-        font-weight: bold;
+        font-weight: 500;
         @apply --paper-button-flat-keyboard-focus;
       }
 
