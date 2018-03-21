@@ -153,6 +153,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
               border-radius: 6.6px;
               background-color: #ffffff;
               box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+              cursor: pointer;
 
               transition: all .5s;
               -webkit-transition: all .5s;
@@ -171,7 +172,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
               -ms-transition: all .5s;
             }
 
-             .pdf-wrapper {
+             .paper-form > .pdf-wrapper {
               @apply --layout-vertical;
               @apply --layout-center;
             }
@@ -211,12 +212,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             .tag-active {
-              width: 80px;
-              height: 30px;
+              width: 70px;
+              height: 21px;
               border-radius: 3px;
-              background-color: blue;
+              background-color: #45BE72;;
               text-align: center;
-              margin-top: 20px;
+              margin-top: 10px;
 
               @apply --layout-vertical
               @apply --layout-center-center
@@ -380,50 +381,62 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
 
-            <!--  Display Workout Container -->
-            <div hidden$=[[!isHidden()]] class="paper-form-container vertical-containter" >
+            <!--  Display Coach Workout Collection -->
+            <div hidden$="[[!_isCoach(userRole)]]" class="paper-form-container vertical-containter">
                   <template is="dom-repeat" items="{{workoutPDF}}">
-                    <div class="vertical-containter">
-                          <div class="paper-form">
-                              <div class="pdf-wrapper">
+                      <div class="vertical-containter">
+                            <div class="paper-form">
+                                <div class="pdf-wrapper">
+                                  <paper-menu-button
+                                      horizontal-align="right"
+                                      vertical-align="top"
+                                      horizontal-offset="10"
+                                      vertical-offset="0">
+                                      <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+                                      <paper-listbox noink slot="dropdown-content">
+                                          <paper-item id$="[[]]" on-tap="">Start</paper-item>
+                                          <paper-item id$="[[]]" on-tap="" onclick="alert('Open PDF')">Preview</paper-item>
+                                          <paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Download</paper-item>
+                                      </paper-listbox>
+                                  </paper-menu-button>
 
-                                <paper-menu-button
-                                    horizontal-align="right"
-                                    vertical-align="top"
-                                    horizontal-offset="10"
-                                    vertical-offset="0">
-                                    <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-                                    <paper-listbox noink slot="dropdown-content">
-                                        <paper-item id$="[[]]" on-tap="" onclick="alert('Open PDF')">Preview</paper-item>
-                                        <paper-item id$="[[]]" on-tap="">Active</paper-item>
-                                        <paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Download</paper-item>
-                                    </paper-listbox>
-                                </paper-menu-button>
-
-                                <div class="content-wrapper">
-                                  <div class="season-title">
-                                    OFF-SEASON
-                                  </div>
-                                    <div class="program-title">10 Week Program</div>
-                                  </div>
-                                  <div class="tag">
-                                    <div class="week-title">Week [[item.week]]</div>
-                                  </div>
-<!--
-                                  <div class="tag-active">
-                                    <div class="week-title">Active</div>
-                                  </div>
--->
-                              </div>
-                          </div>
-<!--
-
-                          <div class="start-button">
-                            <span class="title">Get Started</span>
-                          </div>
--->
-                        </div>
+                                  <div class="content-wrapper">
+                                    <div class="season-title">
+                                      OFF-SEASON
+                                    </div>
+                                      <div class="program-title">10 Week Program</div>
+                                    </div>
+                                    <div class="tag-active">
+                                      <div class="week-title">Week [[item.week]]</div>
+                                    </div>
+  <!--
+                                    <div class="tag-active">
+                                      <div class="week-title">Active</div>
+                                    </div>
+  -->
+                                </div>
+                            </div>
+                      </div>
                   </template>
+            </div>
+
+
+            <!-- Display Athlete Workout -->
+            <div hidden$="[[!_isAthlete(userRole)]]" class="paper-form-container vertical-containter" >
+                            <div class="paper-form" onclick="alert('Open PDF')">
+                                <div class="pdf-wrapper">
+                                  <div class="content-wrapper" style="margin-top: 1.5cm">
+                                    <div class="season-title">
+                                      OFF-SEASON
+                                    </div>
+                                      <div class="program-title">10 Week Program</div>
+                                    </div>
+                                    <div class="tag">
+                                      <div class="week-title">Week 1</div>
+                                    </div>
+                                </div>
+                            </div>
+                      </div>
             </div>
 
         </main>
@@ -447,6 +460,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 static get properties() {
                     return {
                       userInfo: Object,
+                      userRole: String,
                       userReady: {
                           type: Boolean,
                           notify: true,
@@ -470,7 +484,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                               {week: 7},
                               {week: 8},
                               {week: 9},
-                              ];
+                            ];
+                          },
+                      active: {
+                              type: Boolean,
+                              notify: true,
+                              value: false
                             }
                         }
 
@@ -490,6 +509,27 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._appToast = document.getElementById('appToast');
                 }
 
+                /**
+                  * Verifies the role of the user
+                  * Displays workout collection
+                  *
+                  * @param {String} role of the user
+                  * @return {Boolean} true if role is coach, otherwise false
+                  */
+                 _isCoach(role) {
+                     return (role === 'coach') ? true : false;
+                 }
+
+                 /**
+                   * Verifies the role of the user
+                   * Displays athlete workout
+                   *
+                   * @param {String} role of the user
+                   * @return {Boolean} true if role is athlete, otherwise false
+                   */
+                  _isAthlete(role) {
+                      return (role === 'athlete') ? true : false;
+                  }
                 /**
                  * Observers the user for changes
                  *

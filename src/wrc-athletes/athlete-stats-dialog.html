@@ -66,7 +66,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
       			paper-dialog div p {
-      				  font-weight: lighter;
       				  line-height: 1em;
       			}
 
@@ -91,11 +90,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 font-size: 1.3em;
             }
 
-            .header {
-              color: var(--azul-text-title);
-              margin-top: 0;
-              font-weight: 400;
-              font-size: 1.3em;
+            div.header {
+                color: var(--azul-text-title);
+                margin-top: 0;
+                font-weight: 400;
+                font-size: 1.3em;
+            }
+
+            div.header > .weight {
+                margin-left: 60px
+
+            }
+
+            div.header > .reps {
+                margin-left: 104px
+            }
+
+            div.header > .max-weight {
+                margin-left: 105px
             }
 
             div.horizontal {
@@ -117,6 +129,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 font-size: 1.05em;
             }
 
+            div.agility-wrapper {
+              width: 6cm;
+            }
+
+            div.agility > div.horizontal {
+                margin: 0;
+                padding: 0;
+                width: 80%;
+
+                @apply --layout-horizontal;
+            }
+
             /* Form Wrapper */
             vaadin-form-layout {
 				        @apply --layout-vertical;
@@ -136,6 +160,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
     			div.horizontal-fields vaadin-combo-box {
     				  width: 47.5%;
     			}
+
+          div.horizontal-fields-vert vaadin-text-field {
+    				  width: 47.5%;
+    			}
+
+          div.horizontal-fields-broad-jump vaadin-text-field {
+              width: 57.5%;
+          }
 
           [slot='suffix'], [slot='prefix'] {
     				  color: var(--paper-grey-500);
@@ -165,19 +197,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
               width: 110px;
           }
 
-          div.stat-wrapper .reps-container {
+          div.stat-wrapper  .reps-container {
               margin-left: 50px;
-              margin-right: 50px;
+              width: 90px;
           }
 
           div.stat-wrapper .equal-container {
               margin-right: 50px;
           }
-
-          div.stat-wrapper .max-container {
-
-          }
-
 
       /* To keep dialog larger with large screens */
 			@media screen and (min-width: 600px) {
@@ -211,6 +238,45 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 div.horizontal-fields vaadin-combo-box {
                     width: 35%;
                 }
+
+                /* Stats */
+
+                div.header {
+                  font-size: 1em
+                }
+
+                div.header > .weight {
+                    margin-left: 45px
+
+                }
+
+                div.header > .reps {
+                    margin-left: 20px
+                }
+
+                div.header > .max-weight {
+                    margin-left: 20px
+                }
+
+                /* Stat Modal */
+                div.stat-wrapper {
+                    font-size: .9em
+                }
+
+                div.stat-wrapper .title {}
+
+                div.stat-wrapper > .weight-container {
+                    width: 110px;
+                }
+
+                div.stat-wrapper  .reps-container {
+                    margin-left: 50px;
+                    width: 90px;
+                }
+
+                div.stat-wrapper .equal-container {
+                    margin-right: 50px;
+                }
             }
 
             [flex] {
@@ -236,7 +302,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             with-backdrop
             entry-animation="scale-up-animation"
             exit-animation="fade-out-animation"
-            editing$="[[editMaxes]]">
+            editing$="[[editMaxes]]"
+            id="">
 
             <h2>
                 <iron-image
@@ -252,10 +319,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                   <!-- Header  -->
                   <div class="header">
                       <span> Exercise</span>
-                      <span style="margin-left: 60px">Weight</span>
-                      <span style="margin-left: 104px">Reps</span>
-                      <span style="margin-left: 105px">Est. Max</span>
-                    </div>
+                      <span class="weight">Weight</span>
+                      <span class="reps">Reps</span>
+                      <span class="max-weight">Est. Max</span>
+                  </div>
 
                     <div class="maxes-wrapper">
 
@@ -273,8 +340,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <strong>x</strong>
                           </div>
 
-                          <div>
-                            <span class="reps-container">[[athleteStats.bench_press_reps]] reps</span>
+                          <div class="reps-container">
+                            <span >[[athleteStats.bench_press_reps]] reps</span>
                           </div>
 
                           <div>
@@ -282,11 +349,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           </div>
 
                           <div>
-                            <strong class="max-container">344lbs</strong>
+                            <strong class="max-container">[[maxBenchPress]]lbs</strong>
                           </div>
                         </div>
 
-                          <!-- BackSqaut -->
+                          <!-- BackSquat -->
                           <div class="stat-wrapper">
                             <div>
                               <strong class="title" style="margin-right: 50px;">Back Squat:</strong>
@@ -300,8 +367,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                               <strong>x</strong>
                             </div>
 
-                            <div>
-                              <span class="reps-container">[[athleteStats.back_squat_reps]] reps</span>
+                            <div class="reps-container">
+                              <span>[[athleteStats.back_squat_reps]] reps</span>
                             </div>
 
                             <div>
@@ -309,14 +376,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             </div>
 
                             <div>
-                              <strong class="max-container">344lbs</strong>
+                              <strong class="max-container">[[maxBackSquat]]lbs</strong>
                             </div>
                           </div>
 
                          <!--  Front Squat -->
                          <div class="stat-wrapper">
                            <div>
-                             <strong class="title" style="margin-right: 50px;">Back Squat:</strong>
+                             <strong class="title" style="margin-right: 50px;">Front Squat:</strong>
                            </div>
 
                            <div class="weight-container">
@@ -327,8 +394,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                              <strong>x</strong>
                            </div>
 
-                           <div>
-                             <span class="reps-container">[[athleteStats.front_squat_reps]] reps</span>
+                           <div class="reps-container">
+                             <span>[[athleteStats.front_squat_reps]] reps</span>
                            </div>
 
                            <div>
@@ -336,7 +403,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                            </div>
 
                            <div>
-                             <strong class="max-container">344lbs</strong>
+                             <strong class="max-container">[[maxFrontSquat]]lbs</strong>
                            </div>
                          </div>
 
@@ -354,8 +421,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                              <strong>x</strong>
                            </div>
 
-                           <div>
-                             <span class="reps-container">[[athleteStats.deadlift_reps]] reps</span>
+                           <div class="reps-container">
+                             <span>[[athleteStats.deadlift_reps]] reps</span>
                            </div>
 
                            <div>
@@ -363,14 +430,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                            </div>
 
                            <div>
-                             <strong class="max-container">344lbs</strong>
+                             <strong class="max-container">[[maxDeadLift]]lbs</strong>
                            </div>
                          </div>
 
-                         <!--  Hang / Power Clean: -->
+                         <!--  Hang / Power Clean -->
                          <div class="stat-wrapper">
-                           <div style="width: 100px">
-                             <strong class="title" >Hang / Power Clean:</strong>
+                           <div style="width: 135px">
+                             <strong class="title">Clean:</strong>
                            </div>
 
                            <div class="weight-container">
@@ -390,46 +457,76 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                            </div>
 
                            <div>
-                             <strong class="max-container">344lbs</strong>
+                             <strong class="max-container">[[maxClean]]lbs</strong>
                            </div>
                          </div>
 
-                         <!-- Header  -->
-                         <div class="header" style="margin: 1.5em 0 0 0">
-                             <span> Agility</span>
+                         <!--  Pull-ups -->
+                         <div class="stat-wrapper">
+                           <div style="width: 135px">
+                             <strong class="title">Pull-ups:</strong>
                            </div>
 
-                        <p>
-                            <strong class="title">40 Yard Dash:</strong>
-                            <span>[[athleteStats.forty_yard_dash]]</span>
-                        </p>
-                        <p>
-                            <strong class="title">3 Cone Drill:</strong>
-                            <span>[[athleteStats.three_cone_drill]]</span>
-                        </p>
+                           <div class="weight-container">
+                             <span>[[athleteStats.pull_ups]]</span>
+                           </div>
+                         </div>
+
+                         <!-- Agility Header  -->
+                         <div class="agility">
+
+                         <div class="header" style="margin: 1.5em 0 0 0">
+                             <span> Agility</span>
+                         </div>
+
                         <div class="horizontal">
+                        <div class="agility-wrapper">
+                          <p>
+                              <strong class="title">40 Yard Dash:</strong>
+                              <span>[[athleteStats.forty_yard_dash]]</span>
+                          </p>
+                        </div>
+                          <span flex></span>
+                        <div class="agility-wrapper">
+                          <p>
+                              <strong class="title">Broad Jump:</strong>
+                              <span>{{athleteStats.broad_jump}}</span>
+                          </p>
+                        </div>
+                      </div>
+
+                        <div class="horizontal">
+                        <div class="agility-wrapper">
                             <p>
                                 <strong class="title">20 Yard Shuttle:</strong>
                                 <span>[[athleteStats.twenty_yard_shuttle]]</span>
                             </p>
+                        </div>
                             <span flex></span>
+                        <div class="agility-wrapper">
+                            <p>
+                                <strong class="title">3 Cone Drill:</strong>
+                                <span>[[athleteStats.three_cone_drill]]</span>
+                            </p>
+                          </div>
+                        </div>
+
+                        <div class="horizontal">
+                          <div class="agility-wrapper">
+                            <p>
+                                <strong class="title">Vertical Jump:</strong>
+                                <span>[[athleteStats.vertical_jump]] ft</span>
+                            </p>
+                          </div>
+                            <span flex></span>
+                          <div class="agility-wrapper">
                             <p>
                                 <strong class="title">60 Yard Shuttle:</strong>
                                 <span>[[athleteStats.sixty_yard_shuttle]]</span>
                             </p>
                         </div>
-                        <div class="horizontal">
-                            <p>
-                                <strong class="title">Vertical Jump:</strong>
-                                <span>[[athleteStats.vertical_jump]]</span>
-                            </p>
-                            <span flex></span>
-                            <p>
-                                <strong class="title">Broad Jump:</strong>
-                                <span>[[athleteStats.broad_jump]]</span>
-                            </p>
-                        </div>
                     </div>
+                </div>
                 </template>
 
                 <!-- Form Wrapper -->
@@ -441,6 +538,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <vaadin-text-field
                                         label="Bench Press"
                                         name="bench_press_value"
+                                        type="number"
+                                        maxlength="3"
+                                        pattern="[0-9]*"
+                                        prevent-invalid-input
                                         required
                                         error-message="This field is required"
                                         value="{{athleteStats.bench_press_value}}">
@@ -460,6 +561,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <vaadin-text-field
                                         label="Back Squat"
                                         name="back_squat_value"
+                                        maxlength="3"
+                                        pattern="[0-9]*"
+                                        prevent-invalid-input
                                         required
                                         error-message="This field is required"
                                         value="{{athleteStats.back_squat_value}}">
@@ -479,9 +583,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <vaadin-text-field
                                         label="Front Squat"
                                         name="front_squat_value"
+                                        maxlength="3"
+                                        pattern="[0-9]*"
+                                        prevent-invalid-input
                                         required
                                         error-message="This field is required"
-                                        value="{{athleteStats.front_squat_reps}}">
+                                        value="{{athleteStats.front_squat_value}}">
                                         <span slot="suffix">lbs</span>
                                     </vaadin-text-field>
                                     <span flex></span>
@@ -498,6 +605,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <vaadin-text-field
                                         label="Deadlift"
                                         name="deadlift_value"
+                                        maxlength="3"
+                                        pattern="[0-9]*"
+                                        prevent-invalid-input
                                         required
                                         error-message="This field is required"
                                         value="{{athleteStats.deadlift_value}}">
@@ -517,6 +627,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <vaadin-text-field
                                         label="Hang Power / Clean"
                                         name="hang_power_clean_value"
+                                        maxlength="3"
+                                        pattern="[0-9]*"
+                                        prevent-invalid-input
+                                        required
+                                        error-message="This field is required"
                                         value="{{athleteStats.hang_power_clean_value}}">
                                         <span slot="suffix">lbs</span>
                                     </vaadin-text-field>
@@ -530,57 +645,86 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                         value="{{athleteStats.hang_power_clean_reps}}"></vaadin-combo-box>
                                 </div>
                                 <br>
-                                <vaadin-text-field
-                                    colspan="2"
-                                    label="Pull ups"
-                                    name="pull_ups"
-                                    required
-                                    error-message="This field is required"
-                                    value="{{athleteStats.pull_ups}}">
-                                    <span slot="suffix">reps</span>
-                                </vaadin-text-field>
+                                <div class="horizontal-fields">
+                                    <vaadin-text-field
+                                        colspan="2"
+                                        label="Pull ups"
+                                        name="pull_ups"
+                                        type="number"
+                                        pattern="[0-9]*"
+                                        maxlength="3"
+                                        prevent-invalid-input
+                                        required
+                                        error-message="This field is required"
+                                        value="{{athleteStats.pull_ups}}">
+                                        <span slot="suffix">reps</span>
+                                    </vaadin-text-field>
+                                </div>
                                 <vaadin-text-field
                                     colspan="2"
                                     label="40 Yard Dash"
                                     name="forty_yard_dash"
+                                    maxlength="4"
+                                    required
+                                    error-message="This field is required"
                                     value="{{athleteStats.forty_yard_dash}}">
                                 </vaadin-text-field>
                                 <vaadin-text-field
                                     colspan="2"
                                     label="3 Cone Drill"
                                     name="three_cone_drill"
+                                    maxlength="4"
+                                    required
+                                    error-message="This field is required"
                                     value="{{athleteStats.three_cone_drill}}">
                                 </vaadin-text-field>
                                 <vaadin-text-field
                                     colspan="2"
                                     label="20 Yard Shuttle"
                                     name="twenty_yard_shuttle"
+                                    maxlength="4"
+                                    required
+                                    error-message="This field is required"
                                     value="{{athleteStats.twenty_yard_shuttle}}">
                                 </vaadin-text-field>
                                 <vaadin-text-field
                                     colspan="2"
                                     label="60 Yard Shuttle"
                                     name="sixty_yard_shuttle"
+                                    maxlength="4"
+                                    required
+                                    error-message="This field is required"
                                     value="{{athleteStats.sixty_yard_shuttle}}">
                                 </vaadin-text-field>
-                                <vaadin-text-field
-                                    colspan="2"
-                                    label="Vertical Jump"
-                                    name="vertical_jump"
-                                    value="{{athleteStats.vertical_jump}}">
-                                </vaadin-text-field>
-                                <vaadin-text-field
-                                    colspan="2"
-                                    label="Broad Jump"
-                                    name="broad_jump"
-                                    value="{{athleteStats.broad_jump}}">
-                                </vaadin-text-field>
+                                <div class="horizontal-fields-vert">
+                                    <vaadin-text-field
+                                        colspan="2"
+                                        label="Vertical Jump"
+                                        name="vertical_jump"
+                                        maxlength="5"
+                                        value="{{athleteStats.vertical_jump}}">
+                                        <div slot="suffix">in</div>
+                                    </vaadin-text-field>
+                                  </div>
+                                <div class="horizontal-fields" colspan="2">
+                                  <div class="horizontal-fields-broad-jump">
+                                    <vaadin-text-field
+                                        colspan="2"
+                                        label="Broad Jump"
+                                        name="broad_jump"
+                                        required
+                                        error-message="This field is required"
+                                        value="{{athleteStats.broad_jump}}">
+                                        <div slot="suffix">ft</div>
+                                    </vaadin-text-field>
+                                  </div>
+                                </div>
                             </vaadin-form-layout>
                         </form>
                     </iron-form>
                 </div>
             </paper-dialog-scrollable>
-            <div class="buttons" hidden="[[editMaxes]]">
+            <div class="buttons" hidden="[[editMaxes]]" style="margin-top:0.5cm">
                 <paper-button class="cancel-button" dialog-dismiss>Close</paper-button>
                 <paper-button on-tap="_switchToEditView">Edit</paper-button>
             </div>
@@ -612,13 +756,48 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         opened: {
                             type: Boolean,
                             notify: true,
-                            value: false
+                            value: false,
                         },
                         editMaxes: {
                             type: Boolean,
                             notify: true,
                             value: false
-                        }
+                        },
+                        broad_jump_in: {
+                          type: String,
+                          notify:true,
+                          value:'0'
+                        },
+                        broad_jump_ft: {
+                          type: String,
+                          notify:true,
+                          value:'0'
+                        },
+                        maxBenchPress: {
+                          type: Number,
+                          notify: true,
+                          value: "0"
+                        },
+                        maxBackSquat: {
+                          type: Number,
+                          notify: true,
+                          value: "0"
+                        },
+                        maxFrontSquat:  {
+                          type: Number,
+                          notify: true,
+                          value: "0"
+                        },
+                        maxDeadLift: {
+                          type: Number,
+                          notify: true,
+                          value: "0"
+                        },
+                        maxClean:  {
+                          type: Number,
+                          notify: true,
+                          value: "0"
+                        },
                     };
                 }
 
@@ -640,6 +819,63 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /**
+                 * Based on form data calculates the max reps
+                */
+                _calculateMaxReps() {
+                    if (this.$.maxesForm.validate()) {
+                        var athleteStats = this.athleteStats
+
+                        // inital variable values
+                        var e = parseFloat(0.0333);
+                        var clean = 0;
+                        var deadLift = 0;
+                        var backSquat = 0;
+                        var frontSquat = 0;
+                        var benchPress = 0;
+
+                        // the raw result =  to this, if ('weight and reps' have a value) [equation] else result = '0'
+                        clean = (athleteStats.hang_power_clean_value && athleteStats.hang_power_clean_reps) ? (parseInt(athleteStats.hang_power_clean_value) * parseInt(athleteStats.hang_power_clean_reps) * e) + parseInt(athleteStats.hang_power_clean_value) : "0";
+                        this.maxClean = this._roundMaxResult(clean);
+
+                        deadLift = (athleteStats.deadlift_value && athleteStats.deadlift_reps) ? (parseInt(athleteStats.deadlift_value) * parseInt(athleteStats.deadlift_reps) * e) + parseInt(athleteStats.deadlift_value) : "0";
+                        this.maxDeadLift = this._roundMaxResult(deadLift);
+
+                        backSquat = (athleteStats.back_squat_value && athleteStats.back_squat_reps) ? (parseInt(athleteStats.back_squat_value) * parseInt(athleteStats.back_squat_reps) * e) + parseInt(athleteStats.back_squat_value) : "0";
+                        this.maxBackSquat = this._roundMaxResult(backSquat);
+
+                        frontSquat = (athleteStats.front_squat_value && athleteStats.front_squat_reps) ? (parseInt(athleteStats.front_squat_value) * parseInt(athleteStats.front_squat_reps) * e) + parseInt(athleteStats.front_squat_value) : "0";
+                        this.maxFrontSquat = this._roundMaxResult(frontSquat);
+
+                        benchPress = (athleteStats.bench_press_value && athleteStats.bench_press_reps) ? (parseInt(athleteStats.bench_press_value) * parseInt(athleteStats.bench_press_reps) * e) + parseInt(athleteStats.bench_press_value) : "0";
+                        this.maxBenchPress = this._roundMaxResult(benchPress);
+
+                    }
+                }
+
+                // Weight Rounding Method to round the equation results; (e.g. floats/decimals) since weight's are (5,10,15...)
+                _roundMaxResult(rawEquationResult) {
+                    // Display before: rawEquationResult
+                    //alert(this.rawEquationResult);
+                    var rawEquationResult = parseInt(Math.round(rawEquationResult));
+
+                    // Display after: rawEquationResult
+                    alert(rawEquationResult);
+
+                    // find last digit of number
+                    var lastDigit = rawEquationResult.toString().split('').pop();
+
+                    // Testing: Display last digit
+                    //alert(lastDigit);
+
+                    // Conditional statement to determine the rounding method
+                    if (lastDigit >= 5) {
+                        return ((rawEquationResult - lastDigit) + 5);
+                    } else if (lastDigit <= 4) {
+                        return (rawEquationResult - lastDigit);
+                    }
+                }
+
+                /**
                  * Switch edit view
                 */
                 _switchToEditView() {
@@ -653,6 +889,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _saveNewMaxes() {
                     if (this.$.maxesForm.validate()) {
+                        this._calculateMaxReps()
                         this._appProgressBar.hidden = false;
                         var newMaxes = this.$.maxesForm.serializeForm();
                         this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + this.athleteInfo.uid + '/stats', newMaxes)
