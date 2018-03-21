@@ -153,9 +153,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         <h3>Sign in</h3>
                         <iron-form id="loginForm">
                             <form>
-                                <vaadin-text-field id="emailInput" label="Username" placeholder="username@domain.com" name="email" type="email" required
-                                    error-message="Enter your username"></vaadin-text-field>
-                                <vaadin-password-field id="passwordInput" label="Password" placeholder="Enter your password" name="password" type="password"
+                                <vaadin-text-field
+                                    id="emailInput"
+                                    label="Username"
+                                    placeholder="email"
+                                    name="email"
+                                    type="email"
+                                    type="password"
+                                    required error-message="Enter your email">
+                                    </vaadin-text-field>
+                                <vaadin-password-field
+                                    id="passwordInput"
+                                    label="Password"
+                                    placeholder="password"
+                                    name="password"
+                                    type="password"
                                     required error-message="Enter your password"></vaadin-password-field>
                             </form>
                         </iron-form>
