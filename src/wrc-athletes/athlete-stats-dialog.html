@@ -806,7 +806,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
                     // Max Estimation Calculations
-                    //this._calculateMaxReps
+                    this._calculateMaxReps();
 
                     // App Progress Bar
                     this._appProgressBar = document.getElementById('appProgressBar');
@@ -827,8 +827,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * Based on form data calculates the max reps
                 */
                 _calculateMaxReps() {
-                    if (this.$.maxesForm.validate()) {
-                        var athleteStats = this.athleteStats
+
+                        var stats = this.athleteStats;
+                        console.log(stats);
+                        if (this.athleteStats) {
+                          console.log(this.athleteStats)
+                        }
+
 
                         // inital variable values
                         var e = parseFloat(0.0333);
@@ -841,48 +846,48 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         // the raw result =  to this, if ('weight and reps' have a value) [equation] else result = '0'
 
                         // Power & Hang Clean
-                        if (athleteStats.hang_power_clean_reps === '1') {
-                          this.maxClean = athleteStats.hang_power_clean_value;
+                        if (stats.hang_power_clean_reps === '1') {
+                          this.maxClean = stats.hang_power_clean_value;
                           //alert("Calculating Clean Max Successful 🎉")
                         } else {
                           //alert("Error 💩")
-                          clean = (athleteStats.hang_power_clean_value && athleteStats.hang_power_clean_reps) ? (parseInt(athleteStats.hang_power_clean_value) * parseInt(athleteStats.hang_power_clean_reps) * e) + parseInt(athleteStats.hang_power_clean_value) : "0";
+                          clean = (stats.hang_power_clean_value && stats.hang_power_clean_reps) ? (parseInt(stats.hang_power_clean_value) * parseInt(stats.hang_power_clean_reps) * e) + parseInt(athleteStats.hang_power_clean_value) : "0";
                           this.maxClean = this._roundMaxResult(clean);
                         }
 
                         // Deadlift
-                        if (athleteStats.deadlift_reps === '1') {
-                          this.deadlift = athleteStats.deadlift_value;
+                        if (stats.deadlift_reps === '1') {
+                          this.deadlift = stats.deadlift_value;
                         } else {
-                          deadLift = (athleteStats.deadlift_value && athleteStats.deadlift_reps) ? (parseInt(athleteStats.deadlift_value) * parseInt(athleteStats.deadlift_reps) * e) + parseInt(athleteStats.deadlift_value) : "0";
+                          deadLift = (stats.deadlift_value && stats.deadlift_reps) ? (parseInt(stats.deadlift_value) * parseInt(stats.deadlift_reps) * e) + parseInt(stats.deadlift_value) : "0";
                           this.maxDeadLift = this._roundMaxResult(deadLift);
                         }
 
                         // Backsquat
-                        if (athleteStats.back_squat_reps === '1') {
-                          this.maxBackSquat = athleteStats.back_squat_value;
+                        if (stats.back_squat_reps === '1') {
+                          this.maxBackSquat = stats.back_squat_value;
                         } else {
-                          backSquat = (athleteStats.back_squat_value && athleteStats.back_squat_reps) ? (parseInt(athleteStats.back_squat_value) * parseInt(athleteStats.back_squat_reps) * e) + parseInt(athleteStats.back_squat_value) : "0";
+                          backSquat = (stats.back_squat_value && stats.back_squat_reps) ? (parseInt(stats.back_squat_value) * parseInt(stats.back_squat_reps) * e) + parseInt(stats.back_squat_value) : "0";
                           this.maxBackSquat = this._roundMaxResult(backSquat);
                         }
 
                         // Frontsquat
-                        if (athleteStats.front_squat_reps === '1') {
-                          this.maxFrontSquat = athleteStats.front_squat_value;
+                        if (stats.front_squat_reps === '1') {
+                          this.maxFrontSquat = stats.front_squat_value;
                         } else {
-                          frontSquat = (athleteStats.front_squat_value && athleteStats.front_squat_reps) ? (parseInt(athleteStats.front_squat_value) * parseInt(athleteStats.front_squat_reps) * e) + parseInt(athleteStats.front_squat_value) : "0";
+                          frontSquat = (stats.front_squat_value && stats.front_squat_reps) ? (parseInt(stats.front_squat_value) * parseInt(stats.front_squat_reps) * e) + parseInt(stats.front_squat_value) : "0";
                           this.maxFrontSquat = this._roundMaxResult(frontSquat);
                         }
 
                         // Benchpress
-                        if (athleteStats.bench_press_reps === '1') {
-                          this.maxBenchPress = athleteStats.bench_press_value
+                        if (stats.bench_press_reps === '1') {
+                          this.maxBenchPress = stats.bench_press_value
 
                         } else {
-                          benchPress = (athleteStats.bench_press_value && athleteStats.bench_press_reps) ? (parseInt(athleteStats.bench_press_value) * parseInt(athleteStats.bench_press_reps) * e) + parseInt(athleteStats.bench_press_value) : "0";
+                          benchPress = (stats.bench_press_value && stats.bench_press_reps) ? (parseInt(stats.bench_press_value) * parseInt(stats.bench_press_reps) * e) + parseInt(stats.bench_press_value) : "0";
                           this.maxBenchPress = this._roundMaxResult(benchPress);
                         }
-                    }
+
                 }
 
                 // Weight Rounding Method to round the equation results; (e.g. floats/decimals) since weight's are (5,10,15...)
