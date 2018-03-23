@@ -801,12 +801,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     };
                 }
 
+                static get observers() {
+                    return [
+                        '_athleteStatsChanged(athleteStats)'
+                    ];
+                }
+
                 ready() {
                     super.ready();
 
 
                     // Max Estimation Calculations
-                    this._calculateMaxReps();
+                    // this._calculateMaxReps();
 
                     // App Progress Bar
                     this._appProgressBar = document.getElementById('appProgressBar');
@@ -819,7 +825,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.$.backSquatCombo.items =
                     this.$.frontSquatCombo.items =
                     this.$.deadliftCombo.items = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
-                    this.$.hangPowerCleanCombo.items = ['1']
+                    this.$.hangPowerCleanCombo.items = ['1'];
+                }
+
+                _athleteStatsChanged(stats) {
+                    this._calculateMaxReps();
                 }
 
 
