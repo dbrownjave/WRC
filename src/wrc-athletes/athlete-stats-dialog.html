@@ -40,6 +40,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../app-icons.html">
 <link rel="import" href="../fa-icons.html">
 
+
 <dom-module id="athlete-stats-dialog">
     <template>
         <style>
@@ -690,7 +691,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     colspan="2"
                                     label="60 Yard Shuttle"
                                     name="sixty_yard_shuttle"
-                                    maxlength="4"
+                                    maxlength="5"
                                     required
                                     error-message="This field is required"
                                     value="{{athleteStats.sixty_yard_shuttle}}">
@@ -700,7 +701,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                         colspan="2"
                                         label="Vertical Jump"
                                         name="vertical_jump"
-                                        maxlength="5"
+                                        maxlength="2"
                                         value="{{athleteStats.vertical_jump}}">
                                         <div slot="suffix">in</div>
                                     </vaadin-text-field>
@@ -803,6 +804,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 ready() {
                     super.ready();
 
+
+                    // Max Estimation Calculations
+                    //this._calculateMaxReps
+
                     // App Progress Bar
                     this._appProgressBar = document.getElementById('appProgressBar');
 
@@ -813,9 +818,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.$.benchPressCombo.items =
                     this.$.backSquatCombo.items =
                     this.$.frontSquatCombo.items =
-                    this.$.deadliftCombo.items =
-                    this.$.hangPowerCleanCombo.items = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+                    this.$.deadliftCombo.items = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+                    this.$.hangPowerCleanCombo.items = ['1']
                 }
+
 
                 /**
                  * Based on form data calculates the max reps
@@ -833,21 +839,49 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         var benchPress = 0;
 
                         // the raw result =  to this, if ('weight and reps' have a value) [equation] else result = '0'
-                        clean = (athleteStats.hang_power_clean_value && athleteStats.hang_power_clean_reps) ? (parseInt(athleteStats.hang_power_clean_value) * parseInt(athleteStats.hang_power_clean_reps) * e) + parseInt(athleteStats.hang_power_clean_value) : "0";
-                        this.maxClean = this._roundMaxResult(clean);
 
-                        deadLift = (athleteStats.deadlift_value && athleteStats.deadlift_reps) ? (parseInt(athleteStats.deadlift_value) * parseInt(athleteStats.deadlift_reps) * e) + parseInt(athleteStats.deadlift_value) : "0";
-                        this.maxDeadLift = this._roundMaxResult(deadLift);
+                        // Power & Hang Clean
+                        if (athleteStats.hang_power_clean_reps === '1') {
+                          this.maxClean = athleteStats.hang_power_clean_value;
+                          //alert("Calculating Clean Max Successful 🎉")
+                        } else {
+                          //alert("Error 💩")
+                          clean = (athleteStats.hang_power_clean_value && athleteStats.hang_power_clean_reps) ? (parseInt(athleteStats.hang_power_clean_value) * parseInt(athleteStats.hang_power_clean_reps) * e) + parseInt(athleteStats.hang_power_clean_value) : "0";
+                          this.maxClean = this._roundMaxResult(clean);
+                        }
 
-                        backSquat = (athleteStats.back_squat_value && athleteStats.back_squat_reps) ? (parseInt(athleteStats.back_squat_value) * parseInt(athleteStats.back_squat_reps) * e) + parseInt(athleteStats.back_squat_value) : "0";
-                        this.maxBackSquat = this._roundMaxResult(backSquat);
+                        // Deadlift
+                        if (athleteStats.deadlift_reps === '1') {
+                          this.deadlift = athleteStats.deadlift_value;
+                        } else {
+                          deadLift = (athleteStats.deadlift_value && athleteStats.deadlift_reps) ? (parseInt(athleteStats.deadlift_value) * parseInt(athleteStats.deadlift_reps) * e) + parseInt(athleteStats.deadlift_value) : "0";
+                          this.maxDeadLift = this._roundMaxResult(deadLift);
+                        }
 
-                        frontSquat = (athleteStats.front_squat_value && athleteStats.front_squat_reps) ? (parseInt(athleteStats.front_squat_value) * parseInt(athleteStats.front_squat_reps) * e) + parseInt(athleteStats.front_squat_value) : "0";
-                        this.maxFrontSquat = this._roundMaxResult(frontSquat);
+                        // Backsquat
+                        if (athleteStats.back_squat_reps === '1') {
+                          this.maxBackSquat = athleteStats.back_squat_value;
+                        } else {
+                          backSquat = (athleteStats.back_squat_value && athleteStats.back_squat_reps) ? (parseInt(athleteStats.back_squat_value) * parseInt(athleteStats.back_squat_reps) * e) + parseInt(athleteStats.back_squat_value) : "0";
+                          this.maxBackSquat = this._roundMaxResult(backSquat);
+                        }
 
-                        benchPress = (athleteStats.bench_press_value && athleteStats.bench_press_reps) ? (parseInt(athleteStats.bench_press_value) * parseInt(athleteStats.bench_press_reps) * e) + parseInt(athleteStats.bench_press_value) : "0";
-                        this.maxBenchPress = this._roundMaxResult(benchPress);
+                        // Frontsquat
+                        if (athleteStats.front_squat_reps === '1') {
+                          this.maxFrontSquat = athleteStats.front_squat_value;
+                        } else {
+                          frontSquat = (athleteStats.front_squat_value && athleteStats.front_squat_reps) ? (parseInt(athleteStats.front_squat_value) * parseInt(athleteStats.front_squat_reps) * e) + parseInt(athleteStats.front_squat_value) : "0";
+                          this.maxFrontSquat = this._roundMaxResult(frontSquat);
+                        }
 
+                        // Benchpress
+                        if (athleteStats.bench_press_reps === '1') {
+                          this.maxBenchPress = athleteStats.bench_press_value
+
+                        } else {
+                          benchPress = (athleteStats.bench_press_value && athleteStats.bench_press_reps) ? (parseInt(athleteStats.bench_press_value) * parseInt(athleteStats.bench_press_reps) * e) + parseInt(athleteStats.bench_press_value) : "0";
+                          this.maxBenchPress = this._roundMaxResult(benchPress);
+                        }
                     }
                 }
 
@@ -858,7 +892,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     var rawEquationResult = parseInt(Math.round(rawEquationResult));
 
                     // Display after: rawEquationResult
-                    alert(rawEquationResult);
+                    //alert(rawEquationResult);
 
                     // find last digit of number
                     var lastDigit = rawEquationResult.toString().split('').pop();
