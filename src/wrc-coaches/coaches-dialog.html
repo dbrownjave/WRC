@@ -24,6 +24,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <!-- Polymerfire Elements -->
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-storage-ref.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-storage-multiupload.html">
 
@@ -153,6 +154,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
         </style>
 
+        <!-- Firebase Authentication Config | This is used to create new user accounts -->
+        <firebase-auth
+            id="newAccountsAuth"
+            app-name="new_accounts_app"></firebase-auth>
+
         <!-- Firebase Document Configuration -->
         <firebase-document
             id="firebaseDocument"
@@ -190,14 +196,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <form>
                         <vaadin-form-layout>
                             <vaadin-text-field
-                                hidden="[[_hideActions(action)]]"
-                                label="User Unique ID"
-                                placeholder="Firebase Unique ID"
-                                name="uid"
-                                required
-                                error-message="Enter the uid of the coach"
-                                value="{{coachInfo.uid}}"></vaadin-text-field>
-                            <vaadin-text-field
+                                colspan="2"
                                 hidden="[[_hideActions(action)]]"
                                 label="Username"
                                 placeholder="coach@domain.com"
@@ -312,6 +311,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _serializeForm() {
                     if (this.$.coachForm.validate()) {
                         this._appProgressBar.hidden = false;
+
+                        // If we are creating new coach we have to create the account
+                        if (this.action === 'add') {
+                            // Creates the account for the new user using his email and a default passord
+                            this.$.newAccountsAuth.createUserWithEmailAndPassword(this.coachInfo.email, 'wrc2018')
+                            .then(function(user) {
+                                // Extracts the new user information to get Unique ID
+                                var new_user_id = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyClKG12T8HwMcQZqMaArTrKVTeWwrAJxCE:new_accounts_app'));
+                                // Sets the new coach UI extracted from new user info
+                                this.coachInfo.uid = new_user_id.uid;
+                                // Signs out the new user since it is automatically signed in
+                                this.$.newAccountsAuth.signOut();
+                            }.bind(this))
+                            .catch(function(err) {
+                                this._appToast.text = 'An error has ocurred trying to create the new coach. Is possible that the email is already in use.';
+                                this._appToast.open();
+                            }.bind(this));
+                        }
 
 						if (this.$.profilePicture.files[0]) {
 
