@@ -34,549 +34,567 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
 <dom-module id="wrc-workouts">
-    <template>
-        <style>
-
-            /* General Style */
-            main {
-                padding: 1em 0em 2em 0em;
-                height: calc(100vh - (64px + 4em));
-                min-height: calc(100vh - (64px + 4em));
-                overflow: auto;
-            }
-
-            /* Fab */
-            paper-fab {
-              position: fixed;
-              bottom: 2em;
-              right: 2em;
-              --paper-fab-background: var(--azul-primary);
-              --paper-fab-keyboard-focus-background: var(--azul-primary);
-            }
-
-            .default-transiton {
-              transition: all .3s;
-              -webkit-transition: all .3s;
-              -moz-transition: all .3s;
-              -o-transition: all .3s;
-              -ms-transition: all .3s;
-            }
-
-            .center-layout {
-              display: block;
-              margin: 1cm auto 0 auto;
-            }
-
-            .vertical-containter {
-              @apply --layout-vertical;
-              @apply --layout-center;
-            }
-
-            .horizontal-layout {
-              @apply --layout-horizontal;
-            }
-
-            /* Empty Workout State */
-            .motivation-msg {
-              margin: 2cm 0cm 0cm 0cm;
-            }
-
-            .motivation-title {
-              color: #AFB7C1;
-              font-size: 4.5em;
-              font-weight: 500;
-              text-align: center;
-              opacity: .70;
-            }
-
-            .biceps-icon {
-              width: 175px;
-              height: 175px;
-              display: block;
-              margin: 1cm auto 0 auto;
-            }
-
-            .add-workout-title {
-              color: #788290;
-              font-size: 2em;
-              display: block;
-              margin-bottom: .7em;
-              right: 3em;
-              bottom: 4em;
-              position: absolute;
-            }
-
-            .arrow-curve {
-              width: 85px;
-              height: 85px;
-              display: block;
-              right: 7.5em;
-
-              bottom: 3em;
-              position: absolute;
-            }
-
-            /* PDF Workout */
-
-            .menu-icon {
-              margin-left: 10em;
-              color: #86919f;
-            }
-
-            .menu-icon:hover {
-              color: #636E7A;
-            }
-
-            .clock-icon {
-              margin: .2em 0 0 2em;
-              width: 40px;
-              height: 40px;
-            }
-
-            .season-title {
-                font-size: 1.6em;
-                font-weight: 400;
-                letter-spacing: 0.7px;
-                text-align: center;
-                color: #86919f;
-            }
-
-            .paper-form-container {
-              @apply --layout-horizontal;
-              @apply --layout-wrap;
-            }
-
-            .paper-form {
-              width: 200px;
-              height: 290px;
-              margin: 30px;
-              border-radius: 6.6px;
-              background-color: #ffffff;
-              box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.15);
-              cursor: pointer;
-
-              transition: all .5s;
-              -webkit-transition: all .5s;
-              -moz-transition: all .5s;
-              -o-transition: all .5s;
-              -ms-transition: all .5s;
-            }
-
-            .paper-form:hover {
-              box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
-
-              transition: all .5s;
-              -webkit-transition: all .5s;
-              -moz-transition: all .5s;
-              -o-transition: all .5s;
-              -ms-transition: all .5s;
-            }
-
-             .paper-form > .pdf-wrapper {
-              @apply --layout-vertical;
-              @apply --layout-center;
-            }
-
-            .content-wrapper {
-              display: block;
-              margin: .5cm auto 0 auto;
-            }
-
-            .program-title {
-              font-size: 1em;
-              font-weight: 400;
-              letter-spacing: 0.5px;
-              text-align: center;
-              color: #86919f;
-            }
-
-            .week-title {
-              padding-top: 2px;
-              font-size: .7em;
-              font-weight: 300;
-              letter-spacing: 0.4px;
-              text-align: center;
-              color: white;
-            }
-
-            .tag {
-              width: 70px;
-              height: 21px;
-              border-radius: 3px;
-              background-color: #86919f;
-              text-align: center;
-              margin-top: 10px;
-
-              @apply --layout-vertical;
-              @apply --layout-center-center;
-            }
-
-            .tag-active {
-              width: 70px;
-              height: 21px;
-              border-radius: 3px;
-              background-color: #45BE72;;
-              text-align: center;
-              margin-top: 10px;
-
-              @apply --layout-vertical;
-              @apply --layout-center-center;
-            }
-
-            .start-button {
-              width: 110px;
-              height: 30px;
-              border-radius: 3.1px;
-              background-color: #5ac381;
-              box-shadow: 0 4px 15px 0 rgba(90, 195, 129, 0.54);
-              margin: 60px 0 0 0;
-
-              @apply --layout-vertical;
-              @apply --layout-center-center;
-            }
-
-            .start-button > .title {
-              font-size: 1em;
-              font-weight: 400;
-              letter-spacing: 0.4px;
-              text-align: center;
-              color: white;
-            }
-
-            [hidden] {
-                display: none;
-            }
-
-            [flex] {
-                @apply --layout-flex;
-            }
-            /* Responsive */
-            @media screen and (max-width: 600px) {
-
-                paper-fab {
-                    bottom: 1em;
-                    right: 1em;
-                }
-
-                /* Empty Workout State */
-                .motivation-msg {
-                  margin: 2cm 0cm 0cm 0cm;
-                }
-
-                .motivation-title {
-                  font-size: 2em;
-                }
-
-                .biceps-icon {
-                  width: 140px;
-                  height: 140px;
-                }
-
-                .add-workout-title {
-                  font-size: 2em;
-                  margin-bottom: -.5em;
-                  right: 1em;
-                  bottom: 4em;
-                }
-
-                .arrow-curve {
-                  width: 60px;
-                  height: 60px;
-                  right: 5.2em;
-
-                  bottom: 2.5em;
-                  position: absolute;
-                }
-            }
-
-            /* Responsive Small Devices */
-            @media screen and (max-width: 425px) {
-              /* General Style */
-              main {
-                  padding: 1em;
-                  height: calc(100vh - (64px + 2em));
-                  min-height: calc(100vh - (64px + 2em));
-
-                  @apply --layout-vertical;
-                  @apply --layout-center;
-              }
-                paper-fab {
-                    bottom: 1em;
-                    right: 1em;
-                }
-
-                /* Empty Workout State */
-                .motivation-msg {
-                  margin: 2cm 0cm 0cm 0cm;
-                }
-
-                .motivation-title {
-                  font-size: 1.5em;
-                }
-
-                .biceps-icon {
-                  width: 100px;
-                  height: 100px;
-                }
-
-                .add-workout-title {
-                  font-size: 1.4em;
-                  margin-bottom: -.5em;
-                  right: 2em;
-                  bottom: 4.5em;
-                }
-
-                .arrow-curve {
-                  width: 40px;
-                  height: 40px;
-                  right: 5.2em;
-
-                  bottom: 2.5em;
-                  position: absolute;
-                }
-            }
-
-        </style>
-
-            <!-- Firebase Document Configuration -->
-            <firebase-document
-                id="firebaseDocument"
-                app-name="wrc_software"></firebase-document>
-
-        <main>
-
-            <!-- Loading Indicator  -->
-            <template is="dom-if" if="[[!userReady]]">
-                <paper-spinner active></paper-spinner>
-            </template>
-
-            <!--  Empty Workout Message  -->
-            <!--  Testing Hidden Functionalitie: true -->
-            <div hidden$=[[isHidden()]]>
-                <div class="motivation-msg center-layout">
-
-                    <!-- motivatonal message  -->
-                    <div class="motivation-title">
-                      Lets Get Started!
-                    </div>
-
-                    <!--  biceps-icon -->
-                    <div class="biceps-icon">
-                        <img class="biceps-icon" src="../images/app-images/flexed-biceps.png" alt="Biceps Icon">
-                    </div>
-                </div>
-
-                <!--  add workout helper -->
-                  <div class="add-workout-title">Add Workout</div>
-                    <div>
-                      <img class="arrow-curve" src="../images/app-images/arrow-curve.png" alt="arrow">
-                    </div>
-            </div>
-
-
-            <div>
-              <!-- Paper Fab to add new workout -->
-              <paper-fab src="../icons/fab-icon/plus-icon@3x.png" on-tap="_openToAdd"></paper-fab>
-            </div>
-
-
-
-            <!--  Display Coach Workout Collection -->
-            <div hidden$="[[!_isCoach(userRole)]]" class="paper-form-container vertical-containter">
-                  <template is="dom-repeat" items="{{workoutPDF}}">
-                      <div class="vertical-containter">
-                            <div class="paper-form">
-                                <div class="pdf-wrapper">
-                                  <paper-menu-button
-                                      horizontal-align="right"
-                                      vertical-align="top"
-                                      horizontal-offset="10"
-                                      vertical-offset="0">
-                                      <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-                                      <paper-listbox noink slot="dropdown-content">
-                                          <paper-item id$="[[]]" on-tap="" onclick="alert('Compute PDF Calculations')">Start</paper-item>
-                                          <paper-item id$="[[]]" on-tap="" onclick="alert('Open PDF')">Preview</paper-item>
-                                          <paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Download</paper-item>
-                                      </paper-listbox>
-                                  </paper-menu-button>
-
-                                  <div class="content-wrapper">
-                                    <div class="season-title">
-                                      OFF-SEASON
-                                    </div>
-                                      <div class="program-title">10 Week Program</div>
-                                    </div>
-                                    <div class="tag">
-                                      <div class="week-title">Week [[item.week]]</div>
-                                    </div>
-  <!--
+	<template>
+		<style>
+			/* General Style */
+
+			main {
+				padding: 1em 0em 2em 0em;
+				height: calc(100vh - (64px + 4em));
+				min-height: calc(100vh - (64px + 4em));
+				overflow: auto;
+			}
+
+			/* Fab */
+
+			paper-fab {
+				position: fixed;
+				bottom: 2em;
+				right: 2em;
+				--paper-fab-background: var(--azul-primary);
+				--paper-fab-keyboard-focus-background: var(--azul-primary);
+			}
+
+			.default-transiton {
+				transition: all .3s;
+				-webkit-transition: all .3s;
+				-moz-transition: all .3s;
+				-o-transition: all .3s;
+				-ms-transition: all .3s;
+			}
+
+			.center-layout {
+				display: block;
+				margin: 1cm auto 0 auto;
+			}
+
+			.vertical-containter {
+				@apply --layout-vertical;
+				@apply --layout-center;
+			}
+
+			.horizontal-layout {
+				@apply --layout-horizontal;
+			}
+
+			/* Empty Workout State */
+
+			.motivation-msg {
+				margin: 2cm 0cm 0cm 0cm;
+			}
+
+			.motivation-title {
+				color: #AFB7C1;
+				font-size: 4.5em;
+				font-weight: 500;
+				text-align: center;
+				opacity: .70;
+			}
+
+			.biceps-icon {
+				width: 175px;
+				height: 175px;
+				display: block;
+				margin: 1cm auto 0 auto;
+			}
+
+			.add-workout-title {
+				color: #788290;
+				font-size: 2em;
+				display: block;
+				margin-bottom: .7em;
+				right: 3em;
+				bottom: 4em;
+				position: absolute;
+			}
+
+			.arrow-curve {
+				width: 85px;
+				height: 85px;
+				display: block;
+				right: 7.5em;
+
+				bottom: 3em;
+				position: absolute;
+			}
+
+			/* PDF Workout */
+
+			.menu-icon {
+				margin-left: 10em;
+				color: #86919f;
+			}
+
+			.menu-icon:hover {
+				color: #636E7A;
+			}
+
+			.clock-icon {
+				margin: .2em 0 0 2em;
+				width: 40px;
+				height: 40px;
+			}
+
+			.season-title {
+				font-size: 1.6em;
+				font-weight: 400;
+				letter-spacing: 0.7px;
+				text-align: center;
+				color: #86919f;
+			}
+
+			.paper-form-container {
+				@apply --layout-horizontal;
+				@apply --layout-wrap;
+			}
+
+			.paper-form {
+				width: 200px;
+				height: 290px;
+				margin: 30px;
+				border-radius: 6.6px;
+				background-color: #ffffff;
+				box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+				cursor: pointer;
+
+				transition: all .5s;
+				-webkit-transition: all .5s;
+				-moz-transition: all .5s;
+				-o-transition: all .5s;
+				-ms-transition: all .5s;
+			}
+
+			.paper-form:hover {
+				box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
+
+				transition: all .5s;
+				-webkit-transition: all .5s;
+				-moz-transition: all .5s;
+				-o-transition: all .5s;
+				-ms-transition: all .5s;
+			}
+
+			.paper-form>.pdf-wrapper {
+				@apply --layout-vertical;
+				@apply --layout-center;
+			}
+
+			.content-wrapper {
+				display: block;
+				margin: .5cm auto 0 auto;
+			}
+
+			.program-title {
+				font-size: 1em;
+				font-weight: 400;
+				letter-spacing: 0.5px;
+				text-align: center;
+				color: #86919f;
+			}
+
+			.week-title {
+				padding-top: 2px;
+				font-size: .7em;
+				font-weight: 300;
+				letter-spacing: 0.4px;
+				text-align: center;
+				color: white;
+			}
+
+			.tag {
+				width: 70px;
+				height: 21px;
+				border-radius: 3px;
+				background-color: #86919f;
+				text-align: center;
+				margin-top: 10px;
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			.tag-active {
+				width: 70px;
+				height: 21px;
+				border-radius: 3px;
+				background-color: #45BE72;
+				;
+				text-align: center;
+				margin-top: 10px;
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			.start-button {
+				width: 110px;
+				height: 30px;
+				border-radius: 3.1px;
+				background-color: #5ac381;
+				box-shadow: 0 4px 15px 0 rgba(90, 195, 129, 0.54);
+				margin: 60px 0 0 0;
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			.start-button>.title {
+				font-size: 1em;
+				font-weight: 400;
+				letter-spacing: 0.4px;
+				text-align: center;
+				color: white;
+			}
+
+			[hidden] {
+				display: none;
+			}
+
+			[flex] {
+				@apply --layout-flex;
+			}
+
+			/* Responsive */
+
+			@media screen and (max-width: 600px) {
+
+				paper-fab {
+					bottom: 1em;
+					right: 1em;
+				}
+
+				/* Empty Workout State */
+				.motivation-msg {
+					margin: 2cm 0cm 0cm 0cm;
+				}
+
+				.motivation-title {
+					font-size: 2em;
+				}
+
+				.biceps-icon {
+					width: 140px;
+					height: 140px;
+				}
+
+				.add-workout-title {
+					font-size: 2em;
+					margin-bottom: -.5em;
+					right: 1em;
+					bottom: 4em;
+				}
+
+				.arrow-curve {
+					width: 60px;
+					height: 60px;
+					right: 5.2em;
+
+					bottom: 2.5em;
+					position: absolute;
+				}
+			}
+
+			/* Responsive Small Devices */
+
+			@media screen and (max-width: 425px) {
+				/* General Style */
+				main {
+					padding: 1em;
+					height: calc(100vh - (64px + 2em));
+					min-height: calc(100vh - (64px + 2em));
+
+					@apply --layout-vertical;
+					@apply --layout-center;
+				}
+				paper-fab {
+					bottom: 1em;
+					right: 1em;
+				}
+
+				/* Empty Workout State */
+				.motivation-msg {
+					margin: 2cm 0cm 0cm 0cm;
+				}
+
+				.motivation-title {
+					font-size: 1.5em;
+				}
+
+				.biceps-icon {
+					width: 100px;
+					height: 100px;
+				}
+
+				.add-workout-title {
+					font-size: 1.4em;
+					margin-bottom: -.5em;
+					right: 2em;
+					bottom: 4.5em;
+				}
+
+				.arrow-curve {
+					width: 40px;
+					height: 40px;
+					right: 5.2em;
+
+					bottom: 2.5em;
+					position: absolute;
+				}
+			}
+		</style>
+
+		<!-- Firebase Document Configuration -->
+		<firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
+
+		<main>
+
+			<!-- Loading Indicator  -->
+			<template is="dom-if" if="[[!userReady]]">
+				<paper-spinner active></paper-spinner>
+			</template>
+
+			<!--  Empty Workout Message  -->
+			<!--  Testing Hidden Functionalitie: true -->
+			<div hidden$=[[isHidden()]]>
+				<div class="motivation-msg center-layout">
+
+					<!-- motivatonal message  -->
+					<div class="motivation-title">
+						Lets Get Started!
+					</div>
+
+					<!--  biceps-icon -->
+					<div class="biceps-icon">
+						<img class="biceps-icon" src="../images/app-images/flexed-biceps.png" alt="Biceps Icon">
+					</div>
+				</div>
+
+				<!--  add workout helper -->
+				<div class="add-workout-title">Add Workout</div>
+				<div>
+					<img class="arrow-curve" src="../images/app-images/arrow-curve.png" alt="arrow">
+				</div>
+			</div>
+
+
+			<div>
+				<!-- Paper Fab to add new workout -->
+				<paper-fab src="../icons/fab-icon/plus-icon@3x.png" on-tap="_openToAdd"></paper-fab>
+			</div>
+
+
+
+			<!--  Display Coach Workout Collection -->
+			<div hidden$="[[!_isCoach(userRole)]]" class="paper-form-container vertical-containter">
+				<template is="dom-repeat" items="{{workoutPDF}}">
+					<div class="vertical-containter">
+						<div class="paper-form">
+							<div class="pdf-wrapper">
+								<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0">
+									<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+									<paper-listbox noink slot="dropdown-content">
+										<paper-item id$="[[]]" on-tap="" onclick="alert('Compute PDF Calculations')">Start</paper-item>
+										<paper-item id$="[[]]" on-tap="" onclick="alert('Open PDF')">Preview</paper-item>
+										<paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Download</paper-item>
+									</paper-listbox>
+								</paper-menu-button>
+
+								<div class="content-wrapper">
+									<div class="season-title">
+										OFF-SEASON
+									</div>
+									<div class="program-title">10 Week Program</div>
+								</div>
+								<div class="tag">
+									<div class="week-title">Week [[item.week]]</div>
+								</div>
+								<!--
                                     <div class="tag-active">
                                       <div class="week-title">Active</div>
                                     </div>
   -->
-                                </div>
-                            </div>
-                      </div>
-                  </template>
-            </div>
+							</div>
+						</div>
+					</div>
+				</template>
+			</div>
 
 
-            <!-- Display Athlete Workout -->
-            <div hidden$="[[!_isAthlete(userRole)]]" class="paper-form-container vertical-containter" >
-                            <div class="paper-form" onclick="alert('Open PDF')">
-                                <div class="pdf-wrapper">
-                                  <div class="content-wrapper" style="margin-top: 1.5cm">
-                                    <div class="season-title">
-                                      OFF-SEASON
-                                    </div>
-                                      <div class="program-title">10 Week Program</div>
-                                    </div>
-                                    <div class="tag">
-                                      <div class="week-title">Week 1</div>
-                                    </div>
-                                </div>
-                            </div>
-                      </div>
-            </div>
+			<!-- Display Athlete Workout -->
+			<div hidden$="[[!_isAthlete(userRole)]]" class="paper-form-container vertical-containter">
+				<div class="paper-form" onclick="alert('Open PDF')">
+					<div class="pdf-wrapper">
+						<div class="content-wrapper" style="margin-top: 1.5cm">
+							<div class="season-title">
+								OFF-SEASON
+							</div>
+							<div class="program-title">10 Week Program</div>
+						</div>
+						<div class="tag">
+							<div class="week-title">Week 1</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
 
-        </main>
+		</main>
 
 
-    </template>
+	</template>
 
-    <script>
-        (function() {
-            'use strict';
+	<script>
+		(function () {
+			'use strict';
 
-            class WrcWorkouts extends Polymer.Element {
-                /**
-                 * Element definition
-                */
-                static get is() { return 'wrc-workouts'; }
+			class WrcWorkouts extends Polymer.Element {
+				/**
+				 * Element definition
+				 */
+				static get is() {
+					return 'wrc-workouts';
+				}
 
-                /**
-                 * Element properties
-                */
-                static get properties() {
-                    return {
-                      userInfo: Object,
-                      userRole: String,
-                      userReady: {
-                          type: Boolean,
-                          notify: true,
-                          value: false
-                      },
-                      user: {
-                          type: Object,
-                          notify: true,
-                          observer: '_userChanged'
-                      },
-                      workoutPDF: {
-                          type: Array,
-                          value() {
-                            return [
-                              {week: 1},
-                              {week: 2},
-                              {week: 3},
-                              {week: 4},
-                              {week: 5},
-                              {week: 6},
-                              {week: 7},
-                              {week: 8},
-                              {week: 9},
-                            ];
-                          },
-                      active: {
-                              type: Boolean,
-                              notify: true,
-                              value: false
-                            }
-                        }
+				/**
+				 * Element properties
+				 */
+				static get properties() {
+					return {
+						userInfo: Object,
+						userRole: String,
+						userReady: {
+							type: Boolean,
+							notify: true,
+							value: false
+						},
+						user: {
+							type: Object,
+							notify: true,
+							observer: '_userChanged'
+						},
+						workoutPDF: {
+							type: Array,
+							value() {
+								return [{
+										week: 1
+									},
+									{
+										week: 2
+									},
+									{
+										week: 3
+									},
+									{
+										week: 4
+									},
+									{
+										week: 5
+									},
+									{
+										week: 6
+									},
+									{
+										week: 7
+									},
+									{
+										week: 8
+									},
+									{
+										week: 9
+									},
+								];
+							},
+							active: {
+								type: Boolean,
+								notify: true,
+								value: false
+							}
+						}
 
-                    };
-                }
+					};
+				}
 
-                ready() {
-                    super.ready();
+				ready() {
+					super.ready();
 
-                    // Add Workout Dialog
-                    this._addWorkoutDialog = document.getElementById('addWorkoutDialog');
+					// Add Workout Dialog
+					this._addWorkoutDialog = document.getElementById('addWorkoutDialog');
 
-                    // App Progress Bar
-                    this._appProgressBar = document.getElementById('appProgressBar');
+					// App Progress Bar
+					this._appProgressBar = document.getElementById('appProgressBar');
 
-                    // App Toast
-                    this._appToast = document.getElementById('appToast');
-                }
+					// App Toast
+					this._appToast = document.getElementById('appToast');
+				}
 
-                /**
-                  * Verifies the role of the user
-                  * Displays workout collection
-                  *
-                  * @param {String} role of the user
-                  * @return {Boolean} true if role is coach, otherwise false
-                  */
-                 _isCoach(role) {
-                     return (role === 'coach') ? true : false;
-                 }
+				/**
+				 * Verifies the role of the user
+				 * Displays workout collection
+				 *
+				 * @param {String} role of the user
+				 * @return {Boolean} true if role is coach, otherwise false
+				 */
+				_isCoach(role) {
+					return (role === 'coach') ? true : false;
+				}
 
-                 /**
-                   * Verifies the role of the user
-                   * Displays athlete workout
-                   *
-                   * @param {String} role of the user
-                   * @return {Boolean} true if role is athlete, otherwise false
-                   */
-                  _isAthlete(role) {
-                      return (role === 'athlete') ? true : false;
-                  }
-                /**
-                 * Observers the user for changes
-                 *
-                 * @param {Object} user information
-                 * @return {void}
-                */
-                _userChanged(user) {
-                    if (user) {
-                        this.userReady = false;
-                        this.$.firebaseDocument.getStoredValue('/users')
-                        .then(function (snapshot) {
-                            this.userReady = true;
-                        }.bind(this));
-                    }
-                }
+				/**
+				 * Verifies the role of the user
+				 * Displays athlete workout
+				 *
+				 * @param {String} role of the user
+				 * @return {Boolean} true if role is athlete, otherwise false
+				 */
+				_isAthlete(role) {
+					return (role === 'athlete') ? true : false;
+				}
+				/**
+				 * Observers the user for changes
+				 *
+				 * @param {Object} user information
+				 * @return {void}
+				 */
+				_userChanged(user) {
+					if (user) {
+						this.userReady = false;
+						this.$.firebaseDocument.getStoredValue('/users')
+							.then(function (snapshot) {
+								this.userReady = true;
+							}.bind(this));
+					}
+				}
 
-                /**
-                 * Determines if the coaches workout palette is empty to show the message
-                 *
-                 * @param {Number} length of the workoutsheet array
-                 * @param {Boolean} ready status of the user
-                 * @return {Boolean}
-                */
-                _computeVisibleEmptyMessage(length, ready) {
-                    if (!ready) return false;
-                    return (length > 0) ? false : true;
-                }
+				/**
+				 * Determines if the coaches workout palette is empty to show the message
+				 *
+				 * @param {Number} length of the workoutsheet array
+				 * @param {Boolean} ready status of the user
+				 * @return {Boolean}
+				 */
+				_computeVisibleEmptyMessage(length, ready) {
+					if (!ready) return false;
+					return (length > 0) ? false : true;
+				}
 
-                /**
-                 * Testing hidden functionality
-                 *
-                 * @param {Boolean} return true to hide content
-                 * @return {Boolean}
-                */
-                isHidden() {
-                  return true
-                }
+				/**
+				 * Testing hidden functionality
+				 *
+				 * @param {Boolean} return true to hide content
+				 * @return {Boolean}
+				 */
+				isHidden() {
+					return true
+				}
 
-                /**
-                 * Opens workout dialog to add
-                */
-                _openToAdd() {
-                    this._addWorkoutDialog.opened = true;
-                }
+				/**
+				 * Opens workout dialog to add
+				 */
+				_openToAdd() {
+					this._addWorkoutDialog.opened = true;
+				}
 
-            }
-            window.customElements.define(WrcWorkouts.is, WrcWorkouts);
-        })();
-    </script>
+			}
+			window.customElements.define(WrcWorkouts.is, WrcWorkouts);
+		})();
+	</script>
 </dom-module>
