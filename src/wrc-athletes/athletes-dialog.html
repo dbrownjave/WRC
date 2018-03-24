@@ -26,6 +26,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <!-- Polymerfire Elements -->
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-storage-ref.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-storage-multiupload.html">
 
@@ -182,6 +183,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             id="firebaseDocument"
             app-name="wrc_software"></firebase-document>
 
+        <!-- Firebase Authentication Config | This is used to create new user accounts -->
+        <firebase-auth
+            id="newAccountsAuth"
+            app-name="new_accounts_app"></firebase-auth>
+
         <!-- Firebase Storage Configuration -->
         <firebase-storage-ref
             id="storageRef"
@@ -213,15 +219,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 <iron-form id="athleteForm">
                     <form>
                         <vaadin-form-layout>
-                            <vaadin-text-field
-                                hidden="[[_hideActions(action)]]"
-                                colspan="2"
-                                label="User Unique ID"
-                                placeholder="Firebase Unique ID"
-                                name="uid"
-                                required
-                                error-message="Enter the uid of the athlete"
-                                value="{{athleteInfo.uid}}"></vaadin-text-field>
                             <vaadin-text-field
                                 label="First Name"
                                 name="first"
@@ -429,6 +426,23 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _serializeForm() {
                     if (this.$.athleteForm.validate()) {
                         this._appProgressBar.hidden = false;
+
+                        if (this.action === 'add') {
+                            // Creates the account for the new user using his email and a default passord
+                            this.$.newAccountsAuth.createUserWithEmailAndPassword(this.athleteInfo.email, 'wrc2018')
+                            .then(function(user) {
+                                // Extracts the new user information to get Unique ID
+                                var new_user_id = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyClKG12T8HwMcQZqMaArTrKVTeWwrAJxCE:new_accounts_app'));
+                                // Sets the new coach UI extracted from new user info
+                                this.athleteInfo.uid = new_user_id.uid;
+                                // Signs out the new user since it is automatically signed in
+                                this.$.newAccountsAuth.signOut();
+                            }.bind(this))
+                            .catch(function(err) {
+                                this._appToast.text = 'An error has ocurred trying to create the new coach. Is possible that the email is already in use.';
+                                this._appToast.open();
+                            }.bind(this));
+                        }
 
 						if (this.$.profilePicture.files[0]) {
                             if (this.action === 'edit' && this.athleteInfo.profile_pic_name !== 'default_profile.png') {
