@@ -13,6 +13,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-search/paper-search-bar.html">
+<link rel="import" href="../../bower_components/paper-search/paper-search-panel.html">
 
 <!-- Iron Elements -->
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
@@ -198,7 +200,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             div.cards-wrapper paper-card {
                 width: 100%;
                 margin-bottom: 24px;
-                
+
                 @apply --azul-shadow--grid-elevation-1;
             }
 
@@ -318,18 +320,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <div class="coaches-wrapper" hidden$="[[!_computeVisibleData(coachesData.length, userReady)]]">
                 <!-- Search filter -->
                 <div class="search-wrapper">
+                    <!-- Polyfilter configuration -->
                     <poly-filter-diacritic
                         filter="[[coachFilter]]"
                         array-to-filter="[[coachesData]]"
                         filtered-array="{{coachesDataFiltered}}"
                         filter-by="first, last"></poly-filter-diacritic>
-
-                    <vaadin-text-field
-                        placeholder="Search"
-                        type="search"
-                        value="{{coachFilter}}">
-                        <iron-icon slot="prefix" icon="app-icons:search"></iron-icon>
-                    </vaadin-text-field>
+                    <!-- Search bar -->
+                    <paper-search-bar query="{{coachFilter}}" hideFilterButton=true> </paper-search-bar>
                 </div>
 
                 <!-- Grid View -->
@@ -574,7 +572,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
                         }.bind(this));
-                        
+
 						this._coachesDialog.opened = false;
 						this._appToast.text = 'The coach has been saved successfully.';
 						this._appToast.open();
@@ -585,7 +583,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
                         }.bind(this));
-                        
+
 						this._coachesDialog.opened = false;
 						this._appToast.text = 'The coach has been modified successfully.';
 						this._appToast.open();
@@ -598,7 +596,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _openCoachProfileDialog(e) {
                     this.coachId = e.target.getAttribute('id');
-                    
+
                     this.$.firebaseDocument.getStoredValue(this.user.uid + '/coaches/' + this.coachId)
                     .then(function(snapshot) {
                         this._coachProfileDialog.user = this.user;
