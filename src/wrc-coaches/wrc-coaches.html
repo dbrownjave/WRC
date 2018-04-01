@@ -25,14 +25,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
 
+
 <!-- Vaadin Elements -->
 <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-selection-column.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+<!-- <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-checkbox.html">-->
+<!--<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-selection-column.html"> -->
 
 <!-- Polyfilter -->
 <link rel="import" href="../../bower_components/poly-filter/poly-filter-diacritic.html">
@@ -170,24 +172,62 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             div.grid-wrapper vaadin-grid {
-                width: inherit;
-                height: auto;
-                box-shadow: 0 2px 10px 0 rgba(0, 0, 20, 0.25);
+              height: auto;
+              @apply --azul-shadow--grid-elevation-1;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon {
+				        width: 17px;
+                height: 17px;
+			      }
+
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
+      				@apply --layout-horizontal;
+      				@apply --layout-wrap;
+      				@apply --layout-end-justified;
+    			  }
+
+      			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
+      				color: #737D8A;
+      			}
+
+      			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
+      				color: #425164;
+      			}
+
+            /* Vaadin Grid  */
+            div.grid-wrapper vaadin-grid {
+              height: auto;
+              @apply --azul-shadow--grid-elevation-1;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon {
+              width: 15px;
+              height: 15px;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon[active='Yes'] {
+              color: #35BF2E;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon[active='No'] {
+              color: var(--paper-grey-500);
             }
 
             div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
-				@apply --layout-horizontal;
-				@apply --layout-wrap;
-				@apply --layout-end-justified;
-			}
+              @apply --layout-horizontal;
+              @apply --layout-wrap;
+              @apply --layout-end-justified;
+            }
 
-			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
-				color: #737D8A;
-			}
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
+              color: #737D8A;
+            }
 
-			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
-				color: #425164;
-			}
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
+              color: #425164;
+            }
 
             /* Cards Wrapper */
             div.cards-wrapper {
@@ -334,7 +374,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 <template is="dom-if" if="[[!responsiveScreen]]">
                     <div class="grid-wrapper">
                         <vaadin-grid aria-label="Coaches Grid" items="[[coachesDataFiltered]]">
-                            <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
 
                             <!-- First Name -->
                             <vaadin-grid-column>
@@ -352,13 +391,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 <template>[[item.last]]</template>
                             </vaadin-grid-column>
 
-                            <!-- Username ** this can't be edited ** -->
+                            <!-- Username ** this can't be edited **
                             <vaadin-grid-column>
                                 <template class="header">
                                     <vaadin-grid-sorter path="last">Email</vaadin-grid-sorter>
                                 </template>
                                 <template>[[item.email]]</template>
                             </vaadin-grid-column>
+                            -->
 
                             <!-- Team -->
                             <vaadin-grid-column>
@@ -367,6 +407,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 </template>
                                 <template>[[item.team]]</template>
                             </vaadin-grid-column>
+
+                            <!-- Sport: Default (Football) -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="sport">Sport</vaadin-grid-sorter>
+                                </template>
+                                <template>Football</template>
+                            </vaadin-grid-column>
+
 
                             <!-- Phone -->
                             <vaadin-grid-column>

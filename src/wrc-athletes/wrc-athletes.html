@@ -26,12 +26,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Vaadin Elements -->
 <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
-<!-- <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-checkbox.html">-->
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
-<!--<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-selection-column.html"> -->
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+<!-- <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-checkbox.html">-->
+<!--<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-selection-column.html"> -->
 
 <!-- Paper Elements -->
 <link rel="import" href="../../bower_components/paper-search/paper-search-bar.html">
@@ -166,7 +166,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             div.grid-wrapper vaadin-grid {
                 width: inherit;
                 height: auto;
-                box-shadow: 0 2px 10px 0 rgba(0, 0, 20, 0.25);
+                @apply --azul-shadow--grid-elevation-1;
             }
 
             div.grid-wrapper vaadin-grid iron-icon {
@@ -197,35 +197,35 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       			}
 
             /* Vaadin Grid  */
-            div.athletes-wrapper vaadin-grid {
+            div.grid-wrapper vaadin-grid {
               height: auto;
               @apply --azul-shadow--grid-elevation-1;
             }
 
-            div.athletes-wrapper vaadin-grid iron-icon {
+            div.grid-wrapper vaadin-grid iron-icon {
               width: 15px;
               height: 15px;
             }
 
-            div.athletes-wrapper vaadin-grid iron-icon[active='Yes'] {
+            div.grid-wrapper vaadin-grid iron-icon[active='Yes'] {
               color: #35BF2E;
             }
 
-            div.athletes-wrapper vaadin-grid iron-icon[active='No'] {
+            div.grid-wrapper vaadin-grid iron-icon[active='No'] {
               color: var(--paper-grey-500);
             }
 
-            div.athletes-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
               @apply --layout-horizontal;
               @apply --layout-wrap;
               @apply --layout-end-justified;
             }
 
-            div.athletes-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
               color: #737D8A;
             }
 
-            div.athletes-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
               color: #425164;
             }
 
