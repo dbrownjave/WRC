@@ -8,6 +8,10 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../vaadin-item/vaadin-item.html">
 
+<!-- Suji Elements -->
+<link rel="import" href="../../src/suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="../../src/suji/lib/colors/suji-color-palette.html">
+
 <dom-module id="vaadin-tab-default-theme">
   <template>
     <style>
@@ -15,10 +19,15 @@ This program is available under Apache License Version 2.0, available at https:/
         display: flex;
         align-items: center;
         outline: none;
-        opacity: 0.7;
+        color: var(--azul-third-text);
         padding: 0.3em 1em;
+        font-weight: 500;
         box-sizing: border-box;
         flex-shrink: 0;
+        cursor: default;
+        margin-right: 20px;
+        letter-spacing: 1.4px;
+        opacity: .3;
       }
 
       :host([hidden]) {
@@ -32,11 +41,24 @@ This program is available under Apache License Version 2.0, available at https:/
 
       :host([selected]) {
         opacity: 1;
+        font-weight: 400;
+        color: white;
+        width: 125px;
+        height: 31px;
+        border-radius: 3px;
+        background-color: var(--azul-tab-focused);
+        box-shadow: 0 3.5px 12.5px 0 #d4d9dd;
+
       }
 
+
       :host([focus-ring]) {
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: var(--azul-tab-focused);
       }
+
+      :host([hover]) {
+      }
+
     </style>
   </template>
 </dom-module>
