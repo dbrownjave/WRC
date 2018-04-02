@@ -88,12 +88,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
           .paper-dialog-title {
             margin: -10px 0px 10px 0px !important;
             @apply --layout-horizontal
-
           }
 
           paper-button.edit-button {
             color: var(--azul-third-button-text);
             font-weight: normal;
+          }
+
+          div.edit-button-container {
+            height: 10px;
+            margin-top:20px;
           }
 
     			paper-dialog .buttons paper-button.delete-button {
@@ -336,7 +340,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       <h2>[[athleteInfo.first]] [[athleteInfo.last]]</h2>
                       <span flex> </span>
                       <!--  Edit Button  -->
-                      <div style="height: 10px; margin-top:5px;">
+                      <div class="edit-button-container">
                         <paper-button class="edit-button" on-tap="_toggleEditView">Edit</paper-button>
                       </div>
                     </div>

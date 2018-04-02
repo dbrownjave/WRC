@@ -41,139 +41,155 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <style>
             /* Dialog */
             paper-dialog {
-				border-radius: 5px;
-                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
-			}
+				      border-radius: 5px;
+              box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+			      }
 
             paper-dialog h2 {
-				color: var(--azul-text-title);
-				font-size: 1.6em;
-			}
+        			color: var(--azul-text-title);
+        			font-size: 1.6em;
+      			}
 
-			paper-dialog div.buttons {
-				@apply --layout-horizontal;
-				@apply --layout-end-justified;
-			}
-
-            paper-dialog div.buttons[hidden] {
-                display: none;
+            paper-dialog .paper-dialog-title {
+              margin: -5px 0px 10px 0px !important;
+              @apply --layout-horizontal
             }
 
-			paper-dialog .buttons paper-button {
-				color: var(--azul-primary);
-                font-weight: 500;
-                margin: 0;
-			}
+      			paper-dialog div.buttons {
+              margin: 10px 0 0 0;
 
-			paper-dialog .buttons paper-button.cancel-button {
-				color: var(--paper-grey-700);
-                font-weight: normal;
-			}
+        			@apply --layout-horizontal;
+        			@apply --layout-end-justified;
+      			}
 
-			paper-dialog .buttons paper-button.delete-button {
-				color: var(--paper-red-400);
-                font-weight: normal;
-			}
+            paper-dialog div.buttons[hidden] {
+              display: none;
+            }
+
+            paper-dialog paper-button.save-button {
+              color: var(--azul-primary-button);
+              font-weight: normal;
+            }
+
+      			paper-dialog paper-button.edit-button {
+              color: var(--azul-primary-button);
+              font-weight: normal;
+      			}
+
+            div.edit-button-container {
+              height: 10px;
+              margin: 17px 0 0 0;
+            }
+
+      			paper-dialog .buttons paper-button.cancel-button {
+        			color: var(--paper-grey-700);
+              font-weight: normal;
+      			}
+
+      			paper-dialog .buttons paper-button.delete-button {
+      			  color: var(--paper-red-400);
+              font-weight: normal;
+      			}
 
             /* Image Wrapper */
             div.image-wrapper {
-				width: 100%;
+      				width: 100%;
 
-				@apply --layout-vertical;
-                @apply --layout-center;
-			}
+    				  @apply --layout-vertical;
+              @apply --layout-center;
+      			}
 
             div.image-wrapper[hidden] {
-                display: none;
+              display: none;
             }
 
-			div.image-wrapper iron-image {
-				margin-bottom: 12px;
-				background-color: #F3F4F5;
-				overflow: hidden;
-				border-radius: 10em;
-				width: 150px;
-				height: 150px;
-                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+      			div.image-wrapper iron-image {
+        			margin-bottom: 12px;
+        			background-color: #F3F4F5;
+        			overflow: hidden;
+        			border-radius: 10em;
+        			width: 150px;
+        			height: 150px;
+              box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
 
-				@apply --layout-vertical;
-				@apply --layout-center-center;
-			}
+        			@apply --layout-vertical;
+        			@apply --layout-center-center;
+      			}
 
             /* Profile Pic Uploader */
-			[type='file'] {
-				display: none;
-			}
+      			[type='file'] {
+      				display: none;
+      			}
 
-			div.picture-wrapper {
-				width: 100%;
-                margin-bottom: 12px;
+      			div.picture-wrapper {
+        			width: 100%;
+              margin-bottom: 12px;
 
-				@apply --layout-vertical;
-				@apply --layout-center-center;
-			}
+        			@apply --layout-vertical;
+        		  @apply --layout-center-center;
+      			}
 
             div.picture-wrapper[hidden] {
-                display: none;
+              display: none;
             }
 
-			div.picture-wrapper label {
-				background-color: #F3F4F5;
-				overflow: hidden;
-				border-radius: 10em;
-				width: 150px;
-				height: 150px;
-                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+      			div.picture-wrapper label {
+      				background-color: #F3F4F5;
+      				overflow: hidden;
+      				border-radius: 10em;
+      				width: 150px;
+      				height: 150px;
+                      box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
 
-				@apply --layout-vertical;
-				@apply --layout-center-center;
-			}
+      				@apply --layout-vertical;
+      				@apply --layout-center-center;
+      			}
 
-			div.picture-wrapper label:hover {
-				background-color: var(--paper-grey-300);
-			}
+      			div.picture-wrapper label:hover {
+      				background-color: var(--paper-grey-300);
+      			}
 
-			label iron-image {
-				width: inherit;
-				height: inherit;
-				cursor: pointer;
-			}
+      			label iron-image {
+      				width: inherit;
+      				height: inherit;
+      				cursor: pointer;
+      			}
 
             /* Email Wrapper */
             div.email-wrapper {
-                width: 100%;
-                text-align: center;
+              width: 100%;
+              text-align: center;
             }
 
             div.email-wrapper p {
-                color: var(--azul-text-title);
-                font-size: 1.1em;
-                margin-top: 0;
-                font-weight: 400;
+              color: var(--azul-text-title);
+              font-size: 1.1em;
+              margin-top: 0;
+              font-weight: 400;
             }
 
             /* Info Wrapper */
             div.info-wrapper {
-                @apply --layout-vertical;
+              @apply --layout-vertical;
             }
 
             div.info-wrapper[hidden] {
-                display: none;
+              display: none;
             }
 
             div.info-wrapper p {
-                margin-bottom: 0;
-                font-size: 1.1em;
-                color: var(--azul-text-title);
+              margin-bottom: 0;
+              font-size: 1.1em;
+              color: var(--azul-text-title);
             }
 
             div.info-wrapper p strong {
-                margin-right: 3px;
+              margin-right: 3px;
             }
 
             /* Form Wrapper */
             div.form-wrapper {
-                width: 100%;
+              width: 100%;
             }
 
             /* To keep dialog larger with large screens */
@@ -209,7 +225,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             with-backdrop
             entry-animation="scale-up-animation"
             exit-animation="fade-out-animation">
-            <h2>[[coachInfo.first]] [[coachInfo.last]]</h2>
+
+            <!--  Modal Header  -->
+            <div class="paper-dialog-title">
+              <h2>[[coachInfo.first]] [[coachInfo.last]]</h2>
+              <span flex> </span>
+              <!--  Edit Button  -->
+              <div class="edit-button-container" hidden="[[editing]]">
+                <paper-button class="edit-button" on-tap="_toggleEditView">Edit</paper-button>
+              </div>
+            </div>
+
+
             <paper-dialog-scrollable>
                 <!-- Info image -->
                 <div class="image-wrapper" hidden="[[editing]]">
@@ -280,11 +307,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 <paper-button class="delete-button" on-tap="_openDeleteDialog">Delete</paper-button>
                 <span flex></span>
                 <paper-button class="cancel-button" dialog-dismiss on-tap="_resetCoachInfo">Close</paper-button>
-                <paper-button on-tap="_toggleEditView">Edit</paper-button>
             </div>
             <div class="buttons" hidden="[[!editing]]">
                 <paper-button class="cancel-button" on-tap="_toggleEditView">Cancel</paper-button>
-                <paper-button on-tap="_serializeCoachForm">Save</paper-button>
+                <paper-button class="save-button" on-tap="_serializeCoachForm">Save</paper-button>
             </div>
         </paper-dialog>
     </template>
@@ -443,7 +469,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             }
                             this.coachInfo = null;
                         }.bind(this));
-                        
+
                         this._appToast.text = 'The coach has been deleted.';
                         this._appToast.open();
                         this._deleteCoachDialog.opened = false;
