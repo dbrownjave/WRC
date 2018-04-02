@@ -48,6 +48,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="lazy-import" href="../wrc-library/wrc-library.html">
 <link rel="lazy-import" href="../wrc-athletes/wrc-athletes.html">
 <link rel="lazy-import" href="../wrc-workouts/wrc-workouts.html">
+<link rel="lazy-import" href="../wrc-workout-creator/wrc-workout-creator.html">
+
+
+
+
+
 
 <dom-module id="wrc-main">
     <template>
@@ -295,11 +301,19 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         <template is="dom-if" if="[[_isAdmin(userRole)]]">
                             <iron-selector class="drawer-list" selected="[[page]]" attr-for-selected="name" role="navigation">
                                 <a name="coaches" href="[[rootPath]]main/coaches">
-                                    <iron-icon icon="app-icons:person"></iron-icon>
+                                    <iron-icon icon="app-icons:people"></iron-icon>
                                     <span>Coaches</span>
                                 </a>
+                                <a name="programs" href="[[rootPath]]main/programs">
+                                    <iron-icon icon="app-icons:collections-bookmark"></iron-icon>
+                                    <span>Programs</span>
+                                </a>
+                                <a name="workout" href="[[rootPath]]main/workout">
+                                    <iron-icon icon="app-icons:library-add"></iron-icon>
+                                    <span>Workouts</span>
+                                </a>
                                 <a name="library" href="[[rootPath]]main/library">
-                                    <iron-icon icon="fa-icons:video"></iron-icon>
+                                    <iron-icon icon="app-icons:subscriptions"></iron-icon>
                                     <span>Library</span>
                                 </a>
                             </iron-selector>
@@ -309,15 +323,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         <template is="dom-if" if="[[_isCoach(userRole)]]">
                             <iron-selector class="drawer-list" selected="[[page]]" attr-for-selected="name" role="navigation">
                                 <a name="athletes" href="[[rootPath]]main/athletes">
-                                    <iron-icon icon="app-icons:person"></iron-icon>
+                                    <iron-icon icon="app-icons:people"></iron-icon>
                                     <span>Athletes</span>
                                 </a>
                                 <a name="workouts" href="[[rootPath]]main/workouts">
-                                    <iron-icon icon="app-icons:workout"></iron-icon>
+                                    <iron-icon icon="app-icons:description"></iron-icon>
                                     <span>Workouts</span>
                                 </a>
                                 <a name="library" href="[[rootPath]]main/library">
-                                    <iron-icon icon="fa-icons:video"></iron-icon>
+                                    <iron-icon icon="app-icons:subscriptions"></iron-icon>
                                     <span>Library</span>
                                 </a>
                             </iron-selector>
@@ -327,11 +341,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         <template is="dom-if" if="[[_isAthlete(userRole)]]">
                             <iron-selector class="drawer-list" selected="[[page]]" attr-for-selected="name" role="navigation">
                                 <a name="my-workouts" href="[[rootPath]]main/my-workouts">
-                                    <iron-icon icon="app-icons:workout"></iron-icon>
+                                    <iron-icon icon="app-icons:description"></iron-icon>
                                     <span>My Workout</span>
                                 </a>
                                 <a name="library" href="[[rootPath]]main/library">
-                                    <iron-icon icon="fa-icons:video"></iron-icon>
+                                    <iron-icon icon="app-icons:subscriptions"></iron-icon>
                                     <span>Library</span>
                                 </a>
                             </iron-selector>
@@ -354,6 +368,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <wrc-library name="library" user="[[user]]" library-data="[[libraryData]]" user-role="[[userRole]]"></wrc-library>
                             <wrc-athletes name="athletes" user="[[user]]" athletes-data="[[athletesData]]" user-info="[[userInfo]]"></wrc-athletes>
                             <wrc-workouts name="workouts" user="[[user]]" user-role="[[userRole]]"></wrc-workouts>
+                            <wrc-workout-creator name="workout" user="[[user]" user-role="[[userRole]]"></wrc-workout-creator>
                         </iron-pages>
                     </div>
                 </app-header>
@@ -475,6 +490,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             break;
                         case 'workouts':
                             this.mainTitle = 'Workouts';
+                            break;
+                        case 'workout':
+                            this.mainTitle = 'Workout';
                             break;
                         default:
                             this.mainTitle = 'WRC Software';

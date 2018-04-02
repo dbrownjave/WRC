@@ -495,9 +495,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 </template>
             </div>
 
-            <!-- Paper Fab to add new Team -->
+            <!-- Paper Fab to add new video -->
             <template is="dom-if" if="[[_isAdmin(userRole)]]">
-                <paper-fab icon="app-icons:add" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(libraryData.length, userReady)]]"></paper-fab>
+                <paper-fab src="../icons/fab-icon/plus-icon@2x.png" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(libraryData.length, userReady)]]"></paper-fab>
             </template>
         </main>
     </template>
