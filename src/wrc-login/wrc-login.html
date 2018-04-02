@@ -35,7 +35,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             main {
                 width: 100%;
                 min-width: 100%;
-                background-color: var(--azul-background);
+                background-color: var(--azul-primary);
 
                 @apply --layout-fullbleed;
                 @apply --layout-vertical;
@@ -44,7 +44,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             /* Header Style */
 
             .header-content {
-                padding: 2em 0;
+                padding: 5em 0;
 
                 @apply --layout-vertical;
                 @apply --layout-center-center;
@@ -105,9 +105,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 color: #fff;
                 height: 40px;
                 border-radius: 3px;
-                font-weight: lighter;
-                background-color: var(--azul-primary-button);
-                box-shadow: 0 1px 5.5px -1px rgba(104, 155, 255, 0.52);
+                font-weight: normal;
+                background-color: #29CC6D;
+                box-shadow: 0 4px 5.5px -1px rgb(41,204,109, 0.20)
             }
 
             /* Responsive */
@@ -143,9 +143,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <!-- Element UI -->
         <main>
             <header>
+
                 <div class="header-content">
-                    <iron-image preload fade sizing="contain" src="../../images/app-images/wrc.png"></iron-image>
+                    <!--  <iron-image preload fade sizing="contain" src="../../images/app-images/wrc.png"></iron-image>-->
                 </div>
+
             </header>
             <section>
                 <div class="section-content">
