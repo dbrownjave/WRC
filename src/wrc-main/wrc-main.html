@@ -26,6 +26,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Iron Elements -->
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
@@ -48,8 +49,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="lazy-import" href="../wrc-library/wrc-library.html">
 <link rel="lazy-import" href="../wrc-athletes/wrc-athletes.html">
 <link rel="lazy-import" href="../wrc-workouts/wrc-workouts.html">
-<link rel="lazy-import" href="../wrc-programs/wrc-programs.html">
-<link rel="lazy-import" href="../wrc-workout-creator/wrc-workout-creator.html">
+<!-- <link rel="lazy-import" href="../wrc-programs/wrc-programs.html"> -->
+<!-- <link rel="lazy-import" href="../wrc-workout-creator/wrc-workout-creator.html"> -->
 
 
 <dom-module id="wrc-main">
@@ -240,6 +241,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
         </style>
 
+        <!-- Iron Media to match Desktop Only -->
+        <iron-media-query query="(min-width: 1024px)" query-matches="{{desktopOnly}}"></iron-media-query>
+
         <!-- Routing configuration -->
         <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
         <app-route route="{{route}}" pattern="[[rootPath]]main/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
@@ -305,10 +309,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <iron-icon icon="app-icons:collections-bookmark"></iron-icon>
                                     <span>Programs</span>
                                 </a>
-                                <a name="workout" href="[[rootPath]]main/workout">
-                                    <iron-icon icon="app-icons:library-add"></iron-icon>
-                                    <span>Workouts</span>
-                                </a>
+                                <template restamp is="dom-if" if="[[desktopOnly]]">
+                                    <a name="workouts" href="[[rootPath]]main/workouts">
+                                        <iron-icon icon="app-icons:library-add"></iron-icon>
+                                        <span>Workouts</span>
+                                    </a>
+                                </template>
                                 <a name="library" href="[[rootPath]]main/library">
                                     <iron-icon icon="app-icons:subscriptions"></iron-icon>
                                     <span>Library</span>
@@ -365,7 +371,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <wrc-library name="library" user="[[user]]" library-data="[[libraryData]]" user-role="[[userRole]]"></wrc-library>
                             <wrc-athletes name="athletes" user="[[user]]" athletes-data="[[athletesData]]" user-info="[[userInfo]]"></wrc-athletes>
                             <wrc-workouts name="workouts" user="[[user]]" user-role="[[userRole]]"></wrc-workouts>
-                            <wrc-workout-creator name="workout" user="[[user]" user-role="[[userRole]]"></wrc-workout-creator>
+                            <!-- <wrc-workout-creator name="workout" user="[[user]" user-role="[[userRole]]"></wrc-workout-creator> -->
                         </iron-pages>
                     </div>
                 </app-header>
