@@ -50,7 +50,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="lazy-import" href="../wrc-athletes/wrc-athletes.html">
 <link rel="lazy-import" href="../wrc-workouts/wrc-workouts.html">
 <!-- <link rel="lazy-import" href="../wrc-programs/wrc-programs.html"> -->
-<!-- <link rel="lazy-import" href="../wrc-workout-creator/wrc-workout-creator.html"> -->
+<link rel="lazy-import" href="../wrc-workouts-creator/wrc-workouts-creator.html">
 
 
 <dom-module id="wrc-main">
@@ -310,7 +310,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <span>Programs</span>
                                 </a>
                                 <template restamp is="dom-if" if="[[desktopOnly]]">
-                                    <a name="workouts" href="[[rootPath]]main/workouts">
+                                    <a name="workouts-creator" href="[[rootPath]]main/workouts-creator">
                                         <iron-icon icon="app-icons:library-add"></iron-icon>
                                         <span>Workouts</span>
                                     </a>
@@ -371,7 +371,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <wrc-library name="library" user="[[user]]" library-data="[[libraryData]]" user-role="[[userRole]]"></wrc-library>
                             <wrc-athletes name="athletes" user="[[user]]" athletes-data="[[athletesData]]" user-info="[[userInfo]]"></wrc-athletes>
                             <wrc-workouts name="workouts" user="[[user]]" user-role="[[userRole]]"></wrc-workouts>
-                            <!-- <wrc-workout-creator name="workout" user="[[user]" user-role="[[userRole]]"></wrc-workout-creator> -->
+                            <wrc-workouts-creator name="workouts-creator"></wrc-workouts-creator>
                         </iron-pages>
                     </div>
                 </app-header>
