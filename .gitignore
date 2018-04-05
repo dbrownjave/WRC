@@ -1,5 +1,3 @@
 build/
 node_modules/
 .DS_Store
-src/wrc-athletes/athlete-stats-dialog.html
-*.html
