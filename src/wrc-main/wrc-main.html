@@ -49,7 +49,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="lazy-import" href="../wrc-library/wrc-library.html">
 <link rel="lazy-import" href="../wrc-athletes/wrc-athletes.html">
 <link rel="lazy-import" href="../wrc-workouts/wrc-workouts.html">
-<!-- <link rel="lazy-import" href="../wrc-programs/wrc-programs.html"> -->
+<link rel="lazy-import" href="../wrc-programs/wrc-programs.html">
 <link rel="lazy-import" href="../wrc-workouts-creator/wrc-workouts-creator.html">
 
 
@@ -57,7 +57,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
     <template>
         <style>
             /* General Style */
-
             .flex {
                 @apply --layout-flex;
             }
@@ -371,6 +370,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <wrc-library name="library" user="[[user]]" library-data="[[libraryData]]" user-role="[[userRole]]"></wrc-library>
                             <wrc-athletes name="athletes" user="[[user]]" athletes-data="[[athletesData]]" user-info="[[userInfo]]"></wrc-athletes>
                             <wrc-workouts name="workouts" user="[[user]]" user-role="[[userRole]]"></wrc-workouts>
+                            <wrc-programs name="programs"></wrc-programs>
                             <wrc-workouts-creator name="workouts-creator"></wrc-workouts-creator>
                         </iron-pages>
                     </div>

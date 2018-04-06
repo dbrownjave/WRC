@@ -10,17 +10,23 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 
 <!-- Iron Elements -->
-<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
-<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 
 <!-- Neon Elements -->
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../../bower_components/neon-animation/web-animations.html">
 
+<!-- Vaadin Elements -->
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+
 <!-- Icons -->
 <link rel="import" href="../fa-icons.html">
 
-<dom-module id="add-workout-dialog">
+<dom-module id="add-program-dialog">
     <template>
         <style>
         /* Dialog */
@@ -62,6 +68,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         margin: 0 0 0 0;
       }
 
+
       .dayCombo {
           width: 125px;
           margin-bottom: 10px;
@@ -69,10 +76,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
       .weekCombo {
           width: 175px;
-      }
-
-      .typeCombo {
-        width: 250px;
       }
 
       .info-icon {
@@ -99,7 +102,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       exit-animation="fade-out-animation">
 
       <!-- title + info icon-->
-      <h2>Select Program</h2>
+      <h2>Add Program</h2>
       <div>
           <!-- TODO: Implement Paper Tool-tip -->
           <img class="info-icon" src="../images/app-images/info-icon.svg" alt="info. button">
@@ -110,7 +113,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
           <iron-form id="addWorkoutForm">
               <form>
                   <vaadin-form-layout>
-                      <!-- Programs  -->
+                    <!-- Programs  -->
                       <vaadin-combo-box
                           id="programCombo"
                           label="Program"
@@ -118,23 +121,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           required
                           error-message="Select a program"
                           value=""></vaadin-combo-box>
-                      <!-- Program Type  -->
-                      <div class="">
-                          <vaadin-combo-box
-                            id="typeCombo"
-                            class="typeCombo"
-                            label="Type"
-                            name="type"
-                            required
-                            error-message="Select a program type"
-                            value=""></vaadin-combo-box>
-                      </div>
                       <!-- Program Duration  -->
                       <div>
                         <vaadin-combo-box
                             id="durationCombo"
                             class="weekCombo"
-                            label="Duration"
+                            label="Program Duration"
                             name="duration"
                             required
                             error-message="Select the duration"
@@ -158,7 +150,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       <!-- buttons  -->
       <div class="buttons">
           <paper-button dialog-dismiss class="cancel-button" on-tap="_resetForm" >Cancel</paper-button>
-          <paper-button class="save-button" on-tap="">Download</paper-button>
+          <paper-button class="save-button" on-tap="">Create</paper-button>
       </div>
   </paper-dialog>
 </template>
@@ -168,11 +160,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
     (function() {
         'use strict';
 
-        class AddWorkoutDialog extends Polymer.Element {
+        class AddProgramDialog extends Polymer.Element {
             /**
              * Element definition
             */
-            static get is() { return 'add-workout-dialog'; }
+            static get is() { return 'add-program-dialog'; }
 
             /**
              * Element properties
@@ -187,6 +179,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 };
             }
 
+
                 ready() {
                     super.ready()
 
@@ -196,7 +189,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                                   '10 Weeks', '11 Weeks', '12 Weeks']
 
                     this.$.dayCombo.items = ['2', '3', '4']
-                    this.$.typeCombo.items = ['Strength Phase', 'Power Phase', 'Correctional Phase'];
                 }
 
                 /**
@@ -212,7 +204,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
 
               }
-              window.customElements.define(AddWorkoutDialog.is, AddWorkoutDialog);
+              window.customElements.define(AddProgramDialog.is, AddProgramDialog);
           })();
       </script>
   </dom-module>

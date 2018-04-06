@@ -1,0 +1,88 @@
+<!-- Polymer -->
+<link rel="import" href="./../bower_components/polymer/polymer-element.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="./../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="./../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="./../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="./../bower_components/paper-button/paper-button.html">
+<link rel="import" href="./../bower_components/paper-card/paper-card.html">
+<link rel="import" href="./../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="./../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="./../bower_components/paper-item/paper-item.html">
+<link rel="import" href="./../bower_components/paper-icon-button/paper-icon-button.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="./../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="./../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="./../bower_components/iron-form/iron-form.html">
+<link rel="import" href="./../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="./../bower_components/iron-media-query/iron-media-query.html">
+
+<!-- Vaadin Elements -->
+<link rel="import" href="./../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
+<link rel="import" href="./../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="./../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="./../bower_components/vaadin-valo-theme/vaadin-text-field.html">
+<link rel="import" href="./../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="./../bower_components/vaadin-tabs/vaadin-tabs.html">
+
+<!-- Icons -->
+<link rel="import" href="./app-icons.html">
+<link rel="import" href="./fa-icons.html">
+
+<!-- Suji Elements -->
+<link rel="import" href="./suji/lib/themes/azul/azul-theme.html">
+<link rel="import" href="./suji/lib/colors/suji-color-palette.html">
+
+<!-- Neon Animated Pages -->
+<link rel="import" href="./../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="./../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="./../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="./../bower_components/neon-animation/neon-animations.html">
+
+
+<dom-module id="wrc-shared-styles">
+    <template>
+        <style>
+            :host {
+              display: block;
+            }
+
+            /* Fab */
+        		paper-fab {
+        				position: fixed;
+        				bottom: 2em;
+        				right: 2em;
+        				--paper-fab-background: var(--azul-primary);
+        				--paper-fab-keyboard-focus-background: var(--azul-primary);
+        			}
+
+              /* Responsive */
+        			@media screen and (max-width: 600px) {
+
+        				paper-fab {
+        					bottom: 1em;
+        					right: 1em;
+        				}
+              }
+
+              /* Responsive Small Devices */
+              @media screen and (max-width: 425px) {
+                /* General Style */
+                main {
+                  padding: 1em;
+                  height: calc(100vh - (64px + 2em));
+                  min-height: calc(100vh - (64px + 2em));
+
+                  @apply --layout-vertical;
+                  @apply --layout-center;
+                }
+                paper-fab {
+                  bottom: 1em;
+                  right: 1em;
+                }
+            }
+        </style>
+    </template>
+</dom-module>
