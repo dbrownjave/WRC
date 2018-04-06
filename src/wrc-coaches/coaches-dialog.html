@@ -131,24 +131,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 font-weight: 400;
             }
 
-      /* To keep dialog larger with large screens */
-			@media screen and (min-width: 600px) {
-				paper-dialog {
-					width: 610px;
-				}
-            }
+            /* To keep dialog larger with large screens */
+      			@media screen and (min-width: 600px) {
+      				paper-dialog {
+      					width: 610px;
+      				}
+                  }
 
-            @media screen and (max-width: 425px) {
-                div.picture-wrapper label {
-                    width: 135px;
-                    height: 135px;
-                    margin-bottom: 0;
-                }
-            }
+                  @media screen and (max-width: 425px) {
+                      div.picture-wrapper label {
+                          width: 135px;
+                          height: 135px;
+                          margin-bottom: 0;
+                      }
+                  }
 
-			[hidden] {
-				display: none;
-			}
+      			[hidden] {
+      				display: none;
+      			}
 
             [flex] {
                 @apply --layout-flex;
