@@ -80,17 +80,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     super.ready();
 
                     // Add Program Dialog
-                    this._addProgramDialog = document.getElementById('addWorkoutDialog');
+                    this._addProgramDialog = document.getElementById('addProgramDialog');
                 }
 
                 /**
         				 * Opens program dialog to add
         				 */
                 _openToAdd(){
-                  alert(this._addProgramDialog.open);
-                  this._addProgramDialog.open = true;
-
-                  alert(this._addProgramDialog.open);
+                  this._addProgramDialog.opened = true;
                 }
             }
             window.customElements.define(WrcPrograms.is, WrcPrograms);

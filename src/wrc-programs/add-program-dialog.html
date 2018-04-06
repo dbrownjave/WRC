@@ -42,13 +42,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
       /* Paper dialog buttons */
       paper-dialog div.buttons {
+          margin: .25cm 0 0 0;
           @apply --layout-horizontal;
-          @apply --layout-end-justified;
       }
 
       paper-dialog .buttons paper-button.cancel-button {
           color: var(--paper-grey-700);
           font-weight: normal;
+          margin-right: 2.75cm;
       }
 
       paper-dialog .buttons paper-button.save-button {
@@ -76,6 +77,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
       .weekCombo {
           width: 175px;
+      }
+
+      .typeCombo {
+        width: 250px;
       }
 
       .info-icon {
@@ -113,7 +118,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
           <iron-form id="addWorkoutForm">
               <form>
                   <vaadin-form-layout>
-                    <!-- Programs  -->
+                      <!-- Programs  -->
                       <vaadin-combo-box
                           id="programCombo"
                           label="Program"
@@ -121,6 +126,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           required
                           error-message="Select a program"
                           value=""></vaadin-combo-box>
+                      <!-- Program Type  -->
+                      <div class="">
+                          <vaadin-combo-box
+                              id="typeCombo"
+                              class="typeCombo"
+                              label="Type"
+                              name="type"
+                              required
+                              error-message="Select a program type"
+                              value=""></vaadin-combo-box>
+                          </div>
                       <!-- Program Duration  -->
                       <div>
                         <vaadin-combo-box
@@ -143,6 +159,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             error-message="Select number of days"
                             value=""></vaadin-combo-box>
                       </div>
+
               </form>
           </iron-form>
       </paper-dialog-scrollable>
@@ -189,6 +206,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                                   '10 Weeks', '11 Weeks', '12 Weeks']
 
                     this.$.dayCombo.items = ['2', '3', '4']
+                    this.$.typeCombo.items = ['Strength Phase', 'Power Phase', 'Correctional Phase'];
                 }
 
                 /**

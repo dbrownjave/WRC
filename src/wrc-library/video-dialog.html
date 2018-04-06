@@ -38,39 +38,41 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <style>
             /* Dialog */
             paper-dialog {
-				border-radius: 5px;
+				      border-radius: 5px;
                 box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
-			}
+			       }
 
             paper-dialog h2 {
-				color: var(--azul-text-title);
-				font-size: 1.6em;
-			}
+      				color: var(--azul-text-title);
+      				font-size: 1.6em;
+      			}
 
-			paper-dialog div p {
-				font-weight: lighter;
-				line-height: 1em;
-			}
+      			paper-dialog div p {
+      				font-weight: lighter;
+      				line-height: 1em;
+      			}
 
-			paper-dialog div.buttons {
-				@apply --layout-horizontal;
-				@apply --layout-end-justified;
-			}
+      			paper-dialog div.buttons {
+              margin-top: .5cm;
+      				@apply --layout-horizontal;
+      				@apply --layout-end-justified;
+      			}
 
-			paper-dialog .buttons paper-button {
-				color: var(--azul-primary);
-                font-weight: 500;
-			}
+      			paper-dialog .buttons paper-button.save-button {
+      				color: var(--azul-primary-button-text);
+              font-weight: normal;
+      			}
 
-			paper-dialog .buttons paper-button.cancel-button {
-				color: var(--paper-grey-700);
-                font-weight: normal;
-			}
+      			paper-dialog .buttons paper-button.cancel-button {
+      				color: var(--paper-grey-700);
+              font-weight: normal;
+              margin-right: 4.25cm;
+      			}
 
-			paper-dialog .buttons paper-button.delete-button {
-				color: var(--paper-red-400);
-                font-weight: normal;
-			}
+      			paper-dialog .buttons paper-button.delete-button {
+      				color: var(--paper-red-400);
+              font-weight: normal;
+      			}
 
             div.image-wrapper {
                 margin-bottom: 12px;
@@ -96,15 +98,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             /* To keep dialog larger with large screens */
-			@media screen and (min-width: 400px) {
-				paper-dialog {
-					width: 410px;
-				}
-			}
+      			@media screen and (min-width: 400px) {
+      				paper-dialog {
+      					width: 410px;
+      				}
+      			}
 
-			[hidden] {
-				display: none;
-			}
+      			[hidden] {
+      				display: none;
+      			}
 
             [flex] {
                 @apply --layout-flex;
@@ -164,7 +166,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             </paper-dialog-scrollable>
             <div class="buttons">
                 <paper-button dialog-dismiss class="cancel-button" on-tap="_resetForm">Cancel</paper-button>
-                <paper-button on-tap="_serializeData">Save</paper-button>
+                <paper-button class="save-button" on-tap="_serializeData">Save</paper-button>
             </div>
         </paper-dialog>
     </template>
