@@ -71,6 +71,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       			}
 
       			paper-dialog div.buttons {
+                margin-top:0.5cm;
+                
       				  @apply --layout-horizontal;
       				  @apply --layout-end-justified;
       			}
@@ -205,6 +207,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
           div.stat-wrapper .equal-container {
               margin-right: 50px;
+          }
+
+          [flex] {
+            @apply --layout-flex;
           }
 
       /* To keep dialog larger with large screens */
@@ -724,12 +730,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     </iron-form>
                 </div>
             </paper-dialog-scrollable>
-            <div class="buttons" hidden="[[editMaxes]]" style="margin-top:0.5cm">
+            <div class="buttons" hidden="[[editMaxes]]">
                 <paper-button class="cancel-button" dialog-dismiss>Close</paper-button>
+                <span flex></span>
                 <paper-button on-tap="_switchToEditView">Edit</paper-button>
             </div>
             <div class="buttons" hidden="[[!editMaxes]]">
                 <paper-button class="cancel-button" on-tap="_switchToEditView">Back</paper-button>
+                <span flex></span>
                 <paper-button on-tap="_saveNewMaxes">Save</paper-button>
             </div>
         </paper-dialog>

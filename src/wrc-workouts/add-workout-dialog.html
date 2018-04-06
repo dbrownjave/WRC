@@ -81,6 +81,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         position: absolute;
       }
 
+      [flex] {
+        @apply --layout-flex;
+      }
+
       /* Dialog larger with large screens */
       @media screen and (min-width: 600px) {
           paper-dialog {
@@ -157,7 +161,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
       <!-- buttons  -->
       <div class="buttons">
-          <paper-button dialog-dismiss class="cancel-button" on-tap="_resetForm" >Cancel</paper-button>
+          <paper-button dialog-dismiss class="cancel-button" on-tap="_resetForm">Cancel</paper-button>
+          <span flex></span>
           <paper-button class="save-button" on-tap="">Download</paper-button>
       </div>
   </paper-dialog>

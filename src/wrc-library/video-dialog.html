@@ -66,7 +66,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       			paper-dialog .buttons paper-button.cancel-button {
       				color: var(--paper-grey-700);
               font-weight: normal;
-              margin-right: 4.25cm;
       			}
 
       			paper-dialog .buttons paper-button.delete-button {
@@ -166,6 +165,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             </paper-dialog-scrollable>
             <div class="buttons">
                 <paper-button dialog-dismiss class="cancel-button" on-tap="_resetForm">Cancel</paper-button>
+                <span flex></span>
                 <paper-button class="save-button" on-tap="_serializeData">Save</paper-button>
             </div>
         </paper-dialog>

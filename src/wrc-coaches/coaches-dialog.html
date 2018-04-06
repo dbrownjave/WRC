@@ -42,74 +42,75 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <style>
             /* Dialog */
             paper-dialog {
-				border-radius: 5px;
-                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
-			}
+				      border-radius: 5px;
+              box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+			      }
 
             paper-dialog h2 {
-				color: var(--azul-text-title);
-				font-size: 1.6em;
-			}
+    				color: var(--azul-text-title);
+    				font-size: 1.6em;
+    			  }
 
-			paper-dialog div p {
-				font-weight: lighter;
-				line-height: 1em;
-			}
+      			paper-dialog div p {
+      				font-weight: lighter;
+      				line-height: 1em;
+      			}
 
-			paper-dialog div.buttons {
-				@apply --layout-horizontal;
-				@apply --layout-end-justified;
-			}
+      			paper-dialog div.buttons {
+              margin-top: .5cm;
+      				@apply --layout-horizontal;
+              @apply --layout-end-justified;
+      			}
 
-			paper-dialog .buttons paper-button {
-				color: var(--azul-primary);
-                font-weight: 500;
-			}
+      			paper-dialog .buttons paper-button.save-button {
+      				color: var(--azul-primary-button-text);
+              font-weight: normal;
+      			}
 
-			paper-dialog .buttons paper-button.cancel-button {
-				color: var(--paper-grey-700);
-                font-weight: normal;
-			}
+      			paper-dialog .buttons paper-button.cancel-button {
+      				color: var(--paper-grey-700);
+              font-weight: normal;
+      			}
 
-			paper-dialog .buttons paper-button.delete-button {
-				color: var(--paper-red-400);
-                font-weight: normal;
-			}
+      			paper-dialog .buttons paper-button.delete-button {
+      				color: var(--paper-red-400);
+              font-weight: normal;
+      			}
 
             /* Profile Pic Uploader */
-			[type='file'] {
-				display: none;
-			}
+      			[type='file'] {
+      				display: none;
+      			}
 
-			div.picture-wrapper {
-				width: 100%;
-                margin-bottom: 24px;
+      			div.picture-wrapper {
+      				width: 100%;
+                      margin-bottom: 24px;
 
-				@apply --layout-vertical;
-				@apply --layout-center-center;
-			}
+      				@apply --layout-vertical;
+      				@apply --layout-center-center;
+      			}
 
-			div.picture-wrapper label {
-				background-color: #F3F4F5;
-				overflow: hidden;
-				border-radius: 10em;
-				width: 150px;
-				height: 150px;
-                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+      			div.picture-wrapper label {
+      				background-color: #F3F4F5;
+      				overflow: hidden;
+      				border-radius: 10em;
+      				width: 150px;
+      				height: 150px;
+                      box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
 
-				@apply --layout-vertical;
-				@apply --layout-center-center;
-			}
+      				@apply --layout-vertical;
+      				@apply --layout-center-center;
+      			}
 
-			div.picture-wrapper label:hover {
-				background-color: var(--paper-grey-300);
-			}
+      			div.picture-wrapper label:hover {
+      				background-color: var(--paper-grey-300);
+      			}
 
-			label iron-image {
-				width: inherit;
-				height: inherit;
-				cursor: pointer;
-			}
+      			label iron-image {
+      				width: inherit;
+      				height: inherit;
+      				cursor: pointer;
+      			}
 
             div.picture-wrapper p {
                 font-size: 1.1em;
@@ -130,7 +131,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 font-weight: 400;
             }
 
-            /* To keep dialog larger with large screens */
+      /* To keep dialog larger with large screens */
 			@media screen and (min-width: 600px) {
 				paper-dialog {
 					width: 610px;
@@ -233,9 +234,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             </paper-dialog-scrollable>
             <div class="buttons">
                 <paper-button class="delete-button" hidden="[[!_hideActions(action)]]" on-tap="_openDeleteDialog">Delete</paper-button>
-                <span flex></span>
                 <paper-button dialog-dismiss class="cancel-button" on-tap="_resetForm">Cancel</paper-button>
-                <paper-button on-tap="_serializeForm">Save</paper-button>
+                <span flex></span>
+                <paper-button class="save-button" on-tap="_serializeForm">Save</paper-button>
             </div>
         </paper-dialog>
     </template>

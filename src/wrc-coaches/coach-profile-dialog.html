@@ -55,18 +55,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
               @apply --layout-horizontal
             }
 
-      			paper-dialog div.buttons {
-              margin: 10px 0 0 0;
+            paper-dialog div.buttons {
+              margin-top: .5cm;
 
-        			@apply --layout-horizontal;
-        			@apply --layout-end-justified;
+      				@apply --layout-horizontal;
+              @apply --layout-end-justified;
       			}
 
             paper-dialog div.buttons[hidden] {
               display: none;
             }
 
-            paper-dialog paper-button.save-button {
+            paper-dialog .buttons paper-button.save-button {
               color: var(--azul-primary-button);
               font-weight: normal;
             }
@@ -310,6 +310,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             </div>
             <div class="buttons" hidden="[[!editing]]">
                 <paper-button class="cancel-button" on-tap="_toggleEditView">Cancel</paper-button>
+                <span flex></span>
                 <paper-button class="save-button" on-tap="_serializeCoachForm">Save</paper-button>
             </div>
         </paper-dialog>

@@ -35,7 +35,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <!-- Suji Elements -->
 <link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
-<link rel="import" href="../suji/lib/colors/suji-color-palette.html">
 <link rel="import" href="../suji/lib/themes/azul/azul-dialog.html">
 
 <!-- Neon Elements -->
@@ -75,9 +74,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             display: none;
           }
 
-    			paper-dialog .buttons paper-button {
-    				color: var(--azul-primary-button);
-            font-weight: 500;
+    			paper-dialog .buttons paper-button.save-button {
+    				color: var(--azul-primary-button-text);
+            font-weight: normal;
     			}
 
     			paper-dialog .buttons paper-button.cancel-button {
@@ -543,7 +542,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 <paper-button class="delete-button" on-tap="_openDeleteDialog">Delete</paper-button>
                 <span flex></span>
                 <paper-button class="cancel-button" on-tap="_toggleEditView">Cancel</paper-button>
-                <paper-button on-tap="_serializeAthleteForm">Save</paper-button>
+                <paper-button class="save-button" on-tap="_serializeAthleteForm">Save</paper-button>
             </div>
         </paper-dialog>
     </template>
