@@ -50,9 +50,172 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       				overflow: auto;
       			}
 
+						/* PDF Workout */
+						.menu-icon {
+							margin-left: 10em;
+							color: #86919f;
+						}
+
+						.menu-icon:hover {
+							color: #636E7A;
+						}
+
+						.paper-form-container {
+							@apply --layout-horizontal;
+							@apply --layout-wrap;
+						}
+
+						.paper-form {
+							width: 200px;
+							height: 290px;
+							margin: 30px;
+							border-radius: 6.6px;
+							background-color: #ffffff;
+							box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+							cursor: pointer;
+
+							transition: all .5s;
+							-webkit-transition: all .5s;
+							-moz-transition: all .5s;
+							-o-transition: all .5s;
+							-ms-transition: all .5s;
+						}
+
+						.paper-form:hover {
+							box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
+
+							transition: all .5s;
+							-webkit-transition: all .5s;
+							-moz-transition: all .5s;
+							-o-transition: all .5s;
+							-ms-transition: all .5s;
+						}
+
+						.paper-form>.pdf-wrapper {
+							@apply --layout-vertical;
+							@apply --layout-center;
+						}
+
+						.content-wrapper {
+							display: block;
+							margin: .5cm auto 0 auto;
+						}
+
+						.season-title {
+							font-size: 1.4em;
+							font-weight: 400;
+							letter-spacing: 0.7px;
+							text-align: center;
+							color: #7f8d9e;
+						}
+
+						.program-title {
+							font-size: 1em;
+							font-weight: 400;
+							letter-spacing: 0.5px;
+							text-align: center;
+							color: #86919f;
+
+							@apply --layout-vertical;
+							@apply --layout-center;
+						}
+
+						.day-title {
+							font-size: .7em;
+							font-weight: 300;
+							letter-spacing: 0.4px;
+							text-align: center;
+							color: white;
+						}
+
+						.type-title {
+							font-size: .8em;
+							font-weight: 400;
+							letter-spacing: 0.5px;
+							text-align: center;
+							color: #86919f;
+						}
+
+						.tag {
+							width: 70px;
+							height: 21px;
+							border-radius: 3px;
+							background-color: #86919f;
+							text-align: center;
+							margin-top: 10px;
+
+							@apply --layout-vertical;
+							@apply --layout-center-center;
+						}
+
+						.tag-active {
+							width: 70px;
+							height: 21px;
+							border-radius: 3px;
+							background-color: #45BE72;
+							;
+							text-align: center;
+							margin-top: 10px;
+
+							@apply --layout-vertical;
+							@apply --layout-center-center;
+						}
+
+						.start-button {
+							width: 110px;
+							height: 30px;
+							border-radius: 3.1px;
+							background-color: #5ac381;
+							box-shadow: 0 4px 15px 0 rgba(90, 195, 129, 0.54);
+							margin: 60px 0 0 0;
+
+							@apply --layout-vertical;
+							@apply --layout-center-center;
+						}
+
+						.start-button>.title {
+							font-size: 1em;
+							font-weight: 400;
+							letter-spacing: 0.4px;
+							text-align: center;
+							color: white;
+						}
+
+
+						[hidden] {
+							display: none;
+						}
+
 		    </style>
 
         <main>
+
+					<div class="vertical-containter">
+						<div class="paper-form">
+							<div class="pdf-wrapper">
+								<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0">
+									<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+									<paper-listbox noink slot="dropdown-content">
+										<paper-item id$="[[]]" on-tap="" onclick="alert('Compute PDF Calculations')">Start</paper-item>
+										<paper-item id$="[[]]" on-tap="" onclick="alert('Open PDF')">Preview</paper-item>
+										<paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Download</paper-item>
+									</paper-listbox>
+								</paper-menu-button>
+
+								<div class="content-wrapper">
+									<div class="season-title">
+										OFF-SEASON
+									</div>
+									<div class="program-title">10 Week Program</div>
+									<div class="type-title">Strength Phase</div>
+								</div>
+								<div class="tag">
+									<div class="day-title"> 3 Days</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
           <!-- Paper Fab to add new workout -->
           <paper-fab src="../icons/fab-icon/plus-icon@3x.png" on-tap="_openToAdd"></paper-fab>
       </main>

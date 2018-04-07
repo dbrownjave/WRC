@@ -90,7 +90,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             /* Tabs Wrapper */
             .tabs-wrapper {
-                margin: 2.5cm 0 0 0;
+                margin: 2.5cm 0 0 4cm;
+
                 @apply --layout-vertical;
                 @apply --layout-center-center;
             }
@@ -138,17 +139,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             .workoutWeekCombo {
-              width: 105px;
-              position: absolute !important
+                width: 105px;
+            }
+
+            .row-header-wrapper {
+                margin: 0 0 0 .7cm;
+                @apply --layout-horizontal;
             }
 
             .week-wrapper {
-              margin: .5cm 0cm 0cm 1.9cm;
-              position: fixed !important;
-              @apply --layout-horizontal;
-              @apply --layout-start;
+                margin: 1.5cm 2cm 0 0;
             }
-
 
             /* Actions */
             div.actions {
@@ -209,25 +210,26 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     </iron-form>
                 </div>
 
-                  <!-- Week of workout -->
-                  <div class="week-wrapper">
-                      <vaadin-combo-box
-                        id="workoutWeekCombo"
-                        class="workoutWeekCombo"
-                        label="Week"
-                        required
-                        error-message="This field is required"></vaadin-combo-box>
-                  </div>
+                <div class="row-header-wrapper">
+                    <!-- Week of workout -->
+                    <div class="week-wrapper">
+                        <vaadin-combo-box
+                            id="workoutWeekCombo"
+                            class="workoutWeekCombo"
+                            label="Week"
+                            required
+                            error-message="This field is required"></vaadin-combo-box>
+                    </div>
 
-                <!-- Tabs Wrapper -->
-                <div class="tabs-wrapper">
                     <!-- Tabs -->
-                    <vaadin-tabs selected="{{day}}" theme="equal-width-tabs">
-                        <vaadin-tab>Day 1</vaadin-tab>
-                        <vaadin-tab>Day 2</vaadin-tab>
-                        <vaadin-tab>Day 3</vaadin-tab>
-                        <vaadin-tab>Day 4</vaadin-tab>
-                    </vaadin-tabs>
+                    <div class="tabs-wrapper">
+                        <vaadin-tabs selected="{{day}}" theme="equal-width-tabs">
+                            <vaadin-tab>Day 1</vaadin-tab>
+                            <vaadin-tab>Day 2</vaadin-tab>
+                            <vaadin-tab>Day 3</vaadin-tab>
+                            <vaadin-tab>Day 4</vaadin-tab>
+                        </vaadin-tabs>
+                    </div>
                 </div>
 
                     <!-- Page Content -->
