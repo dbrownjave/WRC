@@ -154,7 +154,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             /* Actions */
             div.actions {
                 width: 100%;
-                margin-top: 24px;
+                margin-top: 1.5cm;
 
                 @apply --layout-horizontal;
                 @apply --layout-end-justified;
@@ -162,7 +162,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             div.actions paper-button.preview-button {
                 color: #fff;
-                background-color: var(--paper-grey-500);
+                background-color: #86919f;
                 font-weight: 500;
                 text-transform: none;
                 margin: 0;
@@ -255,7 +255,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     label="Max"
                                     type="number"
                                     maxlength="3"
-                                    pattern="[0-9]*">
+                                    pattern="[0-9]*"
+                                    prevent-invalid-input>
                                     <span slot="suffix">%</span>
                                 </vaadin-text-field>
                                 <vaadin-combo-box
