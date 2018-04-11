@@ -56,7 +56,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             /* Creator Wrapper */
             div.creator-wrapper {
                 width: 100%;
-                height: calc(100vh - (64px + 6em));
+                height: 100vh;
                 border-radius: 10px;
                 padding: 1em;
                 background-color: #ffffff;
@@ -291,6 +291,1401 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 	                                class="tempo-combo tempo-3"
 	                                label=" "
 									value="{{workout.dayOne.rowOne.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">2.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowTwo.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowTwo.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowTwo.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowTwo.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowTwo.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowTwo.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowTwo.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">3.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowThree.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowThree.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowThree.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowThree.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowThree.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowThree.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowThree.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">4.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowFour.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowFour.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowFour.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowFour.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowFour.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowFour.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowFour.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">5.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowFive.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowFive.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowFive.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowFive.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowFive.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowFive.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowFive.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">6.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowSix.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowSix.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowSix.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowSix.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowSix.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowSix.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowSix.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">7.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowSeven.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowSeven.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowSeven.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowSeven.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowSeven.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowSeven.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowSeven.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">8.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowEight.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowEight.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowEight.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowEight.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowEight.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowEight.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowEight.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">9.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowNine.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowNine.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowNine.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowNine.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowNine.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowNine.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowNine.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">10.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowTen.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowTen.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowTen.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowTen.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowTen.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowTen.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowTen.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">11.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowEleven.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowEleven.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowEleven.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowEleven.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowEleven.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowEleven.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowEleven.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">12.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowTwelve.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowTwelve.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowTwelve.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowTwelve.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowTwelve.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowTwelve.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowTwelve.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">13.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowThirteen.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowThirteen.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowThirteen.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowThirteen.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowThirteen.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowThirteen.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowThirteen.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">14.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowFourteen.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowFourteen.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowFourteen.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowFourteen.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowFourteen.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowFourteen.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowFourteen.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">15.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowFifteen.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowFifteen.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowFifteen.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowFifteen.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowFifteen.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowFifteen.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowFifteen.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">16.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowSixteen.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowSixteen.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowSixteen.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowSixteen.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowSixteen.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowSixteen.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowSixteen.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">17.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowSeventeen.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowSeventeen.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowSeventeen.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowSeventeen.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowSeventeen.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowSeventeen.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowSeventeen.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">18.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowEighteen.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowEighteen.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowEighteen.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowEighteen.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowEighteen.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowEighteen.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowEighteen.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">19.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowNineteen.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowNineteen.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowNineteen.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowNineteen.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowNineteen.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowNineteen.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowNineteen.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">20.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowTwenty.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowTwenty.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowTwenty.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowTwenty.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowTwenty.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowTwenty.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowTwenty.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">21.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowTwentyOne.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowTwentyOne.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowTwentyOne.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowTwentyOne.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowTwentyOne.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyOne.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyOne.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">22.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowTwentyTwo.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowTwentyTwo.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowTwentyTwo.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowTwentyTwo.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowTwentyTwo.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyTwo.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyTwo.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">23.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowTwentyThree.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowTwentyThree.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowTwentyThree.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowTwentyThree.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowTwentyThree.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyThree.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyThree.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">24.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowTwentyFour.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowTwentyFour.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowTwentyFour.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowTwentyFour.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowTwentyFour.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyFour.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyFour.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">25.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowTwentyFive.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowTwentyFive.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowTwentyFive.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowTwentyFive.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowTwentyFive.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyFive.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyFive.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">26.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowTwentySix.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowTwentySix.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowTwentySix.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowTwentySix.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowTwentySix.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentySix.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentySix.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">27.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowTwentySeven.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowTwentySeven.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowTwentySeven.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowTwentySeven.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowTwentySeven.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentySeven.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentySeven.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">28.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowTwentyEight.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowTwentyEight.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowTwentyEight.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowTwentyEight.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowTwentyEight.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyEight.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyEight.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">29.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowTwentyNine.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowTwentyNine.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowTwentyNine.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowTwentyNine.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowTwentyNine.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyNine.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowTwentyNine.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">30.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowThirty.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowThirty.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowThirty.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowThirty.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowThirty.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowThirty.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowThirty.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">31.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowThirtyOne.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowThirtyOne.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowThirtyOne.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowThirtyOne.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowThirtyOne.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowThirtyOne.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowThirtyOne.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+							<div class="row">
+	                            <span class="row-number">32.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowThirtyTwo.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowThirtyTwo.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowThirtyTwo.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowThirtyTwo.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowThirtyTwo.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowThirtyTwo.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowThirtyTwo.tempoThree}}"></vaadin-combo-box>
 	                        </div>
 	                    </page>
 	                </iron-pages>
