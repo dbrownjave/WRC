@@ -6275,12 +6275,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				</div>
 
                 <div class="actions">
-                    <paper-button class="preview-button" raised on-tap="mock">Preview</paper-button>
-                    <paper-button class="generate-button" raised>Generate</paper-button>
+					<!-- <a href="../../images/asdasd.pdf" download="workout.pdf">Download PDF</a> -->
+					<paper-button class="preview-button" raised on-tap="_generatePdfPreview">Preview</paper-button>
+                    <paper-button class="generate-button" raised on-tap="_generateWorkout">Generate</paper-button>
                 </div>
             </div>
         </main>
     </template>
+
+	<!-- pdfMake script -->
+    <script src="../../bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="../../bower_components/pdfmake/build/vfs_fonts.js"></script>
 
 	<script>
 		'use strict';
@@ -6479,8 +6484,38 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					};
 				}
 
-				mock() {
-					console.log(this.workout.dayOne.rowThree.exercise);
+				/**
+				 * Generates PDF Preview for workout
+				*/
+				_generatePdfPreview() {
+					const pdfContent = {
+						content: [
+							{
+								table: {
+									headerRows: 1,
+									body: [
+										[{text: 'Day 1'}, {text: 'Day 2'}, {text: 'Day 3'}, {text: 'Day 4'}],
+										[
+											'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+											'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+											'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+											'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+										]
+									]
+								}
+							}
+						]
+					};
+
+					// This creates and opens the PDF in a new tab
+					pdfMake.createPdf(pdfContent).open();
+				}
+
+				/**
+				 * Generates Workout
+				*/
+				_generateWorkout() {
+
 				}
 			}
 			window.customElements.define(WrcWorkoutsCreator.is, WrcWorkoutsCreator);
