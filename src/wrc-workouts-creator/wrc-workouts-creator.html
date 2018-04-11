@@ -40,7 +40,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 
 <dom-module id="wrc-workouts-creator">
-    <template>
+	<template>
         <style>
             /* Main Wrapper */
             main {
@@ -56,11 +56,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             /* Creator Wrapper */
             div.creator-wrapper {
                 width: 100%;
-                height: auto;
+                height: calc(100vh - (64px + 6em));
                 border-radius: 10px;
                 padding: 1em;
                 background-color: #ffffff;
                 box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.05);
+
+				@apply --layout-vertical;
             }
 
             div.creator-wrapper h3 {
@@ -77,7 +79,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             /* Workout Selector */
             .workout-selector {
                 width: 100%;
-                margin: 36px 0;
+                margin: 36px 0 0;
             }
 
             .workout-selector #seasonCombo, .workout-selector #typeCombo {
@@ -150,6 +152,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             .week-wrapper {
                 margin: 1.5cm 2cm 0 0;
             }
+
+			/* Iron Pages */
+			.pages-wrapper {
+				overflow: auto;
+
+				@apply --layout-flex;
+			}
 
             /* Actions */
             div.actions {
@@ -232,1349 +241,267 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     </div>
                 </div>
 
-                    <!-- Page Content -->
-                    <iron-pages selected="[[day]]">
-                        <!-- Page 1 -->
-                        <page>
-                            <div class="row">
-                                <span class="row-number">1.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    id="repsCombo"
-                                    class="reps-combo"
-                                    label="Reps"
-                                    type="number"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max"
-                                    type="number"
-                                    maxlength="3"
-                                    pattern="[0-9]*"
-                                    prevent-invalid-input>
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    id="tempoCombo1"
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    id="tempoCombo2"
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    id="tempoCombo3"
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">2.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">3.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">4.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">5.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">6.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">7.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">8.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">9.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">10.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">11.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                        </page>
+                <!-- Page Content -->
+				<div class="pages-wrapper">
+	                <iron-pages selected="[[day]]">
+	                    <!-- Page 1 -->
+	                    <page>
+							<!-- Row One -->
+	                        <div class="row">
+	                            <span class="row-number">1.</span>
+	                            <vaadin-text-field
+	                                class="excercise-field"
+	                                label="Excercise"
+									value="{{workout.dayOne.rowOne.exercise}}"></vaadin-text-field>
+	                            <vaadin-text-field
+	                                class="variation-field"
+	                                label="Variation"
+									value="{{workout.dayOne.rowOne.variation}}"></vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="repsCombo"
+	                                class="reps-combo"
+	                                label="Reps"
+	                                type="number"
+									value="{{workout.dayOne.rowOne.reps}}"></vaadin-combo-box>
+	                            <span class="multiplier">x</span>
+	                            <vaadin-text-field
+	                                class="max-field"
+	                                label="Max"
+	                                type="number"
+	                                maxlength="3"
+	                                pattern="[0-9]*"
+	                                prevent-invalid-input
+									value="{{workout.dayOne.rowOne.max}}">
+	                                <span slot="suffix">%</span>
+	                            </vaadin-text-field>
+	                            <vaadin-combo-box
+	                                id="tempoCombo1"
+	                                class="tempo-combo tempo-1"
+	                                label="Tempo"
+									value="{{workout.dayOne.rowOne.tempoOne}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo2"
+	                                class="tempo-combo tempo-2"
+	                                label=" "
+									value="{{workout.dayOne.rowOne.tempoTwo}}"></vaadin-combo-box>
+	                            <span class="colon">:</span>
+	                            <vaadin-combo-box
+	                                id="tempoCombo3"
+	                                class="tempo-combo tempo-3"
+	                                label=" "
+									value="{{workout.dayOne.rowOne.tempoThree}}"></vaadin-combo-box>
+	                        </div>
+	                    </page>
+	                </iron-pages>
+				</div>
 
-                        <!-- Page 2 -->
-                        <page>
-                            <div class="row">
-                                <span class="row-number">1.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">2.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">3.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">4.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">5.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">6.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">7.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">8.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">9.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">10.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">11.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                        </page>
-
-                        <!-- Page 3 -->
-                        <page>
-                            <div class="row">
-                                <span class="row-number">1.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">2.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">3.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">4.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">5.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">6.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">7.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">8.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">9.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">10.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">11.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                        </page>
-
-                        <!-- Page 4 -->
-                        <page>
-                            <div class="row">
-                                <span class="row-number">1.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">2.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">3.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">4.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">5.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">6.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">7.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">8.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">9.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">10.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                            <div class="row">
-                                <span class="row-number">11.</span>
-                                <vaadin-text-field
-                                    class="excercise-field"
-                                    label="Excercise"></vaadin-text-field>
-                                <vaadin-text-field
-                                    class="variation-field"
-                                    label="Variation"></vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="reps-combo"
-                                    label="Reps"></vaadin-combo-box>
-                                <span class="multiplier">x</span>
-                                <vaadin-text-field
-                                    class="max-field"
-                                    label="Max">
-                                    <span slot="suffix">%</span>
-                                </vaadin-text-field>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label="Tempo"></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                                <span class="colon">:</span>
-                                <vaadin-combo-box
-                                    class="tempo-combo"
-                                    label=" "></vaadin-combo-box>
-                            </div>
-                        </page>
-                    </iron-pages>
-
-                    <div class="actions">
-                        <paper-button class="preview-button" raised>Preview</paper-button>
-                        <paper-button class="generate-button" raised>Generate</paper-button>
-                    </div>
+                <div class="actions">
+                    <paper-button class="preview-button" raised>Preview</paper-button>
+                    <paper-button class="generate-button" raised>Generate</paper-button>
                 </div>
             </div>
         </main>
     </template>
 
-    <script>
-        'use strict';
+	<script>
+		'use strict';
 
-        (function() {
-            class WrcWorkoutsCreator extends Polymer.Element {
-                // Element definition
-                static get is() { return 'wrc-workouts-creator'; }
+		(function() {
+			class WrcWorkoutsCreator extends Polymer.Element {
+				// Element definition
+				static get is() {
+					return 'wrc-workouts-creator';
+				}
 
-                ready() {
-                    super.ready();
+				ready() {
+					super.ready();
 
-                    // Assign items for each top combo box
-                    this.$.seasonCombo.items = ['Off-season', 'Pre-season', 'In-season'];
-                    this.$.typeCombo.items = ['Strength Phase', 'Power Phase', 'Correctional Phase'];
-                    this.$.weeksCombo.items = ['4', '6', '8', '10', '12'];
-                    this.$.daysCombo.items = ['2', '3', '4'];
-                    this.$.workoutWeekCombo.items = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+					// Assign items for each top combo box
+					this.$.seasonCombo.items = ['Off-season', 'Pre-season', 'In-season'];
+					this.$.typeCombo.items = ['Strength Phase', 'Power Phase', 'Correctional Phase'];
+					this.$.weeksCombo.items = ['4', '6', '8', '10', '12'];
+					this.$.daysCombo.items = ['2', '3', '4'];
+					this.$.workoutWeekCombo.items = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 
-                    // Assign items for each content combo box
-                    this.$.repsCombo.items = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12','13',
-                                              '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25'];
-                    this.$.tempoCombo1.items = ['1', '2', '3', '4', '5', '6'];
-                    this.$.tempoCombo2.items = ['0', '1', '2', '3', '4', '5', '6'];
-                    this.$.tempoCombo3.items = ['1', '2', '3', '4', '5', '6', 'Max '];
+					// Get all reps combos and set their items
+					const repsCombos = this.root.querySelectorAll(".reps-combo");
+					for (let i = 0; i < repsCombos.length; i++) {
+						repsCombos[i].items = ['0', '1', '2', '3', '4', '5',
+							'6', '7', '8', '9', '10', '11', '12', '13', '14',
+							'15', '16', '17', '18', '19', '20', '21', '22',
+							'23', '24', '25'
+						];
+					}
 
+					// Get all tempo-1 and set their items
+					const tempoCombos1 = this.root.querySelectorAll(".tempo-1");
+					for (let i = 0; i < tempoCombos1.length; i++) {
+						tempoCombos1[i].items = ['1', '2', '3', '4', '5', '6'];
+					}
 
+					// Get all tempo-2 and set their items
+					const tempoCombos2 = this.root.querySelectorAll(".tempo-2");
+					for (let i = 0; i < tempoCombos2.length; i++) {
+						tempoCombos2[i].items = ['0', '1', '2', '3', '4', '5', '6'];
+					}
 
-                }
-            }
-            window.customElements.define(WrcWorkoutsCreator.is, WrcWorkoutsCreator);
-        }());
-    </script>
+					// Get all tempo-3 and set their items
+					const tempoCombos3 = this.root.querySelectorAll(".tempo-3");
+					for (let i = 0; i < tempoCombos3.length; i++) {
+						tempoCombos3[i].items = ['1', '2', '3', '4', '5', '6', 'Max '];
+					}
+				}
+
+				// Element properties
+				static get properties() {
+					return {
+						workout: {
+							type: Object,
+							notify: true,
+							value: {
+								dayOne: {
+									rowOne: Object,
+									rowTwo: Object,
+									rowThree: Object,
+									rowFour: Object,
+									rowFive: Object,
+									rowSix: Object,
+									rowSeven: Object,
+									rowEight: Object,
+									rowNine: Object,
+									rowTen: Object,
+									rowEleven: Object,
+									rowTwelve: Object,
+									rowThirteen: Object,
+									rowFourteen: Object,
+									rowFifteen: Object,
+									rowSixteen: Object,
+									rowSeventeen: Object,
+									rowEighteen: Object,
+									rowNineteen: Object,
+									rowTwenty: Object,
+									rowTwentyOne: Object,
+									rowTwentyTwo: Object,
+									rowTwentyThree: Object,
+									rowTwentyFour: Object,
+									rowTwentyFive: Object,
+									rowTwentySix: Object,
+									rowTwentySeven: Object,
+									rowTwentyEight: Object,
+									rowTwentyNine: Object,
+									rowThirty: Object,
+									rowThirtyOne: Object,
+									rowThirtyTwo: Object
+								},
+								dayTwo: {
+									rowOne: Object,
+									rowTwo: Object,
+									rowThree: Object,
+									rowFour: Object,
+									rowFive: Object,
+									rowSix: Object,
+									rowSeven: Object,
+									rowEight: Object,
+									rowNine: Object,
+									rowTen: Object,
+									rowEleven: Object,
+									rowTwelve: Object,
+									rowThirteen: Object,
+									rowFourteen: Object,
+									rowFifteen: Object,
+									rowSixteen: Object,
+									rowSeventeen: Object,
+									rowEighteen: Object,
+									rowNineteen: Object,
+									rowTwenty: Object,
+									rowTwentyOne: Object,
+									rowTwentyTwo: Object,
+									rowTwentyThree: Object,
+									rowTwentyFour: Object,
+									rowTwentyFive: Object,
+									rowTwentySix: Object,
+									rowTwentySeven: Object,
+									rowTwentyEight: Object,
+									rowTwentyNine: Object,
+									rowThirty: Object,
+									rowThirtyOne: Object,
+									rowThirtyTwo: Object
+								},
+								dayThree: {
+									rowOne: Object,
+									rowTwo: Object,
+									rowThree: Object,
+									rowFour: Object,
+									rowFive: Object,
+									rowSix: Object,
+									rowSeven: Object,
+									rowEight: Object,
+									rowNine: Object,
+									rowTen: Object,
+									rowEleven: Object,
+									rowTwelve: Object,
+									rowThirteen: Object,
+									rowFourteen: Object,
+									rowFifteen: Object,
+									rowSixteen: Object,
+									rowSeventeen: Object,
+									rowEighteen: Object,
+									rowNineteen: Object,
+									rowTwenty: Object,
+									rowTwentyOne: Object,
+									rowTwentyTwo: Object,
+									rowTwentyThree: Object,
+									rowTwentyFour: Object,
+									rowTwentyFive: Object,
+									rowTwentySix: Object,
+									rowTwentySeven: Object,
+									rowTwentyEight: Object,
+									rowTwentyNine: Object,
+									rowThirty: Object,
+									rowThirtyOne: Object,
+									rowThirtyTwo: Object
+								},
+								dayFour: {
+									rowOne: Object,
+									rowTwo: Object,
+									rowThree: Object,
+									rowFour: Object,
+									rowFive: Object,
+									rowSix: Object,
+									rowSeven: Object,
+									rowEight: Object,
+									rowNine: Object,
+									rowTen: Object,
+									rowEleven: Object,
+									rowTwelve: Object,
+									rowThirteen: Object,
+									rowFourteen: Object,
+									rowFifteen: Object,
+									rowSixteen: Object,
+									rowSeventeen: Object,
+									rowEighteen: Object,
+									rowNineteen: Object,
+									rowTwenty: Object,
+									rowTwentyOne: Object,
+									rowTwentyTwo: Object,
+									rowTwentyThree: Object,
+									rowTwentyFour: Object,
+									rowTwentyFive: Object,
+									rowTwentySix: Object,
+									rowTwentySeven: Object,
+									rowTwentyEight: Object,
+									rowTwentyNine: Object,
+									rowThirty: Object,
+									rowThirtyOne: Object,
+									rowThirtyTwo: Object
+								}
+							}
+						}
+					};
+				}
+			}
+			window.customElements.define(WrcWorkoutsCreator.is, WrcWorkoutsCreator);
+		}());
+	</script>
 </dom-module>
