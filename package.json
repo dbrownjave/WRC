@@ -13,6 +13,7 @@
     "test:integration": "polymer build # test that psk builds without error with the CLI"
   },
   "dependencies": {
-    "nodemon": "^1.17.2"
+    "nodemon": "^1.17.2",
+    "pdfmake": "^0.1.36"
   }
 }
