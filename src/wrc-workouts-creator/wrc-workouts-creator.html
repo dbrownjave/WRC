@@ -148,7 +148,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             .week-wrapper {
-                margin: 1.5cm 2cm 0 0;
+                margin: 0 2cm 0 0;
             }
 
 			/* Iron Pages */
@@ -190,6 +190,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <main>
             <div class="creator-wrapper">
                 <h3>New Weekly Workout</h3>
+								<!--
                 <div class="workout-selector">
                     <iron-form id="workoutSelectorForm">
                         <form>
@@ -216,6 +217,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         </form>
                     </iron-form>
                 </div>
+							-->
 
                 <div class="row-header-wrapper">
                     <!-- Week of workout -->
@@ -6555,10 +6557,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					super.ready();
 
 					// Assign items for each top combo box
-					this.$.seasonCombo.items = ['Off-season', 'Pre-season', 'In-season'];
-					this.$.typeCombo.items = ['Strength Phase', 'Power Phase', 'Correctional Phase'];
-					this.$.weeksCombo.items = ['4', '6', '8', '10', '12'];
-					this.$.daysCombo.items = ['2', '3', '4'];
+					//this.$.seasonCombo.items = ['Off-season', 'Pre-season', 'In-season'];
+					//this.$.typeCombo.items = ['Strength Phase', 'Power Phase', 'Correctional Phase'];
+					//this.$.weeksCombo.items = ['4', '6', '8', '10', '12'];
+					//this.$.daysCombo.items = ['2', '3', '4'];
 					this.$.workoutWeekCombo.items = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 
 					// Get all reps combos and set their items
@@ -6586,7 +6588,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					// Get all tempo-3 and set their items
 					const tempoCombos3 = this.root.querySelectorAll(".tempo-3");
 					for (let i = 0; i < tempoCombos3.length; i++) {
-						tempoCombos3[i].items = ['1', '2', '3', '4', '5', '6', 'Max '];
+						tempoCombos3[i].items = ['0', '1', '2', '3', '4', '5', '6'];
 					}
 				}
 
@@ -6599,13 +6601,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							value: {
 								dayOne: {
 									rowOne: {
-										exercise: '',
+										exercise: 'Front Squat',
                     variation: 'Hardcore',
-                    reps: '1',
-                    max: '15',
-                    tempoOne: '',
-                    tempoTwo: '',
-                    tempoThree: ''
+                    reps: '2',
+                    max: '90',
+                    tempoOne: '1',
+                    tempoTwo: '1',
+                    tempoThree: '1'
 									},
 									rowTwo: {},
 									rowThree: {},
@@ -11808,7 +11810,12 @@ defaultStyle: {
 					}
 				}
 
-
+				/**
+				 * Exercise Tempo Format Generator
+				 *
+				 * @param {String} tempo percentage of weight as Integer
+				 * @return {Void}
+				*/
 				_getExerciseTempo(tempo1, tempo2, tempo3) {
 						if (tempo1 && tempo2 && tempo3) {
 							return tempo1 + ":" + tempo2 + ":" + tempo3;
@@ -11833,19 +11840,19 @@ defaultStyle: {
 						var rawMaxResult = 0;
 
 						if (max) {
-								alert( "Initial Value: " + max);
+								//alert( "Initial Value: " + max);
 
 								// Integer to Percentage Conversion
 								maxPercentage = (max / 100);
-								alert("Percentage Converted: " + maxPercentage);
+								//alert("Percentage Converted: " + maxPercentage);
 
 								rawMaxResult = (maxPercentage * athleteExerciseMax)
-								alert("Calculated " + rawMaxResult);
-								alert("Rounded to Integer: " + Math.round(rawMaxResult));
+								//alert("Calculated " + rawMaxResult);
+								//alert("Rounded to Integer: " + Math.round(rawMaxResult));
 
 								// Convert max to weights equations
 								max = this._computeWeightFormat(rawMaxResult)
-								alert("Weight Formated " + max);
+								//alert("Weight Formated " + max);
 
 								return  max + 'lbs';
 						} else {
@@ -11878,9 +11885,6 @@ defaultStyle: {
 								return 0;
 						}
 				}
-
-
-
 
 			}
 			window.customElements.define(WrcWorkoutsCreator.is, WrcWorkoutsCreator);
