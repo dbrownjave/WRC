@@ -11863,8 +11863,10 @@ defaultStyle: {
 						// Conditional statement to determine the rounding method
 						if (lastDigit >= 5) {
 								return ((rawEquationResult - lastDigit) + 10);
-						} else if (lastDigit <= 4) {
+						} else if (lastDigit <= 4 && lastDigit != 0) {
 								return (rawEquationResult - lastDigit) + 5;
+						} else {
+								return 0;
 						}
 				}
 
