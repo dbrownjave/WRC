@@ -7040,7 +7040,7 @@ content: [
 						{
               // Tempo
 							width: 52,
-							text: this.workout.dayOne.rowOne.tempoOne + ':' + this.workout.dayOne.rowOne.tempoTwo + ':' + this.workout.dayOne.rowOne.tempoThree,
+							text: this._getExerciseTempo(this.workout.dayOne.rowOne.tempoOne, this.workout.dayOne.rowOne.tempoTwo, this.workout.dayOne.rowOne.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -11808,6 +11808,15 @@ defaultStyle: {
 					}
 				}
 
+
+				_getExerciseTempo(tempo1, tempo2, tempo3) {
+						if (tempo1 && tempo2 && tempo3) {
+							return tempo1 + ":" + tempo2 + ":" + tempo3;
+						} else {
+							return " ";
+						}
+				}
+
 				// Athlete Max Calculation Test
 
 				/**
@@ -11824,19 +11833,19 @@ defaultStyle: {
 						var rawMaxResult = 0;
 
 						if (max) {
-								//alert( "Initial Value: " + max);
+								alert( "Initial Value: " + max);
 
 								// Integer to Percentage Conversion
 								maxPercentage = (max / 100);
-								//alert("Percentage Converted: " + maxPercentage);
+								alert("Percentage Converted: " + maxPercentage);
 
 								rawMaxResult = (maxPercentage * athleteExerciseMax)
-								//alert("Calculated " + rawMaxResult);
-								//alert("Rounded to Integer: " + Math.round(rawMaxResult));
+								alert("Calculated " + rawMaxResult);
+								alert("Rounded to Integer: " + Math.round(rawMaxResult));
 
 								// Convert max to weights equations
 								max = this._computeWeightFormat(rawMaxResult)
-								//alert("Weight Formated " + max);
+								alert("Weight Formated " + max);
 
 								return  max + 'lbs';
 						} else {
