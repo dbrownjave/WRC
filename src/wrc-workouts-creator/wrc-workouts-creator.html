@@ -250,7 +250,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 	                            <vaadin-text-field
 	                                class="excercise-field"
 	                                label="Excercise"
-                                  	maxlength = "11"
+                                  maxlength = "11"
 									value="{{workout.dayOne.rowOne.exercise}}"></vaadin-text-field>
 	                            <vaadin-text-field
 	                                class="variation-field"
@@ -6599,7 +6599,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							value: {
 								dayOne: {
 									rowOne: {
-										exercise: ''
+										exercise: '',
+                    variation: 'Hardcore',
+                    reps: '1',
+                    max: '',
+                    tempoOne: '',
+                    tempoTwo: '',
+                    tempoThree: ''
 									},
 									rowTwo: {},
 									rowThree: {},
@@ -6765,10 +6771,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
 					/*********** TEST *********/
-						
+
 					// playground requires you to assign document definition to a variable called dd
 
-var dd = {
+var pdfContent = {
 
 // Page Orientation: [portrait or landscap]
 pageOrientation: 'landscape',
@@ -7015,25 +7021,26 @@ content: [
 					columns: [
 						{
 							// Variation
-							width: 34,
-							text: 'Banded',
+							width: 36,
+							text: this.workout.dayOne.rowOne.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
-							width: 36,
-							text: '132lbs',
+							width: 34,
+							text: this._computeWorkoutWeight(this.workout.dayOne.rowOne.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayOne.rowOne.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+              // Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this.workout.dayOne.rowOne.tempoOne + ':' + this.workout.dayOne.rowOne.tempoTwo + ':' + this.workout.dayOne.rowOne.tempoThree,
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -7043,7 +7050,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7079,7 +7086,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7115,7 +7122,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7154,7 +7161,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '3',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7190,7 +7197,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7226,7 +7233,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7262,7 +7269,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7301,7 +7308,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '4',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7337,7 +7344,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7373,7 +7380,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7409,7 +7416,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7448,7 +7455,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '5',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7484,7 +7491,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7520,7 +7527,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7556,7 +7563,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7595,7 +7602,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '6',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7631,7 +7638,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7667,7 +7674,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7703,7 +7710,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7742,7 +7749,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '7',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7778,7 +7785,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7814,7 +7821,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7850,7 +7857,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7889,7 +7896,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '8',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7925,7 +7932,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7961,7 +7968,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -7997,7 +8004,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8036,7 +8043,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '9',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8072,7 +8079,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8108,7 +8115,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8144,7 +8151,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8183,7 +8190,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '10',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8219,7 +8226,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8255,7 +8262,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8291,7 +8298,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8330,7 +8337,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '11',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8366,7 +8373,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8402,7 +8409,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8438,7 +8445,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8477,7 +8484,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '12',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8513,7 +8520,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8549,7 +8556,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8585,7 +8592,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8624,7 +8631,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '13',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8660,7 +8667,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8696,7 +8703,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8732,7 +8739,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8771,7 +8778,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '14',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8807,7 +8814,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8843,7 +8850,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8879,7 +8886,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8918,7 +8925,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '15',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8954,7 +8961,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8990,7 +8997,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9026,7 +9033,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9065,7 +9072,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '16',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9101,7 +9108,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9137,7 +9144,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9173,7 +9180,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9212,7 +9219,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '17',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9248,7 +9255,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9284,7 +9291,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9320,7 +9327,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9359,7 +9366,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '18',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9395,7 +9402,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9431,7 +9438,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9467,7 +9474,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9506,7 +9513,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '19',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9542,7 +9549,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9578,7 +9585,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9614,7 +9621,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9653,7 +9660,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '20',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9689,7 +9696,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9725,7 +9732,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9761,7 +9768,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9800,7 +9807,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '21',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9836,7 +9843,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9872,7 +9879,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9908,7 +9915,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9947,7 +9954,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '22',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9983,7 +9990,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10019,7 +10026,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10055,7 +10062,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10094,7 +10101,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '23',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10130,7 +10137,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10166,7 +10173,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10202,7 +10209,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10241,7 +10248,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '24',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10277,7 +10284,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10313,7 +10320,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10349,7 +10356,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10388,7 +10395,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '25',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10424,7 +10431,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10460,7 +10467,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10496,7 +10503,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10535,7 +10542,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '26',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10571,7 +10578,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10607,7 +10614,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10643,7 +10650,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10682,7 +10689,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '27',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10718,7 +10725,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10754,7 +10761,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10790,7 +10797,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10829,7 +10836,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '28',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10865,7 +10872,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10901,7 +10908,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10937,7 +10944,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10976,7 +10983,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '29',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11012,7 +11019,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11048,7 +11055,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11084,7 +11091,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11123,7 +11130,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '30',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11159,7 +11166,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11195,7 +11202,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11231,7 +11238,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11270,7 +11277,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '31',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11306,7 +11313,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11342,7 +11349,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11378,7 +11385,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11417,7 +11424,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '32',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11453,7 +11460,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11489,7 +11496,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11525,7 +11532,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11564,7 +11571,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: '33',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11600,7 +11607,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11636,7 +11643,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11672,7 +11679,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: 'Back Squat',
+					text: this.workout.dayOne.rowOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11785,7 +11792,7 @@ defaultStyle: {
 					/*********** END TEST *********/
 
 					// This creates and opens the PDF in a new tab
-					pdfMake.createPdf(dd).open();
+					pdfMake.createPdf(pdfContent).open();
 				}
 
 				/**
@@ -11793,13 +11800,51 @@ defaultStyle: {
 				*/
 				_generateWorkout() {
 					// For PDF purposes only we need is the exercise value
-					// So 
+					// So
 					if (this.workout.dayOne.rowOne.exercise) {
-						console.log("This row is not empty")
+						console.log("This row is not empty");
 					} else {
 						console.log("This row is empty");
 					}
 				}
+
+				// Athlete Max Calculation Test
+
+				/**
+				 * Prevents invalidations & returns max calculation results
+				 *
+				 * The 'max' is the percentage of an athlete exercise (max weight)
+				 *
+				 * @param {Integer} max percentage of weight as Integer
+				 * @return {Integer}
+				*/
+				_computeWorkoutWeight(max) {
+					var athleteExerciseMax = 125;
+					var maxPercentage = 0;
+
+					if (max) {
+						alert( "old: " + max);
+
+						// Integer to Percentage Conversion
+						maxPercentage = max / 100;
+						alert("Percentage Converted: " + maxPercentage);
+
+						max = (maxPercentage * athleteExerciseMax)
+						alert("Calculated " + max);
+
+						// Convert max to weights equations
+						alert("Weight Formated " + max);
+
+						// Round percentage
+						return max.toFixed(0) + 'lbs';
+					} else {
+						return " ";
+					}
+				}
+
+
+
+
 			}
 			window.customElements.define(WrcWorkoutsCreator.is, WrcWorkoutsCreator);
 		}());
