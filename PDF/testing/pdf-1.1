@@ -1,0 +1,318 @@
+// playground requires you to assign document definition to a variable called dd
+
+var dd = {
+
+        // Page Orientation: [portrait or landscap]
+        pageOrientation: 'landscape',
+
+        // [left, top, right, bottom] or [horizontal, vertical] or just a number for equal margins
+        pageMargins: [ 7, 10, 10, 10 ],
+
+	content: [
+
+		// Header
+		{text: 'Jason Prater', style: 'header'},
+
+        {
+			style: '',
+			color: '#444',
+
+			table: {
+				widths: [69, 134, 69, 134],
+				headerRows: 2,
+
+				body: [
+
+				    // Header: Row 0
+					[
+					    // Column 1
+					    {
+					        text: 'Day 1',
+					        style: 'dayHeader',
+					        colSpan: 2,
+					        border: [true, true,true,true],
+					        fillColor: '#DCDCDC'
+					    },
+
+					    // Empty column span
+					    {},
+
+					    // Column 2
+					    {
+					        text: 'Day 2',
+					        style: 'dayHeader',
+					        colSpan: 2,
+					        border: [true, true,true,true],
+					        fillColor: '#DCDCDC'
+					    },
+
+					    // Empty column span
+					    {}
+
+					   ], // EO: Row 1
+
+
+					// Subheader: Row 1
+					[
+
+					    /*************** Day 1 ***************/
+					   {
+					        // Exercise
+                            text: 'Exercise',
+						    alignment: 'center',
+						    style: 'subheader'
+					    },
+					    {
+
+                            columns: [
+    				            {
+    					            // Variation
+    					            width: 34,
+            						text: 'Var',
+            						style: 'subheader'
+                                },
+                                {
+    					            // Weight
+    					            width: 28,
+            						text: 'Wt',
+            						alignment: 'center',
+            					    style: 'subheader'
+                                },
+                                {
+                                    // Reps
+                                    width:36,
+            						text: 'Reps',
+            						alignment: 'center',
+            						style: 'subheader'
+                                },
+                                {
+                                    // Tempo
+                                    width: 50,
+                                    text: 'Tempo',
+                                    style: 'subheader'
+                                },
+                            ], // EO Column
+					    }, // EO Day 1
+
+					    /*************** Day 2 ***************/
+					   {
+					        // Exercise
+                            text: 'Exercise',
+						    alignment: 'center',
+						    style: 'subheader'
+					    },
+					    {
+
+                            columns: [
+    				            {
+    					            // Variation
+    					            width: 34,
+            						text: 'Var',
+            						style: 'subheader'
+                                },
+                                {
+    					            // Weight
+    					            width: 28,
+            						text: 'Wt',
+            						alignment: 'center',
+            					    style: 'subheader'
+                                },
+                                {
+                                    // Reps
+                                    width:36,
+            						text: 'Reps',
+            						alignment: 'center',
+            						style: 'subheader'
+                                },
+                                {
+                                    // Tempo
+                                    width: 50,
+                                    text: 'Tempo',
+                                    style: 'subheader'
+                                },
+                            ], // EO Column
+					    }, // EO Day 2
+				    ], // EO Subheader: Row 1
+
+
+				    // Content: Row 2
+				    [
+				        /*************** Day 1 ***************/
+					    {
+                            // Exercise
+                            text: 'Back Squat',
+						    style: 'exercise',
+						    alignment: 'center'
+					    },
+					    {
+                            columns: [
+	                            {
+					                // Variation
+					                width: 34,
+        						    text: 'Banded',
+        						    style: 'variation'
+					            },
+					            {
+					                // Weight
+					                width: 36,
+        						    text: '132lbs',
+        						    style: 'weight'
+					            },
+					            {
+					                // Reps
+					                width:20,
+        						    text: '31',
+        						    style: 'reps'
+					            },
+					            {    // Tempo
+					            	width: 52,
+        						    text: '1:6:0',
+        						    alignment: 'center',
+        						    style: 'tempo',
+					            },
+						    ], // EO Column
+					    }, // EO Day 2
+
+					    /*************** Day 2 ***************/
+					    {
+                            // Exercise
+                            text: 'Back Squat',
+						    style: 'exercise',
+						    alignment: 'center'
+					    },
+					    {
+                            columns: [
+	                            {
+					                // Variation
+					                width: 34,
+        						    text: 'Banded',
+        						    style: 'variation'
+					            },
+					            {
+					                // Weight
+					                width: 36,
+        						    text: '132lbs',
+        						    style: 'weight'
+					            },
+					            {
+					                // Reps
+					                width:20,
+        						    text: '31',
+        						    style: 'reps'
+					            },
+					            {    // Tempo
+					            	width: 52,
+        						    text: '1:6:0',
+        						    alignment: 'center',
+        						    style: 'tempo',
+					            },
+						    ], // EO Column
+					    }, // EO Day 2
+				    ], // EO Content: Row 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				    
+				] // EO Table Body
+			} // EO Table
+		},
+    ], // EO Content
+
+	styles: {
+
+	    dayHeader: {
+	       	fontSize: 14,
+			bold: true,
+			alignment: 'center',
+			margin: [2,2,2,2],
+			color: 'black'
+	    },
+
+		header: {
+			fontSize: 16,
+			bold: true,
+			margin: [0, 0, 0, 10],
+			color: 'black'
+		},
+
+		subheader: {
+			fontSize: 10,
+			bold: true,
+			margin: [4, 0, 0, 0],
+		},
+
+	    content: {
+			fontSize: 8,
+			bold: true,
+			margin: [0, 0, 0, 0]
+		},
+
+		exercise: {
+		    fontSize: 8,
+		    bold: true,
+			margin: [0, 0, 0, 0]
+		},
+
+		variation: {
+		    fontSize: 8,
+		    bold: true,
+			margin: [0, 0, 0, 0]
+		},
+
+		weight: {
+		    fontSize: 8,
+		    bold: true,
+		    alignment: 'left',
+			margin: [5, 0, 0, 0]
+		},
+
+		reps: {
+		    fontSize: 8,
+		    bold: true,
+		    alignment: 'center',
+			margin: [5, 0, 0, 0]
+		},
+
+		tempo: {
+            fontSize: 9,
+            bold: true,
+			margin: [5, 0, 0, 0]
+		}
+	},
+	defaultStyle: {
+		// alignment: 'justify'
+	}
+
+}
