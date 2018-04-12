@@ -6602,7 +6602,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										exercise: '',
                     variation: 'Hardcore',
                     reps: '1',
-                    max: '',
+                    max: '15',
                     tempoOne: '',
                     tempoTwo: '',
                     tempoThree: ''
@@ -11819,27 +11819,53 @@ defaultStyle: {
 				 * @return {Integer}
 				*/
 				_computeWorkoutWeight(max) {
-					var athleteExerciseMax = 125;
-					var maxPercentage = 0;
+						var athleteExerciseMax = 125;
+						var maxPercentage = 0;
+						var rawMaxResult = 0;
 
-					if (max) {
-						alert( "old: " + max);
+						if (max) {
+								//alert( "Initial Value: " + max);
 
-						// Integer to Percentage Conversion
-						maxPercentage = max / 100;
-						alert("Percentage Converted: " + maxPercentage);
+								// Integer to Percentage Conversion
+								maxPercentage = (max / 100);
+								//alert("Percentage Converted: " + maxPercentage);
 
-						max = (maxPercentage * athleteExerciseMax)
-						alert("Calculated " + max);
+								rawMaxResult = (maxPercentage * athleteExerciseMax)
+								//alert("Calculated " + rawMaxResult);
+								//alert("Rounded to Integer: " + Math.round(rawMaxResult));
 
-						// Convert max to weights equations
-						alert("Weight Formated " + max);
+								// Convert max to weights equations
+								max = this._computeWeightFormat(rawMaxResult)
+								//alert("Weight Formated " + max);
 
-						// Round percentage
-						return max.toFixed(0) + 'lbs';
-					} else {
-						return " ";
-					}
+								return  max + 'lbs';
+						} else {
+								// Removes default:  'lbs'
+								return " ";
+						}
+				}
+
+				// Weight Rounding Method to round the equation results; (e.g. floats/decimals) since weight's are (5,10,15...)
+				_computeWeightFormat(rawEquationResult) {
+						// Display before: rawEquationResult
+						//alert(this.rawEquationResult);
+						var rawEquationResult = parseInt(Math.round(rawEquationResult));
+
+						// Display after: rawEquationResult
+						//alert(rawEquationResult);
+
+						// find last digit of number
+						var lastDigit = rawEquationResult.toString().split('').pop();
+
+						// Testing: Display last digit
+						//alert(lastDigit);
+
+						// Conditional statement to determine the rounding method
+						if (lastDigit >= 5) {
+								return ((rawEquationResult - lastDigit) + 10);
+						} else if (lastDigit <= 4) {
+								return (rawEquationResult - lastDigit) + 5;
+						}
 				}
 
 
