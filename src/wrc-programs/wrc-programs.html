@@ -115,63 +115,51 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					<div class="vertical-containter">
 						<!-- Program Cards -->
-						<div class="paper-form" hidden$={{hidden}} on-tap="_isHidden">
-							<div class="pdf-wrapper">
-								<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0">
-									<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-									<paper-listbox noink slot="dropdown-content">
-										<paper-item id$="[[]]" on-tap="" onclick="alert('Compute PDF Calculations')">Start</paper-item>
-										<paper-item id$="[[]]" on-tap="" onclick="alert('Open PDF')">Preview</paper-item>
-										<paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Download</paper-item>
-									</paper-listbox>
-								</paper-menu-button>
+						<template is=dom-repeat items="{{programs}}">
+							<div class="paper-form" hidden$={{hidden}} on-tap="_isHidden">
+								<div class="pdf-wrapper">
+									<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0">
+										<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+										<paper-listbox noink slot="dropdown-content">
+											<paper-item id$="[[]]" on-tap="" onclick="alert('Compute PDF Calculations')">Start</paper-item>
+											<paper-item id$="[[]]" on-tap="" onclick="alert('Open PDF')">Preview</paper-item>
+											<paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Download</paper-item>
+										</paper-listbox>
+									</paper-menu-button>
 
-								<!--  Content -->
-								<div class="content-wrapper">
-									<div class="season-title-program">
-										OFF-SEASON
+									<!--  Content -->
+									<div class="content-wrapper">
+										<div class="season-title-program">
+											OFF-SEASON
+										</div>
+										<div class="program-title">10 Week Program</div>
+										<div class="type-title">Strength Phase</div>
 									</div>
-									<div class="program-title">10 Week Program</div>
-									<div class="type-title">Strength Phase</div>
-								</div>
-								<div class="tag">
-									<div class="day-title"> 3 Days</div>
+									<div class="tag">
+										<div class="day-title"> [[item.days]] Days</div>
+									</div>
 								</div>
 							</div>
-						</div>
+						</template>
 
 						<iron-selector multi hidden$="[[!hidden]]">
 							<!-- Workouts Cards -->
-							<div class="paper-form">
-								<div class="pdf-wrapper">
-									<div class="content-wrapper">
-										<div class="season-title-workout">
-											OFF-SEASON
+							<template is=dom-repeat items="{{workouts}}">
+								<div class="paper-form">
+									<div class="pdf-wrapper">
+										<div class="content-wrapper">
+											<div class="season-title-workout">
+												OFF-SEASON
+											</div>
+											<div class="program-title">10 Week Program</div>
+											<div class="type-title">Strength Phase</div>
 										</div>
-										<div class="program-title">10 Week Program</div>
-										<div class="type-title">Strength Phase</div>
-									</div>
-									<div class="tag">
-										<div class="day-title">Day 1</div>
+										<div class="tag">
+											<div class="day-title">Week [[item.week]]</div>
+										</div>
 									</div>
 								</div>
-							</div>
-
-							<div class="paper-form">
-								<div class="pdf-wrapper">
-									<div class="content-wrapper">
-										<div class="season-title-workout">
-											OFF-SEASON
-										</div>
-										<div class="program-title">10 Week Program</div>
-										<div class="type-title">Strength Phase</div>
-									</div>
-									<div class="tag">
-										<div class="day-title">Day 1</div>
-									</div>
-								</div>
-							</div>
-						</iron-selector>
+							</template>
 					</div>
 
           <!-- Paper Fab to add new workout -->
@@ -193,7 +181,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         				static get properties() {
         					return {
 
-										workoutPDF: {
+										workouts: {
 											type: Array,
 											notify: true,
 											value() {
@@ -212,19 +200,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 													},
 													{
 														week: 5
+													}
+												]
+											}
+										},
+										programs: {
+											type: Array,
+											notify: true,
+											value() {
+												return [
+													{
+														days: 2
 													},
 													{
-														week: 6
-													},
-													{
-														week: 7
-													},
-													{
-														week: 8
-													},
-													{
-														week: 9
-													},
+														days: 4
+													}
 												]
 											}
 										},
@@ -252,7 +242,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
 								/**
-								 * Testing hidden functionality
+								 * Element Hidden functionality
 								 *
 								 * @param {Boolean} return true to hide content
 								 * @return {Boolean}
