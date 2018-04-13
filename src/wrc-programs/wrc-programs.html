@@ -25,6 +25,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-multi-selectable.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 
 <!-- Vaadin Elements -->
 <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
@@ -60,37 +62,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							color: #636E7A;
 						}
 
-						.paper-form-container {
-							@apply --layout-horizontal;
-							@apply --layout-wrap;
-						}
-
-						.paper-form {
-							width: 200px;
-							height: 290px;
-							margin: 30px;
-							border-radius: 6.6px;
-							background-color: #ffffff;
-							box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.15);
-							cursor: pointer;
-
-							transition: all .5s;
-							-webkit-transition: all .5s;
-							-moz-transition: all .5s;
-							-o-transition: all .5s;
-							-ms-transition: all .5s;
-						}
-
-						.paper-form:hover {
-							box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
-
-							transition: all .5s;
-							-webkit-transition: all .5s;
-							-moz-transition: all .5s;
-							-o-transition: all .5s;
-							-ms-transition: all .5s;
-						}
-
 						.paper-form>.pdf-wrapper {
 							@apply --layout-vertical;
 							@apply --layout-center;
@@ -101,65 +72,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							margin: .5cm auto 0 auto;
 						}
 
-						.season-title {
-							font-size: 1.4em;
-							font-weight: 400;
-							letter-spacing: 0.7px;
-							text-align: center;
-							color: #7f8d9e;
-						}
-
-						.program-title {
-							font-size: 1em;
-							font-weight: 400;
-							letter-spacing: 0.5px;
-							text-align: center;
-							color: #86919f;
-
-							@apply --layout-vertical;
-							@apply --layout-center;
-						}
-
-						.day-title {
-							font-size: .7em;
-							font-weight: 300;
-							letter-spacing: 0.4px;
-							text-align: center;
-							color: white;
-						}
-
-						.type-title {
-							font-size: .8em;
-							font-weight: 400;
-							letter-spacing: 0.5px;
-							text-align: center;
-							color: #86919f;
-						}
-
-						.tag {
-							width: 70px;
-							height: 21px;
-							border-radius: 3px;
-							background-color: #86919f;
-							text-align: center;
-							margin-top: 10px;
-
-							@apply --layout-vertical;
-							@apply --layout-center-center;
-						}
-
-						.tag-active {
-							width: 70px;
-							height: 21px;
-							border-radius: 3px;
-							background-color: #45BE72;
-							;
-							text-align: center;
-							margin-top: 10px;
-
-							@apply --layout-vertical;
-							@apply --layout-center-center;
-						}
 
 						.start-button {
 							width: 110px;
@@ -182,6 +94,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						}
 
 
+						.iron-selected {
+							background-color: red;
+							color: white;
+						}
+
 						[hidden] {
 							display: none;
 						}
@@ -191,6 +108,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <main>
 
 					<div class="vertical-containter">
+
+						<!-- Program Cards -->
 						<div class="paper-form">
 							<div class="pdf-wrapper">
 								<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0">
@@ -203,7 +122,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								</paper-menu-button>
 
 								<div class="content-wrapper">
-									<div class="season-title">
+									<div class="season-title-program">
 										OFF-SEASON
 									</div>
 									<div class="program-title">10 Week Program</div>
@@ -214,7 +133,26 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								</div>
 							</div>
 						</div>
+
+						<iron-selector multi selected-values='[0]'>
+							<!-- Workouts Cards -->
+							<div class="paper-form">
+								<div class="pdf-wrapper">
+									<div class="content-wrapper">
+										<div class="season-title-workout">
+											OFF-SEASON
+										</div>
+										<div class="program-title">10 Week Program</div>
+										<div class="type-title">Strength Phase</div>
+									</div>
+									<div class="tag">
+										<div class="day-title">Day 1</div>
+									</div>
+								</div>
+							</div>
+						</iron-selector>
 					</div>
+
 
           <!-- Paper Fab to add new workout -->
           <paper-fab src="../icons/fab-icon/plus-icon@3x.png" on-tap="_openToAdd"></paper-fab>
