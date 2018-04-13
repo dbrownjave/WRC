@@ -39,6 +39,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 
+<!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+
 <dom-module id="wrc-workouts-creator">
 	<template>
         <style>
@@ -186,6 +189,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 height: 35px;
             }
         </style>
+
+		<!-- Firebase Document Configuration -->
+		<firebase-document
+			id="firebaseDocument"
+			app-name="wrc_software"></firebase-document>
 
         <main>
             <div class="creator-wrapper">
@@ -6556,6 +6564,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				ready() {
 					super.ready();
 
+					// App Toast
+					this._appToast = document.getElementById("appToast");
+
 					// Assign items for each top combo box
 					//this.$.seasonCombo.items = ['Off-season', 'Pre-season', 'In-season'];
 					//this.$.typeCombo.items = ['Strength Phase', 'Power Phase', 'Correctional Phase'];
@@ -12860,12 +12871,14 @@ defaultStyle: {
 				 * Generates Workout
 				*/
 				_generateWorkout() {
-					// For PDF purposes only we need is the exercise value
-					// So
-					if (this.workout.dayOne.rowOne.exercise) {
-						console.log("This row is not empty");
-					} else {
-						console.log("This row is empty");
+					if (this.workout && this.$.workoutWeekCombo.validate()) {
+						this.$.firebaseDocument.push('workouts', this.workout)
+						.catch(function(err) {
+							this._appToast.text = "An error has ocurred saving the workout";
+							this._appToast.open();
+						}.bind(this));
+						this._appToast.text = "The workout has been saved";
+						this._appToast.open();
 					}
 				}
 
