@@ -8068,7 +8068,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: this.workout.dayTwo.rowOne.exercise,
+					text: this.workout.dayTwo.rowTwo.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8219,7 +8219,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowTwo.exercise,
+					text: this.workout.dayTwo.rowTwo.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8634,7 +8634,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowFive.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8643,24 +8643,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayOne.rowFive.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayOne.rowFive.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayOne.rowFive.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayOne.rowFive.tempoOne, this.workout.dayOne.rowFive.tempoTwo, this.workout.dayOne.rowFive.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -8670,7 +8671,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayTwo.rowFive.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8679,24 +8680,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayTwo.rowFive.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayTwo.rowFive.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayTwo.rowFive.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayTwo.rowFive.tempoOne, this.workout.dayTwo.rowFive.tempoTwo, this.workout.dayTwo.rowFive.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -8706,7 +8708,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayThree.rowFive.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8715,24 +8717,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayThree.rowFive.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayThree.rowFive.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayThree.rowFive.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayThree.rowFive.tempoOne, this.workout.dayThree.rowFive.tempoTwo, this.workout.dayThree.rowFive.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -8742,7 +8745,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayFour.rowFive.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8751,24 +8754,176 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayFour.rowFive.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayFour.rowFive.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayFour.rowFive.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayFour.rowFive.tempoOne, this.workout.dayFour.rowFive.tempoTwo, this.workout.dayFour.rowFive.tempoThree),
+							alignment: 'center',
+							style: 'tempo',
+						},
+					], // EO Column
+				}, // EO Day 4
+			], // EO Content: Row 5
+
+// Content: Row 6
+			[
+				/*************** Day 1 ***************/
+				{
+					// Exercise
+					text: this.workout.dayOne.rowSix.exercise,
+					style: 'exercise',
+					alignment: 'center'
+				},
+				{
+					columns: [
+						{
+							// Variation
+							width: 36,
+							text: this.workout.dayOne.rowSix.variation,
+							style: 'variation'
+						},
+						{
+							// Weight
+							width: 34,
+							text: this._computeWorkoutWeight(this.workout.dayOne.rowSix.max),
+							style: 'weight'
+						},
+						{
+							// Reps
+							width:18,
+							text: this.workout.dayOne.rowSix.reps,
+							style: 'reps'
+						},
+						{
+							// Tempo
+							width: 52,
+							text: this._getExerciseTempo(this.workout.dayOne.rowSix.tempoOne, this.workout.dayOne.rowSix.tempoTwo, this.workout.dayOne.rowSix.tempoThree),
+							alignment: 'center',
+							style: 'tempo',
+						},
+					], // EO Column
+				}, // EO Day 1
+
+				/*************** Day 2 ***************/
+				{
+					// Exercise
+					text: this.workout.dayTwo.rowSix.exercise,
+					style: 'exercise',
+					alignment: 'center'
+				},
+				{
+					columns: [
+						{
+							// Variation
+							width: 36,
+							text: this.workout.dayTwo.rowSix.variation,
+							style: 'variation'
+						},
+						{
+							// Weight
+							width: 34,
+							text: this._computeWorkoutWeight(this.workout.dayTwo.rowSix.max),
+							style: 'weight'
+						},
+						{
+							// Reps
+							width:18,
+							text: this.workout.dayTwo.rowSix.reps,
+							style: 'reps'
+						},
+						{
+							// Tempo
+							width: 52,
+							text: this._getExerciseTempo(this.workout.dayTwo.rowSix.tempoOne, this.workout.dayTwo.rowSix.tempoTwo, this.workout.dayTwo.rowSix.tempoThree),
+							alignment: 'center',
+							style: 'tempo',
+						},
+					], // EO Column
+				}, // EO Day 2
+
+				/*************** Day 3 ***************/
+				{
+					// Exercise
+					text: this.workout.dayThree.rowSix.exercise,
+					style: 'exercise',
+					alignment: 'center'
+				},
+				{
+					columns: [
+						{
+							// Variation
+							width: 36,
+							text: this.workout.dayThree.rowSix.variation,
+							style: 'variation'
+						},
+						{
+							// Weight
+							width: 34,
+							text: this._computeWorkoutWeight(this.workout.dayThree.rowSix.max),
+							style: 'weight'
+						},
+						{
+							// Reps
+							width:18,
+							text: this.workout.dayThree.rowSix.reps,
+							style: 'reps'
+						},
+						{
+							// Tempo
+							width: 52,
+							text: this._getExerciseTempo(this.workout.dayThree.rowSix.tempoOne, this.workout.dayThree.rowSix.tempoTwo, this.workout.dayThree.rowSix.tempoThree),
+							alignment: 'center',
+							style: 'tempo',
+						},
+					], // EO Column
+				}, // EO Day 3
+
+				/*************** Day 4 ***************/
+				{
+					// Exercise
+					text: this.workout.dayFour.rowSix.exercise,
+					style: 'exercise',
+					alignment: 'center'
+				},
+				{
+					columns: [
+						{
+							// Variation
+							width: 36,
+							text: this.workout.dayFour.rowSix.variation,
+							style: 'variation'
+						},
+						{
+							// Weight
+							width: 34,
+							text: this._computeWorkoutWeight(this.workout.dayFour.rowSix.max),
+							style: 'weight'
+						},
+						{
+							// Reps
+							width:18,
+							text: this.workout.dayFour.rowSix.reps,
+							style: 'reps'
+						},
+						{
+							// Tempo
+							width: 52,
+							text: this._getExerciseTempo(this.workout.dayFour.rowSix.tempoOne, this.workout.dayFour.rowSix.tempoTwo, this.workout.dayFour.rowSix.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -8781,7 +8936,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowSeven.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8790,24 +8945,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayOne.rowSeven.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayOne.rowSeven.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayOne.rowSeven.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayOne.rowSeven.tempoOne, this.workout.dayOne.rowSeven.tempoTwo, this.workout.dayOne.rowSeven.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -8817,7 +8973,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayTwo.rowSeven.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8826,24 +8982,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayTwo.rowSeven.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayTwo.rowSeven.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayTwo.rowSeven.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayTwo.rowSeven.tempoOne, this.workout.dayTwo.rowSeven.tempoTwo, this.workout.dayTwo.rowSeven.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -8853,7 +9010,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayThree.rowSeven.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8862,24 +9019,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayThree.rowSeven.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayThree.rowSeven.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayThree.rowSeven.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayThree.rowSeven.tempoOne, this.workout.dayThree.rowSeven.tempoTwo, this.workout.dayThree.rowSeven.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -8889,7 +9047,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayFour.rowSeven.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8898,24 +9056,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayFour.rowSeven.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayFour.rowSeven.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayFour.rowSeven.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayFour.rowSeven.tempoOne, this.workout.dayFour.rowSeven.tempoTwo, this.workout.dayFour.rowSeven.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -8928,7 +9087,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowEight.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8937,24 +9096,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayOne.rowEight.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayOne.rowEight.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayOne.rowEight.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayOne.rowEight.tempoOne, this.workout.dayOne.rowEight.tempoTwo, this.workout.dayOne.rowEight.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -8964,7 +9124,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayTwo.rowEight.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -8973,24 +9133,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayTwo.rowEight.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayTwo.rowEight.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayTwo.rowEight.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayTwo.rowEight.tempoOne, this.workout.dayTwo.rowEight.tempoTwo, this.workout.dayTwo.rowEight.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -9000,7 +9161,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayThree.rowEight.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9009,24 +9170,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayThree.rowEight.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayThree.rowEight.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayThree.rowEight.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							 // Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayThree.rowEight.tempoOne, this.workout.dayThree.rowEight.tempoTwo, this.workout.dayThree.rowEight.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -9036,7 +9198,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayFour.rowEight.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9045,24 +9207,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayFour.rowEight.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayFour.rowEight.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayFour.rowEight.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayFour.rowEight.tempoOne, this.workout.dayFour.rowEight.tempoTwo, this.workout.dayFour.rowEight.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -9075,7 +9238,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowNine.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9084,24 +9247,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayOne.rowNine.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayOne.rowNine.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayOne.rowNine.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayOne.rowNine.tempoOne, this.workout.dayOne.rowNine.tempoTwo, this.workout.dayOne.rowNine.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -9111,7 +9275,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayTwo.rowNine.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9120,24 +9284,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayTwo.rowNine.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayTwo.rowNine.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayTwo.rowNine.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayTwo.rowNine.tempoOne, this.workout.dayTwo.rowNine.tempoTwo, this.workout.dayTwo.rowNine.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -9147,7 +9312,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayThree.rowNine.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9156,24 +9321,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayThree.rowNine.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayThree.rowNine.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayThree.rowNine.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayThree.rowNine.tempoOne, this.workout.dayThree.rowNine.tempoTwo, this.workout.dayThree.rowNine.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -9183,7 +9349,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayFour.rowNine.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9192,24 +9358,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayFour.rowNine.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this.workout.dayFour.rowNine.reps,
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayFour.rowNine.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayFour.rowNine.tempoOne, this.workout.dayFour.rowNine.tempoTwo, this.workout.dayFour.rowNine.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -9222,7 +9389,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowTen.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9231,24 +9398,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayOne.rowTen.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayOne.rowTen.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayOne.rowTen.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayOne.rowTen.tempoOne, this.workout.dayOne.rowTen.tempoTwo, this.workout.dayOne.rowTen.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -9258,7 +9426,7 @@ content: [
 				/*************** Day 2 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayTwo.rowTen.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9267,24 +9435,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayTwo.rowTen.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayTwo.rowTen.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayTwo.rowTen.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayTwo.rowTen.tempoOne, this.workout.dayTwo.rowTen.tempoTwo, this.workout.dayTwo.rowTen.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -9294,7 +9463,7 @@ content: [
 				/*************** Day 3 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayThree.rowTen.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9303,24 +9472,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayThree.rowTen.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayThree.rowTen.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayThree.rowTen.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							 // Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayThree.rowTen.tempoOne, this.workout.dayThree.rowTen.tempoTwo, this.workout.dayThree.rowTen.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -9330,7 +9500,7 @@ content: [
 				/*************** Day 4 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayFour.rowTen.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9339,24 +9509,25 @@ content: [
 						{
 							// Variation
 							width: 36,
-							text: 'Banded',
+							text: this.workout.dayFour.rowTen.variation,
 							style: 'variation'
 						},
 						{
 							// Weight
 							width: 34,
-							text: '132lbs',
+							text: this._computeWorkoutWeight(this.workout.dayFour.rowTen.max),
 							style: 'weight'
 						},
 						{
 							// Reps
-							width:20,
-							text: '31',
+							width:18,
+							text: this.workout.dayFour.rowTen.reps,
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
-							text: '1:6:0',
+							text: this._getExerciseTempo(this.workout.dayFour.rowTen.tempoOne, this.workout.dayFour.rowTen.tempoTwo, this.workout.dayFour.rowTen.tempoThree),
 							alignment: 'center',
 							style: 'tempo',
 						},
@@ -9369,7 +9540,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowEleven.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9389,18 +9560,19 @@ content: [
 						},
 						{
 							// Reps
-							width:20,
+							width:18,
 							text: '31',
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
 							text: '1:6:0',
 							alignment: 'center',
 							style: 'tempo',
 						},
 					], // EO Column
-				}, // EO Day 1
+				}, // EO Day 2
 
 				/*************** Day 2 ***************/
 				{
@@ -9516,7 +9688,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowTwelve.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9547,7 +9719,7 @@ content: [
 							style: 'tempo',
 						},
 					], // EO Column
-				}, // EO Day 2
+				}, // EO Day 1
 
 				/*************** Day 2 ***************/
 				{
@@ -9644,11 +9816,12 @@ content: [
 						},
 						{
 							// Reps
-							width:20,
+							width:18,
 							text: '31',
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
 							text: '1:6:0',
 							alignment: 'center',
@@ -9663,7 +9836,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowThirteen.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9810,7 +9983,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowFourteen.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9957,7 +10130,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowFifteen.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -9977,11 +10150,12 @@ content: [
 						},
 						{
 							// Reps
-							width:20,
+							width:18,
 							text: '31',
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
 							text: '1:6:0',
 							alignment: 'center',
@@ -10085,11 +10259,12 @@ content: [
 						},
 						{
 							// Reps
-							width:20,
+							width:18,
 							text: '31',
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
 							text: '1:6:0',
 							alignment: 'center',
@@ -10104,7 +10279,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowSixteen.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10124,11 +10299,12 @@ content: [
 						},
 						{
 							// Reps
-							width:20,
+							width:18,
 							text: '31',
 							style: 'reps'
 						},
-						{    // Tempo
+						{
+							// Tempo
 							width: 52,
 							text: '1:6:0',
 							alignment: 'center',
@@ -10251,7 +10427,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowSeventeen.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10398,7 +10574,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowNineteen.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10545,7 +10721,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowNineteen.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10692,7 +10868,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowTwenty.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10832,14 +11008,14 @@ content: [
 						},
 					], // EO Column
 				}, // EO Day 4
-			], // EO Content: Row 4
+			], // EO Content: Row 20
 
 // Content: Row 21
 			[
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowTwentyOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -10986,7 +11162,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowTwentyTwo.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11126,14 +11302,14 @@ content: [
 						},
 					], // EO Column
 				}, // EO Day 4
-			], // EO Content: Row 21
+			], // EO Content: Row 22
 
 // Content: Row 23
 			[
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowTwentyThree.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11280,7 +11456,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowTwentyFour.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11427,7 +11603,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowTwentyFive.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11574,7 +11750,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowTwentySix.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11721,7 +11897,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowTwentySeven.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -11868,7 +12044,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowTwentyEight.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -12015,7 +12191,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowTwentyNine.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -12162,154 +12338,7 @@ content: [
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
-					style: 'exercise',
-					alignment: 'center'
-				},
-				{
-					columns: [
-						{
-							// Variation
-							width: 36,
-							text: 'Banded',
-							style: 'variation'
-						},
-						{
-							// Weight
-							width: 34,
-							text: '132lbs',
-							style: 'weight'
-						},
-						{
-							// Reps
-							width:20,
-							text: '31',
-							style: 'reps'
-						},
-						{    // Tempo
-							width: 52,
-							text: '1:6:0',
-							alignment: 'center',
-							style: 'tempo',
-						},
-					], // EO Column
-				}, // EO Day 1
-
-				/*************** Day 2 ***************/
-				{
-					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
-					style: 'exercise',
-					alignment: 'center'
-				},
-				{
-					columns: [
-						{
-							// Variation
-							width: 36,
-							text: 'Banded',
-							style: 'variation'
-						},
-						{
-							// Weight
-							width: 34,
-							text: '132lbs',
-							style: 'weight'
-						},
-						{
-							// Reps
-							width:20,
-							text: '31',
-							style: 'reps'
-						},
-						{    // Tempo
-							width: 52,
-							text: '1:6:0',
-							alignment: 'center',
-							style: 'tempo',
-						},
-					], // EO Column
-				}, // EO Day 2
-
-				/*************** Day 3 ***************/
-				{
-					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
-					style: 'exercise',
-					alignment: 'center'
-				},
-				{
-					columns: [
-						{
-							// Variation
-							width: 36,
-							text: 'Banded',
-							style: 'variation'
-						},
-						{
-							// Weight
-							width: 34,
-							text: '132lbs',
-							style: 'weight'
-						},
-						{
-							// Reps
-							width:20,
-							text: '31',
-							style: 'reps'
-						},
-						{    // Tempo
-							width: 52,
-							text: '1:6:0',
-							alignment: 'center',
-							style: 'tempo',
-						},
-					], // EO Column
-				}, // EO Day 3
-
-				/*************** Day 4 ***************/
-				{
-					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
-					style: 'exercise',
-					alignment: 'center'
-				},
-				{
-					columns: [
-						{
-							// Variation
-							width: 36,
-							text: 'Banded',
-							style: 'variation'
-						},
-						{
-							// Weight
-							width: 34,
-							text: '132lbs',
-							style: 'weight'
-						},
-						{
-							// Reps
-							width:20,
-							text: '31',
-							style: 'reps'
-						},
-						{    // Tempo
-							width: 52,
-							text: '1:6:0',
-							alignment: 'center',
-							style: 'tempo',
-						},
-					], // EO Column
-				}, // EO Day 4
-			], // EO Content: Row 30
-
-// Content: Row 31
-			[
-				/*************** Day 1 ***************/
-				{
-					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowThirty.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -12449,14 +12478,14 @@ content: [
 						},
 					], // EO Column
 				}, // EO Day 4
-			], // EO Content: Row 2
+			], // EO Content: Row 30
 
-// Content: Row 32
+// Content: Row 31
 			[
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowThirtyOne.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
@@ -12596,14 +12625,14 @@ content: [
 						},
 					], // EO Column
 				}, // EO Day 4
-			], // EO Content: Row 32
+			], // EO Content: Row 31
 
-// Content: Row 33
+// Content: Row 32
 			[
 				/*************** Day 1 ***************/
 				{
 					// Exercise
-					text: this.workout.dayOne.rowOne.exercise,
+					text: this.workout.dayOne.rowThirtyTwo.exercise,
 					style: 'exercise',
 					alignment: 'center'
 				},
