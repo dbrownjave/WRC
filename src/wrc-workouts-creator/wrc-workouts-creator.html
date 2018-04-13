@@ -235,7 +235,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             class="workoutWeekCombo"
                             label="Week"
                             required
-                            error-message="This field is required"></vaadin-combo-box>
+							error-message="This field is required"
+							value="{{workout.week}}"></vaadin-combo-box>
                     </div>
 
                     <!-- Tabs -->
@@ -6610,6 +6611,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							type: Object,
 							notify: true,
 							value: {
+								week: '',
 								dayOne: {
 									rowOne: {
 										exercise: '1',
