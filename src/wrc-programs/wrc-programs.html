@@ -93,6 +93,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							color: white;
 						}
 
+						.option-menu {
+							 z-index: 2;
+						}
+
+						.collection-wrapper {
+							@apply --layout-wrap
+							@apply --layout-horizontal
+						}
+
 
 						.iron-selected {
 							border-style: solid;
@@ -113,12 +122,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					<paper-button raised hidden$="{{!hidden}}" on-tap="_isHidden">back</paper-button>
 
-					<div class="vertical-containter">
+					<div class="">
 						<!-- Program Cards -->
 						<template is=dom-repeat items="{{programs}}">
 							<div class="paper-form" hidden$={{hidden}} on-tap="_isHidden">
 								<div class="pdf-wrapper">
-									<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0">
+									<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
 										<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
 										<paper-listbox noink slot="dropdown-content">
 											<paper-item id$="[[]]" on-tap="" onclick="alert('Compute PDF Calculations')">Start</paper-item>
@@ -141,26 +150,31 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								</div>
 							</div>
 						</template>
+				</div>
+
+						<div class="collection-wrapper">
 
 						<iron-selector multi hidden$="[[!hidden]]">
-							<!-- Workouts Cards -->
-							<template is=dom-repeat items="{{workouts}}">
-								<div class="paper-form">
-									<div class="pdf-wrapper">
-										<div class="content-wrapper">
-											<div class="season-title-workout">
-												OFF-SEASON
+								<!-- Workouts Cards -->
+								<template is=dom-repeat items="{{workouts}}">
+									<div class="paper-form">
+										<div class="pdf-wrapper">
+											<div class="content-wrapper">
+												<div class="season-title-workout">
+													OFF-SEASON
+												</div>
+												<div class="program-title">10 Week Program</div>
+												<div class="type-title">Strength Phase</div>
 											</div>
-											<div class="program-title">10 Week Program</div>
-											<div class="type-title">Strength Phase</div>
-										</div>
-										<div class="tag">
-											<div class="day-title">Week [[item.week]]</div>
+											<div class="tag">
+												<div class="day-title">Week [[item.week]]</div>
+											</div>
 										</div>
 									</div>
-								</div>
-							</template>
-					</div>
+								</template>
+					</iron-selector>
+											</div>
+
 
           <!-- Paper Fab to add new workout -->
           <paper-fab src="../icons/fab-icon/plus-icon@3x.png" on-tap="_openToAdd"></paper-fab>
