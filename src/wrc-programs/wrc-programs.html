@@ -52,6 +52,44 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       				overflow: auto;
       			}
 
+						/* Header Section */
+						div.title {
+						@apply --layout-center-justified;
+						}
+
+						img.back-button {
+							width: 30px;
+							height: 30px;
+							left: 0;
+						}
+
+						.header-section {
+							@apply --layout-horizontal;
+						}
+
+						paper-button.back-button {
+						}
+
+					  div.title h3 {
+								margin-left: 26px;
+								font-size: 1.6em;
+								font-weight: 400;
+								font-style: normal;
+								font-stretch: normal;
+								line-height: normal;
+								letter-spacing: 1px;
+								color: #6a7582;
+
+								@apply --layout-center;
+								@apply --layout-vertical;
+						}
+
+						/* Paper Fab */
+						paper-fab.finish-button {
+							--paper-fab-background: #5ac381;
+							--paper-fab-keyboard-focus-background: #5ac381;
+						}
+
 						/* Iron Selector */
 						iron-selector {
 							@apply --layout-wrap;
@@ -75,6 +113,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 						.menu-icon:hover {
 							color: #636E7A;
+						}
+
+						.paper-form {
+							z-index: 0;
 						}
 
 						.paper-form>.pdf-wrapper {
@@ -108,7 +150,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						}
 
 						.option-menu {
-							 z-index: 2;
+							 z-index: 5;
 						}
 
 						div.collection-wrapper {
@@ -125,8 +167,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
         <main>
 
-					<!-- Back button  -->
-					<paper-button raised hidden$="{{!hidden}}" on-tap="_isHidden">back</paper-button>
+					<div class="header-section" hidden$="{{!hidden}}">
+						<!-- Back button  -->
+						<paper-button noink class="back-button" on-tap="_isHidden">
+							<img src="../icons/buttons/left-arrow.svg" alt="Back" class="back-button">
+						</paper-button>
+
+						<div class="title">
+							<h3>Select Workouts for Program</h3>
+						</div>
+					</div>
 
 					<!-- Program Cards -->
 					<div class="collection-wrapper">
@@ -177,8 +227,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
           <!-- Paper Fab to add new workout -->
           <paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}}" on-tap="_openToAdd"></paper-fab>
-					<!-- Done button -->
-					<paper-fab hidden$="{{!hidden}}" on-tap="alert('Done')" ></paper-fab>
+
+					<!-- Finish button -->
+					<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{!hidden}}" on-tap="alert('Done')" class="finish-button"></paper-fab>
 
       </main>
     </template>
