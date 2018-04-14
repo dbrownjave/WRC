@@ -11,6 +11,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
@@ -45,8 +46,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <dom-module id="wrc-programs">
 	  <template>
 		    <style include="wrc-shared-styles">
-      			/* General Style */
 
+						/* General Style */
       			main {
       				padding: 1em 0em 2em 0em;
       				height: calc(100vh - (64px + 4em));
@@ -60,26 +61,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							@apply --layout-center-justified;
 						}
 
-						img.back-button {
-							margin: 10px 0 0 0;
-							width: 30px;
-							height: 30px;
-							position:absolute;
-
-
-							@apply --layout-horizontal;
-							@apply --layout-center-justified;
+						paper-icon-button.back-button {
+							margin: 10px 0 0 15px;
 						}
 
 						.header-section {
 							@apply --layout-horizontal;
 						}
 
-						paper-button.back-button {
-						}
-
 					  div.title h3 {
-								margin-left: 26px;
 								font-size: 1.6em;
 								font-weight: 400;
 								font-style: normal;
@@ -87,6 +77,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								line-height: normal;
 								letter-spacing: 1px;
 								color: #6a7582;
+								margin: -38px 0 20px 0;
 
 								@apply --layout-center;
 								@apply --layout-vertical;
@@ -124,6 +115,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						}
 
 						.paper-form {
+							position: relative;
 							z-index: 0;
 						}
 
@@ -158,7 +150,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						}
 
 						.option-menu {
-							 z-index: 5;
+							 z-index: 2;
 						}
 
 						div.collection-wrapper {
@@ -188,11 +180,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
         <main>
 
-					<div class="" hidden$="{{!hidden}}">
+					<div hidden$="{{!hidden}}">
+
 						<!-- Back button  -->
-						<paper-button noink class="back-button" on-tap="_isHidden">
-							<img src="../icons/buttons/left-arrow.svg" alt="Back" class="back-button">
-						</paper-button>
+						<paper-icon-button
+								noink
+								class="back-button"
+								alt="Back"
+								src="../icons/buttons/left-arrow.svg"
+								on-tap="_isHidden">
+						</paper-icon-button>
 
 						<div class="title">
 							<h3>Select Workouts for Program</h3>
