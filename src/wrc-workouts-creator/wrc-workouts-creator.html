@@ -151,15 +151,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             .week-wrapper {
-                margin: 0 2cm 0 0;
+								margin: 1.4cm 2cm 0 0;
             }
-
-			/* Iron Pages */
-			.pages-wrapper {
-				/* overflow: auto;
-
-				@apply --layout-flex; */
-			}
 
             /* Actions */
             div.actions {
@@ -198,7 +191,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <main>
             <div class="creator-wrapper">
                 <h3>New Weekly Workout</h3>
-								<!--
                 <div class="workout-selector">
                     <iron-form id="workoutSelectorForm">
                         <form>
@@ -206,27 +198,29 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 id="seasonCombo"
                                 label="Season"
                                 required
-                                error-message="This field is required"></vaadin-combo-box>
+                                error-message="This field is required"
+																value="{{workout.season}}"></vaadin-combo-box>
                             <vaadin-combo-box
                                 id="typeCombo"
                                 label="Type"
                                 required
-                                error-message="This field is required"></vaadin-combo-box>
+                                error-message="This field is required"
+																value="{{workout.type}}"></vaadin-combo-box>
                             <vaadin-combo-box
                                 id="weeksCombo"
                                 label="Weeks"
                                 required
-                                error-message="This field is required"></vaadin-combo-box>
+                                error-message="This field is required"
+																value="{{workout.weeks}}"></vaadin-combo-box>
                             <vaadin-combo-box
                                 id="daysCombo"
                                 label="Days"
                                 required
-                                error-message="This field is required"></vaadin-combo-box>
+                                error-message="This field is required"
+                                value="{{workout.days}}"></vaadin-combo-box>
                         </form>
                     </iron-form>
                 </div>
-							-->
-
                 <div class="row-header-wrapper">
                     <!-- Week of workout -->
                     <div class="week-wrapper">
@@ -6569,10 +6563,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					this._appToast = document.getElementById("appToast");
 
 					// Assign items for each top combo box
-					//this.$.seasonCombo.items = ['Off-season', 'Pre-season', 'In-season'];
-					//this.$.typeCombo.items = ['Strength Phase', 'Power Phase', 'Correctional Phase'];
-					//this.$.weeksCombo.items = ['4', '6', '8', '10', '12'];
-					//this.$.daysCombo.items = ['2', '3', '4'];
+					this.$.seasonCombo.items = ['Off-season', 'Pre-season', 'In-season'];
+					this.$.typeCombo.items = ['Strength Phase', 'Power Phase', 'Correctional Phase'];
+					this.$.weeksCombo.items = ['4', '6', '8', '10', '12'];
+					this.$.daysCombo.items = ['2', '3', '4'];
 					this.$.workoutWeekCombo.items = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 
 					// Get all reps combos and set their items
@@ -6611,6 +6605,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							type: Object,
 							notify: true,
 							value: {
+								season: '',
+								type: '',
+								weeks: '',
+								days: '',
 								week: '',
 								status: false,
 								dayOne: {
@@ -12874,7 +12872,12 @@ defaultStyle: {
 				 * Generates Workout
 				*/
 				_generateWorkout() {
-					if (this.workout && this.$.workoutWeekCombo.validate()) {
+					if (this.workout && (this.$.workoutWeekCombo.validate()
+										 			 && this.$.seasonCombo.validate()
+													 && this.$.typeCombo.validate()
+													 && this.$.weeksCombo.validate()
+													 && this.$.daysCombo.validate()))
+					{
 						this.$.firebaseDocument.push('workouts', this.workout)
 						.catch(function(err) {
 							this._appToast.text = "An error has ocurred saving the workout";
