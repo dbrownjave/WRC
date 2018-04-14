@@ -41,232 +41,232 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../shared-styles.html">
 
 <dom-module id="wrc-programs">
-	  <template>
-		    <style include="wrc-shared-styles">
-      			/* General Style */
+	<template>
+		<style include="wrc-shared-styles">
+			/* General Style */
 
-      			main {
-      				padding: 1em 0em 2em 0em;
-      				height: calc(100vh - (64px + 4em));
-      				min-height: calc(100vh - (64px + 4em));
-      				overflow: auto;
-      			}
+			main {
+				padding: 1em 0em 2em 0em;
+				height: calc(100vh - (64px + 4em));
+				min-height: calc(100vh - (64px + 4em));
+				overflow: auto;
+			}
 
-						/* PDF Workout */
-						.menu-icon {
-							margin-left: 10em;
-							color: #86919f;
-						}
+			/* PDF Workout */
 
-						.menu-icon:hover {
-							color: #636E7A;
-						}
+			.menu-icon {
+				margin-left: 10em;
+				color: #86919f;
+			}
 
-						.paper-form>.pdf-wrapper {
-							@apply --layout-vertical;
-							@apply --layout-center;
-						}
+			.menu-icon:hover {
+				color: #636E7A;
+			}
 
-						.content-wrapper {
-							display: block;
-							margin: .5cm auto 0 auto;
-						}
+			.paper-form>.pdf-wrapper {
+				@apply --layout-vertical;
+				@apply --layout-center;
+			}
 
-
-						.start-button {
-							width: 110px;
-							height: 30px;
-							border-radius: 3.1px;
-							background-color: #5ac381;
-							box-shadow: 0 4px 15px 0 rgba(90, 195, 129, 0.54);
-							margin: 60px 0 0 0;
-
-							@apply --layout-vertical;
-							@apply --layout-center-center;
-						}
-
-						.start-button>.title {
-							font-size: 1em;
-							font-weight: 400;
-							letter-spacing: 0.4px;
-							text-align: center;
-							color: white;
-						}
-
-						.option-menu {
-							 z-index: 2;
-						}
-
-						.collection-wrapper {
-							@apply --layout-wrap
-							@apply --layout-horizontal
-						}
+			.content-wrapper {
+				display: block;
+				margin: .5cm auto 0 auto;
+			}
 
 
-						.iron-selected {
-							border-style: solid;
-							border-color: rgb(66, 141, 255, .60);
-							border-width: medium;
-							color: white;
+			.start-button {
+				width: 110px;
+				height: 30px;
+				border-radius: 3.1px;
+				background-color: #5ac381;
+				box-shadow: 0 4px 15px 0 rgba(90, 195, 129, 0.54);
+				margin: 60px 0 0 0;
 
-							box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
-						}
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
 
-						[hidden] {
-							display: none;
-						}
+			.start-button>.title {
+				font-size: 1em;
+				font-weight: 400;
+				letter-spacing: 0.4px;
+				text-align: center;
+				color: white;
+			}
 
-		    </style>
+			.option-menu {
+				z-index: 2;
+			}
 
-        <main>
+			.collection-wrapper {
+				@apply --layout-wrap;
+				@apply --layout-horizontal;
+			}
 
-					<paper-button raised hidden$="{{!hidden}}" on-tap="_isHidden">back</paper-button>
 
-					<div class="">
-						<!-- Program Cards -->
-						<template is=dom-repeat items="{{programs}}">
-							<div class="paper-form" hidden$={{hidden}} on-tap="_isHidden">
-								<div class="pdf-wrapper">
-									<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
-										<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-										<paper-listbox noink slot="dropdown-content">
-											<paper-item id$="[[]]" on-tap="" onclick="alert('Compute PDF Calculations')">Start</paper-item>
-											<paper-item id$="[[]]" on-tap="" onclick="alert('Open PDF')">Preview</paper-item>
-											<paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Download</paper-item>
-										</paper-listbox>
-									</paper-menu-button>
+			.iron-selected {
+				border-style: solid;
+				border-color: rgb(66, 141, 255, .60);
+				border-width: medium;
+				color: white;
 
-									<!--  Content -->
-									<div class="content-wrapper">
-										<div class="season-title-program">
-											OFF-SEASON
-										</div>
-										<div class="program-title">10 Week Program</div>
-										<div class="type-title">Strength Phase</div>
+				box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
+			}
+
+			[hidden] {
+				display: none;
+			}
+		</style>
+
+		<main>
+
+			<paper-button raised hidden$="{{!hidden}}" on-tap="_isHidden">back</paper-button>
+
+			<div class="">
+				<!-- Program Cards -->
+				<template is=dom-repeat items="{{programs}}">
+					<div class="paper-form" hidden$={{hidden}} on-tap="_isHidden">
+						<div class="pdf-wrapper">
+							<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+								<paper-listbox noink slot="dropdown-content">
+									<paper-item id$="[[]]" on-tap="" onclick="alert('Compute PDF Calculations')">Start</paper-item>
+									<paper-item id$="[[]]" on-tap="" onclick="alert('Open PDF')">Preview</paper-item>
+									<paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Download</paper-item>
+								</paper-listbox>
+							</paper-menu-button>
+
+							<!--  Content -->
+							<div class="content-wrapper">
+								<div class="season-title-program">
+									OFF-SEASON
+								</div>
+								<div class="program-title">10 Week Program</div>
+								<div class="type-title">Strength Phase</div>
+							</div>
+							<div class="tag">
+								<div class="day-title"> [[item.days]] Days</div>
+							</div>
+						</div>
+					</div>
+				</template>
+			</div>
+
+			<div class="collection-wrapper">
+
+				<iron-selector multi hidden$="[[!hidden]]">
+					<!-- Workouts Cards -->
+					<template is=dom-repeat items="{{workouts}}">
+						<div class="paper-form">
+							<div class="pdf-wrapper">
+								<div class="content-wrapper">
+									<div class="season-title-workout">
+										OFF-SEASON
 									</div>
-									<div class="tag">
-										<div class="day-title"> [[item.days]] Days</div>
-									</div>
+									<div class="program-title">10 Week Program</div>
+									<div class="type-title">Strength Phase</div>
+								</div>
+								<div class="tag">
+									<div class="day-title">Week [[item.week]]</div>
 								</div>
 							</div>
-						</template>
-				</div>
-
-						<div class="collection-wrapper">
-
-						<iron-selector multi hidden$="[[!hidden]]">
-								<!-- Workouts Cards -->
-								<template is=dom-repeat items="{{workouts}}">
-									<div class="paper-form">
-										<div class="pdf-wrapper">
-											<div class="content-wrapper">
-												<div class="season-title-workout">
-													OFF-SEASON
-												</div>
-												<div class="program-title">10 Week Program</div>
-												<div class="type-title">Strength Phase</div>
-											</div>
-											<div class="tag">
-												<div class="day-title">Week [[item.week]]</div>
-											</div>
-										</div>
-									</div>
-								</template>
-					</iron-selector>
-											</div>
+						</div>
+					</template>
+				</iron-selector>
+			</div>
 
 
-          <!-- Paper Fab to add new workout -->
-          <paper-fab src="../icons/fab-icon/plus-icon@3x.png" on-tap="_openToAdd"></paper-fab>
-      </main>
-    </template>
+			<!-- Paper Fab to add new workout -->
+			<paper-fab src="../icons/fab-icon/plus-icon@3x.png" on-tap="_openToAdd"></paper-fab>
+		</main>
+	</template>
 
-    <script>
-        'use strict';
+	<script>
+		'use strict';
 
-        (function() {
-            class WrcPrograms extends Polymer.Element {
-                // Element definition
-                static get is() { return 'wrc-programs'; }
+		(function () {
+			class WrcPrograms extends Polymer.Element {
+				// Element definition
+				static get is() {
+					return 'wrc-programs';
+				}
 
-                /**
-        				 * Element properties
-        				 */
-        				static get properties() {
-        					return {
+				/**
+				 * Element properties
+				 */
+				static get properties() {
+					return {
 
-										workouts: {
-											type: Array,
-											notify: true,
-											value() {
-												return [
-													{
-														week: 1
-													},
-													{
-														week: 2
-													},
-													{
-														week: 3
-													},
-													{
-														week: 4
-													},
-													{
-														week: 5
-													}
-												]
-											}
-										},
-										programs: {
-											type: Array,
-											notify: true,
-											value() {
-												return [
-													{
-														days: 2
-													},
-													{
-														days: 4
-													}
-												]
-											}
-										},
-										hidden: {
-											type: Boolean,
-											notify: true,
-											value: false
-										}
+						workouts: {
+							type: Array,
+							notify: true,
+							value() {
+								return [{
+										week: 1
+									},
+									{
+										week: 2
+									},
+									{
+										week: 3
+									},
+									{
+										week: 4
+									},
+									{
+										week: 5
 									}
-								};
+								]
+							}
+						},
+						programs: {
+							type: Array,
+							notify: true,
+							value() {
+								return [{
+										days: 2
+									},
+									{
+										days: 4
+									}
+								]
+							}
+						},
+						hidden: {
+							type: Boolean,
+							notify: true,
+							value: false
+						}
+					}
+				};
 
-                ready() {
-                    super.ready();
+				ready() {
+					super.ready();
 
-                    // Add Program Dialog
-                    this._addProgramDialog = document.getElementById('addProgramDialog');
-                }
+					// Add Program Dialog
+					this._addProgramDialog = document.getElementById('addProgramDialog');
+				}
 
-                /**
-        				 * Opens program dialog to add
-        				 */
-                _openToAdd(){
-                  this._addProgramDialog.opened = true;
-                }
+				/**
+				 * Opens program dialog to add
+				 */
+				_openToAdd() {
+					this._addProgramDialog.opened = true;
+				}
 
 
-								/**
-								 * Element Hidden functionality
-								 *
-								 * @param {Boolean} return true to hide content
-								 * @return {Boolean}
-								 */
-								_isHidden(){
-									this.hidden = !this.hidden;
-								}
+				/**
+				 * Element Hidden functionality
+				 *
+				 * @param {Boolean} return true to hide content
+				 * @return {Boolean}
+				 */
+				_isHidden() {
+					this.hidden = !this.hidden;
+				}
 
-            }
-            window.customElements.define(WrcPrograms.is, WrcPrograms);
-        }());
-    </script>
+			}
+			window.customElements.define(WrcPrograms.is, WrcPrograms);
+		}());
+	</script>
 </dom-module>
