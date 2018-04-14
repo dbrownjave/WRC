@@ -23,6 +23,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <!-- Iron Elements -->
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-multi-selectable.html">
@@ -54,13 +56,19 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 						/* Header Section */
 						div.title {
-						@apply --layout-center-justified;
+							@apply --layout-horizontal;
+							@apply --layout-center-justified;
 						}
 
 						img.back-button {
+							margin: 10px 0 0 0;
 							width: 30px;
 							height: 30px;
-							left: 0;
+							position:absolute;
+
+
+							@apply --layout-horizontal;
+							@apply --layout-center-justified;
 						}
 
 						.header-section {
@@ -163,11 +171,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							display: none;
 						}
 
+						/* Responsive */
+						@media screen and (max-width: 600px) {
+							div.title h3 {
+									font-size: 1.4em;
+							}
+
+							div.collection-wrapper {
+								@apply --layout-wrap;
+								@apply --layout-vertical;
+								@apply --layout-center;
+							}
+						}
+
 		    </style>
 
         <main>
 
-					<div class="header-section" hidden$="{{!hidden}}">
+					<div class="" hidden$="{{!hidden}}">
 						<!-- Back button  -->
 						<paper-button noink class="back-button" on-tap="_isHidden">
 							<img src="../icons/buttons/left-arrow.svg" alt="Back" class="back-button">
