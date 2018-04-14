@@ -52,6 +52,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       				overflow: auto;
       			}
 
+						/* Iron Selector */
+						iron-selector {
+							@apply --layout-wrap;
+							@apply --layout-horizontal;
+						}
+
+						.iron-selected {
+							border-style: solid;
+							border-color: rgb(66, 141, 255, .60);
+							border-width: medium;
+							color: white;
+
+							box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
+						}
+
 						/* PDF Workout */
 						.menu-icon {
 							margin-left: 10em;
@@ -71,7 +86,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							display: block;
 							margin: .5cm auto 0 auto;
 						}
-
 
 						.start-button {
 							width: 110px;
@@ -97,19 +111,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							 z-index: 2;
 						}
 
-						.collection-wrapper {
-							@apply --layout-wrap
-							@apply --layout-horizontal
-						}
-
-
-						.iron-selected {
-							border-style: solid;
-							border-color: rgb(66, 141, 255, .60);
-							border-width: medium;
-							color: white;
-
-							box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
+						div.collection-wrapper {
+							@apply --layout-wrap;
+							@apply --layout-horizontal;
+							@apply --layout-center;
 						}
 
 						[hidden] {
@@ -120,10 +125,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
         <main>
 
+					<!-- Back button  -->
 					<paper-button raised hidden$="{{!hidden}}" on-tap="_isHidden">back</paper-button>
 
-					<div class="">
-						<!-- Program Cards -->
+					<!-- Program Cards -->
+					<div class="collection-wrapper">
 						<template is=dom-repeat items="{{programs}}">
 							<div class="paper-form" hidden$={{hidden}} on-tap="_isHidden">
 								<div class="pdf-wrapper">
@@ -136,11 +142,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										</paper-listbox>
 									</paper-menu-button>
 
-									<!--  Content -->
+									<!-- card content -->
 									<div class="content-wrapper">
-										<div class="season-title-program">
-											OFF-SEASON
-										</div>
+										<div class="season-title-program"> OFF-SEASON </div>
 										<div class="program-title">10 Week Program</div>
 										<div class="type-title">Strength Phase</div>
 									</div>
@@ -152,32 +156,30 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						</template>
 				</div>
 
-						<div class="collection-wrapper">
-
-						<iron-selector multi hidden$="[[!hidden]]">
-								<!-- Workouts Cards -->
-								<template is=dom-repeat items="{{workouts}}">
-									<div class="paper-form">
-										<div class="pdf-wrapper">
-											<div class="content-wrapper">
-												<div class="season-title-workout">
-													OFF-SEASON
+							<!-- Workouts Cards -->
+							<iron-selector multi hidden$="[[!hidden]]">
+									<template is=dom-repeat items="{{workouts}}">
+										<div class="paper-form">
+											<div class="pdf-wrapper">
+												<div class="content-wrapper">
+													<div class="season-title-workout">OFF-SEASON</div>
+													<div class="program-title">10 Week Program</div>
+													<div class="type-title">Strength Phase</div>
 												</div>
-												<div class="program-title">10 Week Program</div>
-												<div class="type-title">Strength Phase</div>
-											</div>
-											<div class="tag">
-												<div class="day-title">Week [[item.week]]</div>
+												<div class="tag">
+													<div class="day-title">Week [[item.week]]</div>
+												</div>
 											</div>
 										</div>
-									</div>
-								</template>
-					</iron-selector>
-											</div>
+									</template>
+						</iron-selector>
 
 
           <!-- Paper Fab to add new workout -->
-          <paper-fab src="../icons/fab-icon/plus-icon@3x.png" on-tap="_openToAdd"></paper-fab>
+          <paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}}" on-tap="_openToAdd"></paper-fab>
+					<!-- Done button -->
+					<paper-fab hidden$="{{!hidden}}" on-tap="alert('Done')" ></paper-fab>
+
       </main>
     </template>
 
