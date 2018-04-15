@@ -23,55 +23,69 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 * @return {Integer}
 			*/
 			_computeWorkoutWeight(max) {
-					var athleteExerciseMax = 125;
-					var maxPercentage = 0;
-					var rawMaxResult = 0;
+				var athleteExerciseMax = 125;
+				var maxPercentage = 0;
+				var rawMaxResult = 0;
 
-					if (max) {
-							//alert( "Initial Value: " + max);
+				if (max) {
+						//alert( "Initial Value: " + max);
 
-							// Integer to Percentage Conversion
-							maxPercentage = (max / 100);
-							//alert("Percentage Converted: " + maxPercentage);
+						// Integer to Percentage Conversion
+						maxPercentage = (max / 100);
+						//alert("Percentage Converted: " + maxPercentage);
 
-							rawMaxResult = (maxPercentage * athleteExerciseMax)
-							//alert("Calculated " + rawMaxResult);
-							//alert("Rounded to Integer: " + Math.round(rawMaxResult));
+						rawMaxResult = (maxPercentage * athleteExerciseMax)
+						//alert("Calculated " + rawMaxResult);
+						//alert("Rounded to Integer: " + Math.round(rawMaxResult));
 
-							// Convert max to weights equations
-							max = this._computeWeightFormat(rawMaxResult)
-							//alert("Weight Formated " + max);
+						// Convert max to weights equations
+						max = this._computeWeightFormat(rawMaxResult)
+						//alert("Weight Formated " + max);
 
-							return  max + 'lbs';
-					} else {
-							// Removes default:  'lbs'
-							return " ";
-					}
+						return  max + 'lbs';
+				} else {
+						// Removes default:  'lbs'
+						return " ";
+				}
 			}
 
 			// Weight Rounding Method to round the equation results; (e.g. floats/decimals) since weight's are (5,10,15...)
 			_computeWeightFormat(rawEquationResult) {
-					// Display before: rawEquationResult
-					//alert(this.rawEquationResult);
-					var rawEquationResult = parseInt(Math.round(rawEquationResult));
+				// Display before: rawEquationResult
+				//alert(this.rawEquationResult);
+				var rawEquationResult = parseInt(Math.round(rawEquationResult));
 
-					// Display after: rawEquationResult
-					//alert(rawEquationResult);
+				// Display after: rawEquationResult
+				//alert(rawEquationResult);
 
-					// find last digit of number
-					var lastDigit = rawEquationResult.toString().split('').pop();
+				// find last digit of number
+				var lastDigit = rawEquationResult.toString().split('').pop();
 
-					// Testing: Display last digit
-					//alert(lastDigit);
+				// Testing: Display last digit
+				//alert(lastDigit);
 
-					// Conditional statement to determine the rounding method
-					if (lastDigit >= 5) {
-							return ((rawEquationResult - lastDigit) + 10);
-					} else if (lastDigit <= 4 && lastDigit != 0) {
-							return (rawEquationResult - lastDigit) + 5;
-					} else {
-							return 0;
-					}
+				// Conditional statement to determine the rounding method
+				if (lastDigit >= 5) {
+						return ((rawEquationResult - lastDigit) + 10);
+				} else if (lastDigit <= 4 && lastDigit != 0) {
+						return (rawEquationResult - lastDigit) + 5;
+				} else {
+						return 0;
+				}
+			}
+
+			/**
+			 * Exercise Tempo Format Generator
+			 *
+			 * @param {String} tempo percentage of weight as Integer
+			 * @return {Void}
+			*/
+			_getExerciseTempo(tempo1, tempo2, tempo3) {
+				if (tempo1 && tempo2 && tempo3) {
+					return tempo1 + ":" + tempo2 + ":" + tempo3;
+				} else {
+					return " ";
+				}
 			}
 
 			// Generates Preview for Workout

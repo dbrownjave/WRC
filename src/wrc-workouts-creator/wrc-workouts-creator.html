@@ -8703,7 +8703,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				}
 
 				/**
-				 * Generates Workout
+				 * Generates Workout and saves it to Firebase
 				*/
 				_generateWorkout() {
 					if (this.workout && this.$.workoutSelectorForm.validate() && this.$.workoutWeekCombo.validate())
@@ -8725,25 +8725,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						}.bind(this));
 					}
 				}
-
-				/**
-				 * Exercise Tempo Format Generator
-				 *
-				 * @param {String} tempo percentage of weight as Integer
-				 * @return {Void}
-				*/
-				_getExerciseTempo(tempo1, tempo2, tempo3) {
-						if (tempo1 && tempo2 && tempo3) {
-							return tempo1 + ":" + tempo2 + ":" + tempo3;
-						} else {
-							return " ";
-						}
-				}
-
-				_test() {
-					super._generatePreview(this.workout);
-				}
-
 			}
 			window.customElements.define(WrcWorkoutsCreator.is, WrcWorkoutsCreator);
 		}());
