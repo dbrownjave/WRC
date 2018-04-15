@@ -13796,6 +13796,10 @@ defaultStyle: {
 							this._appToast.open();
 							this.$.workoutSelectorForm.reset();
 							this.$.workoutWeekCombo.value = null;
+							this.$.dayOneForm.reset();
+							this.$.dayTwoForm.reset();
+							this.$.dayThreeForm.reset();
+							this.$.dayFourForm.reset();
 						}.bind(this))
 						.catch(function(err) {
 							this._appToast.text = "An error has ocurred saving the workout";
