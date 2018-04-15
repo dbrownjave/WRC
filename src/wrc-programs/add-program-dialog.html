@@ -120,7 +120,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
       	<!-- modal conent  -->
       	<paper-dialog-scrollable>
-      		<iron-form id="addWorkoutForm">
+      		<iron-form id="programForm">
           		<form>
               		<vaadin-form-layout>
                   		<!-- Programs  -->
@@ -130,42 +130,31 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           	name="program"
                           	required
                           	error-message="Select a program"
-                          	value=""></vaadin-combo-box>
-                      	<!-- Program Type  -->
-                      	<div class="">
-                          	<vaadin-combo-box
-                              	id="typeCombo"
-                              	class="typeCombo"
-                              	label="Type"
-                              	name="type"
-                              	required
-                              	error-message="Select a program type"
-                              	value=""></vaadin-combo-box>
-                      	</div>
-
-                      	<!-- Program Duration  -->
-                      	<div>
-                        	<vaadin-combo-box
-                            	id="durationCombo"
-	                            class="weekCombo"
-	                            label="Program Duration"
-	                            name="duration"
-	                            required
-	                            error-message="Select the duration"
-	                            value=""></vaadin-combo-box>
-                      	</div>
-
-                      	<!--  Days -->
-                      	<div>
-                          	<vaadin-combo-box
-                            	id="dayCombo"
-	                            class="dayCombo"
-	                            label="Days Per Week"
-	                            name="day"
-	                            required
-	                            error-message="Select number of days"
-	                            value=""></vaadin-combo-box>
-                      	</div>
+                          	value="{{programInfo.program}}"></vaadin-combo-box>
+                      	<vaadin-combo-box
+                          	id="typeCombo"
+                          	class="typeCombo"
+                          	label="Type"
+                          	name="type"
+                          	required
+                          	error-message="Select a program type"
+                          	value="{{programInfo.type}}"></vaadin-combo-box>
+                      	<vaadin-combo-box
+                        	id="durationCombo"
+                            class="weekCombo"
+                            label="Program Duration"
+                            name="duration"
+                            required
+                            error-message="Select the duration"
+                            value="{{programInfo.duration}}"></vaadin-combo-box>
+                      	<vaadin-combo-box
+                        	id="dayCombo"
+                            class="dayCombo"
+                            label="Days Per Week"
+                            name="day"
+                            required
+                            error-message="Select number of days"
+                            value="{{programInfo.days}}"></vaadin-combo-box>
               		</form>
           		</iron-form>
       		</paper-dialog-scrollable>
@@ -174,7 +163,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			<div class="buttons">
           		<paper-button dialog-dismiss class="cancel-button" on-tap="_resetForm" >Cancel</paper-button>
           		<span flex></span>
-          		<paper-button class="save-button" on-tap="">Create</paper-button>
+          		<paper-button class="save-button" on-tap="_serializeProgram">Create</paper-button>
       		</div>
   		</paper-dialog>
 	</template>
@@ -195,14 +184,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             	*/
             	static get properties() {
                 	return {
+						acceptedCallback: Function,
                     	opened: {
                         	type: Boolean,
                         	notify: true,
                         	value: false
-                    	}
+                    	},
+						programInfo: {
+							type: Object,
+							notify: true,
+							value: {
+								program: '',
+								type: '',
+								duration: '',
+								days: ''
+							}
+						}
                 	};
             	}
-
 
                 ready() {
                     super.ready()
@@ -220,14 +219,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * Resets the form
                 */
                 _resetForm() {
-                    this.equationResult = 0;
-                    this.$.addWorkoutForm.reset();
+                    this.$.programForm.reset();
                 }
 
                 /**
                  * Triggers the accepted callback with the response
                 */
-
+				_serializeProgram() {
+					if (this.$.programForm.validate()) {
+						this.acceptedCallback(this.programInfo);
+					}
+				}
               }
               window.customElements.define(AddProgramDialog.is, AddProgramDialog);
           })();
