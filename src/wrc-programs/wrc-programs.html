@@ -102,7 +102,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
 
-			.iron-selected {
+			.paper-form.iron-selected {
 				border-style: solid;
 				border-color: rgb(66, 141, 255, .60);
 				border-width: medium;
@@ -125,7 +125,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 			.paper-form {
 				position: relative;
-				z-index: 0;
+				/* z-index: 102; */
 			}
 
 			.paper-form>.pdf-wrapper {
@@ -158,8 +158,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				color: white;
 			}
 
-			.option-menu {
-			 	z-index: 2;
+			.option-menu paper-icon-button {
+			 	/* z-index: 105; */
 			}
 
 			div.collection-wrapper {
@@ -224,14 +224,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			<!-- Program Cards -->
 			<div class="collection-wrapper">
 				<template is=dom-repeat items="{{programsData}}" as="program">
-					<div class="paper-form" hidden$={{hidden}} on-tap="" id$="[[program.$key]]">
+					<div class="paper-form" hidden$={{hidden}} id$="[[program.$key]]">
 						<div class="pdf-wrapper">
 							<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
 								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
 								<paper-listbox noink slot="dropdown-content">
-									<paper-item id$="[[]]" on-tap="_isHidden">Review</paper-item>
-									<paper-item id$="[[]]" on-tap="_isHidden" >Edit</paper-item>
-									<paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Delete</paper-item>
+									<paper-item id$="[[program.$key]]" on-tap="_isHidden">Review</paper-item>
+									<paper-item id$="[[program.$key]]" on-tap="_isHidden">Edit</paper-item>
+									<paper-item id$="[[program.$key]]" on-tap="_deleteProgram">Delete</paper-item>
 								</paper-listbox>
 							</paper-menu-button>
 
@@ -268,7 +268,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			</iron-selector>
 
 		<!-- Workouts Cards Selector -->
-		<div hidden$="[[!hidden]]">
+		<!-- <div hidden$="[[!hidden]]">
 
 
 		<template is=dom-repeat items="{{workoutsData}}" as="workout">
@@ -293,7 +293,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			</div>
 		</template>
 
-		</div>
+		</div> -->
 
 
 			<!-- Paper Fab to add new workout -->
@@ -376,7 +376,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 */
 				_isHidden(e) {
 					// Extracts id of clicked program
-					const programId = e.path[3].id;
+					const programId = e.target.getAttribute("id");
 
 					// Assigns the id to a global variable to can access it from any other function
 					this.programId = (programId) ? programId : null;
@@ -388,7 +388,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 * Binds selected workouts to program
 				*/
 				_bindWorkoutsToProgram() {
-					const selectedWorkouts = this.root.querySelectorAll(".iron-selected");
+					const selectableWorkouts = this.root.querySelector("iron-selector");
+					const selectedWorkouts = selectableWorkouts.querySelectorAll(".iron-selected");
 					if (selectedWorkouts && selectedWorkouts.length > 0) {
 						this._appProgress.hidden = false;
 						let bindedWorkouts = [];
@@ -397,6 +398,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							bindedWorkouts.push(workoutId);
 							this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", true);
 						}
+						console.log(bindedWorkouts);
 						this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", bindedWorkouts)
 						.then(function() {
 							this._appProgress.hidden = true;
@@ -413,6 +415,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						this._appToast.text = "Please select at least one workout";
 						this._appToast.open();
 					}
+				}
+
+				/**
+				 * @description Deletes Program and releases all binded workouts
+				 */
+				_deleteProgram(evt) {
+					// TODO: Add confirm before deleting
+					
+					this.programId = evt.target.getAttribute("id");
+					this.$.firebaseDocument.getStoredValue("programs/" + this.programId + "/workouts")
+					.then(function(workouts) {
+						for (let workout of workouts) {
+							this.$.firebaseDocument.setStoredValue("workouts/" + workout + "/status", false);
+						}
+						this.$.firebaseDocument.destroy("programs/" + this.programId);
+						this._appToast.text = "The program has been deleted.";
+						this._appToast.open();
+					}.bind(this));
 				}
 			}
 			window.customElements.define(WrcPrograms.is, WrcPrograms);
