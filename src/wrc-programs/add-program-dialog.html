@@ -161,7 +161,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 	      	<!-- buttons  -->
 			<div class="buttons">
-          		<paper-button dialog-dismiss class="cancel-button" on-tap="_resetForm" >Cancel</paper-button>
+          		<paper-button dialog-dismiss class="cancel-button" on-tap="resetForm" >Cancel</paper-button>
           		<span flex></span>
           		<paper-button class="save-button" on-tap="_serializeProgram">Create</paper-button>
       		</div>
@@ -218,7 +218,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 /**
                  * Resets the form
                 */
-                _resetForm() {
+                resetForm() {
                     this.$.programForm.reset();
                 }
 

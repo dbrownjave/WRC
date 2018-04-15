@@ -176,6 +176,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 	    </style>
 
+		<!-- Firebase Document Configuration -->
+		<firebase-document
+			id="firebaseDocument"
+			app-name="wrc_software"></firebase-document>
+
 		<!-- Workouts Query Configuration -->
 		<firebase-query
 			app-name="wrc_software"
@@ -317,15 +322,41 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					// Add Program Dialog
 					this._addProgramDialog = document.getElementById('addProgramDialog');
+
+					// App Toast
+					this._appToast = document.getElementById("appToast");
+
+					// App Progress bar
+					this._appProgress = document.getElementById("appProgressBar");
 				}
 
 				/**
 				 * Opens program dialog to add
 				 */
 				_openToAdd() {
+					this._addProgramDialog.acceptedCallback = this._onProgramDialog.bind(this);
 					this._addProgramDialog.opened = true;
 				}
 
+				/**
+				 * Saves new program
+				*/
+				_onProgramDialog(programInfo) {
+					this._appProgress.hidden = false;
+					this.$.firebaseDocument.push("programs", programInfo)
+					.then(function() {
+						this._appProgress.hidden = true;
+						this._appToast.text = "The program has been created succesfully.";
+						this._appToast.open();
+						this._addProgramDialog.resetForm();
+						this._addProgramDialog.opened = false;
+					}.bind(this))
+					.catch(function(err) {
+						this._appProgress.hidden = true;
+						this._appToast.text = "There has been an error. Please try again.";
+						this._appToast.open();
+					}.bind(this));
+				}
 
 				/**
 				 * Element Hidden functionality
@@ -336,7 +367,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				_isHidden() {
 					this.hidden = !this.hidden;
 				}
-
 			}
 			window.customElements.define(WrcPrograms.is, WrcPrograms);
 		}());
