@@ -20,7 +20,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <!-- Polymerfire Elements -->
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
-<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 
 <!-- Iron Elements -->
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
@@ -149,7 +149,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 
 			.option-menu {
-				 z-index: 2;
+			 	z-index: 2;
 			}
 
 			div.collection-wrapper {
@@ -165,7 +165,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			/* Responsive */
 			@media screen and (max-width: 600px) {
 				div.title h3 {
-						font-size: 1.4em;
+					font-size: 1.4em;
 				}
 
 				div.collection-wrapper {
@@ -175,6 +175,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				}
 			}
 	    </style>
+
+		<!-- Workouts Query Configuration -->
+		<firebase-query
+			app-name="wrc_software"
+			path="workouts"
+			data="{{workoutsData}}"></firebase-query>
 
 		<!-- Element UI -->
     	<main>
@@ -222,16 +228,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 			<!-- Workouts Cards -->
 			<iron-selector multi hidden$="[[!hidden]]">
-				<template is=dom-repeat items="{{workouts}}">
-					<div class="paper-form">
+				<template is=dom-repeat items="{{workoutsData}}" as="workout">
+					<div class="paper-form" id$="[[workout.$key]]">
 						<div class="pdf-wrapper">
 							<div class="content-wrapper">
-								<div class="season-title-workout">OFF-SEASON</div>
-								<div class="program-title">10 Week Program</div>
-								<div class="type-title">Strength Phase</div>
+								<div class="season-title-workout">[[workout.season]]</div>
+								<div class="program-title">[[workout.weeks]] Week Program</div>
+								<div class="type-title">[[workout.type]]</div>
 							</div>
 							<div class="tag">
-								<div class="day-title">Week [[item.week]]</div>
+								<div class="day-title">Week [[workout.week]]</div>
 							</div>
 						</div>
 					</div>
