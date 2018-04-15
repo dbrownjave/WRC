@@ -94,6 +94,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				@apply --layout-horizontal;
 			}
 
+
+			.menu-item-selected{
+				border-style: none;
+				background-color: white;
+			}
+
+
+
 			.iron-selected {
 				border-style: solid;
 				border-color: rgb(66, 141, 255, .60);
@@ -102,6 +110,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
 			}
+
+
 
 			/* PDF Workout */
 			.menu-icon {
@@ -214,14 +224,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			<!-- Program Cards -->
 			<div class="collection-wrapper">
 				<template is=dom-repeat items="{{programsData}}" as="program">
-					<div class="paper-form" hidden$={{hidden}} on-tap="_isHidden" id$="[[program.$key]]">
+					<div class="paper-form" hidden$={{hidden}} on-tap="" id$="[[program.$key]]">
 						<div class="pdf-wrapper">
 							<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
 								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
 								<paper-listbox noink slot="dropdown-content">
-									<paper-item id$="[[]]" on-tap="" onclick="alert('Compute PDF Calculations')">Start</paper-item>
-									<paper-item id$="[[]]" on-tap="" onclick="alert('Open PDF')">Preview</paper-item>
-									<paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Download</paper-item>
+									<paper-item id$="[[]]" on-tap="_isHidden">Review</paper-item>
+									<paper-item id$="[[]]" on-tap="_isHidden" >Edit</paper-item>
+									<paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Delete</paper-item>
 								</paper-listbox>
 							</paper-menu-button>
 
@@ -239,7 +249,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				</template>
 			</div>
 
-			<!-- Workouts Cards -->
+			<!-- Workouts Cards Selector -->
 			<iron-selector multi hidden$="[[!hidden]]">
 				<template is=dom-repeat items="{{workoutsData}}" as="workout">
 					<div class="paper-form" id$="[[workout.$key]]">
@@ -256,6 +266,35 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					</div>
 				</template>
 			</iron-selector>
+
+		<!-- Workouts Cards Selector -->
+		<div hidden$="[[!hidden]]">
+
+
+		<template is=dom-repeat items="{{workoutsData}}" as="workout">
+			<div class="paper-form" id$="[[workout.$key]]">
+				<div class="pdf-wrapper">
+					<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+						<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+						<paper-listbox noink slot="dropdown-content">
+							<paper-item id$="[[]]" on-tap="_isHidden">Preview</paper-item>
+							<paper-item id$="[[]]" on-tap="_isHidden" >Delete</paper-item>
+						</paper-listbox>
+					</paper-menu-button>
+					<div class="content-wrapper">
+						<div class="season-title-workout">[[workout.season]]</div>
+						<div class="program-title">[[workout.weeks]] Week Program</div>
+						<div class="type-title">[[workout.type]]</div>
+					</div>
+					<div class="tag">
+						<div class="day-title">Week [[workout.week]]</div>
+					</div>
+				</div>
+			</div>
+		</template>
+
+		</div>
+
 
 			<!-- Paper Fab to add new workout -->
 			<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}}" on-tap="_openToAdd"></paper-fab>
