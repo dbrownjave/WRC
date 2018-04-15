@@ -185,7 +185,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 		<firebase-query
 			app-name="wrc_software"
 			path="workouts"
-			data="{{workoutsData}}"></firebase-query>
+			data="{{workoutsData}}"
+			order-by-child="status"
+			equal-to="false"></firebase-query>
 
 		<!-- Programs Query Configuration -->
 		<firebase-query
@@ -212,7 +214,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			<!-- Program Cards -->
 			<div class="collection-wrapper">
 				<template is=dom-repeat items="{{programsData}}" as="program">
-					<div class="paper-form" hidden$={{hidden}} on-tap="_isHidden">
+					<div class="paper-form" hidden$={{hidden}} on-tap="_isHidden" id$="[[program.$key]]">
 						<div class="pdf-wrapper">
 							<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
 								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
@@ -259,7 +261,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}}" on-tap="_openToAdd"></paper-fab>
 
 			<!-- Finish button -->
-			<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{!hidden}}" on-tap="alert('Done')" class="finish-button"></paper-fab>
+			<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{!hidden}}" on-tap="_bindWorkoutsToProgram" class="finish-button"></paper-fab>
 		</main>
 	</template>
 
@@ -278,43 +280,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 */
 				static get properties() {
 					return {
-						workouts: {
-							type: Array,
-							notify: true,
-							value() {
-								return [
-									{
-										week: 1
-									},
-									{
-										week: 2
-									},
-									{
-										week: 3
-									},
-									{
-										week: 4
-									},
-									{
-										week: 5
-									}
-								]
-							}
-						},
-						programs: {
-							type: Array,
-							notify: true,
-							value() {
-								return [
-									{
-										days: 2
-									},
-									{
-										days: 4
-									}
-								]
-							}
-						},
 						hidden: {
 							type: Boolean,
 							notify: true,
@@ -370,8 +335,45 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 * @param {Boolean} return true to hide content
 				 * @return {Boolean}
 				 */
-				_isHidden() {
+				_isHidden(e) {
+					// Extracts id of clicked program
+					const programId = e.path[3].id;
+
+					// Assigns the id to a global variable to can access it from any other function
+					this.programId = (programId) ? programId : null;
+
 					this.hidden = !this.hidden;
+				}
+
+				/**
+				 * Binds selected workouts to program
+				*/
+				_bindWorkoutsToProgram() {
+					const selectedWorkouts = this.root.querySelectorAll(".iron-selected");
+					if (selectedWorkouts && selectedWorkouts.length > 0) {
+						this._appProgress.hidden = false;
+						let bindedWorkouts = [];
+						for (let i = 0; i < selectedWorkouts.length; i++) {
+							const workoutId = selectedWorkouts[i].id;
+							bindedWorkouts.push(workoutId);
+							this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", true);
+						}
+						this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", bindedWorkouts)
+						.then(function() {
+							this._appProgress.hidden = true;
+							this._appToast.text = "The workouts has been assigned succesfully.";
+							this._appToast.open();
+							this.hidden = false;
+						}.bind(this))
+						.catch(function(err) {
+							this._appProgress.hidden = true;
+							this._appToast.text = "There has been an error. Please try again.";
+							this._appToast.open();
+						}.bind(this));
+					} else {
+						this._appToast.text = "Please select at least one workout";
+						this._appToast.open();
+					}
 				}
 			}
 			window.customElements.define(WrcPrograms.is, WrcPrograms);
