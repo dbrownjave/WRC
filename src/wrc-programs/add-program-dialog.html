@@ -27,179 +27,181 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../fa-icons.html">
 
 <dom-module id="add-program-dialog">
-    <template>
-        <style>
-        /* Dialog */
-      paper-dialog {
-          border-radius: 5px;
-          box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
-      }
+	<template>
+    	<style>
+    		/* Dialog */
+      		paper-dialog {
+      			border-radius: 5px;
+      			box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+      		}
 
-      paper-dialog h2 {
-        color: var(--azul-text-title);
-        font-size: 1.6em;
-      }
+      		paper-dialog h2 {
+        		color: var(--azul-text-title);
+        		font-size: 1.6em;
+      		}
 
-      /* Paper dialog buttons */
-      paper-dialog div.buttons {
-          margin: .25cm 0 0 0;
-          @apply --layout-horizontal;
-      }
+      		/* Paper dialog buttons */
+      		paper-dialog div.buttons {
+          		margin: .25cm 0 0 0;
 
-      paper-dialog .buttons paper-button.cancel-button {
-          color: var(--paper-grey-700);
-          font-weight: normal;
-          margin-right: 2.75cm;
-      }
+          		@apply --layout-horizontal;
+      		}
 
-      paper-dialog .buttons paper-button.save-button {
-          color: var(--azul-primary-button-text);
-          font-weight: normal;
-      }
+      		paper-dialog .buttons paper-button.cancel-button {
+          		color: var(--paper-grey-700);
+          		font-weight: normal;
+	          	margin-right: 2.75cm;
+      		}
 
-      paper-spinner {
-          --paper-spinner-layer-1-color: var(--azul-primary);
-          --paper-spinner-layer-2-color: var(--azul-primary);
-          --paper-spinner-layer-3-color: var(--azul-primary);
-          --paper-spinner-layer-4-color: var(--azul-primary);
-      }
+      		paper-dialog .buttons paper-button.save-button {
+          		color: var(--azul-primary-button-text);
+          		font-weight: normal;
+      		}
 
-      .horizontal-layout {
-        @apply --layout-horizontal
-        margin: 0 0 0 0;
-      }
+      		paper-spinner {
+          		--paper-spinner-layer-1-color: var(--azul-primary);
+          		--paper-spinner-layer-2-color: var(--azul-primary);
+          		--paper-spinner-layer-3-color: var(--azul-primary);
+          		--paper-spinner-layer-4-color: var(--azul-primary);
+      		}
 
+      		.horizontal-layout {
+				margin: 0 0 0 0;
 
-      .dayCombo {
-          width: 125px;
-          margin-bottom: 10px;
-      }
-
-      .weekCombo {
-          width: 175px;
-      }
-
-      .typeCombo {
-        width: 250px;
-      }
-
-      .info-icon {
-        top: 15px;
-        right: 15px;
-        position: absolute;
-      }
-
-      [flex] {
-        @apply --layout-flex;
-      }
-
-      /* Dialog larger with large screens */
-      @media screen and (min-width: 600px) {
-          paper-dialog {
-          width: 350px;
-        }
-      }
-
-  </style>
+        		@apply --layout-horizontal
+      		}
 
 
-  <!-- Element UI -->
-  <paper-dialog
-      opened="{{opened}}"
-      modal
-      entry-animation="scale-up-animation"
-      exit-animation="fade-out-animation">
+      		.dayCombo {
+          		width: 125px;
+          		margin-bottom: 10px;
+      		}
 
-      <!-- title + info icon-->
-      <h2>Add Program</h2>
-      <div>
-          <!-- TODO: Implement Paper Tool-tip -->
-          <img class="info-icon" src="../images/app-images/info-icon.svg" alt="info. button">
-      </div>
+      		.weekCombo {
+          		width: 175px;
+      		}
 
-      <!-- modal conent  -->
-      <paper-dialog-scrollable>
-          <iron-form id="addWorkoutForm">
-              <form>
-                  <vaadin-form-layout>
-                      <!-- Programs  -->
-                      <vaadin-combo-box
-                          id="programCombo"
-                          label="Program"
-                          name="program"
-                          required
-                          error-message="Select a program"
-                          value=""></vaadin-combo-box>
-                      <!-- Program Type  -->
-                      <div class="">
-                          <vaadin-combo-box
-                              id="typeCombo"
-                              class="typeCombo"
-                              label="Type"
-                              name="type"
-                              required
-                              error-message="Select a program type"
-                              value=""></vaadin-combo-box>
-                          </div>
-                      <!-- Program Duration  -->
-                      <div>
-                        <vaadin-combo-box
-                            id="durationCombo"
-                            class="weekCombo"
-                            label="Program Duration"
-                            name="duration"
-                            required
-                            error-message="Select the duration"
-                            value=""></vaadin-combo-box>
-                      </div>
-                      <!--  Days -->
-                      <div>
-                          <vaadin-combo-box
-                            id="dayCombo"
-                            class="dayCombo"
-                            label="Days Per Week"
-                            name="day"
-                            required
-                            error-message="Select number of days"
-                            value=""></vaadin-combo-box>
-                      </div>
+      		.typeCombo {
+        		width: 250px;
+      		}
 
-              </form>
-          </iron-form>
-      </paper-dialog-scrollable>
+      		.info-icon {
+        		top: 15px;
+        		right: 15px;
+        		position: absolute;
+  			}
 
-      <!-- buttons  -->
-      <div class="buttons">
-          <paper-button dialog-dismiss class="cancel-button" on-tap="_resetForm" >Cancel</paper-button>
-          <span flex></span>
-          <paper-button class="save-button" on-tap="">Create</paper-button>
-      </div>
-  </paper-dialog>
-</template>
+      		[flex] {
+        		@apply --layout-flex;
+      		}
+
+      		/* Dialog larger with large screens */
+      		@media screen and (min-width: 600px) {
+          		paper-dialog {
+          		width: 350px;
+        	}
+      	}
+  	</style>
 
 
-<script>
-    (function() {
-        'use strict';
+  	<!-- Element UI -->
+  	<paper-dialog
+  		opened="{{opened}}"
+      	with-backdrop
+      	entry-animation="scale-up-animation"
+      	exit-animation="fade-out-animation">
 
-        class AddProgramDialog extends Polymer.Element {
-            /**
-             * Element definition
-            */
-            static get is() { return 'add-program-dialog'; }
+  		<!-- title + info icon-->
+      	<h2>Add Program</h2>
+      	<div>
+      		<!-- TODO: Implement Paper Tool-tip -->
+          	<img class="info-icon" src="../images/app-images/info-icon.svg" alt="info. button">
+      	</div>
 
-            /**
-             * Element properties
-            */
-            static get properties() {
-                return {
-                    opened: {
-                        type: Boolean,
-                        notify: true,
-                        value: false
-                    }
-                };
-            }
+      	<!-- modal conent  -->
+      	<paper-dialog-scrollable>
+      		<iron-form id="addWorkoutForm">
+          		<form>
+              		<vaadin-form-layout>
+                  		<!-- Programs  -->
+              			<vaadin-combo-box
+                      		id="programCombo"
+                          	label="Program"
+                          	name="program"
+                          	required
+                          	error-message="Select a program"
+                          	value=""></vaadin-combo-box>
+                      	<!-- Program Type  -->
+                      	<div class="">
+                          	<vaadin-combo-box
+                              	id="typeCombo"
+                              	class="typeCombo"
+                              	label="Type"
+                              	name="type"
+                              	required
+                              	error-message="Select a program type"
+                              	value=""></vaadin-combo-box>
+                      	</div>
+
+                      	<!-- Program Duration  -->
+                      	<div>
+                        	<vaadin-combo-box
+                            	id="durationCombo"
+	                            class="weekCombo"
+	                            label="Program Duration"
+	                            name="duration"
+	                            required
+	                            error-message="Select the duration"
+	                            value=""></vaadin-combo-box>
+                      	</div>
+
+                      	<!--  Days -->
+                      	<div>
+                          	<vaadin-combo-box
+                            	id="dayCombo"
+	                            class="dayCombo"
+	                            label="Days Per Week"
+	                            name="day"
+	                            required
+	                            error-message="Select number of days"
+	                            value=""></vaadin-combo-box>
+                      	</div>
+              		</form>
+          		</iron-form>
+      		</paper-dialog-scrollable>
+
+	      	<!-- buttons  -->
+			<div class="buttons">
+          		<paper-button dialog-dismiss class="cancel-button" on-tap="_resetForm" >Cancel</paper-button>
+          		<span flex></span>
+          		<paper-button class="save-button" on-tap="">Create</paper-button>
+      		</div>
+  		</paper-dialog>
+	</template>
+
+
+	<script>
+    	(function() {
+        	'use strict';
+
+        	class AddProgramDialog extends Polymer.Element {
+            	/**
+             	 * Element definition
+            	*/
+            	static get is() { return 'add-program-dialog'; }
+
+            	/**
+             	 * Element properties
+            	*/
+            	static get properties() {
+                	return {
+                    	opened: {
+                        	type: Boolean,
+                        	notify: true,
+                        	value: false
+                    	}
+                	};
+            	}
 
 
                 ready() {
