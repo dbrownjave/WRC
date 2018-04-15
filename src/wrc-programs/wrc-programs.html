@@ -44,300 +44,295 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../shared-styles.html">
 
 <dom-module id="wrc-programs">
-	  <template>
-		    <style include="wrc-shared-styles">
+	<template>
+	    <style include="wrc-shared-styles">
+			/* General Style */
+  			main {
+  				padding: 1em 0em 2em 0em;
+  				height: calc(100vh - (64px + 4em));
+  				min-height: calc(100vh - (64px + 4em));
+  				overflow: auto;
+  			}
 
-						/* General Style */
-      			main {
-      				padding: 1em 0em 2em 0em;
-      				height: calc(100vh - (64px + 4em));
-      				min-height: calc(100vh - (64px + 4em));
-      				overflow: auto;
-      			}
+			/* Header Section */
+			div.title {
+				@apply --layout-horizontal;
+				@apply --layout-center-justified;
+			}
 
-						/* Header Section */
-						div.title {
-							@apply --layout-horizontal;
-							@apply --layout-center-justified;
-						}
+			paper-icon-button.back-button {
+				margin: 10px 0 0 15px;
+			}
 
-						paper-icon-button.back-button {
-							margin: 10px 0 0 15px;
-						}
+			.header-section {
+				@apply --layout-horizontal;
+			}
 
-						.header-section {
-							@apply --layout-horizontal;
-						}
+		  	div.title h3 {
+				font-size: 1.6em;
+				font-weight: 400;
+				font-style: normal;
+				font-stretch: normal;
+				line-height: normal;
+				letter-spacing: 1px;
+				color: #6a7582;
+				margin: -38px 0 20px 0;
 
-					  div.title h3 {
-								font-size: 1.6em;
-								font-weight: 400;
-								font-style: normal;
-								font-stretch: normal;
-								line-height: normal;
-								letter-spacing: 1px;
-								color: #6a7582;
-								margin: -38px 0 20px 0;
+				@apply --layout-center;
+				@apply --layout-vertical;
+			}
 
-								@apply --layout-center;
-								@apply --layout-vertical;
-						}
+			/* Paper Fab */
+			paper-fab.finish-button {
+				--paper-fab-background: #5ac381;
+				--paper-fab-keyboard-focus-background: #5ac381;
+			}
 
-						/* Paper Fab */
-						paper-fab.finish-button {
-							--paper-fab-background: #5ac381;
-							--paper-fab-keyboard-focus-background: #5ac381;
-						}
+			/* Iron Selector */
+			iron-selector {
+				@apply --layout-wrap;
+				@apply --layout-horizontal;
+			}
 
-						/* Iron Selector */
-						iron-selector {
-							@apply --layout-wrap;
-							@apply --layout-horizontal;
-						}
+			.iron-selected {
+				border-style: solid;
+				border-color: rgb(66, 141, 255, .60);
+				border-width: medium;
+				color: white;
 
-						.iron-selected {
-							border-style: solid;
-							border-color: rgb(66, 141, 255, .60);
-							border-width: medium;
-							color: white;
+				box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
+			}
 
-							box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
-						}
+			/* PDF Workout */
+			.menu-icon {
+				margin-left: 10em;
+				color: #86919f;
+			}
 
-						/* PDF Workout */
-						.menu-icon {
-							margin-left: 10em;
-							color: #86919f;
-						}
+			.menu-icon:hover {
+				color: #636E7A;
+			}
 
-						.menu-icon:hover {
-							color: #636E7A;
-						}
+			.paper-form {
+				position: relative;
+				z-index: 0;
+			}
 
-						.paper-form {
-							position: relative;
-							z-index: 0;
-						}
+			.paper-form>.pdf-wrapper {
+				@apply --layout-vertical;
+				@apply --layout-center;
+			}
 
-						.paper-form>.pdf-wrapper {
-							@apply --layout-vertical;
-							@apply --layout-center;
-						}
+			.content-wrapper {
+				display: block;
+				margin: .5cm auto 0 auto;
+			}
 
-						.content-wrapper {
-							display: block;
-							margin: .5cm auto 0 auto;
-						}
+			.start-button {
+				width: 110px;
+				height: 30px;
+				border-radius: 3.1px;
+				background-color: #5ac381;
+				box-shadow: 0 4px 15px 0 rgba(90, 195, 129, 0.54);
+				margin: 60px 0 0 0;
 
-						.start-button {
-							width: 110px;
-							height: 30px;
-							border-radius: 3.1px;
-							background-color: #5ac381;
-							box-shadow: 0 4px 15px 0 rgba(90, 195, 129, 0.54);
-							margin: 60px 0 0 0;
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
 
-							@apply --layout-vertical;
-							@apply --layout-center-center;
-						}
+			.start-button>.title {
+				font-size: 1em;
+				font-weight: 400;
+				letter-spacing: 0.4px;
+				text-align: center;
+				color: white;
+			}
 
-						.start-button>.title {
-							font-size: 1em;
-							font-weight: 400;
-							letter-spacing: 0.4px;
-							text-align: center;
-							color: white;
-						}
+			.option-menu {
+				 z-index: 2;
+			}
 
-						.option-menu {
-							 z-index: 2;
-						}
+			div.collection-wrapper {
+				@apply --layout-wrap;
+				@apply --layout-horizontal;
+				@apply --layout-center;
+			}
 
-						div.collection-wrapper {
-							@apply --layout-wrap;
-							@apply --layout-horizontal;
-							@apply --layout-center;
-						}
+			[hidden] {
+				display: none;
+			}
 
-						[hidden] {
-							display: none;
-						}
+			/* Responsive */
+			@media screen and (max-width: 600px) {
+				div.title h3 {
+						font-size: 1.4em;
+				}
 
-						/* Responsive */
-						@media screen and (max-width: 600px) {
-							div.title h3 {
-									font-size: 1.4em;
-							}
+				div.collection-wrapper {
+					@apply --layout-wrap;
+					@apply --layout-vertical;
+					@apply --layout-center;
+				}
+			}
+	    </style>
 
-							div.collection-wrapper {
-								@apply --layout-wrap;
-								@apply --layout-vertical;
-								@apply --layout-center;
-							}
-						}
+		<!-- Element UI -->
+    	<main>
+			<div hidden$="{{!hidden}}">
+				<!-- Back button  -->
+				<paper-icon-button
+					noink
+					class="back-button"
+					alt="Back"
+					src="../icons/buttons/left-arrow.svg"
+					on-tap="_isHidden"></paper-icon-button>
 
-		    </style>
+				<div class="title">
+					<h3>Select Workouts for Program</h3>
+				</div>
+			</div>
 
-        <main>
+			<!-- Program Cards -->
+			<div class="collection-wrapper">
+				<template is=dom-repeat items="{{programs}}">
+					<div class="paper-form" hidden$={{hidden}} on-tap="_isHidden">
+						<div class="pdf-wrapper">
+							<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+								<paper-listbox noink slot="dropdown-content">
+									<paper-item id$="[[]]" on-tap="" onclick="alert('Compute PDF Calculations')">Start</paper-item>
+									<paper-item id$="[[]]" on-tap="" onclick="alert('Open PDF')">Preview</paper-item>
+									<paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Download</paper-item>
+								</paper-listbox>
+							</paper-menu-button>
 
-					<div hidden$="{{!hidden}}">
-
-						<!-- Back button  -->
-						<paper-icon-button
-								noink
-								class="back-button"
-								alt="Back"
-								src="../icons/buttons/left-arrow.svg"
-								on-tap="_isHidden">
-						</paper-icon-button>
-
-						<div class="title">
-							<h3>Select Workouts for Program</h3>
+							<!-- card content -->
+							<div class="content-wrapper">
+								<div class="season-title-program"> OFF-SEASON </div>
+								<div class="program-title">10 Week Program</div>
+								<div class="type-title">Strength Phase</div>
+							</div>
+							<div class="tag">
+								<div class="day-title"> [[item.days]] Days</div>
+							</div>
 						</div>
 					</div>
+				</template>
+			</div>
 
-					<!-- Program Cards -->
-					<div class="collection-wrapper">
-						<template is=dom-repeat items="{{programs}}">
-							<div class="paper-form" hidden$={{hidden}} on-tap="_isHidden">
-								<div class="pdf-wrapper">
-									<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
-										<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-										<paper-listbox noink slot="dropdown-content">
-											<paper-item id$="[[]]" on-tap="" onclick="alert('Compute PDF Calculations')">Start</paper-item>
-											<paper-item id$="[[]]" on-tap="" onclick="alert('Open PDF')">Preview</paper-item>
-											<paper-item id$="[[]]" on-tap="" onclick="alert('Download PDF')">Download</paper-item>
-										</paper-listbox>
-									</paper-menu-button>
-
-									<!-- card content -->
-									<div class="content-wrapper">
-										<div class="season-title-program"> OFF-SEASON </div>
-										<div class="program-title">10 Week Program</div>
-										<div class="type-title">Strength Phase</div>
-									</div>
-									<div class="tag">
-										<div class="day-title"> [[item.days]] Days</div>
-									</div>
-								</div>
+			<!-- Workouts Cards -->
+			<iron-selector multi hidden$="[[!hidden]]">
+				<template is=dom-repeat items="{{workouts}}">
+					<div class="paper-form">
+						<div class="pdf-wrapper">
+							<div class="content-wrapper">
+								<div class="season-title-workout">OFF-SEASON</div>
+								<div class="program-title">10 Week Program</div>
+								<div class="type-title">Strength Phase</div>
 							</div>
-						</template>
-				</div>
+							<div class="tag">
+								<div class="day-title">Week [[item.week]]</div>
+							</div>
+						</div>
+					</div>
+				</template>
+			</iron-selector>
 
-							<!-- Workouts Cards -->
-							<iron-selector multi hidden$="[[!hidden]]">
-									<template is=dom-repeat items="{{workouts}}">
-										<div class="paper-form">
-											<div class="pdf-wrapper">
-												<div class="content-wrapper">
-													<div class="season-title-workout">OFF-SEASON</div>
-													<div class="program-title">10 Week Program</div>
-													<div class="type-title">Strength Phase</div>
-												</div>
-												<div class="tag">
-													<div class="day-title">Week [[item.week]]</div>
-												</div>
-											</div>
-										</div>
-									</template>
-						</iron-selector>
+			<!-- Paper Fab to add new workout -->
+			<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}}" on-tap="_openToAdd"></paper-fab>
 
+			<!-- Finish button -->
+			<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{!hidden}}" on-tap="alert('Done')" class="finish-button"></paper-fab>
+		</main>
+	</template>
 
-          <!-- Paper Fab to add new workout -->
-          <paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}}" on-tap="_openToAdd"></paper-fab>
+	<script>
+		'use strict';
 
-					<!-- Finish button -->
-					<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{!hidden}}" on-tap="alert('Done')" class="finish-button"></paper-fab>
+		(function() {
+			class WrcPrograms extends Polymer.Element {
+				// Element definition
+				static get is() {
+					return 'wrc-programs';
+				}
 
-      </main>
-    </template>
-
-    <script>
-        'use strict';
-
-        (function() {
-            class WrcPrograms extends Polymer.Element {
-                // Element definition
-                static get is() { return 'wrc-programs'; }
-
-                /**
-        				 * Element properties
-        				 */
-        				static get properties() {
-        					return {
-
-										workouts: {
-											type: Array,
-											notify: true,
-											value() {
-												return [
-													{
-														week: 1
-													},
-													{
-														week: 2
-													},
-													{
-														week: 3
-													},
-													{
-														week: 4
-													},
-													{
-														week: 5
-													}
-												]
-											}
-										},
-										programs: {
-											type: Array,
-											notify: true,
-											value() {
-												return [
-													{
-														days: 2
-													},
-													{
-														days: 4
-													}
-												]
-											}
-										},
-										hidden: {
-											type: Boolean,
-											notify: true,
-											value: false
-										}
+				/**
+				 * Element properties
+				 */
+				static get properties() {
+					return {
+						workouts: {
+							type: Array,
+							notify: true,
+							value() {
+								return [
+									{
+										week: 1
+									},
+									{
+										week: 2
+									},
+									{
+										week: 3
+									},
+									{
+										week: 4
+									},
+									{
+										week: 5
 									}
-								};
+								]
+							}
+						},
+						programs: {
+							type: Array,
+							notify: true,
+							value() {
+								return [
+									{
+										days: 2
+									},
+									{
+										days: 4
+									}
+								]
+							}
+						},
+						hidden: {
+							type: Boolean,
+							notify: true,
+							value: false
+						}
+					}
+				};
 
-                ready() {
-                    super.ready();
+				ready() {
+					super.ready();
 
-                    // Add Program Dialog
-                    this._addProgramDialog = document.getElementById('addProgramDialog');
-                }
+					// Add Program Dialog
+					this._addProgramDialog = document.getElementById('addProgramDialog');
+				}
 
-                /**
-        				 * Opens program dialog to add
-        				 */
-                _openToAdd(){
-                  this._addProgramDialog.opened = true;
-                }
+				/**
+				 * Opens program dialog to add
+				 */
+				_openToAdd() {
+					this._addProgramDialog.opened = true;
+				}
 
 
-								/**
-								 * Element Hidden functionality
-								 *
-								 * @param {Boolean} return true to hide content
-								 * @return {Boolean}
-								 */
-								_isHidden(){
-									this.hidden = !this.hidden;
-								}
+				/**
+				 * Element Hidden functionality
+				 *
+				 * @param {Boolean} return true to hide content
+				 * @return {Boolean}
+				 */
+				_isHidden() {
+					this.hidden = !this.hidden;
+				}
 
-            }
-            window.customElements.define(WrcPrograms.is, WrcPrograms);
-        }());
-    </script>
+			}
+			window.customElements.define(WrcPrograms.is, WrcPrograms);
+		}());
+	</script>
 </dom-module>
