@@ -74,6 +74,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 --paper-spinner-layer-4-color: var(--azul-primary);
             }
 
+            /* header wrapper */
+            div.wrapper-horizontal {
+                @apply --layout-horizontal;
+            }
+
             [flex] {
                 @apply --layout-flex;
             }
@@ -145,7 +150,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             /* Search Style */
             div.search-wrapper {
-                width: 100%;
+                width: 96%;
                 margin-bottom: 24px;
             }
 
@@ -367,6 +372,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             <!-- Athletes Wrapper -->
             <div class="athletes-wrapper" hidden$="[[!_computeVisibleData(athletesData.length, userReady)]]">
+
+              <div class="wrapper-horizontal">
                 <!-- Search filter -->
                 <div class="search-wrapper">
                     <!-- Polyfilter configuration -->
@@ -377,7 +384,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         filter-by="first, last"></poly-filter-diacritic>
                     <!-- Search bar -->
                     <paper-search-bar query="{{athleteFilter}}" hideFilterButton=true> </paper-search-bar>
-                </div>
+                  </div>
+
+                  <!-- printer -->
+                  <paper-icon-button noink icon="fa-icons:pdf" on-tap='_printPdfCollection'></paper-icon-button>
+              </div>
 
                 <!-- Grid View -->
                 <template is="dom-if" if="[[!responsiveScreen]]">
@@ -747,6 +758,67 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _computeActiveToggle(active) {
                     return (active === 'Yes') ? true : false;
                 }
+
+                /**
+                 * Test Print all functionality
+                */
+
+                _printPdfCollection(e) {
+
+                    // Retrived Data
+                    var sourceData = [
+                        {name: 'Google'},
+                        {name: 'Apple'},
+                        {name: 'Microsoft'},
+                        {name: 'Github'},
+                        {name: 'Nike'}
+                    ];
+
+
+                    function computeContent(data) {
+
+                        // Array of content
+                        var content = [];
+
+                        // Loop for each element in an array, in order
+                        data.forEach(function(company) { // provide the array with any name to represent the element
+                            // Push data (elements) to array
+                            content.push(
+                                {text: company.name, style: 'header', pageBreak: 'after' }
+                            );
+                        });
+
+                        return content;
+                    }
+
+
+                    // This defines the content of the PDF. For more info read: http://pdfmake.org/index.html#/gettingstarted
+                    var pdfCollection = {
+
+                        pageOrientation: 'landscape',
+
+                        content: computeContent(sourceData),
+
+                        styles: {
+                            header: {
+                                fontSize: 100,
+                                bold: true,
+                                margin: [ 30, 180, 10, 20 ],
+                                alignment: 'center',
+                                color: '#757575'
+                            }
+                        }
+                    };
+
+                    // This creates and opens the PDF in a new tab
+                    pdfMake.createPdf(pdfCollection).open();
+                }
+
+
+
+
+
+
 
                 /**
                  * Test to create PDF

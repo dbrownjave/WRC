@@ -2831,24 +2831,25 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 											columns: [{
 													// Variation
 													width: 36,
-													text: 'Banded',
+													text: workout.dayOne.rowEighteen.variation,
 													style: 'variation'
 												},
 												{
 													// Weight
 													width: 34,
-													text: '132lbs',
+													text: this._computeWorkoutWeight(workout.dayOne.rowEighteen.max),
 													style: 'weight'
 												},
 												{
 													// Reps
-													width: 20,
-													text: '31',
+													width: 18,
+													text: workout.dayOne.rowEighteen.reps,
 													style: 'reps'
 												},
-												{ // Tempo
+												{
+													// Tempo
 													width: 52,
-													text: '1:6:0',
+													text: this._getExerciseTempo(workout.dayOne.rowEighteen.tempoOne, workout.dayOne.rowEighteen.tempoTwo, workout.dayOne.rowEighteen.tempoThree),
 													alignment: 'center',
 													style: 'tempo',
 												},
@@ -2858,7 +2859,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										/*************** Day 2 ***************/
 										{
 											// Exercise
-											text: workout.dayOne.rowOne.exercise,
+											text: workout.dayTwo.rowEighteen.exercise,
 											style: 'exercise',
 											alignment: 'center'
 										},
@@ -2866,24 +2867,25 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 											columns: [{
 													// Variation
 													width: 36,
-													text: 'Banded',
+													text: workout.dayTwo.rowEighteen.variation,
 													style: 'variation'
 												},
 												{
 													// Weight
 													width: 34,
-													text: '132lbs',
+													text: this._computeWorkoutWeight(workout.dayTwo.rowEighteen.max),
 													style: 'weight'
 												},
 												{
 													// Reps
-													width: 20,
-													text: '31',
+													width: 18,
+													text: workout.dayTwo.rowEighteen.reps,
 													style: 'reps'
 												},
-												{ // Tempo
+												{
+													// Tempo
 													width: 52,
-													text: '1:6:0',
+													text: this._getExerciseTempo(workout.dayTwo.rowEighteen.tempoOne, workout.dayTwo.rowEighteen.tempoTwo, workout.dayTwo.rowEighteen.tempoThree),
 													alignment: 'center',
 													style: 'tempo',
 												},
@@ -2893,7 +2895,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										/*************** Day 3 ***************/
 										{
 											// Exercise
-											text: workout.dayOne.rowOne.exercise,
+											text: workout.dayThree.rowEighteen.exercise,
 											style: 'exercise',
 											alignment: 'center'
 										},
@@ -2901,24 +2903,25 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 											columns: [{
 													// Variation
 													width: 36,
-													text: 'Banded',
+													text: workout.dayThree.rowEighteen.variation,
 													style: 'variation'
 												},
 												{
 													// Weight
 													width: 34,
-													text: '132lbs',
+													text: this._computeWorkoutWeight(workout.dayThree.rowEighteen.max),
 													style: 'weight'
 												},
 												{
 													// Reps
-													width: 20,
-													text: '31',
+													width: 18,
+													text: workout.dayThree.rowEighteen.reps,
 													style: 'reps'
 												},
-												{ // Tempo
+												{
+													// Tempo
 													width: 52,
-													text: '1:6:0',
+													text: this._getExerciseTempo(workout.dayThree.rowEighteen.tempoOne, workout.dayThree.rowEighteen.tempoTwo, workout.dayThree.rowEighteen.tempoThree),
 													alignment: 'center',
 													style: 'tempo',
 												},
@@ -2928,7 +2931,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										/*************** Day 4 ***************/
 										{
 											// Exercise
-											text: workout.dayOne.rowOne.exercise,
+											text: workout.dayFour.rowEighteen.exercise,
 											style: 'exercise',
 											alignment: 'center'
 										},
@@ -2936,24 +2939,25 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 											columns: [{
 													// Variation
 													width: 36,
-													text: 'Banded',
+													text: workout.dayFour.rowEighteen.variation,
 													style: 'variation'
 												},
 												{
 													// Weight
 													width: 34,
-													text: '132lbs',
+													text: this._computeWorkoutWeight(workout.dayFour.rowEighteen.max),
 													style: 'weight'
 												},
 												{
 													// Reps
-													width: 20,
-													text: '31',
+													width: 18,
+													text: workout.dayFour.rowEighteen.reps,
 													style: 'reps'
 												},
-												{ // Tempo
+												{
+													// Tempo
 													width: 52,
-													text: '1:6:0',
+													text: this._getExerciseTempo(workout.dayFour.rowEighteen.tempoOne, workout.dayFour.rowEighteen.tempoTwo, workout.dayFour.rowEighteen.tempoThree),
 													alignment: 'center',
 													style: 'tempo',
 												},
