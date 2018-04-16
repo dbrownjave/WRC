@@ -83,6 +83,19 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 @apply --layout-flex;
             }
 
+            /* icon buttons */
+            .icon-button {
+              color: #737D8A;
+            }
+
+            .icon-button:hover {
+              color: #425164;
+            }
+
+            .printer-icon {
+              margin: 0 0 0 10px;
+            }
+
             /* Empty Message */
             .empty-message {
                 width: 100%;
@@ -150,7 +163,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             /* Search Style */
             div.search-wrapper {
-                width: 96%;
+                width: 95%;
                 margin-bottom: 24px;
             }
 
@@ -387,7 +400,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                   </div>
 
                   <!-- printer -->
-                  <paper-icon-button noink icon="fa-icons:pdf" on-tap='_printPdfCollection'></paper-icon-button>
+                  <div class="printer-icon">
+                  <paper-icon-button class="icon-button" noink icon="app-icons:printer" on-tap='_printPdfCollection'></paper-icon-button>
+                  </div>
               </div>
 
                 <!-- Grid View -->
