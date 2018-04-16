@@ -759,11 +759,23 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     return (active === 'Yes') ? true : false;
                 }
 
+
+
+
+
+
                 /**
                  * Test Print all functionality
                 */
 
                 _printPdfCollection(e) {
+
+                  console.log('1. Print All')
+
+                  // Gets athlete id
+                  var athletesData = this.athletesData;
+
+                  console.log(this.athletesData);
 
                     // Retrived Data
                     var sourceData = [
@@ -777,14 +789,22 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     function computeContent(data) {
 
+                        console.log('2. Compute Content')
+
                         // Array of content
                         var content = [];
 
+                        console.log('3. Collect Stored firebase🔥 info')
+
                         // Loop for each element in an array, in order
-                        data.forEach(function(company) { // provide the array with any name to represent the element
-                            // Push data (elements) to array
+                        data.forEach(function(athlete) { // provide the array with any name to represent the element
+                            // Push data (element) to array
                             content.push(
-                                {text: company.name, style: 'header', pageBreak: 'after' }
+                                {
+                                  text: athlete.profile.first + " " + athlete.profile.last,
+                                  style: 'header',
+                                  pageBreak: 'after'
+                                }
                             );
                         });
 
@@ -797,11 +817,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                         pageOrientation: 'landscape',
 
-                        content: computeContent(sourceData),
+                        content: computeContent(athletesData),
 
                         styles: {
                             header: {
-                                fontSize: 100,
+                                fontSize: 25,
                                 bold: true,
                                 margin: [ 30, 180, 10, 20 ],
                                 alignment: 'center',
@@ -813,6 +833,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     // This creates and opens the PDF in a new tab
                     pdfMake.createPdf(pdfCollection).open();
                 }
+
+
 
 
 
