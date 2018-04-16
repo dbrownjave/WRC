@@ -769,56 +769,40 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
 
                 _printPdfCollection(e) {
+                   var athletesData = this.athletesData;
 
-                  console.log('1. Print All')
-
-                  // Gets athlete id
-                  var athletesData = this.athletesData;
-
-                  console.log(this.athletesData);
+                   console.log(this.athletesData);
 
                     // Retrived Data
-                    var sourceData = [
-                        {name: 'Google'},
-                        {name: 'Apple'},
-                        {name: 'Microsoft'},
-                        {name: 'Github'},
-                        {name: 'Nike'}
-                    ];
-
-
                     function computeContent(data) {
-
-                        console.log('2. Compute Content')
-
                         // Array of content
                         var content = [];
 
-                        console.log('3. Collect Stored firebase🔥 info')
-
-                        // Loop for each element in an array, in order
-                        data.forEach(function(athlete) { // provide the array with any name to represent the element
+                       /**
+                        * Loop for each element in an array, in order.
+                        * Note: Provide the array with any name to represent the element.
+                        */
+                        data.forEach(function(athlete) { //
                             // Push data (element) to array
                             content.push(
                                 {
                                   text: athlete.profile.first + " " + athlete.profile.last,
                                   style: 'header',
+                                },
+                                {
+                                  text: "Max Bench Press: " + athlete.stats.bench_press_value + "lbs",
+                                  style: 'subheader',
                                   pageBreak: 'after'
                                 }
                             );
                         });
-
                         return content;
                     }
 
-
                     // This defines the content of the PDF. For more info read: http://pdfmake.org/index.html#/gettingstarted
                     var pdfCollection = {
-
                         pageOrientation: 'landscape',
-
                         content: computeContent(athletesData),
-
                         styles: {
                             header: {
                                 fontSize: 25,
@@ -826,6 +810,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 margin: [ 30, 180, 10, 20 ],
                                 alignment: 'center',
                                 color: '#757575'
+                            },
+
+                            subheader: {
+                              fontSize: 10,
+                              bold: true,
+                              alignment: 'center',
+                              color: '#757575'
                             }
                         }
                     };
@@ -833,10 +824,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     // This creates and opens the PDF in a new tab
                     pdfMake.createPdf(pdfCollection).open();
                 }
-
-
-
-
 
 
 
