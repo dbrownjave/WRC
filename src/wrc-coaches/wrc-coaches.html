@@ -611,7 +611,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _saveCoach(coachInfo) {
 					if (this.action === 'add') {
                         // Saves coach into admin private info
-						this.$.firebaseDocument.setStoredValue(this.user.uid + '/coaches/' + coachInfo.uid, coachInfo)
+						            this.$.firebaseDocument.setStoredValue(this.user.uid + '/coaches/' + coachInfo.uid, coachInfo)
                         .then(function() {
                             // Saves coach metadata
                             this.$.firebaseDocument.setStoredValue(coachInfo.uid + '/metadata', {'path': this.user.uid + '/coaches/' + coachInfo.uid, 'role': 'coach'});
@@ -621,21 +621,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._appToast.open();
                         }.bind(this));
 
-						this._coachesDialog.opened = false;
-						this._appToast.text = 'The coach has been saved successfully.';
-						this._appToast.open();
-						this._appProgressBar.hidden = true;
-					} else {
-						this.$.firebaseDocument.setStoredValue(this.user.uid + '/coaches/' + coachInfo.uid, coachInfo)
+            						this._coachesDialog.opened = false;
+            						this._appToast.text = 'The coach has been saved successfully.';
+            						this._appToast.open();
+            						this._appProgressBar.hidden = true;
+              					} else {
+              						this.$.firebaseDocument.setStoredValue(this.user.uid + '/coaches/' + coachInfo.uid, coachInfo)
                         .catch(function (err) {
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
                         }.bind(this));
 
-						this._coachesDialog.opened = false;
-						this._appToast.text = 'The coach has been modified successfully.';
-						this._appToast.open();
-						this._appProgressBar.hidden = true;
+            						this._coachesDialog.opened = false;
+            						this._appToast.text = 'The coach has been modified successfully.';
+            						this._appToast.open();
+            						this._appProgressBar.hidden = true;
                     }
                 }
 

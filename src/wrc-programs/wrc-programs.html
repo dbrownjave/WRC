@@ -201,8 +201,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 		<!-- Element UI -->
     	<main>
-			<div hidden$="{{!hidden}}">
-				<!-- Back button  -->
+
+
+			<div hidden$="{{!reviewMode}}">
+				<!-- Back button -->
+				<paper-icon-button
+					noink
+					class="back-button"
+					alt="Back"
+					src="../icons/buttons/left-arrow.svg"
+					on-tap="_isHidden"></paper-icon-button>
+			</div>
+
+			<!-- Workout Selector
+			<div hidden$="{{!editMode}}">
+				<!-- Back button
 				<paper-icon-button
 					noink
 					class="back-button"
@@ -210,15 +223,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					src="../icons/buttons/left-arrow.svg"
 					on-tap="_isHidden"></paper-icon-button>
 
-				<div class="title">
+					<div class="title">
 					<h3>Select Workouts for Program</h3>
-				</div>
+					</div>
 			</div>
-
+-->
 			<!-- Program Cards -->
 			<div class="collection-wrapper">
 				<template is=dom-repeat items="{{programsData}}" as="program">
-					<div class="paper-form" hidden$={{hidden}} id$="[[program.$key]]">
+					<div class="paper-form" hidden$={{reviewMode}} id$="[[program.$key]]">
 						<div class="pdf-wrapper">
 							<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
 								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
@@ -244,31 +257,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			</div>
 
 			<!-- Workouts Cards Selector
-      <div class="collection-wrapper">
-				<template is=dom-repeat items="{{workoutsData}}" as="workout">
-					<div class="paper-form" id$="[[workout.$key]]">
-						<div class="pdf-wrapper">
-              <paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
-                <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-                <paper-listbox noink slot="dropdown-content">
-                  <paper-item id$="[[workout.$key]]" on-tap="_openDeleteWorkoutDialog">Delete</paper-item>
-                </paper-listbox>
-              </paper-menu-button>
-							<div class="content-wrapper">
-								<div class="season-title-program">[[workout.season]]</div>
-								<div class="program-title">[[workout.weeks]] Week Program</div>
-								<div class="type-title">[[workout.type]]</div>
-							</div>
-							<div class="tag">
-								<div class="day-title">Week [[workout.week]]</div>
-							</div>
-						</div>
-					</div>
-        </div>
-				-->
-
-			<!-- Workouts Cards Selector -->
-			<iron-selector multi hidden$="[[!hidden]]">
+			<iron-selector multi hidden$="[[editMode]]">
 				<template is=dom-repeat items="{{workoutsData}}" as="workout">
 					<div class="paper-form" id$="[[workout.$key]]">
 						<div class="pdf-wrapper">
@@ -284,12 +273,34 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					</div>
 				</template>
 			</iron-selector>
+			-->
+
+			<!-- Workouts Cards-->
+			<div class="collection-wrapper">
+				<template is=dom-repeat items="{{workoutsData}}" as="workout">
+					<div class="paper-form" hidden$={{!reviewMode}} id$="[[workout.$key]]">
+						<div class="pdf-wrapper">
+							<div class="content-wrapper">
+								<div class="season-title-workout">[[workout.season]]</div>
+								<div class="program-title">[[workout.weeks]] Week Program</div>
+								<div class="type-title">[[workout.type]]</div>
+							</div>
+							<div class="tag">
+								<div class="day-title">Week [[workout.week]]</div>
+							</div>
+						</div>
+					</div>
+				</template>
+			</div>
+
+
 
 			<!-- Paper Fab to add new workout -->
-			<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}}" on-tap="_openToAdd"></paper-fab>
+			<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{reviewMode}}" on-tap="_openToAdd"></paper-fab>
 
-			<!-- Finish button -->
-			<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{!hidden}}" on-tap="_bindWorkoutsToProgram" class="finish-button"></paper-fab>
+			<!-- Finish button
+			<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{!editMode}}" on-tap="_bindWorkoutsToProgram" class="finish-button"></paper-fab>
+		-->
 		</main>
 	</template>
 
@@ -309,6 +320,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				static get properties() {
 					return {
 						hidden: {
+							type: Boolean,
+							notify: true,
+							value: false
+						},
+						reviewMode: {
+							type: Boolean,
+							notify: true,
+							value: false
+						},
+						EditMode: {
 							type: Boolean,
 							notify: true,
 							value: false
@@ -403,31 +424,51 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 * @return {Boolean}
 				 */
 				_isHidden(e) {
+					var reviewMode = this.reviewMode;
+					var editMode = this.editMode;
+
 					// Extracts id of clicked program
 					const programId = e.target.getAttribute("id");
 
 					// Assigns the id to a global variable to can access it from any other function
 					this.programId = (programId) ? programId : null;
 
-					this.hidden = !this.hidden;
+					console.log(this.prgramId);
+
+					if(reviewMode == true) {
+						this.reviewMode = !this.reviewMode;
+					} else {
+						this.reviewMode = !this.reviewMode;
+					}
+
+					if(!editMode) {
+						this.editMode = !this.editMode;
+					} else {
+						this.editMode = !this.editMode;
+					}
+
+
 				}
 
 
 				/**
-				 * Element Hidden functionality
+				 * Program Modes
 				 *
-				 * @param {Boolean} return true to hide content
-				 * @return {Boolean}
 				 */
 				_computeModeVisibilty(e) {
-					alert('computeModeVisibilty');
+
+					// Read data attribute
 					var mode = e.target.dataset.option;
-					//var mode = e.target.dataset.review;
 
 					if (mode == 'review') {
-						alert('Review')
+						console.log("Review");
+						console.log(!this.reviewMode);
+
+						this.reviewMode = !this.reviewMode;
+
 					} else if (mode == 'edit') {
-						alert('Edit')
+
+						this.editMode = !this.editMode;
 					}
 				}
 
