@@ -298,12 +298,22 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
 				/**
-				 * @description Deletes Program and releases all binded workouts
+				 * @description Deletes Workouts
 				 */
 				_deleteWorkout(evt) {
 					// TODO: Add confirm before deleting
 
-					this.programId = evt.target.getAttribute("id");
+					this.workoutId = evt.target.getAttribute("id");
+          console.log(this.workoutId);
+
+          this.$.firebaseDocument.destroy("workouts/" + this.workoutId);
+          /*
+          .then() {
+              console.log("Deleted Workout Succesfully");
+
+          }.bind(this));
+
+          /*
 					this.$.firebaseDocument.getStoredValue("programs/" + this.programId + "/workouts")
 					.then(function(workouts) {
 						for (let workout of workouts) {
@@ -313,7 +323,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						this._appToast.text = "The program has been deleted.";
 						this._appToast.open();
 					}.bind(this));
-				}
+				}*/
+        }
 			}
 			window.customElements.define(WrcWorkoutCollection .is, WrcWorkoutCollection);
 		}());
