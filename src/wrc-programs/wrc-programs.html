@@ -246,25 +246,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 			<!-- Review Workouts content -->
 			<div hidden$="{{!reviewMode}}">
-				<p>this is the review</p>
-				<!-- Back button -->
-				<paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
-			</div>
-
-			<!-- Edit Workouts content -->
-			<div hidden$="{{!editMode}}">
 				<!-- Back button -->
 				<paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
 
-				<div class="title">
-					<h3>Select Workouts for Program</h3>
-					<p>this is the edit mode</p>
-				</div>
-			</div>
-
-			<!-- Workouts Cards Selector
-			<iron-selector multi hidden$="[[editMode]]">
-				<template is=dom-repeat items="{{workoutsData}}" as="workout">
+				<!-- Workouts of the program -->
+				<template is=dom-repeat items="[[workoutsOfProgram]]" as="workout">
 					<div class="paper-form" id$="[[workout.$key]]">
 						<div class="pdf-wrapper">
 							<div class="content-wrapper">
@@ -278,8 +264,35 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						</div>
 					</div>
 				</template>
-			</iron-selector>
-			-->
+			</div>
+
+			<!-- Edit Workouts content -->
+			<div hidden$="{{!editMode}}">
+				<!-- Back button -->
+				<paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
+
+				<div class="title">
+					<h3>Select Workouts for Program</h3>
+				</div>
+
+				<!-- Workouts Cards Selector -->
+				<iron-selector multi>
+					<template is=dom-repeat items="{{workoutsData}}" as="workout">
+						<div class="paper-form" id$="[[workout.$key]]">
+							<div class="pdf-wrapper">
+								<div class="content-wrapper">
+									<div class="season-title-workout">[[workout.season]]</div>
+									<div class="program-title">[[workout.weeks]] Week Program</div>
+									<div class="type-title">[[workout.type]]</div>
+								</div>
+								<div class="tag">
+									<div class="day-title">Week [[workout.week]]</div>
+								</div>
+							</div>
+						</div>
+					</template>
+				</iron-selector>
+			</div>
 
 			<!-- Finish button -->
 			<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{!editMode}}" on-tap="_bindWorkoutsToProgram" class="finish-button"></paper-fab>
@@ -322,7 +335,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							notify: true,
 							value: null
 						},
-
+						workoutsOfProgram: {
+							type: Array,
+							notify: true
+						}
 					}
 				};
 
@@ -424,8 +440,23 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				}
 
 				_reviewProgram(evt) {
+					let workoutsOfProgram = [];
 					this.reviewMode = true;
 					this.programId = evt.target.getAttribute("id");
+
+					this.$.firebaseDocument.getStoredValue(`programs/${this.programId}/workouts`)
+					.then(function(workouts) {
+						if (workouts && workouts.length) {
+							for(let workout of workouts) {
+								this.$.firebaseDocument.getStoredValue(`workouts/${workout}`)
+								.then(function(workoutData) {
+									workoutData["$key"] = workout;
+									workoutsOfProgram.push(workoutData);
+								}.bind(this));
+							}
+							this.set("workoutsOfProgram", workoutsOfProgram);
+						}
+					}.bind(this));
 				}
 
 				_editProgram(evt) {
@@ -522,7 +553,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								this._appProgress.hidden = true;
 								this._appToast.text = "The workouts has been assigned succesfully.";
 								this._appToast.open();
-								this.hidden = false;
+								this.editMode = false;
 							}.bind(this))
 							.catch(function (err) {
 								this._appProgress.hidden = true;
