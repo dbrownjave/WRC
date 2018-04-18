@@ -27,9 +27,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Icons -->
 <link rel="import" href="../fa-icons.html">
 
+<!-- Shared Style  -->
+<link rel="import" href="../shared-styles.html">
+
 <dom-module id="delete-video-dialog">
     <template>
-        <style>
+        <style include="wrc-shared-styles">
 
             /* General */
             [hidden] {
@@ -44,16 +47,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             paper-dialog {
       				border-radius: 5px;
               box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
-              width: 450px;
       			}
 
             paper-dialog h2 {
       				color: var(--azul-text-title);
       				font-size: 1.6em;
-              margin: 20 0 0 10px;
+              margin: 15px 0 0 10px;
       			}
 
       			paper-dialog div.buttons {
+              margin: 20px 0 0 0;
+
       				@apply --layout-horizontal;
       				@apply --layout-end-justified;
       			}
@@ -87,23 +91,46 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             div.description-wrapper p {
-              color: var(--azul-text-title);
-              margin: 30px 0 0 10px;
               font-size: 1.1em;
+              text-align: center;
+              margin: 30px 0 0 10px;
+              color: var(--azul-text-title);
             }
 
             /* icons & images */
             .trash-icon {
               width: 125px;
               height: 125px;
+
+              @aply --layout-center;
+              @apply  --layout-horizontal;
             }
 
-                  /* To keep dialog larger with large screens */
+            /* To keep dialog larger with large screens */
       			@media screen and (min-width: 600px) {
       				paper-dialog {
-      					width: 450px;
+      					width: 500px;
       				}
       			}
+
+            @media screen and (max-width: 600px) {
+
+              .trash-icon {
+                width: 90px;
+                height: 90px;
+              }
+
+              div.description-wrapper p {
+                font-size: 1em;
+                text-align: center;
+              }
+
+              paper-dialog h2 {
+                color: var(--azul-text-title);
+                font-size: 1.6em;
+                margin: 15px 0 0 10px;
+              }
+            }
       </style>
 
         <!-- Element UI -->
@@ -117,7 +144,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <paper-dialog-scrollable>
                 <div class="description-wrapper">
                     <img class="trash-icon" src="./images/app-images/trash.png" alt="Trash Icon">
-                    <p class="question">Are you sure you want to delete this video?</p>
+                    <p class="question">[[msg]]</p>
                 </div>
             </paper-dialog-scrollable>
             <div class="buttons">
@@ -149,11 +176,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             notify: true,
                             value: false
                         },
+
+                        /**
+                         * Dialog Title
+                         */
                         title: {
                           type: String,
                           notify: true,
-                          value: "Delete Video"
-                        }
+                          value: "Title"
+                        },
+
+                        /**
+                         * Dialog Message
+                         */
+                        msg: {
+                           type: String,
+                           notify: true,
+                           value: "Message"
+                        },
                     };
                 }
 
