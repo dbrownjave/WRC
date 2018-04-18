@@ -306,25 +306,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					this.workoutId = evt.target.getAttribute("id");
           console.log(this.workoutId);
 
-          this.$.firebaseDocument.destroy("workouts/" + this.workoutId);
-          /*
-          .then() {
-              console.log("Deleted Workout Succesfully");
-
+          this.$.firebaseDocument.destroy("workouts/" + this.workoutId)
+          .catch(function(err) {
+            // Catch any error from firebase
+            this._appToast.text = "An error has ocurred trying to delete workout. Please try again.";
+						this._appToast.open();
           }.bind(this));
 
-          /*
-					this.$.firebaseDocument.getStoredValue("programs/" + this.programId + "/workouts")
-					.then(function(workouts) {
-						for (let workout of workouts) {
-							this.$.firebaseDocument.setStoredValue("workouts/" + workout + "/status", false);
-						}
-						this.$.firebaseDocument.destroy("programs/" + this.programId);
-						this._appToast.text = "The program has been deleted.";
-						this._appToast.open();
-					}.bind(this));
-				}*/
+          // Open toast with successful message
+          this._appToast.text = "The workout has been deleted successfully.";
+          this._appToast.open();
         }
+
 			}
 			window.customElements.define(WrcWorkoutCollection .is, WrcWorkoutCollection);
 		}());
