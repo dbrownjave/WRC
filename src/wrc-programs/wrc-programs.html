@@ -202,7 +202,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 		<!-- Element UI -->
     	<main>
 
-
+			<!-- Review Workouts content -->
 			<div hidden$="{{!reviewMode}}">
 				<!-- Back button -->
 				<paper-icon-button
@@ -213,8 +213,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					on-tap="_isHidden"></paper-icon-button>
 			</div>
 
-			<!-- Workout Selector
-			<div hidden$="{{!editMode}}">
+			<!-- Edit Workouts content
+			<div hidden$="{{editMode}}">
 				<!-- Back button
 				<paper-icon-button
 					noink
@@ -233,9 +233,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				<template is=dom-repeat items="{{programsData}}" as="program">
 					<div class="paper-form" hidden$={{reviewMode}} id$="[[program.$key]]">
 						<div class="pdf-wrapper">
-							<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+							<paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu" >
 								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-								<paper-listbox noink slot="dropdown-content">
+								<paper-listbox noink slot="dropdown-content" selected="{{selectedMenuItem}}">
 									<paper-item id$="[[program.$key]]" on-tap="_computeModeVisibilty" data-option="review">Review</paper-item>
 									<paper-item id$="[[program.$key]]" on-tap="_computeModeVisibilty" data-option="edit">Edit</paper-item>
 									<paper-item id$="[[program.$key]]" on-tap="_openDeleteProgramDialog">Delete</paper-item>
@@ -299,8 +299,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{reviewMode}}" on-tap="_openToAdd"></paper-fab>
 
 			<!-- Finish button
-			<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{!editMode}}" on-tap="_bindWorkoutsToProgram" class="finish-button"></paper-fab>
-		-->
+			<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{editMode}}" on-tap="_bindWorkoutsToProgram" class="finish-button"></paper-fab>
+-->
 		</main>
 	</template>
 
@@ -329,10 +329,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							notify: true,
 							value: false
 						},
-						EditMode: {
+						editMode: {
 							type: Boolean,
 							notify: true,
-							value: false
+							value: true
+						},
+						selectedMenuItem: {
+							type: Object,
+							notify: true,
+							value: null
 						}
 					}
 				};
@@ -354,6 +359,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				}
 
 				/**
+				 * Reset 'paper-menu-button' user selection
+				 */
+				_resetMenuSelection() {
+				this.selectedMenuItem = null;
+				}
+
+
+				/**
 				 * Opens program dialog to add
 				 */
 				_openToAdd() {
@@ -365,7 +378,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 * Opens delete program dialog
 				 */
 				_openDeleteProgramDialog(e) {
-					console.log("Open Dialog");
 					this.programId = e.target.getAttribute("id");
 
 					// Binding confirmation action
@@ -381,8 +393,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 * @description Deletes Program and releases all binded workouts
 				 */
 				_deleteProgram(response) {
-					console.log("Responding");
-
 					if (response) {
 						this.$.firebaseDocument.getStoredValue("programs/" + this.programId + "/workouts")
 						.then(function(workouts) {
@@ -427,27 +437,36 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					var reviewMode = this.reviewMode;
 					var editMode = this.editMode;
 
+
 					// Extracts id of clicked program
 					const programId = e.target.getAttribute("id");
 
 					// Assigns the id to a global variable to can access it from any other function
 					this.programId = (programId) ? programId : null;
 
-					console.log(this.prgramId);
+					// Review program's workout collection
+					if(reviewMode) {
+						// view programs
+						this.reviewMode = !this.reviewMode;
+						this._resetMenuSelection()
 
-					if(reviewMode == true) {
-						this.reviewMode = !this.reviewMode;
 					} else {
+						// view program workout collection
 						this.reviewMode = !this.reviewMode;
+						console.log(this.programId);
 					}
 
-					if(!editMode) {
+					// TODO: Finish Edit Mode
+					/*
+					// Edit program's workout collection
+					console.log(editMode);
+					if(editMode) {
 						this.editMode = !this.editMode;
 					} else {
 						this.editMode = !this.editMode;
 					}
 
-
+					*/
 				}
 
 
