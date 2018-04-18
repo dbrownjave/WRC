@@ -57,10 +57,19 @@
               display: inline-block;
             }
 
+
             div.collection-wrapper {
               @apply --layout-wrap;
               @apply --layout-horizontal;
               @apply --layout-center;
+            }
+
+            [slot="dropdown-content"] {
+              background-color: white;
+              line-height: 20px;
+              border-radius: 20px;
+              border-radius: 7px !important;
+              box-shadow: 0px 2px 6px #ccc;
             }
 
               /************************* Paper Form ****************************/
