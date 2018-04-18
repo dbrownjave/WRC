@@ -435,10 +435,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						}.bind(this));
 				}
 
+				// Returns to programs from editMode / reviewMode
 				_backToPrograms() {
 					this.editMode = this.reviewMode = false;
 				}
 
+				/**
+				 * @description Go to review mode and loads the workouts saved in the program
+				*/
 				_reviewProgram(evt) {
 					let workoutsOfProgram = [];
 					this.reviewMode = true;
@@ -463,75 +467,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					this.editMode = true;
 					this.programId = evt.target.getAttribute("id");
 				}
-
-				/**
-				 * Element Hidden functionality
-				 *
-				 * @param {Boolean} return true to hide content
-				 * @return {Boolean}
-				 */
-				_isHidden(e) {
-					var reviewMode = this.reviewMode;
-					var editMode = this.editMode;
-
-					// Extracts id of clicked program
-					const programId = e.target.getAttribute("id");
-
-					// Assigns the id to a global variable to can access it from any other function
-					this.programId = (programId) ? programId : null;
-
-					// Review program's workout collection
-					if (reviewMode) {
-						// view program workout collection
-						this.reviewMode = !this.reviewMode;
-						this._resetMenuSelection();
-
-					} else {
-						// view program
-						this.reviewMode = !this.reviewMode;
-						this._resetMenuSelection();
-					}
-
-					// TODO: Finish Edit Mode
-					/*
-					// Edit program's workout collection
-					console.log(editMode);
-					if(editMode) {
-						// view selectable workout collection
-						this.editMode = !this.editMode;
-						this.hidden = true;
-						this._resetMenuSelection();
-					} else {
-						// view program
-						this.editMode = !this.editMode;
-						this.hidden = true;
-						this._resetMenuSelection();
-					}
-					*/
-				}
-
-
-				/**
-				 * Program Modes
-				 *
-				 */
-				_computeModeVisibilty(e) {
-
-					// Read data attribute
-					var mode = e.target.dataset.option;
-
-					if (mode == 'review') {
-						console.log("Review");
-						console.log(!this.reviewMode);
-
-						this.reviewMode = !this.reviewMode;
-
-					} else if (mode == 'edit') {
-
-						this.editMode = !this.editMode;
-					}
-				}
-
 
 				/**
 				 * Binds selected workouts to program
