@@ -50,6 +50,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="lazy-import" href="../wrc-athletes/wrc-athletes.html">
 <link rel="lazy-import" href="../wrc-workouts/wrc-workouts.html">
 <link rel="lazy-import" href="../wrc-programs/wrc-programs.html">
+<link rel="lazy-import" href="../wrc-workout-collection/wrc-workout-collection.html">
 <link rel="lazy-import" href="../wrc-workouts-creator/wrc-workouts-creator.html">
 
 
@@ -308,10 +309,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <iron-icon icon="app-icons:collections-bookmark"></iron-icon>
                                     <span>Programs</span>
                                 </a>
+                                <a name="workout-collection" href="[[rootPath]]main/workout-collection">
+                                    <iron-icon icon="app-icons:library-books"></iron-icon>
+                                    <span>Workouts</span>
+                                </a>
                                 <template restamp is="dom-if" if="[[desktopOnly]]">
                                     <a name="workouts-creator" href="[[rootPath]]main/workouts-creator">
                                         <iron-icon icon="app-icons:library-add"></iron-icon>
-                                        <span>Workouts</span>
+                                        <span>Creator</span>
                                     </a>
                                 </template>
                                 <a name="library" href="[[rootPath]]main/library">
@@ -371,6 +376,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <wrc-athletes name="athletes" user="[[user]]" athletes-data="[[athletesData]]" user-info="[[userInfo]]"></wrc-athletes>
                             <wrc-workouts name="workouts" user="[[user]]" user-role="[[userRole]]"></wrc-workouts>
                             <wrc-programs name="programs"></wrc-programs>
+                            <wrc-workout-collection name="workout-collection"></wrc-workout-collection>
                             <wrc-workouts-creator name="workouts-creator"></wrc-workouts-creator>
                         </iron-pages>
                     </div>
