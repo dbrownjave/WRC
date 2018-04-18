@@ -111,6 +111,33 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
 			}
 
+			.option-menu .iron-selected {
+				text-transform: none;
+				font-weight: normal;
+				background-color: white !important;
+			}
+
+			.option-menu paper-item {
+				text-transform: none;
+				font-weight: normal;
+				text-decoration: none;
+
+				--paper-item-selected: red;
+
+			}
+
+			paper-listbox {
+				--paper-listbox-background-color: yellow;
+			}
+
+			paper-menu-button {
+				--paper-menu-button-dropdown-background: red;
+			}
+
+
+
+
+
 
 
 			/* PDF Workout */
@@ -359,7 +386,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 * Reset 'paper-menu-button' user selection
 				 */
 				_resetMenuSelection() {
-				this.selectedMenuItem = null;
+					this.selectedMenuItem = null;
 				}
 
 				/**
