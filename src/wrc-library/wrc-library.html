@@ -606,7 +606,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _userChanged(user) {
                     if (user) {
                         this.userReady = false;
-						this.$.firebaseDocument.getStoredValue('library')
+						            this.$.firebaseDocument.getStoredValue('library')
                         .then(function (snapshot) {
                             this.userReady = true;
                         }.bind(this));
@@ -672,27 +672,25 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _saveVideo(videInfo) {
                     if (this.action === 'add') {
-						this.$.firebaseDocument.push('library', videInfo)
+						            this.$.firebaseDocument.push('library', videInfo)
                         .catch(function (err) {
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
                         }.bind(this));
-
-						this._videoDialog.opened = false;
-						this._appToast.text = 'The video has been saved successfully.';
-						this._appToast.open();
-						this._appProgressBar.hidden = true;
-					} else {
-                        this.$.firebaseDocument.setStoredValue('library/' + this.videoId, videInfo)
+                						this._videoDialog.opened = false;
+                						this._appToast.text = 'The video has been saved successfully.';
+                						this._appToast.open();
+                						this._appProgressBar.hidden = true;
+					              } else {
+                            this.$.firebaseDocument.setStoredValue('library/' + this.videoId, videInfo)
                         .catch(function (err) {
                             this._appToast.text = 'There has been an error. Please try again.';
                             this._appToast.open();
                         }.bind(this));
-
-                        this._videoDialog.opened = false;
-						this._appToast.text = 'The video has been edited successfully.';
-						this._appToast.open();
-						this._appProgressBar.hidden = true;
+                            this._videoDialog.opened = false;
+                						this._appToast.text = 'The video has been edited successfully.';
+                						this._appToast.open();
+                						this._appProgressBar.hidden = true;
                     }
                 }
 
@@ -741,7 +739,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _openDeleteVideoDialog(e) {
                     this.videoId = e.target.getAttribute('id');
+
+                    // Binding confirmation action
                     this._deleteVideoDialog.acceptedCallback = this._deleteVideo.bind(this);
+
                     this._deleteVideoDialog.opened = true;
                     this._deleteVideoDialog.title = "Delete Video"
                     this._deleteVideoDialog.msg = "Are you sure you want to delete this video?"

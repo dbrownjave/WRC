@@ -217,7 +217,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
               <paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
                 <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
                 <paper-listbox noink slot="dropdown-content">
-                  <paper-item id$="[[workout.$key]]" on-tap="_deleteWorkout">Delete</paper-item>
+                  <paper-item id$="[[workout.$key]]" on-tap="_openDeleteWorkoutDialog">Delete</paper-item>
                 </paper-listbox>
               </paper-menu-button>
 							<div class="content-wrapper">
@@ -229,7 +229,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								<div class="day-title">Week [[workout.week]]</div>
 							</div>
 						</div>
-					</div>        
+					</div>
         </div>
 				</template>
 
@@ -267,27 +267,42 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					// App Progress bar
 					this._appProgress = document.getElementById("appProgressBar");
+
+          // Delete Dialog
+          this._deleteWorkoutDialog = document.getElementById('appDeleteDialog');
 				}
+
+        /**
+         * Opens delete workout dialog
+        */
+        _openDeleteWorkoutDialog(e) {
+          	this.workoutId = e.target.getAttribute("id");
+
+            // Binding confirmation action
+            this._deleteWorkoutDialog.acceptedCallback = this._deleteWorkout.bind(this);
+
+            this._deleteWorkoutDialog.opened = true;
+            this._deleteWorkoutDialog.title = "Delete Workout"
+            this._deleteWorkoutDialog.msg = "Are you sure you want to delete this workout?"
+        }
 
 				/**
 				 * @description Deletes Workouts
 				 */
-				_deleteWorkout(evt) {
-					// TODO: Add confirm before deleting
+				_deleteWorkout(response) {
+            if (response) {
+                this.$.firebaseDocument.destroy("workouts/" + this.workoutId)
+                .catch(function(err) {
+                  // Catch any error from firebase
+                  this._appToast.text = 'There has been an error. Please try again.';
+                  this._appToast.open();
+                }.bind(this));
 
-					this.workoutId = evt.target.getAttribute("id");
-          console.log(this.workoutId);
-
-          this.$.firebaseDocument.destroy("workouts/" + this.workoutId)
-          .catch(function(err) {
-            // Catch any error from firebase
-            this._appToast.text = "An error has ocurred trying to delete workout. Please try again.";
-						this._appToast.open();
-          }.bind(this));
-
-          // Open toast with successful message
-          this._appToast.text = "The workout has been deleted successfully.";
-          this._appToast.open();
+                this._deleteWorkoutDialog.opened = false;
+                this._appToast.text = "The workout has been deleted successfully.";
+                this._appToast.open();
+                this._appProgressBar.hidden = true;
+            }
         }
 
 			}
