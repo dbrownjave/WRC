@@ -210,23 +210,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 			<div hidden$="{{hidden}}">
 
-				<!-- Review Workouts content -->
-				<div hidden$="{{!reviewMode}}">
-					<!-- Back button -->
-					<paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_isHidden"></paper-icon-button>
-				</div>
-
 				<!-- Program Cards -->
 				<div class="collection-wrapper">
 					<template is=dom-repeat items="{{programsData}}" as="program">
-						<div class="paper-form" hidden$={{reviewMode}} id$="[[program.$key]]">
+						<div class="paper-form" hidden$="[[_computeHiddenPrograms(reviewMode, editMode)]]" id$="[[program.$key]]">
 							<div class="pdf-wrapper">
 								<paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"
 								    class="option-menu">
 									<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
 									<paper-listbox noink slot="dropdown-content" selected="{{selectedMenuItem}}">
-										<paper-item id$="[[program.$key]]" on-tap="_computeModeVisibilty" data-option="review">Review</paper-item>
-										<paper-item id$="[[program.$key]]" on-tap="_computeModeVisibilty" data-option="edit">Edit</paper-item>
+										<paper-item id$="[[program.$key]]" on-tap="_reviewProgram" data-option="review">Review</paper-item>
+										<paper-item id$="[[program.$key]]" on-tap="_editProgram" data-option="edit">Edit</paper-item>
 										<paper-item id$="[[program.$key]]" on-tap="_openDeleteProgramDialog">Delete</paper-item>
 									</paper-listbox>
 								</paper-menu-button>
@@ -250,21 +244,23 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 			</div>
 
-
-
-
-
+			<!-- Review Workouts content -->
+			<div hidden$="{{!reviewMode}}">
+				<p>this is the review</p>
+				<!-- Back button -->
+				<paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
+			</div>
 
 			<!-- Edit Workouts content -->
-			<div hidden$="{{editMode}}">
+			<div hidden$="{{!editMode}}">
 				<!-- Back button -->
-				<paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_isHidden"></paper-icon-button>
+				<paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
 
 				<div class="title">
 					<h3>Select Workouts for Program</h3>
+					<p>this is the edit mode</p>
 				</div>
 			</div>
-
 
 			<!-- Workouts Cards Selector
 			<iron-selector multi hidden$="[[editMode]]">
@@ -285,14 +281,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			</iron-selector>
 			-->
 
-
-
-
-
-
-
 			<!-- Finish button -->
-			<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{editMode}}" on-tap="_bindWorkoutsToProgram" class="finish-button"></paper-fab>
+			<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{!editMode}}" on-tap="_bindWorkoutsToProgram" class="finish-button"></paper-fab>
 
 		</main>
 	</template>
@@ -325,7 +315,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						editMode: {
 							type: Boolean,
 							notify: true,
-							value: true
+							value: false
 						},
 						selectedMenuItem: {
 							type: Object,
@@ -350,6 +340,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					// Delete Workout Dialog
 					this._deleteProgramDialog = document.getElementById("appDeleteDialog");
+				}
+
+				_computeHiddenPrograms(reviewMode, editMode) {
+					if (reviewMode || editMode) {
+						return true;
+					}
+					return false;
 				}
 
 				/**
@@ -420,6 +417,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							this._appToast.text = "There has been an error. Please try again.";
 							this._appToast.open();
 						}.bind(this));
+				}
+
+				_backToPrograms() {
+					this.editMode = this.reviewMode = false;
+				}
+
+				_reviewProgram(evt) {
+					this.reviewMode = true;
+					this.programId = evt.target.getAttribute("id");
+				}
+
+				_editProgram(evt) {
+					this.editMode = true;
+					this.programId = evt.target.getAttribute("id");
 				}
 
 				/**
