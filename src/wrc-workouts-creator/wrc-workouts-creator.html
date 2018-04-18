@@ -8710,7 +8710,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					{
 						this.$.firebaseDocument.push('workouts', this.workout)
 						.then(function() {
-							this._appToast.text = "The workout has been saved";
+							this._appToast.text = "The workout has been saved succesfully";
 							this._appToast.open();
 							this.$.workoutSelectorForm.reset();
 							this.$.workoutWeekCombo.value = null;
@@ -8720,7 +8720,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							this.$.dayFourForm.reset();
 						}.bind(this))
 						.catch(function(err) {
-							this._appToast.text = "An error has ocurred saving the workout";
+							this._appToast.text = "An error has ocurred saving the workout.";
 							this._appToast.open();
 						}.bind(this));
 					}

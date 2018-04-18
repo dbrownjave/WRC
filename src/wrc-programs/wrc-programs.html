@@ -223,8 +223,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
 								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
 								<paper-listbox noink slot="dropdown-content">
-									<paper-item id$="[[program.$key]]" on-tap="_isHidden">Review</paper-item>
-									<paper-item id$="[[program.$key]]" on-tap="_isHidden">Edit</paper-item>
+									<paper-item id$="[[program.$key]]" on-tap="_computeModeVisibilty" data-option="review">Review</paper-item>
+									<paper-item id$="[[program.$key]]" on-tap="_computeModeVisibilty" data-option="edit">Edit</paper-item>
 									<paper-item id$="[[program.$key]]" on-tap="_openDeleteProgramDialog">Delete</paper-item>
 								</paper-listbox>
 							</paper-menu-button>
@@ -242,6 +242,30 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					</div>
 				</template>
 			</div>
+
+			<!-- Workouts Cards Selector
+      <div class="collection-wrapper">
+				<template is=dom-repeat items="{{workoutsData}}" as="workout">
+					<div class="paper-form" id$="[[workout.$key]]">
+						<div class="pdf-wrapper">
+              <paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+                <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+                <paper-listbox noink slot="dropdown-content">
+                  <paper-item id$="[[workout.$key]]" on-tap="_openDeleteWorkoutDialog">Delete</paper-item>
+                </paper-listbox>
+              </paper-menu-button>
+							<div class="content-wrapper">
+								<div class="season-title-program">[[workout.season]]</div>
+								<div class="program-title">[[workout.weeks]] Week Program</div>
+								<div class="type-title">[[workout.type]]</div>
+							</div>
+							<div class="tag">
+								<div class="day-title">Week [[workout.week]]</div>
+							</div>
+						</div>
+					</div>
+        </div>
+				-->
 
 			<!-- Workouts Cards Selector -->
 			<iron-selector multi hidden$="[[!hidden]]">
@@ -339,20 +363,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					console.log("Responding");
 
 					if (response) {
-							this.$.firebaseDocument.getStoredValue("programs/" + this.programId + "/workouts")
-							.then(function(workouts) {
-								for (let workout of workouts) {
-									this.$.firebaseDocument.setStoredValue("workouts/" + workout + "/status", false);
-								}
-								this.$.firebaseDocument.destroy("programs/" + this.programId);
-								this._appToast.text = "The workout has been deleted successfully.";
-                this._appToast.open();
-                this._appProgressBar.hidden = true;
-							}.bind(this));
+						this.$.firebaseDocument.getStoredValue("programs/" + this.programId + "/workouts")
+						.then(function(workouts) {
+							for (let workout of workouts) {
+								this.$.firebaseDocument.setStoredValue("workouts/" + workout + "/status", false);
+							}
+							this.$.firebaseDocument.destroy("programs/" + this.programId);
+							this._appToast.text = "The workout has been deleted successfully.";
+              this._appToast.open();
+              this._appProgressBar.hidden = true;
+						}.bind(this));
 				}
 			}
-
-
 
 				/**
 				 * Saves new program
@@ -389,6 +411,26 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					this.hidden = !this.hidden;
 				}
+
+
+				/**
+				 * Element Hidden functionality
+				 *
+				 * @param {Boolean} return true to hide content
+				 * @return {Boolean}
+				 */
+				_computeModeVisibilty(e) {
+					alert('computeModeVisibilty');
+					var mode = e.target.dataset.option;
+					//var mode = e.target.dataset.review;
+
+					if (mode == 'review') {
+						alert('Review')
+					} else if (mode == 'edit') {
+						alert('Edit')
+					}
+				}
+
 
 				/**
 				 * Binds selected workouts to program
