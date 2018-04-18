@@ -162,12 +162,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 	/* z-index: 105; */
 			}
 
-			div.collection-wrapper {
-				@apply --layout-wrap;
-				@apply --layout-horizontal;
-				@apply --layout-center;
-			}
-
 			[hidden] {
 				display: none;
 			}
@@ -422,7 +416,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 */
 				_deleteProgram(evt) {
 					// TODO: Add confirm before deleting
-					
+
 					this.programId = evt.target.getAttribute("id");
 					this.$.firebaseDocument.getStoredValue("programs/" + this.programId + "/workouts")
 					.then(function(workouts) {
