@@ -43,18 +43,23 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Shared Style  -->
 <link rel="import" href="../shared-styles.html">
 
+<!-- PDF Workout Creator -->
+<link rel="import" href="../pdf-workout-creator/pdf-workout-creator.html">
+
 <dom-module id="wrc-workout-collection">
 	<template>
-	    <style include="wrc-shared-styles">
+		<style include="wrc-shared-styles">
 			/* General Style */
-  			main {
-  				padding: 1em 0em 2em 0em;
-  				height: calc(100vh - (64px + 4em));
-  				min-height: calc(100vh - (64px + 4em));
-  				overflow: auto;
-  			}
+
+			main {
+				padding: 1em 0em 2em 0em;
+				height: calc(100vh - (64px + 4em));
+				min-height: calc(100vh - (64px + 4em));
+				overflow: auto;
+			}
 
 			/* Header Section */
+
 			div.title {
 				@apply --layout-horizontal;
 				@apply --layout-center-justified;
@@ -68,7 +73,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				@apply --layout-horizontal;
 			}
 
-		  	div.title h3 {
+			div.title h3 {
 				font-size: 1.6em;
 				font-weight: 400;
 				font-style: normal;
@@ -83,19 +88,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 
 			/* Paper Fab */
+
 			paper-fab.finish-button {
 				--paper-fab-background: #5ac381;
 				--paper-fab-keyboard-focus-background: #5ac381;
 			}
 
 			/* Iron Selector */
+
 			iron-selector {
 				@apply --layout-wrap;
 				@apply --layout-horizontal;
 			}
 
 
-			.menu-item-selected{
+			.menu-item-selected {
 				border-style: none;
 				background-color: white;
 			}
@@ -114,6 +121,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
 			/* PDF Workout */
+
 			.menu-icon {
 				margin-left: 10em;
 				color: #86919f;
@@ -159,7 +167,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 
 			.option-menu paper-icon-button {
-			 	/* z-index: 105; */
+				/* z-index: 105; */
 			}
 
 			div.collection-wrapper {
@@ -173,6 +181,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 
 			/* Responsive */
+
 			@media screen and (max-width: 600px) {
 				div.title h3 {
 					font-size: 1.4em;
@@ -184,12 +193,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					@apply --layout-center;
 				}
 			}
-	    </style>
+		</style>
 
 		<!-- Firebase Document Configuration -->
-		<firebase-document
-			id="firebaseDocument"
-			app-name="wrc_software"></firebase-document>
+		<firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
 
 		<!-- Workouts Query Configuration -->
 		<firebase-query
@@ -199,27 +206,22 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			order-by-child="status"
 			equal-to="false"></firebase-query>
 
-		<!-- Programs Query Configuration -->
-		<firebase-query
-			app-name="wrc_software"
-			path="programs"
-			data="{{programsData}}"></firebase-query>
-
 		<!-- Element UI -->
-    	<main>
+		<main>
 
 
 			<!-- Workouts Cards -->
-      <div class="collection-wrapper">
+			<div class="collection-wrapper">
 				<template is=dom-repeat items="{{workoutsData}}" as="workout">
 					<div class="paper-form" id$="[[workout.$key]]">
 						<div class="pdf-wrapper">
-              <paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
-                <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-                <paper-listbox noink slot="dropdown-content">
-                  <paper-item id$="[[workout.$key]]" on-tap="_openDeleteWorkoutDialog">Delete</paper-item>
-                </paper-listbox>
-              </paper-menu-button>
+							<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+								<paper-listbox noink slot="dropdown-content">
+									<paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData">Preview</paper-item>
+									<paper-item id$="[[workout.$key]]" on-tap="_openDeleteWorkoutDialog">Delete</paper-item>
+								</paper-listbox>
+							</paper-menu-button>
 							<div class="content-wrapper">
 								<div class="season-title-program">[[workout.season]]</div>
 								<div class="program-title">[[workout.weeks]] Week Program</div>
@@ -231,7 +233,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						</div>
 					</div>
 				</template>
-      </div>
+			</div>
 
 		</main>
 	</template>
@@ -239,8 +241,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 	<script>
 		'use strict';
 
-		(function() {
-			class WrcWorkoutCollection extends Polymer.Element {
+		(function () {
+			class WrcWorkoutCollection extends PdfWorkoutCreator(Polymer.Element) {
 				// Element definition
 				static get is() {
 					return 'wrc-workout-collection';
@@ -259,6 +261,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					}
 				};
 
+				static get observers() {
+					return [
+						'_readyToPreviewChanged(readyToPreview)'
+					];
+				}
+
 				ready() {
 					super.ready();
 
@@ -268,45 +276,68 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					// App Progress bar
 					this._appProgress = document.getElementById("appProgressBar");
 
-          // Delete Dialog
-          this._deleteWorkoutDialog = document.getElementById('appDeleteDialog');
+					// Delete Dialog
+					this._deleteWorkoutDialog = document.getElementById('appDeleteDialog');
 				}
 
-        /**
-         * Opens delete workout dialog
-        */
-        _openDeleteWorkoutDialog(e) {
-          	this.workoutId = e.target.getAttribute("id");
+				/**
+				 * Opens delete workout dialog
+				 */
+				_openDeleteWorkoutDialog(e) {
+					this.workoutId = e.target.getAttribute("id");
 
-            // Binding confirmation action
-            this._deleteWorkoutDialog.acceptedCallback = this._deleteWorkout.bind(this);
+					// Binding confirmation action
+					this._deleteWorkoutDialog.acceptedCallback = this._deleteWorkout.bind(this);
 
-            this._deleteWorkoutDialog.opened = true;
-            this._deleteWorkoutDialog.title = "Delete Workout"
-            this._deleteWorkoutDialog.msg = "Are you sure you want to delete this workout?"
-        }
+					this._deleteWorkoutDialog.opened = true;
+					this._deleteWorkoutDialog.title = "Delete Workout";
+					// this._deleteWorkoutDialog.msg = "Are you sure you want to delete this workout? It might being used by a program.";
+					this._deleteWorkoutDialog.msg = "This workout might being used by a program. Are you sure you want to delete it?";
+				}
 
 				/**
 				 * @description Deletes Workouts
 				 */
 				_deleteWorkout(response) {
-            if (response) {
-                this.$.firebaseDocument.destroy("workouts/" + this.workoutId)
-                .catch(function(err) {
-                  // Catch any error from firebase
-                  this._appToast.text = 'There has been an error. Please try again.';
-                  this._appToast.open();
-                }.bind(this));
+					if (response) {
+						this.$.firebaseDocument.destroy("workouts/" + this.workoutId)
+							.catch(function (err) {
+								// Catch any error from firebase
+								this._appToast.text = 'There has been an error. Please try again.';
+								this._appToast.open();
+							}.bind(this));
 
-                this._deleteWorkoutDialog.opened = false;
-                this._appToast.text = "The workout has been deleted successfully.";
-                this._appToast.open();
-                this._appProgressBar.hidden = true;
-            }
-        }
+						this._deleteWorkoutDialog.opened = false;
+						this._appToast.text = "The workout has been deleted successfully.";
+						this._appToast.open();
+						this._appProgressBar.hidden = true;
+					}
+				}
+				
+				/**
+				 * @description Retrieves workout data from Firebase
+				*/
+				_loadWorkoutData(evt) {
+					// Extracts workoutId from clicked button
+					const workoutId = evt.target.getAttribute("id");
 
+					// Retrieves data from Firebase
+					this.$.firebaseDocument.getStoredValue("workouts/" + workoutId)
+					.then(function(snapshot) {
+						// Pass the retrieved workout to our generation function
+						this._generatePreview(snapshot);
+					}.bind(this));
+				}
+
+				/**
+				 * @description Generates workout PDF Preview making use of the super class
+				 * @param {Object} workout - workout retrieved from firebase
+				*/
+				_generatePreview(workout) {
+					super._generatePreview(workout);
+				}
 			}
-			window.customElements.define(WrcWorkoutCollection .is, WrcWorkoutCollection);
+			window.customElements.define(WrcWorkoutCollection.is, WrcWorkoutCollection);
 		}());
 	</script>
 </dom-module>
