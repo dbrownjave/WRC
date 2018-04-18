@@ -207,28 +207,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 		<!-- Element UI -->
     	<main>
-			<div hidden$="{{!hidden}}">
-				<!-- Back button  -->
-				<paper-icon-button
-					noink
-					class="back-button"
-					alt="Back"
-					src="../icons/buttons/left-arrow.svg"
-					on-tap="_isHidden"></paper-icon-button>
-
-				<div class="title">
-					<h3>Select Workouts for Program</h3>
-				</div>
-			</div>
 
 
 			<!-- Workouts Cards Selector -->
-			<iron-selector multi hidden$="[[!hidden]]">
 				<template is=dom-repeat items="{{workoutsData}}" as="workout">
 					<div class="paper-form" id$="[[workout.$key]]">
 						<div class="pdf-wrapper">
+              <paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+                <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+                <paper-listbox noink slot="dropdown-content">
+                  <paper-item id$="[[workout.$key]]" on-tap="_deleteWorkout">Delete</paper-item>
+                </paper-listbox>
+              </paper-menu-button>
 							<div class="content-wrapper">
-								<div class="season-title-workout">[[workout.season]]</div>
+								<div class="season-title-program">[[workout.season]]</div>
 								<div class="program-title">[[workout.weeks]] Week Program</div>
 								<div class="type-title">[[workout.type]]</div>
 							</div>
@@ -238,7 +230,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						</div>
 					</div>
 				</template>
-			</iron-selector>
+
 
 		<!-- Workouts Cards Selector -->
 		<!-- <div hidden$="[[!hidden]]">
@@ -268,12 +260,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 		</div> -->
 
-
-			<!-- Paper Fab to add new workout -->
-			<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}}" on-tap="_openToAdd"></paper-fab>
-
-			<!-- Finish button -->
-			<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{!hidden}}" on-tap="_bindWorkoutsToProgram" class="finish-button"></paper-fab>
 		</main>
 	</template>
 
@@ -312,78 +298,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
 				/**
-				 * Saves new program
-				*/
-				_onProgramDialog(programInfo) {
-					this._appProgress.hidden = false;
-					this.$.firebaseDocument.push("programs", programInfo)
-					.then(function() {
-						this._appProgress.hidden = true;
-						this._appToast.text = "The program has been created succesfully.";
-						this._appToast.open();
-						this._addProgramDialog.resetForm();
-						this._addProgramDialog.opened = false;
-					}.bind(this))
-					.catch(function(err) {
-						this._appProgress.hidden = true;
-						this._appToast.text = "There has been an error. Please try again.";
-						this._appToast.open();
-					}.bind(this));
-				}
-
-				/**
-				 * Element Hidden functionality
-				 *
-				 * @param {Boolean} return true to hide content
-				 * @return {Boolean}
-				 */
-				_isHidden(e) {
-					// Extracts id of clicked program
-					const programId = e.target.getAttribute("id");
-
-					// Assigns the id to a global variable to can access it from any other function
-					this.programId = (programId) ? programId : null;
-
-					this.hidden = !this.hidden;
-				}
-
-				/**
-				 * Binds selected workouts to program
-				*/
-				_bindWorkoutsToProgram() {
-					const selectableWorkouts = this.root.querySelector("iron-selector");
-					const selectedWorkouts = selectableWorkouts.querySelectorAll(".iron-selected");
-					if (selectedWorkouts && selectedWorkouts.length > 0) {
-						this._appProgress.hidden = false;
-						let bindedWorkouts = [];
-						for (let i = 0; i < selectedWorkouts.length; i++) {
-							const workoutId = selectedWorkouts[i].id;
-							bindedWorkouts.push(workoutId);
-							this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", true);
-						}
-						console.log(bindedWorkouts);
-						this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", bindedWorkouts)
-						.then(function() {
-							this._appProgress.hidden = true;
-							this._appToast.text = "The workouts has been assigned succesfully.";
-							this._appToast.open();
-							this.hidden = false;
-						}.bind(this))
-						.catch(function(err) {
-							this._appProgress.hidden = true;
-							this._appToast.text = "There has been an error. Please try again.";
-							this._appToast.open();
-						}.bind(this));
-					} else {
-						this._appToast.text = "Please select at least one workout";
-						this._appToast.open();
-					}
-				}
-
-				/**
 				 * @description Deletes Program and releases all binded workouts
 				 */
-				_deleteProgram(evt) {
+				_deleteWorkout(evt) {
 					// TODO: Add confirm before deleting
 
 					this.programId = evt.target.getAttribute("id");
