@@ -225,7 +225,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								<paper-listbox noink slot="dropdown-content">
 									<paper-item id$="[[program.$key]]" on-tap="_isHidden">Review</paper-item>
 									<paper-item id$="[[program.$key]]" on-tap="_isHidden">Edit</paper-item>
-									<paper-item id$="[[program.$key]]" on-tap="_deleteProgram">Delete</paper-item>
+									<paper-item id$="[[program.$key]]" on-tap="_openDeleteProgramDialog">Delete</paper-item>
 								</paper-listbox>
 							</paper-menu-button>
 
@@ -260,35 +260,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					</div>
 				</template>
 			</iron-selector>
-
-		<!-- Workouts Cards Selector -->
-		<!-- <div hidden$="[[!hidden]]">
-
-
-		<template is=dom-repeat items="{{workoutsData}}" as="workout">
-			<div class="paper-form" id$="[[workout.$key]]">
-				<div class="pdf-wrapper">
-					<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
-						<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-						<paper-listbox noink slot="dropdown-content">
-							<paper-item id$="[[]]" on-tap="_isHidden">Preview</paper-item>
-							<paper-item id$="[[]]" on-tap="_isHidden" >Delete</paper-item>
-						</paper-listbox>
-					</paper-menu-button>
-					<div class="content-wrapper">
-						<div class="season-title-workout">[[workout.season]]</div>
-						<div class="program-title">[[workout.weeks]] Week Program</div>
-						<div class="type-title">[[workout.type]]</div>
-					</div>
-					<div class="tag">
-						<div class="day-title">Week [[workout.week]]</div>
-					</div>
-				</div>
-			</div>
-		</template>
-
-		</div> -->
-
 
 			<!-- Paper Fab to add new workout -->
 			<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}}" on-tap="_openToAdd"></paper-fab>
@@ -332,6 +303,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					// App Progress bar
 					this._appProgress = document.getElementById("appProgressBar");
+
+					// Delete Workout Dialog
+					this._deleteProgramDialog = document.getElementById("appDeleteDialog");
 				}
 
 				/**
@@ -341,6 +315,44 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					this._addProgramDialog.acceptedCallback = this._onProgramDialog.bind(this);
 					this._addProgramDialog.opened = true;
 				}
+
+				/**
+				 * Opens delete program dialog
+				 */
+				_openDeleteProgramDialog(e) {
+					console.log("Open Dialog");
+					this.programId = e.target.getAttribute("id");
+
+					// Binding confirmation action
+					this._deleteProgramDialog.acceptedCallback = this._deleteProgram.bind(this);
+
+					this._deleteProgramDialog.opened = true;
+					this._deleteProgramDialog.title = "Delete Program";
+					this._deleteProgramDialog.msg = "Are you sure you want to delete this Program?";
+					// TODO: Improve UX + Add More Detailed info.: All workouts from this program will release back to the workout collection.
+				}
+
+				/**
+				 * @description Deletes Program and releases all binded workouts
+				 */
+				_deleteProgram(response) {
+					console.log("Responding");
+
+					if (response) {
+							this.$.firebaseDocument.getStoredValue("programs/" + this.programId + "/workouts")
+							.then(function(workouts) {
+								for (let workout of workouts) {
+									this.$.firebaseDocument.setStoredValue("workouts/" + workout + "/status", false);
+								}
+								this.$.firebaseDocument.destroy("programs/" + this.programId);
+								this._appToast.text = "The workout has been deleted successfully.";
+                this._appToast.open();
+                this._appProgressBar.hidden = true;
+							}.bind(this));
+				}
+			}
+
+
 
 				/**
 				 * Saves new program
@@ -409,24 +421,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						this._appToast.text = "Please select at least one workout";
 						this._appToast.open();
 					}
-				}
-
-				/**
-				 * @description Deletes Program and releases all binded workouts
-				 */
-				_deleteProgram(evt) {
-					// TODO: Add confirm before deleting
-
-					this.programId = evt.target.getAttribute("id");
-					this.$.firebaseDocument.getStoredValue("programs/" + this.programId + "/workouts")
-					.then(function(workouts) {
-						for (let workout of workouts) {
-							this.$.firebaseDocument.setStoredValue("workouts/" + workout + "/status", false);
-						}
-						this.$.firebaseDocument.destroy("programs/" + this.programId);
-						this._appToast.text = "The program has been deleted.";
-						this._appToast.open();
-					}.bind(this));
 				}
 			}
 			window.customElements.define(WrcPrograms.is, WrcPrograms);
