@@ -56,6 +56,10 @@ method is called on the element.
         overflow: hidden;
         pointer-events: none;
       }
+
+      div.dropdown-content {
+        border-radius: 7px !important;
+      }
     </style>
 
     <div id="contentWrapper">
@@ -243,7 +247,7 @@ method is called on the element.
             this._finishRenderClosed();
           }
         },
-        
+
         /**
          * Constructs the final animation config from different properties used
          * to configure specific parts of the opening and closing animations.
