@@ -253,6 +253,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				<template is=dom-repeat items="[[workoutsOfProgram]]" as="workout">
 					<div class="paper-form" id$="[[workout.$key]]">
 						<div class="pdf-wrapper">
+							<!-- <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"
+								class="option-menu">
+								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+								<paper-listbox noink slot="dropdown-content" selected="{{selectedMenuItem}}">
+									<paper-item id$="[[program.$key]]" on-tap="_reviewPdfWorkout" data-option="review">Preview workout</paper-item>
+								</paper-listbox>
+							</paper-menu-button> -->
+
 							<div class="content-wrapper">
 								<div class="season-title-workout">[[workout.season]]</div>
 								<div class="program-title">[[workout.weeks]] Week Program</div>
