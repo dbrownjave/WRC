@@ -389,13 +389,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					if (response) {
 						this.$.firebaseDocument.getStoredValue("programs/" + this.programId + "/workouts")
 							.then(function (workouts) {
-								for (let workout of workouts) {
-									this.$.firebaseDocument.setStoredValue("workouts/" + workout + "/status", false);
+								if (workouts && workouts.length) {
+									for (let workout of workouts) {
+										this.$.firebaseDocument.setStoredValue("workouts/" + workout + "/status", false);
+									}
 								}
 								this.$.firebaseDocument.destroy("programs/" + this.programId);
 								this._appToast.text = "The workout has been deleted successfully.";
 								this._appToast.open();
-								this._appProgressBar.hidden = true;
+								this._deleteProgramDialog.opened = false;
 							}.bind(this));
 					}
 				}
