@@ -202,6 +202,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 		<!-- Element UI -->
     	<main>
 
+			<div hidden$="{{hidden}}">
+
 			<!-- Review Workouts content -->
 			<div hidden$="{{!reviewMode}}">
 				<!-- Back button -->
@@ -213,21 +215,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					on-tap="_isHidden"></paper-icon-button>
 			</div>
 
-			<!-- Edit Workouts content
-			<div hidden$="{{editMode}}">
-				<!-- Back button
-				<paper-icon-button
-					noink
-					class="back-button"
-					alt="Back"
-					src="../icons/buttons/left-arrow.svg"
-					on-tap="_isHidden"></paper-icon-button>
-
-					<div class="title">
-					<h3>Select Workouts for Program</h3>
-					</div>
-			</div>
--->
 			<!-- Program Cards -->
 			<div class="collection-wrapper">
 				<template is=dom-repeat items="{{programsData}}" as="program">
@@ -256,6 +243,32 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				</template>
 			</div>
 
+			<!-- Paper Fab to add new workout -->
+			<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{reviewMode}}" on-tap="_openToAdd"></paper-fab>
+
+			</div>
+
+
+
+
+
+
+			<!-- Edit Workouts content -->
+			<div hidden$="{{editMode}}">
+				<!-- Back button -->
+				<paper-icon-button
+					noink
+					class="back-button"
+					alt="Back"
+					src="../icons/buttons/left-arrow.svg"
+					on-tap="_isHidden"></paper-icon-button>
+
+					<div class="title">
+					<h3>Select Workouts for Program</h3>
+					</div>
+			</div>
+
+
 			<!-- Workouts Cards Selector
 			<iron-selector multi hidden$="[[editMode]]">
 				<template is=dom-repeat items="{{workoutsData}}" as="workout">
@@ -275,32 +288,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			</iron-selector>
 			-->
 
-			<!-- Workouts Cards-->
-			<div class="collection-wrapper">
-				<template is=dom-repeat items="{{workoutsData}}" as="workout">
-					<div class="paper-form" hidden$={{!reviewMode}} id$="[[workout.$key]]">
-						<div class="pdf-wrapper">
-							<div class="content-wrapper">
-								<div class="season-title-workout">[[workout.season]]</div>
-								<div class="program-title">[[workout.weeks]] Week Program</div>
-								<div class="type-title">[[workout.type]]</div>
-							</div>
-							<div class="tag">
-								<div class="day-title">Week [[workout.week]]</div>
-							</div>
-						</div>
-					</div>
-				</template>
-			</div>
 
 
 
-			<!-- Paper Fab to add new workout -->
-			<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{reviewMode}}" on-tap="_openToAdd"></paper-fab>
 
-			<!-- Finish button
+
+
+			<!-- Finish button -->
 			<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{editMode}}" on-tap="_bindWorkoutsToProgram" class="finish-button"></paper-fab>
--->
+
 		</main>
 	</template>
 
@@ -338,7 +334,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							type: Object,
 							notify: true,
 							value: null
-						}
+						},
+
 					}
 				};
 
@@ -364,7 +361,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				_resetMenuSelection() {
 				this.selectedMenuItem = null;
 				}
-
 
 				/**
 				 * Opens program dialog to add
@@ -437,7 +433,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					var reviewMode = this.reviewMode;
 					var editMode = this.editMode;
 
-
 					// Extracts id of clicked program
 					const programId = e.target.getAttribute("id");
 
@@ -446,14 +441,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					// Review program's workout collection
 					if(reviewMode) {
-						// view programs
-						this.reviewMode = !this.reviewMode;
-						this._resetMenuSelection()
-
-					} else {
 						// view program workout collection
 						this.reviewMode = !this.reviewMode;
-						console.log(this.programId);
+						this._resetMenuSelection();
+
+					} else {
+						// view program
+						this.reviewMode = !this.reviewMode;
+						this._resetMenuSelection();
 					}
 
 					// TODO: Finish Edit Mode
@@ -461,11 +456,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					// Edit program's workout collection
 					console.log(editMode);
 					if(editMode) {
+						// view selectable workout collection
 						this.editMode = !this.editMode;
+						this.hidden = true;
+						this._resetMenuSelection();
 					} else {
+						// view program
 						this.editMode = !this.editMode;
+						this.hidden = true;
+						this._resetMenuSelection();
 					}
-
 					*/
 				}
 
