@@ -43,6 +43,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Shared Style  -->
 <link rel="import" href="../shared-styles.html">
 
+<!-- PDF Workout Creator -->
+<link rel="import" href="../pdf-workout-creator/pdf-workout-creator.html">
+
 <dom-module id="wrc-programs">
 	<template>
 		<style include="wrc-shared-styles">
@@ -173,10 +176,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				color: white;
 			}
 
-			.option-menu paper-icon-button {
-				/* z-index: 105; */
-			}
-
 			[hidden] {
 				display: none;
 			}
@@ -245,7 +244,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			</div>
 
 			<!-- Review Workouts content -->
-			<div hidden$="{{!reviewMode}}">
+			<div class="review-content" hidden$="{{!reviewMode}}">
 				<!-- Back button -->
 				<paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
 
@@ -253,16 +252,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				<template is=dom-repeat items="[[workoutsOfProgram]]" as="workout">
 					<div class="paper-form" id$="[[workout.$key]]">
 						<div class="pdf-wrapper">
-							<!-- <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"
-								class="option-menu">
+							<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
 								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-								<paper-listbox noink slot="dropdown-content" selected="{{selectedMenuItem}}">
-									<paper-item id$="[[program.$key]]" on-tap="_reviewPdfWorkout" data-option="review">Preview workout</paper-item>
+								<paper-listbox noink slot="dropdown-content">
+									<paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
 								</paper-listbox>
-							</paper-menu-button> -->
+							</paper-menu-button>
 
 							<div class="content-wrapper">
-								<div class="season-title-workout">[[workout.season]]</div>
+								<div class="season-title-program">[[workout.season]]</div>
 								<div class="program-title">[[workout.weeks]] Week Program</div>
 								<div class="type-title">[[workout.type]]</div>
 							</div>
@@ -275,7 +273,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			</div>
 
 			<!-- Edit Workouts content -->
-			<div hidden$="{{!editMode}}">
+			<div class="edit-content" hidden$="{{!editMode}}">
 				<!-- Back button -->
 				<paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
 
@@ -288,8 +286,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					<template is=dom-repeat items="{{workoutsData}}" as="workout">
 						<div class="paper-form" id$="[[workout.$key]]">
 							<div class="pdf-wrapper">
+								<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+									<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+									<paper-listbox noink slot="dropdown-content">
+										<paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
+									</paper-listbox>
+								</paper-menu-button>
+
 								<div class="content-wrapper">
-									<div class="season-title-workout">[[workout.season]]</div>
+									<div class="season-title-program">[[workout.season]]</div>
 									<div class="program-title">[[workout.weeks]] Week Program</div>
 									<div class="type-title">[[workout.type]]</div>
 								</div>
@@ -312,7 +317,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 		'use strict';
 
 		(function () {
-			class WrcPrograms extends Polymer.Element {
+			class WrcPrograms extends PdfWorkoutCreator(Polymer.Element) {
 				// Element definition
 				static get is() {
 					return 'wrc-programs';
@@ -507,6 +512,31 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						this._appToast.text = "Please select at least one workout";
 						this._appToast.open();
 					}
+				}
+
+				/**
+				 * @description Retrieves workout data from Firebase
+				*/
+				_loadWorkoutData(evt) {
+					evt.preventDefault();
+					
+					// Extracts workoutId from clicked button
+					const workoutId = evt.target.getAttribute("id");
+
+					// Retrieves data from Firebase
+					this.$.firebaseDocument.getStoredValue("workouts/" + workoutId)
+					.then(function(snapshot) {
+						// Pass the retrieved workout to our generation function
+						this._generatePreview(snapshot);
+					}.bind(this));
+				}
+
+				/**
+				 * @description Generates workout PDF Preview making use of the super class
+				 * @param {Object} workout - workout retrieved from firebase
+				*/
+				_generatePreview(workout) {
+					super._generatePreview(workout);
 				}
 			}
 			window.customElements.define(WrcPrograms.is, WrcPrograms);
