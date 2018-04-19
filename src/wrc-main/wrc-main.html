@@ -333,7 +333,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <iron-icon icon="app-icons:people"></iron-icon>
                                     <span>Athletes</span>
                                 </a>
-                                <a name="workouts" href="[[rootPath]]main/workouts">
+                                <a name="workouts" href="[[rootPath]]main/assign-workouts">
                                     <iron-icon icon="app-icons:description"></iron-icon>
                                     <span>Workouts</span>
                                 </a>
@@ -475,12 +475,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 _routePageChanged(page, role) {
                     if (role) {
-                        if (role === 'admin') {
-                            this.page = page || 'coaches';
-                        } else if (role === 'coach') {
-                            this.page = page || 'athletes';
-                        } else if (role === 'athlete') {
-                            this.page = page || 'library';
+                        if (role === 'admin' && page !== 'coaches' && page !== 'programs' && page !== 'workout-collection' && page !== 'workouts-creator' && page !== 'library') {
+                            this.set("route.path", "main/coaches");
+                        } else if (role === 'coach' && page !== 'athletes' && page !== 'assign-workouts' && page !== 'library') {
+                            this.set("route.path", "main/athletes");
+                        } else if (role === 'athlete' && page !== 'my-workouts' && page !== 'library') {
+                            this.set("route.path", "main/library");
+                        } else {
+                            this.page = page;
                         }
                     }
 
@@ -605,8 +607,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 logout() {
                     this.$.firebaseAuth.signOut();
-                    this.set('page', null);
-                    this.set('routData.page', null);
+                    this.set('page', '');
+                    this.set('routData.page', '');
                 }
 
                 /**
