@@ -1,0 +1,184 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+-->
+
+<!-- Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-selector/iron-multi-selectable.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<!-- Icons -->
+<link rel="import" href="../app-icons.html">
+<link rel="import" href="../fa-icons.html">
+
+<!-- Shared Style  -->
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="wrc-assign-workouts">
+    <template>
+        <style include="wrc-shared-styles">
+            /* General Style */
+			main {
+				padding: 1em 0em 2em 0em;
+				height: calc(100vh - (64px + 4em));
+				min-height: calc(100vh - (64px + 4em));
+				overflow: auto;
+
+                @apply --layout-vertical;
+			}
+
+            /* Program Selector */
+            .paper-form {
+				position: relative;
+                cursor: auto;
+				
+                @apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			.paper-form > .pdf-wrapper {
+				@apply --layout-vertical;
+				@apply --layout-center;
+			}
+
+            paper-menu-button {
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+
+            .menu-icon {
+				color: #86919f;
+			}
+
+            paper-menu-button paper-listbox paper-item {
+                font-weight: normal;
+                text-decoration: none;
+                text-transform: none;
+                background-color: #fff;
+                cursor: pointer;
+            }
+
+            paper-menu-button paper-listbox .iron-selected {
+                font-weight: normal;
+                text-decoration: none;
+                text-transform: none;
+                background-color: #fff;
+            }
+
+            paper-item:focus:before {
+                background: #fff;
+            }
+
+            paper-item:active:before {
+                background: var(--paper-grey-300);
+                color: #000;
+            }
+
+            /* Status icon holder */
+            .program-status {
+                position: absolute;
+                top: 1.2em;
+                left: 1.2em;
+                width: 14px;
+                height: 14px;
+                color: var(--paper-grey-500);
+            }
+
+            .program-status[active] {
+                color: #35BF2E;
+            }
+        </style>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document
+            id="firebaseDocument"
+            app-name="wrc_software"></firebase-document>
+        
+        <!-- Programs Query Configuration -->
+        <firebase-query
+            app-name="wrc_software"
+            path="programs"
+            data="{{programsData}}"></firebase-query>
+
+        <!-- Element UI -->
+        <main>
+            <div class="collection-wrapper">
+                <template is=dom-repeat items="{{programsData}}" as="program">
+                    <div class="paper-form" id$="[[program.$key]]">
+                        <div class="pdf-wrapper">
+                            <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"
+                                class="option-menu">
+                                <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+                                <paper-listbox noink slot="dropdown-content">
+                                    <paper-item id$="[[program.$key]]" on-tap="_setProgramActive" data-option="review">Active</paper-item>
+                                </paper-listbox>
+                            </paper-menu-button>
+
+                            <!-- Active status -->
+                            <iron-icon class="program-status" icon="app-icons:dot" active$="[[program.status]]"></iron-icon>
+
+                            <div class="content-wrapper">
+                                <div class="season-title-program">[[program.program]]</div>
+                                <div class="program-title">[[program.duration]] Program</div>
+                                <div class="type-title">[[program.type]]</div>
+                            </div>
+                            <div class="tag">
+                                <div class="day-title">[[program.days]] Days</div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </main>
+    </template>
+
+    <script>
+        "use strict";
+
+        (function() {
+            class WrcAssignWorkouts extends Polymer.Element {
+                // Element definition
+                static get is() { return 'wrc-assign-workouts'; }
+
+                ready() {
+                    super.ready();
+
+                    this._appToast = document.getElementById("appToast");
+                }
+
+                /**
+                 * @description Sets active status to program, thus the program will apear available for athletes
+                */
+                _setProgramActive(evt) {
+                    const programId = evt.target.getAttribute("id");
+
+                    this.$.firebaseDocument.setStoredValue(`programs/${programId}/status`, true)
+                    .then(function(res) {
+                        this._appToast.text = "The program has been activated. Now it will be available for athletes.";
+                        this._appToast.open();
+                    }.bind(this))
+                    .catch(function(err) {
+                        this._appToast.text = "There has been an error activating the program. Please try again.";
+                        this._appToast.open();
+                    }.bind(this));
+                }
+            }
+            window.customElements.define(WrcAssignWorkouts.is, WrcAssignWorkouts);
+        }());
+    </script>
+</dom-module>

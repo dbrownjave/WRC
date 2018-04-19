@@ -52,6 +52,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="lazy-import" href="../wrc-programs/wrc-programs.html">
 <link rel="lazy-import" href="../wrc-workout-collection/wrc-workout-collection.html">
 <link rel="lazy-import" href="../wrc-workouts-creator/wrc-workouts-creator.html">
+<link rel="lazy-import" href="../wrc-assign-workouts/wrc-assign-workouts.html">
 
 
 <dom-module id="wrc-main">
@@ -333,7 +334,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <iron-icon icon="app-icons:people"></iron-icon>
                                     <span>Athletes</span>
                                 </a>
-                                <a name="workouts" href="[[rootPath]]main/assign-workouts">
+                                <a name="assign-workouts" href="[[rootPath]]main/assign-workouts">
                                     <iron-icon icon="app-icons:description"></iron-icon>
                                     <span>Workouts</span>
                                 </a>
@@ -347,7 +348,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         <!-- Menu for athletes -->
                         <template is="dom-if" if="[[_isAthlete(userRole)]]">
                             <iron-selector class="drawer-list" selected="[[page]]" attr-for-selected="name" role="navigation">
-                                <a name="my-workouts" href="[[rootPath]]main/my-workouts">
+                                <a name="my-workouts" href="[[rootPath]]main/active-workouts">
                                     <iron-icon icon="app-icons:description"></iron-icon>
                                     <span>My Workout</span>
                                 </a>
@@ -378,6 +379,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <wrc-programs name="programs"></wrc-programs>
                             <wrc-workout-collection name="workout-collection"></wrc-workout-collection>
                             <wrc-workouts-creator name="workouts-creator"></wrc-workouts-creator>
+                            <wrc-assign-workouts name="assign-workouts"></wrc-assign-workouts>
                         </iron-pages>
                     </div>
                 </app-header>
@@ -479,7 +481,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this.set("route.path", "main/coaches");
                         } else if (role === 'coach' && page !== 'athletes' && page !== 'assign-workouts' && page !== 'library') {
                             this.set("route.path", "main/athletes");
-                        } else if (role === 'athlete' && page !== 'my-workouts' && page !== 'library') {
+                        } else if (role === 'athlete' && page !== 'active-workouts' && page !== 'library') {
                             this.set("route.path", "main/library");
                         } else {
                             this.page = page;
