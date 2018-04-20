@@ -246,16 +246,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /**
-                 * @description Sets active status to workout, thus the program will apear available for athletes
+                 * @description Sets active status to workout, thus the workout will apear available for athletes
                 */
                 _setWorkoutActive(evt) {
                     // Extracts workoutId from clicked button
                     const workoutId = evt.target.getAttribute("id");
 
-                    alert(workoutId);
-
                     // Retrieves data from Firebase
-                    this.$.firebaseDocument.getStoredValue("workouts/" + workoutId +"/status", true)
+                    this.$.firebaseDocument.setStoredValue("workouts/" + workoutId +"/status", true)
                     .then(function(res) {
                         this._appToast.text = "The workout has been activated. Now it will be available for athletes.";
                         this._appToast.open();
