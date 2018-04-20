@@ -358,10 +358,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._appToast = document.getElementById('appToast');
 
                     // Delete Coach Dialog
-                    this._deleteCoachDialog = document.getElementById('deleteCoachDialog');
+                    this._deleteCoachDialog = document.getElementById('appDeleteDialog');
 
                     const fileUpload = this.$.profilePicture;
-					fileUpload.addEventListener('change', function(e) {
+					              fileUpload.addEventListener('change', function(e) {
                         this._createImgPreview(e.target.files[0]);
                     }.bind(this));
                 }
@@ -448,7 +448,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * Opens the delete confirmation dialog
                 */
                 _openDeleteDialog() {
+                    // Binding confirmation action
                     this._deleteCoachDialog.acceptedCallback = this._deleteCoach.bind(this);
+
+                    this._deleteCoachDialog.title = "Delete Coach";
+                    this._deleteCoachDialog.msg = "Are you sure you want to delete this Coach?";
+
+                    // Open Dialog
                     this._deleteCoachDialog.opened = true;
                 }
 
@@ -471,8 +477,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this.coachInfo = null;
                         }.bind(this));
 
-                        this._appToast.text = 'The coach has been deleted.';
+                        // Notification
+                        this._appToast.text = 'The coach has been deleted successfully.';
                         this._appToast.open();
+
+                        // Close Delete + Profile Dialog
                         this._deleteCoachDialog.opened = false;
                         this.opened = false;
                     }

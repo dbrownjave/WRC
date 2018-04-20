@@ -396,26 +396,26 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.$.yearCombo.items = ['FR', 'SO', 'JR', 'SR'];
 
                     this.$.posCombo.items = ['Quarterback (QB)', 'Running Back (RB)', 'Fullback (FB)', 'Wide Receiver (WR)', 'Tight End (TE)', 'Offensive Lineman (OL)', 'Center (C)', 'Guard (G)', 'Left Guard (LG)', 'Right Guard (RG)', 'Tackle (T)',
-					  'Left Tackle (LT)', 'Right Tackle (RT)', 'Kicker (K)', 'Kick Returner(KR)', 'Defensive Lineman (DL)', 'Defensive End (DE)', 'Defensive Tackle (DT)', '	Nose Tackle (NT)', 'Linebacker (LB)', 'Inside Linebacker (ILB)',
-					  'Outside Linebacker (OLB)', 'Middle Linebacker (MLB)', 'Defensive Back (DB)', 'Cornerback (CB)', '	Free Safety (FS)', 'Strong Safety (SS)', 'Safety (S)', 'Punter (P)', 'Punt Returner (PR)'
+					          'Left Tackle (LT)', 'Right Tackle (RT)', 'Kicker (K)', 'Kick Returner(KR)', 'Defensive Lineman (DL)', 'Defensive End (DE)', 'Defensive Tackle (DT)', '	Nose Tackle (NT)', 'Linebacker (LB)', 'Inside Linebacker (ILB)',
+					          'Outside Linebacker (OLB)', 'Middle Linebacker (MLB)', 'Defensive Back (DB)', 'Cornerback (CB)', '	Free Safety (FS)', 'Strong Safety (SS)', 'Safety (S)', 'Punter (P)', 'Punt Returner (PR)'
 					];
 
                     this.$.heightCombo.items = ['5’0', '5’1', '5’2', '5’3', '5’4', '5’5', '5’6', '5’7', '5’8', '5’9', '6’0', '6’1',
-						'6’2', '6’3', '6’4', '6’5', '6’6', '6’7', '6’8', '6’9', '7’0'];
+						                                   '6’2', '6’3', '6’4', '6’5', '6’6', '6’7', '6’8', '6’9', '7’0'];
 
-					this.$.activeCombo.items = ['Yes', 'No'];
+					          this.$.activeCombo.items = ['Yes', 'No'];
 
                     // App Progress Bar
-					this._appProgressBar = document.getElementById('appProgressBar');
+					          this._appProgressBar = document.getElementById('appProgressBar');
 
                     // App Toast
                     this._appToast = document.getElementById('appToast');
 
                     // Delete Athlete Dialog
-                    this._deleteAthleteDialog = document.getElementById('deleteAthleteDialog');
+                    this._deleteAthleteDialog = document.getElementById('appDeleteDialog');
 
                     const fileUpload = this.$.profilePicture;
-					      fileUpload.addEventListener('change', function(e) {
+					              fileUpload.addEventListener('change', function(e) {
                         this._createImgPreview(e.target.files[0]);
                     }.bind(this));
                 }
@@ -519,6 +519,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _openDeleteDialog() {
                     this._deleteAthleteDialog.acceptedCallback = this._deleteAthlete.bind(this);
+                    this._deleteAthleteDialog.text = "Test";
+                    this._deleteProgramDialog.title = "Test";
                     this._deleteAthleteDialog.opened = true;
                 }
 
