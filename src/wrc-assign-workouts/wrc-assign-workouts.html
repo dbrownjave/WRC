@@ -158,8 +158,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 <div class="program-title">[[program.duration]] Program</div>
                                 <div class="type-title">[[program.type]]</div>
                             </div>
-                            <!-- Active status -->
-                            <div class="tag" active$="[[program.status]]">
+                            <div class="tag">
                                 <div class="day-title">[[program.days]] Days</div>
                             </div>
                         </div>
@@ -196,7 +195,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         <div class="program-title">[[workout.weeks]] Week Program</div>
                         <div class="type-title">[[workout.type]]</div>
                       </div>
-                      <div class="tag">
+                      <!-- Active status -->
+                      <div class="tag" active$=[[workout.status]]>
                         <div class="day-title">Week [[workout.week]]</div>
                       </div>
                     </div>
@@ -248,16 +248,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 /**
                  * @description Sets active status to workout, thus the program will apear available for athletes
                 */
-                __setWorkoutActive(evt) {
-                    const programId = evt.target.getAttribute("id");
+                _setWorkoutActive(evt) {
+                    // Extracts workoutId from clicked button
+                    const workoutId = evt.target.getAttribute("id");
 
-                    this.$.firebaseDocument.setStoredValue(`programs/${programId}/status`, true)
+                    alert(workoutId);
+
+                    // Retrieves data from Firebase
+                    this.$.firebaseDocument.getStoredValue("workouts/" + workoutId +"/status", true)
                     .then(function(res) {
-                        this._appToast.text = "The program has been activated. Now it will be available for athletes.";
+                        this._appToast.text = "The workout has been activated. Now it will be available for athletes.";
                         this._appToast.open();
                     }.bind(this))
                     .catch(function(err) {
-                        this._appToast.text = "There has been an error activating the program. Please try again.";
+                        this._appToast.text = "There has been an error activating the workout. Please try again.";
                         this._appToast.open();
                     }.bind(this));
                 }
