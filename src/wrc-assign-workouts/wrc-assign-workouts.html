@@ -45,7 +45,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             .paper-form {
 				position: relative;
                 cursor: auto;
-				
+
                 @apply --layout-vertical;
 				@apply --layout-center-center;
 			}
@@ -89,7 +89,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 color: #000;
             }
 
-            /* Status icon holder */
+            /* Status icon holder
             .program-status {
                 position: absolute;
                 top: 1.2em;
@@ -102,13 +102,31 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             .program-status[active] {
                 color: #35BF2E;
             }
+            */
+
+            .tag {
+              width: 70px;
+              height: 21px;
+              border-radius: 3px;
+              background-color: #86919f;
+              text-align: center;
+              margin-top: 10px;
+
+              @apply --layout-vertical;
+              @apply --layout-center-center;
+            }
+
+            .tag[active]{
+              background-color: #45BE72;
+            }
+
         </style>
 
         <!-- Firebase Document Configuration -->
         <firebase-document
             id="firebaseDocument"
             app-name="wrc_software"></firebase-document>
-        
+
         <!-- Programs Query Configuration -->
         <firebase-query
             app-name="wrc_software"
@@ -129,15 +147,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 </paper-listbox>
                             </paper-menu-button>
 
-                            <!-- Active status -->
-                            <iron-icon class="program-status" icon="app-icons:dot" active$="[[program.status]]"></iron-icon>
+                            <!-- Active status
+                            <iron-icon class="" icon="app-icons:dot" active$="[[program.status]]"></iron-icon>-->
 
                             <div class="content-wrapper">
                                 <div class="season-title-program">[[program.program]]</div>
                                 <div class="program-title">[[program.duration]] Program</div>
                                 <div class="type-title">[[program.type]]</div>
                             </div>
-                            <div class="tag">
+                            <div class="tag" active$="[[program.status]]">
                                 <div class="day-title">[[program.days]] Days</div>
                             </div>
                         </div>

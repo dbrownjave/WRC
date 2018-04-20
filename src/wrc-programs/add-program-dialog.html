@@ -184,22 +184,22 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             	*/
             	static get properties() {
                 	return {
-						acceptedCallback: Function,
+											acceptedCallback: Function,
                     	opened: {
                         	type: Boolean,
                         	notify: true,
                         	value: false
                     	},
-						programInfo: {
-							type: Object,
-							notify: true,
-							value: {
-								program: '',
-								type: '',
-								duration: '',
-								days: ''
-							}
-						}
+											programInfo: {
+											type: Object,
+											notify: true,
+											value: {
+												program: '',
+												type: '',
+												duration: '',
+												days: ''
+											}
+										}
                 	};
             	}
 
@@ -224,12 +224,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 /**
                  * Triggers the accepted callback with the response
-                */
-				_serializeProgram() {
-					if (this.$.programForm.validate()) {
-						this.acceptedCallback(this.programInfo);
-					}
-				}
+				                */
+								_serializeProgram() {
+									if (this.$.programForm.validate()) {
+										this.acceptedCallback(this.programInfo);
+									}
+								}
               }
               window.customElements.define(AddProgramDialog.is, AddProgramDialog);
           })();
