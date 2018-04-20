@@ -122,9 +122,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <firebase-query
             app-name="wrc_software"
             path="programs"
-            data="{{programsData}}"
-
-            ></firebase-query>
+            data="{{programsData}}"></firebase-query>
 
         <!-- Workouts Query Configuration -->
         <firebase-query
@@ -141,31 +139,31 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
           <div hidden$="{{hidden}}">
 
             <div class="collection-wrapper">
-                <template is=dom-repeat items="{{programsData}}" as="program">
-                    <div class="paper-form" id$="[[program.$key]]">
+                <template is=dom-if if=[[!programDownloaded]]>
+                    <div class="paper-form">
                         <div class="pdf-wrapper">
                             <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"
                                 class="option-menu">
                                 <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
                                 <paper-listbox noink slot="dropdown-content">
-  <!--                                  <paper-item id$="[[program.$key]]" on-tap="_setProgramActive" data-option="">Active</paper-item>
-                                    <paper-item id$="[[program.$key]]" on-tap="_setProgramActive" data-option="">Active</paper-item>-->
 
-                                <paper-item id$="[[program.$key]]" on-tap="_reviewProgram">View</paper-item>
-                                <paper-item id$="[[program.$key]]" on-tap="_setProgramActive">Remove</paper-item>
+                                <paper-item on-tap="_reviewProgram">View</paper-item>
+                                <paper-item  on-tap="_setProgramActive">Remove</paper-item>
                                 </paper-listbox>
                             </paper-menu-button>
                             <div class="content-wrapper">
-                                <div class="season-title-program">[[program.program]]</div>
-                                <div class="program-title">[[program.duration]] Program</div>
-                                <div class="type-title">[[program.type]]</div>
+                                <div class="season-title-program">{{programSeason}}</div>
+                                <div class="program-title">{{program}}</div>
+                                <div class="type-title">{{programType}}</div>
                             </div>
                             <div class="tag">
-                                <div class="day-title">[[program.days]] Days</div>
+                                <div class="day-title">{{programDays}} Days</div>
                             </div>
                         </div>
                     </div>
                 </template>
+
+                <h1>{{programDays}}</h1>
             </div>
 
             <!-- Paper Fab to add new program -->
@@ -232,6 +230,36 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       type: Boolean,
                       notify: true,
                       value: false
+                    },
+                    programDays: {
+                      type: String,
+                      notify: true,
+                      value: "100"
+                    },
+                    programDuration: {
+                      type: String,
+                      notify: true,
+                      value: " "
+                    },
+                    programSeason: {
+                      type: String,
+                      notify: true,
+                      value: " "
+                    },
+                    programType: {
+                      type: String,
+                      notify: true,
+                      value: " "
+                    },
+                    downloadedProgramID: {
+                      type: String,
+                      notify: true,
+                      value: " "
+                    },
+                    programDownloaded: {
+                      type: Boolean,
+                      notify: true,
+                      value: false
                     }
                   }
                 };
@@ -251,34 +279,49 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                   this.hidden = this.reviewMode = false;
                 }
 
-
                 // Test
                 _openToDownload(evt) {
                     // The default action that belongs to the event will not occur
                     evt.preventDefault();
 
                     var programCollection = this.programsData;
+                    var programDownloaded = this.programDownloaded;
+                    var downloadedProgramID = this.downloadedProgramID;
+
+                    console.log("Databind Program Days: " + this.programDays + " = 100");
+                    console.log(this.program);
 
                     programCollection.forEach(function(program) {
-                      console.log(program); // Object
 
+                    console.log(program); // Object
+
+                      // TODO: Replace program data with form data
                       if (program.days == "3" &&
                           program.duration == "4 Weeks" &&
                           program.program == "In-Season" &&
                           program.type == "Strength Phase"
-                      ){
+                      ){  
 
-                      alert("Program Match, ID: " + program.$key);
+                        //this.programDays = "22";
+                        console.log("Databind Program Days: " + this.programDays + " = " +  program.days);
 
+                        // Testing
+                        console.log("Program Downloaded?: " + programDownloaded);
+                        console.log("Program Match 🎉 , ID: " + program.$key );
+
+                        // Download Program with this UID
+                        downloadedProgramID =  program.$key;
+
+                        // Program Downloaded Notifier
+                        programDownloaded = true;
+                        console.log("Program Downloaded?: " + programDownloaded);
                     }
-
                   });
               }
 
-
                 /**
                  * @description Sets active status to workout, thus the workout will apear available for athletes
-                */
+
                 _setWorkoutActive(evt) {
                     // Extracts workoutId from clicked button
                     const workoutId = evt.target.getAttribute("id");
@@ -297,7 +340,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 /**
                  * @description Go to review mode and loads the workouts saved in the program
-                */
+
                 _reviewProgram(evt) {
                   let workoutsOfProgram = [];
                   this.reviewMode = !this.reviewMode;
@@ -318,7 +361,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.set("workoutsOfProgram", workoutsOfProgram);
                   }.bind(this));
                 }
-
+*/
             }
             window.customElements.define(WrcAssignWorkouts.is, WrcAssignWorkouts);
         }());
