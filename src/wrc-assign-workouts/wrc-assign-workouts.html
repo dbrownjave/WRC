@@ -270,6 +270,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     // Notification
                     this._appToast = document.getElementById("appToast");
 
+                    // App Progress bar
+                    this._appProgress = document.getElementById("appProgressBar");
+
                     // Open Download Program Dialog
                     this._downloadProgramDialog = document.getElementById("downloadProgramDialog");
                 }
@@ -280,44 +283,73 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 // Test
-                _openToDownload(evt) {
-                    // The default action that belongs to the event will not occur
-                    evt.preventDefault();
+                _openToDownload(e) {
+                  // Binding confirmation action + content
+                  this._downloadProgramDialog.acceptedCallback = this._downloadProgram.bind(this);
+                  this._downloadProgramDialog.opened = true;
+              }
 
-                    var programCollection = this.programsData;
-                    var programDownloaded = this.programDownloaded;
-                    var downloadedProgramID = this.downloadedProgramID;
+              _downloadProgram(program) {
+                  var programCollection = this.programsData;
+                  var programDownloaded = this.programDownloaded;
+                  var downloadedProgramID = this.downloadedProgramID;
 
                     console.log("Databind Program Days: " + this.programDays + " = 100");
                     console.log(this.program);
 
-                    programCollection.forEach(function(program) {
+                    programCollection.forEach(function(programSelected) {
 
                     console.log(program); // Object
 
                       // TODO: Replace program data with form data
-                      if (program.days == "3" &&
-                          program.duration == "4 Weeks" &&
-                          program.program == "In-Season" &&
-                          program.type == "Strength Phase"
+                      if (program.days == programSelected.days &&
+                          program.duration== programSelected.duration &&
+                          program.program == programSelected.program  &&
+                          program.type == programSelected.type
                       ){  
 
-                        //this.programDays = "22";
-                        console.log("Databind Program Days: " + this.programDays + " = " +  program.days);
+                        // Notification
+                        //this._appToast.text = 'The program has been downloading successfully.';
+                        //this._appToast.open();
 
                         // Testing
                         console.log("Program Downloaded?: " + programDownloaded);
-                        console.log("Program Match 🎉 , ID: " + program.$key );
+                        console.log("Program Match 🎉 , ID: " + programSelected.$key );
 
                         // Download Program with this UID
-                        downloadedProgramID =  program.$key;
+                        downloadedProgramID =  programSelected.$key;
 
                         // Program Downloaded Notifier
                         programDownloaded = true;
                         console.log("Program Downloaded?: " + programDownloaded);
+                    } else {
+                      // Testing
+                      console.log("Program No Match ☹️");
+
+                      // Notification
+                      //this._appToast.text = 'The athlete has been deleted successfully.';
+                      //this._appToast.open();
                     }
+
+                    // Close Download Program Dialog
+                    this._downloadProgramDialog.opened = false;
                   });
+
+
+                alert("Computing Program Algorithm");
+
+                this._appProgress.hidden = false;
               }
+
+                //this._downloadProgramDialog.opened = true;
+
+                // Notification
+                //this._appToast.text = 'The program has been downloading successfully.';
+                //this._appToast.open();
+
+                // Close Download Program Dialog
+                //this._downloadProgramDialog.opened = false;
+
 
                 /**
                  * @description Sets active status to workout, thus the workout will apear available for athletes
@@ -367,54 +399,3 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         }());
     </script>
 </dom-module>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-                _openToDownload(e) {
-                  alert("Download Button Touched");
-                  // Binding confirmation action + content
-                  this._downloadProgramDialog.acceptedCallback = this._downloadProgram.bind(this);
-
-                  alert("acceptedCallback");
-
-                  alert(this._downloadProgramDialog.opened);
-
-                  this._downloadProgramDialog.opened = true;
-
-                  alert(this._downloadProgramDialog.opened)
-
-                  alert(this._downloadProgramDialog.acceptedCallback);
-                }
-
-                _downloadProgram() {
-
-
-                  alert("Computing Program Algorithm");
-
-                  this._appProgress.hidden = false;
-                }
-
-                  //this._downloadProgramDialog.opened = true;
-
-                  // Notification
-                  //this._appToast.text = 'The program has been downloading successfully.';
-                  //this._appToast.open();
-
-                  // Close Download Program Dialog
-                  //this._downloadProgramDialog.opened = false;
-
-
-*/

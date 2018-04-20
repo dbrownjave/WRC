@@ -112,7 +112,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       	exit-animation="fade-out-animation">
 
   		<!-- title + info icon-->
-      	<h2>Download Program</h2>
+      	<h2>Add Program</h2>
       	<div>
       		<!-- TODO: Implement Paper Tool-tip -->
           	<img class="info-icon" src="../images/app-images/info-icon.svg" alt="info. button">
@@ -163,7 +163,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			<div class="buttons">
           		<paper-button dialog-dismiss class="cancel-button" on-tap="resetForm">Cancel</paper-button>
           		<span flex></span>
-          		<paper-button class="save-button" on-tap="">Download</paper-button>
+          		<paper-button class="save-button" on-tap="_serializeProgram">Download</paper-button>
       		</div>
   		</paper-dialog>
 	</template>
@@ -191,17 +191,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         	value: false
                     	},
 											programInfo: {
-											type: Object,
-											notify: true,
-											value: {
-												program: '',
-												type: '',
-												duration: '',
-												days: ''
+												type: Object,
+												notify: true,
+												value: {
+													program: '',
+													type: '',
+													duration: '',
+													days: ''
+												}
 											}
-										}
-                	};
-            	}
+                		}
+            		};
 
                 ready() {
                     super.ready()
@@ -231,7 +231,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								}
 							}
 
-              window.customElements.define(DownloadProgramDialog.is, DownloadProgramDialog);
-          })();
-      </script>
-  </dom-module>
+						}
+						window.customElements.define(DownloadProgramDialog.is, DownloadProgramDialog);
+				})();
+		</script>
+</dom-module>
