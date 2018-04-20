@@ -644,6 +644,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.action = 'add';
                     this._videoDialog._resetForm();
                     this._videoDialog.title = 'New';
+                    console.log("acceptedCallback: " + this._videoDialog.acceptedCallback);
                     this._videoDialog.acceptedCallback = this._saveVideo.bind(this);
                     this._videoDialog.opened = true;
                 }

@@ -225,8 +225,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * Serializes data from form
                 */
                 _serializeData() {
+                    console.log("Saving Video Form");
+
                     if (this.$.videoForm.validate()) {
                         this._appProgressBar.hidden = false;
+
+                        // Serialize Form is to retrieve the form data
+                        this.videoInfo = this.$.videoForm.serializeForm();
+                        
+                        // Transfer form data
                         this.acceptedCallback(this.videoInfo);
                     }
                 }
