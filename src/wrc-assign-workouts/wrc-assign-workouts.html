@@ -42,6 +42,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 @apply --layout-vertical;
             }
 
+            [hidden]{
+              display: none;
+            }
+
             /* Program Selector */
 
             .paper-form {
@@ -120,8 +124,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             path="programs"
             data="{{programsData}}"></firebase-query>
 
+        <!-- Workouts Query Configuration -->
+        <firebase-query
+         app-name="wrc_software"
+         path="workouts"
+         data="{{workoutsData}}"
+         order-by-child="status"
+         equal-to="false"></firebase-query>
+
         <!-- Element UI -->
         <main>
+
+          <!-- Program Cards -->
+          <div hidden$="{{hidden}}">
+
             <div class="collection-wrapper">
                 <template is=dom-repeat items="{{programsData}}" as="program">
                     <div class="paper-form" id$="[[program.$key]]">
@@ -130,7 +146,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 class="option-menu">
                                 <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
                                 <paper-listbox noink slot="dropdown-content">
-                                    <paper-item id$="[[program.$key]]" on-tap="_setProgramActive" data-option="review">Active</paper-item>
+  <!--                                  <paper-item id$="[[program.$key]]" on-tap="_setProgramActive" data-option="">Active</paper-item>
+                                    <paper-item id$="[[program.$key]]" on-tap="_setProgramActive" data-option="">Active</paper-item>-->
+
+                                <paper-item id$="[[program.$key]]" on-tap="_reviewProgram">View</paper-item>
+                                <paper-item id$="[[program.$key]]" on-tap="_setProgramActive">Remove</paper-item>
                                 </paper-listbox>
                             </paper-menu-button>
                             <div class="content-wrapper">
@@ -146,6 +166,45 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     </div>
                 </template>
             </div>
+
+            <!-- Paper Fab to add new program -->
+            <paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}" on-tap="_openToAdd"></paper-fab>
+
+          </div>
+
+
+            <!-- Review Workouts content -->
+            <div class="review-content" hidden$="{{!reviewMode}}">
+              <!-- Back button -->
+              <paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
+
+              <!-- Workouts of the program -->
+              <div class="collection-wrapper">
+                <template is=dom-repeat items="[[workoutsOfProgram]]" as="workout">
+                  <div class="paper-form" id$="[[workout.$key]]">
+                    <div class="pdf-wrapper">
+                      <paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+                        <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+                        <paper-listbox noink slot="dropdown-content">
+                          <paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
+                          <paper-item id$="[[workout.$key]]" on-tap="_setWorkoutActive" data-option="review">Active</paper-item>
+                        </paper-listbox>
+                      </paper-menu-button>
+
+                      <div class="content-wrapper">
+                        <div class="season-title-program">[[workout.season]]</div>
+                        <div class="program-title">[[workout.weeks]] Week Program</div>
+                        <div class="type-title">[[workout.type]]</div>
+                      </div>
+                      <div class="tag">
+                        <div class="day-title">Week [[workout.week]]</div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
+
         </main>
     </template>
 
@@ -157,16 +216,39 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 // Element definition
                 static get is() { return 'wrc-assign-workouts'; }
 
+                /**
+                 * Element properties
+                 */
+                static get properties() {
+                  return {
+                    hidden: {
+                      type: Boolean,
+                      notify: true,
+                      value: false
+                    },
+                    reviewMode: {
+                      type: Boolean,
+                      notify: true,
+                      value: false
+                    }
+                  }
+                };
+
                 ready() {
                     super.ready();
 
                     this._appToast = document.getElementById("appToast");
                 }
 
+                // Returns to programs from editMode / reviewMode
+                _backToPrograms() {
+                  this.hidden = this.reviewMode = false;
+                }
+
                 /**
-                 * @description Sets active status to program, thus the program will apear available for athletes
+                 * @description Sets active status to workout, thus the program will apear available for athletes
                 */
-                _setProgramActive(evt) {
+                __setWorkoutActive(evt) {
                     const programId = evt.target.getAttribute("id");
 
                     this.$.firebaseDocument.setStoredValue(`programs/${programId}/status`, true)
@@ -179,6 +261,31 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this._appToast.open();
                     }.bind(this));
                 }
+
+                /**
+                 * @description Go to review mode and loads the workouts saved in the program
+                */
+                _reviewProgram(evt) {
+                  let workoutsOfProgram = [];
+                  this.reviewMode = !this.reviewMode;
+                  this.hidden = true;
+                  this.programId = evt.target.getAttribute("id");
+
+                  this.$.firebaseDocument.getStoredValue(`programs/${this.programId}/workouts`)
+                  .then(function(workouts) {
+                    if (workouts && workouts.length) {
+                      for(let workout of workouts) {
+                        this.$.firebaseDocument.getStoredValue(`workouts/${workout}`)
+                        .then(function(workoutData) {
+                          workoutData["$key"] = workout;
+                          workoutsOfProgram.push(workoutData);
+                        }.bind(this));
+                      }
+                    }
+                    this.set("workoutsOfProgram", workoutsOfProgram);
+                  }.bind(this));
+                }
+
             }
             window.customElements.define(WrcAssignWorkouts.is, WrcAssignWorkouts);
         }());
