@@ -600,7 +600,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._appToast = document.getElementById('appToast');
 
                     // Delete Athlete Dialog
-                    this._deleteAthleteDialog = document.getElementById('deleteAthleteDialog');
+                    this._deleteAthleteDialog = document.getElementById('appDeleteDialog');
 
                     const fileUpload = this.$.profilePicture;
                     fileUpload.addEventListener('change', function(e) {
@@ -683,7 +683,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * Opens the delete confirmation dialog
                 */
                 _openDeleteDialog() {
+                    // Binding confirmation action + content
                     this._deleteAthleteDialog.acceptedCallback = this._deleteAthlete.bind(this);
+                    this._deleteAthleteDialog.title = "Delete Athlete"
+                    this._deleteAthleteDialog.msg = "Are you sure you want to delete this Athlete?"
+
+                    // Open Dialog
                     this._deleteAthleteDialog.opened = true;
                 }
 
@@ -706,8 +711,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._resetForm();
                         }.bind(this));
 
-                        this._appToast.text = 'The athlete has been deleted.';
+                        // Notification
+                        this._appToast.text = 'The athlete has been deleted successfully.';
                         this._appToast.open();
+
+                        // Close Delete + Profile Dialog
                         this._deleteAthleteDialog.opened = false;
                         this.opened = false;
                     }

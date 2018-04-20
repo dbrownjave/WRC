@@ -448,9 +448,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * Opens the delete confirmation dialog
                 */
                 _openDeleteDialog() {
-                    // Binding confirmation action
+                    // Binding confirmation action + content
                     this._deleteCoachDialog.acceptedCallback = this._deleteCoach.bind(this);
-
                     this._deleteCoachDialog.title = "Delete Coach";
                     this._deleteCoachDialog.msg = "Are you sure you want to delete this Coach?";
 
