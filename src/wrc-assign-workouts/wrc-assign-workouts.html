@@ -122,7 +122,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <firebase-query
             app-name="wrc_software"
             path="programs"
-            data="{{programsData}}"></firebase-query>
+            data="{{programsData}}"
+
+            ></firebase-query>
 
         <!-- Workouts Query Configuration -->
         <firebase-query
@@ -167,7 +169,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             </div>
 
             <!-- Paper Fab to add new program -->
-            <paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}" on-tap="_openToAdd"></paper-fab>
+            <paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}" on-tap="_openToDownload"></paper-fab>
 
           </div>
 
@@ -237,13 +239,42 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 ready() {
                     super.ready();
 
+                    // Notification
                     this._appToast = document.getElementById("appToast");
+
+                    // Open Download Program Dialog
+                    this._downloadProgramDialog = document.getElementById("downloadProgramDialog");
                 }
 
                 // Returns to programs from editMode / reviewMode
                 _backToPrograms() {
                   this.hidden = this.reviewMode = false;
                 }
+
+
+                // Test
+                _openToDownload(evt) {
+                    // The default action that belongs to the event will not occur
+                    evt.preventDefault();
+
+                    var programCollection = this.programsData;
+
+                    programCollection.forEach(function(program) {
+                      console.log(program); // Object
+
+                      if (program.days == "3" &&
+                          program.duration == "4 Weeks" &&
+                          program.program == "In-Season" &&
+                          program.type == "Strength Phase"
+                      ){
+
+                      alert("Program Match, ID: " + program.$key);
+
+                    }
+
+                  });
+              }
+
 
                 /**
                  * @description Sets active status to workout, thus the workout will apear available for athletes
@@ -293,3 +324,54 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         }());
     </script>
 </dom-module>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+                _openToDownload(e) {
+                  alert("Download Button Touched");
+                  // Binding confirmation action + content
+                  this._downloadProgramDialog.acceptedCallback = this._downloadProgram.bind(this);
+
+                  alert("acceptedCallback");
+
+                  alert(this._downloadProgramDialog.opened);
+
+                  this._downloadProgramDialog.opened = true;
+
+                  alert(this._downloadProgramDialog.opened)
+
+                  alert(this._downloadProgramDialog.acceptedCallback);
+                }
+
+                _downloadProgram() {
+
+
+                  alert("Computing Program Algorithm");
+
+                  this._appProgress.hidden = false;
+                }
+
+                  //this._downloadProgramDialog.opened = true;
+
+                  // Notification
+                  //this._appToast.text = 'The program has been downloading successfully.';
+                  //this._appToast.open();
+
+                  // Close Download Program Dialog
+                  //this._downloadProgramDialog.opened = false;
+
+
+*/

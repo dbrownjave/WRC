@@ -26,7 +26,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Icons -->
 <link rel="import" href="../fa-icons.html">
 
-<dom-module id="add-program-dialog">
+<dom-module id="download-program-dialog">
 	<template>
     	<style>
     		/* Dialog */
@@ -106,13 +106,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
   	<!-- Element UI -->
   	<paper-dialog
-  		opened="{{opened}}"
+  			opened="{{opened}}"
       	with-backdrop
       	entry-animation="scale-up-animation"
       	exit-animation="fade-out-animation">
 
   		<!-- title + info icon-->
-      	<h2>Add Program</h2>
+      	<h2>Download Program</h2>
       	<div>
       		<!-- TODO: Implement Paper Tool-tip -->
           	<img class="info-icon" src="../images/app-images/info-icon.svg" alt="info. button">
@@ -161,9 +161,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 	      	<!-- buttons  -->
 			<div class="buttons">
-          		<paper-button dialog-dismiss class="cancel-button" on-tap="resetForm" >Cancel</paper-button>
+          		<paper-button dialog-dismiss class="cancel-button" on-tap="resetForm">Cancel</paper-button>
           		<span flex></span>
-          		<paper-button class="save-button" on-tap="_serializeProgram">Create</paper-button>
+          		<paper-button class="save-button" on-tap="">Download</paper-button>
       		</div>
   		</paper-dialog>
 	</template>
@@ -173,11 +173,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
     	(function() {
         	'use strict';
 
-        	class AddProgramDialog extends Polymer.Element {
+        	class DownloadProgramDialog extends Polymer.Element {
             	/**
              	 * Element definition
             	*/
-            	static get is() { return 'add-program-dialog'; }
+            	static get is() { return 'download-program-dialog'; }
 
             	/**
              	 * Element properties
@@ -222,16 +222,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.$.programForm.reset();
                 }
 
-                /**
-                 * Triggers the accepted callback with the response
-				         */
-								_serializeProgram() {
-									if (this.$.programForm.validate()) {
-										this.acceptedCallback(this.programInfo);
-									}
+							/**
+							 * Triggers the accepted callback with the response
+							 */
+							_serializeProgram() {
+								if (this.$.programForm.validate()) {
+									this.acceptedCallback(this.programInfo);
 								}
-              }
-              window.customElements.define(AddProgramDialog.is, AddProgramDialog);
+							}
+
+              window.customElements.define(DownloadProgramDialog.is, DownloadProgramDialog);
           })();
       </script>
   </dom-module>

@@ -386,14 +386,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				}
 
 				/**
-				 * Opens program dialog to add
-				 */
-				_openToAdd() {
-					this._addProgramDialog.acceptedCallback = this._onProgramDialog.bind(this);
-					this._addProgramDialog.opened = true;
-				}
-
-				/**
 				 * Opens delete program dialog
 				 */
 				_openDeleteProgramDialog(e) {
@@ -426,6 +418,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								this._deleteProgramDialog.opened = false;
 							}.bind(this));
 					}
+				}
+
+				/**
+				 * Opens program dialog to add
+				 */
+				_openToAdd() {
+					this._addProgramDialog.acceptedCallback = this._onProgramDialog.bind(this);
+					this._addProgramDialog.opened = true;
 				}
 
 				/**
@@ -519,7 +519,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				*/
 				_loadWorkoutData(evt) {
 					evt.preventDefault();
-					
+
 					// Extracts workoutId from clicked button
 					const workoutId = evt.target.getAttribute("id");
 
