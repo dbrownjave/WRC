@@ -32,28 +32,30 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
     <template>
         <style include="wrc-shared-styles">
             /* General Style */
-			main {
-				padding: 1em 0em 2em 0em;
-				height: calc(100vh - (64px + 4em));
-				min-height: calc(100vh - (64px + 4em));
-				overflow: auto;
+
+            main {
+                padding: 1em 0em 2em 0em;
+                height: calc(100vh - (64px + 4em));
+                min-height: calc(100vh - (64px + 4em));
+                overflow: auto;
 
                 @apply --layout-vertical;
-			}
+            }
 
             /* Program Selector */
+
             .paper-form {
-				position: relative;
+                position: relative;
                 cursor: auto;
 
                 @apply --layout-vertical;
-				@apply --layout-center-center;
-			}
+                @apply --layout-center-center;
+            }
 
-			.paper-form > .pdf-wrapper {
-				@apply --layout-vertical;
-				@apply --layout-center;
-			}
+            .paper-form>.pdf-wrapper {
+                @apply --layout-vertical;
+                @apply --layout-center;
+            }
 
             paper-menu-button {
                 position: absolute;
@@ -62,8 +64,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             .menu-icon {
-				color: #86919f;
-			}
+                color: #86919f;
+            }
 
             paper-menu-button paper-listbox paper-item {
                 font-weight: normal;
@@ -89,37 +91,22 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 color: #000;
             }
 
-            /* Status icon holder
-            .program-status {
-                position: absolute;
-                top: 1.2em;
-                left: 1.2em;
-                width: 14px;
-                height: 14px;
-                color: var(--paper-grey-500);
-            }
-
-            .program-status[active] {
-                color: #35BF2E;
-            }
-            */
-
+            /* Active Status */
             .tag {
-              width: 70px;
-              height: 21px;
-              border-radius: 3px;
-              background-color: #86919f;
-              text-align: center;
-              margin-top: 10px;
+                width: 70px;
+                height: 21px;
+                border-radius: 3px;
+                background-color: #86919f;
+                text-align: center;
+                margin-top: 10px;
 
-              @apply --layout-vertical;
-              @apply --layout-center-center;
+                @apply --layout-vertical;
+                @apply --layout-center-center;
             }
 
-            .tag[active]{
-              background-color: #45BE72;
+            .tag[active] {
+                background-color: #45BE72;
             }
-
         </style>
 
         <!-- Firebase Document Configuration -->
@@ -146,15 +133,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <paper-item id$="[[program.$key]]" on-tap="_setProgramActive" data-option="review">Active</paper-item>
                                 </paper-listbox>
                             </paper-menu-button>
-
-                            <!-- Active status
-                            <iron-icon class="" icon="app-icons:dot" active$="[[program.status]]"></iron-icon>-->
-
                             <div class="content-wrapper">
                                 <div class="season-title-program">[[program.program]]</div>
                                 <div class="program-title">[[program.duration]] Program</div>
                                 <div class="type-title">[[program.type]]</div>
                             </div>
+                            <!-- Active status -->
                             <div class="tag" active$="[[program.status]]">
                                 <div class="day-title">[[program.days]] Days</div>
                             </div>

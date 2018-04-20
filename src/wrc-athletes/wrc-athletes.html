@@ -798,18 +798,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         * Note: Provide the array with any name to represent the element.
                         */
                         data.forEach(function(athlete) { //
-                            // Push data (element) to array
-                            content.push(
-                                {
-                                  text: athlete.profile.first + " " + athlete.profile.last,
-                                  style: 'header',
-                                },
-                                {
-                                  text: "Max Bench Press: " + athlete.stats.bench_press_value + "lbs",
-                                  style: 'subheader',
-                                  pageBreak: 'after'
-                                }
-                            );
+
+                            if (athlete.profile.active == "Yes") {
+                                // Push data (element) to array
+                                content.push(
+                                    {
+                                      text: athlete.profile.first + " " + athlete.profile.last,
+                                      style: 'header',
+                                    },
+                                    {
+                                      text: "Max Bench Press: " + athlete.stats.bench_press_value + "lbs",
+                                      style: 'subheader',
+                                      pageBreak: 'after'
+                                    }
+                                );
+                            }
                         });
                         return content;
                     }
