@@ -139,7 +139,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
           <div hidden$="{{hidden}}">
 
             <div class="collection-wrapper">
-                <template is=dom-if if=[[!programDownloaded]]>
+                <template is=dom-if if=[[programDownloaded]]>
                     <div class="paper-form">
                         <div class="pdf-wrapper">
                             <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"
@@ -152,18 +152,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 </paper-listbox>
                             </paper-menu-button>
                             <div class="content-wrapper">
-                                <div class="season-title-program">{{programSeason}}</div>
-                                <div class="program-title">{{program}}</div>
-                                <div class="type-title">{{programType}}</div>
+                                <div class="season-title-program">{{program.season}}</div>
+                                <div class="program-title">{{program.duration}}</div>
+                                <div class="type-title">{{program.type}}</div>
                             </div>
                             <div class="tag">
-                                <div class="day-title">{{programDays}} Days</div>
+                                <div class="day-title">{{program.days}} Days</div>
                             </div>
                         </div>
                     </div>
                 </template>
-
-                <h1>{{programDays}}</h1>
             </div>
 
             <!-- Paper Fab to add new program -->
@@ -209,17 +207,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
     </template>
 
     <script>
-        "use strict";
-
         (function() {
+            'use strict';
             class WrcAssignWorkouts extends Polymer.Element {
-                // Element definition
-                static get is() { return 'wrc-assign-workouts'; }
+                	// Element definition
+                	static get is() { return 'wrc-assign-workouts'; }
 
-                /**
-                 * Element properties
-                 */
-                static get properties() {
+                	/**
+                	* Element properties
+                	 */
+                	static get properties() {
                   return {
                     hidden: {
                       type: Boolean,
@@ -231,25 +228,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       notify: true,
                       value: false
                     },
-                    programDays: {
-                      type: String,
+
+                    program: {
+                      type: Object,
                       notify: true,
-                      value: "100"
-                    },
-                    programDuration: {
-                      type: String,
-                      notify: true,
-                      value: " "
-                    },
-                    programSeason: {
-                      type: String,
-                      notify: true,
-                      value: " "
-                    },
-                    programType: {
-                      type: String,
-                      notify: true,
-                      value: " "
+                      value: {
+                        days: "100",
+                        duration: "40",
+                        season: "Test",
+                        type: "Strengthx"
+                      }
                     },
                     downloadedProgramID: {
                       type: String,
@@ -261,8 +249,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       notify: true,
                       value: false
                     }
-                  }
-                };
+                  };
+                }
 
                 ready() {
                     super.ready();
@@ -290,55 +278,60 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
               }
 
               _downloadProgram(program) {
+                  // Store function value manually
+                  var self = this;
+
                   var programCollection = this.programsData;
                   var programDownloaded = this.programDownloaded;
                   var downloadedProgramID = this.downloadedProgramID;
 
-                    console.log("Databind Program Days: " + this.programDays + " = 100");
-                    console.log(this.program);
+                  console.log("Databind Program Days: " + this.programDays + " = 100");
+                  console.log(this.program);
 
-                    programCollection.forEach(function(programSelected) {
+                  programCollection.forEach(function(programSelected) {
 
-                    console.log(program); // Object
+                  console.log(program); // Object
 
-                      // TODO: Replace program data with form data
-                      if (program.days == programSelected.days &&
-                          program.duration== programSelected.duration &&
-                          program.program == programSelected.program  &&
-                          program.type == programSelected.type
+                  // TODO: Replace program data with form data
+                  if (program.days == programSelected.days &&
+                      program.duration== programSelected.duration &&
+                      program.program == programSelected.program  &&
+                      program.type == programSelected.type
                       ){  
 
-                        // Notification
-                        //this._appToast.text = 'The program has been downloading successfully.';
-                        //this._appToast.open();
+                      self.program.days = programSelected.days;
 
-                        // Testing
-                        console.log("Program Downloaded?: " + programDownloaded);
-                        console.log("Program Match 🎉 , ID: " + programSelected.$key );
+                      // Notification
+                      self._appToast.text = 'The program has been downloading successfully.';
+                      self._appToast.open();
 
-                        // Download Program with this UID
-                        downloadedProgramID =  programSelected.$key;
+                      // Testing
+                      console.log("Program Downloaded: " + programDownloaded);
+                      console.log("Program Match 🎉 , ID: " + programSelected.$key);
 
-                        // Program Downloaded Notifier
-                        programDownloaded = true;
-                        console.log("Program Downloaded?: " + programDownloaded);
+                      // Download Program with this UID
+                      self.downloadedProgramID =  programSelected.$key;
+
+                      // Program Downloaded Notifier
+                      self.programDownloaded = true;
+                      console.log("Program Downloaded: " + programDownloaded);
+
+                      // Close Download Program Dialog
+                      self._downloadProgramDialog.opened = false;
                     } else {
                       // Testing
                       console.log("Program No Match ☹️");
 
                       // Notification
-                      //this._appToast.text = 'The athlete has been deleted successfully.';
-                      //this._appToast.open();
+                      self._appToast.text = 'Sorry, This program is not available.';
+                      self._appToast.open();
+
+                      // Program Downloaded Notifier
+                      self.programDownloaded = true;
+
+                      self._appProgress.hidden = true;
                     }
-
-                    // Close Download Program Dialog
-                    this._downloadProgramDialog.opened = false;
                   });
-
-
-                alert("Computing Program Algorithm");
-
-                this._appProgress.hidden = false;
               }
 
                 //this._downloadProgramDialog.opened = true;
@@ -396,6 +389,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 */
             }
             window.customElements.define(WrcAssignWorkouts.is, WrcAssignWorkouts);
-        }());
+        })();
     </script>
 </dom-module>
