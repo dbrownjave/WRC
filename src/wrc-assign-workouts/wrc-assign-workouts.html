@@ -126,52 +126,47 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
         <!-- Workouts Query Configuration -->
         <firebase-query
-         app-name="wrc_software"
-         path="workouts"
-         data="{{workoutsData}}"
-         order-by-child="status"
-         equal-to="false"></firebase-query>
+           app-name="wrc_software"
+           path="workouts"
+           data="{{workoutsData}}"
+           order-by-child="status"
+           equal-to="false"></firebase-query>
 
         <!-- Element UI -->
         <main>
 
           <!-- Program Cards -->
           <div hidden$="{{hidden}}">
-
             <div class="collection-wrapper">
-            <template is=dom-if if="{{programDownloaded}}">
-             <template is=dom-repeat items="[[programsData]]" as="program" filter="{{_computeProgramFilter(programIdRequested)}}">
-                    <div class="paper-form">
-                        <div class="pdf-wrapper">
-                            <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"
-                                class="option-menu">
-                                <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-                                <paper-listbox noink slot="dropdown-content">
-
-                                <paper-item on-tap="_reviewProgram">View</paper-item>
-                                <paper-item  on-tap="_setProgramActive">Remove</paper-item>
-                                </paper-listbox>
-                            </paper-menu-button>
-                            <div class="content-wrapper">
-                                <div class="season-title-program">{{program.program}}</div>
-                                <div class="program-title">{{program.duration}}</div>
-                                <div class="type-title">{{program.type}}</div>
-                            </div>
-                            <div class="tag">
-                                <div class="day-title">{{program.days}} Days</div>
-                            </div>
-                        </div>
+              <template is=dom-if if="{{programDownloaded}}">
+                <template is=dom-repeat items="[[programsData]]" as="program" filter="{{_computeProgramFilter(programIdRequested)}}">
+                  <div class="paper-form">
+                    <div class="pdf-wrapper">
+                      <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"class="option-menu">
+                        <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+                        <paper-listbox noink slot="dropdown-content">
+                          <paper-item id$="[[program.$key]]" on-tap="_reviewProgram">View</paper-item>
+                          <paper-item  on-tap="_setProgramActive">Remove</paper-item>
+                        </paper-listbox>
+                      </paper-menu-button>
+                      <div class="content-wrapper">
+                        <div class="season-title-program">{{program.program}}</div>
+                        <div class="program-title">{{program.duration}}</div>
+                        <div class="type-title">{{program.type}}</div>
+                      </div>
+                      <div class="tag">
+                        <div class="day-title">{{program.days}} Days</div>
+                      </div>
+                      </div>
                     </div>
+                  </template>
                 </template>
-              </template>
-
             </div>
 
             <!-- Paper Fab to add new program -->
             <paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}" on-tap="_openToDownload"></paper-fab>
 
           </div>
-
 
             <!-- Review Workouts content -->
             <div class="review-content" hidden$="{{!reviewMode}}">
@@ -251,6 +246,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       notify: true,
                       value: " ",
                       observer: '_programIdRequestChanged'
+                    },
+                    workoutsOfProgram: {
+                      type: Array,
+                      notify: true
                     }
                   };
                 }
@@ -268,10 +267,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._downloadProgramDialog = document.getElementById("downloadProgramDialog");
                 }
 
+                /**
+                 * @description Program observer, observes if new program is downloaded
+                */
                 _programIdRequestChanged(programIdRequested) {
                     console.log("New Requested Program ID: " + programIdRequested);
                 }
 
+                /**
+                 * Filters through programs, & search for requested program
+                 *
+                 * @param {String} Id of the requested program
+                 * @param {String} Id of program
+                 * @return {String} the program Id that matches the requested Id program
+                */
                 _computeProgramFilter(programIdRequest) {
                     return function(program) {
                         return program.$key == programIdRequest;
@@ -283,54 +292,59 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.hidden = this.reviewMode = false;
                 }
 
+                /**
+                 * Opens program dialog to download
+                 */
                 _openToDownload(e) {
                   // Binding confirmation action + content
                   this._downloadProgramDialog.acceptedCallback = this._downloadProgram.bind(this);
                   this._downloadProgramDialog.opened = true;
-              }
+                }
 
-              _downloadProgram(program) {
-                  var self = this; // Store function value manually
-                  var programCollection = this.programsData;
+                /**
+                 * Search queries programs and retrieves the request program ID.
+                 *
+                 * @param {Object} program information (content) from "Download Program Dialog"
+                */
+                _downloadProgram(program) {
+                    var self = this; // Store function value manually
+                    var programCollection = this.programsData;
 
-                  console.log("New Search Inquiry:"); // Object  
+                    console.log("New Search Inquiry:"); 
 
-                  // Loop through collection of programs
-                  programCollection.forEach(function(programSelected) {
+                    // Loop through collection of programs
+                    programCollection.forEach(function(programSelected) {
+                      if (program.days == programSelected.days &&
+                          program.duration== programSelected.duration &&
+                          program.program == programSelected.program  &&
+                          program.type == programSelected.type
+                          ){
 
-                    //console.log(programSelected); // Object  
+                          // Notification
+                          self._appToast.text = 'The program has been downloaded successfully.';
+                          self._appToast.open();
 
-                    if (program.days == programSelected.days &&
-                        program.duration== programSelected.duration &&
-                        program.program == programSelected.program  &&
-                        program.type == programSelected.type
-                        ){
+                          // Testing
+                          console.log("Program Match 🎉 , ID: " + programSelected.$key);
 
-                        // Notification
-                        self._appToast.text = 'The program has been downloaded successfully.';
-                        self._appToast.open();
+                          // Download Program with this UID
+                          self.programIdRequested =  programSelected.$key;
 
-                        // Testing
-                        console.log("Program Match 🎉 , ID: " + programSelected.$key);
+                          // Program Downloaded Notifier
+                          self.programDownloaded = true;
 
-                        // Download Program with this UID
-                        self.programIdRequested =  programSelected.$key;
+                          // Close Download Program Dialog
+                          self._downloadProgramDialog.opened = false;
+                        } else {
 
-                        // Program Downloaded Notifier
-                        self.programDownloaded = true;
-
-                        // Close Download Program Dialog
-                        self._downloadProgramDialog.opened = false;
-                      } else {
-
-                        // Testing
-                        console.log("Program No Match ☹️ ID: " + programSelected.$key);
-                        // Notification
-                        //self._appToast.text = 'Sorry, This program is not available.';
-                        //self._appToast.open();
-                        }
-                  });
-              }
+                          // Testing
+                          console.log("Program No Match ☹️ ID: " + programSelected.$key);
+                          // Notification
+                          //self._appToast.text = 'Sorry, This program is not available.';
+                          //self._appToast.open();
+                          }
+                    });
+                }
 
                 //this._downloadProgramDialog.opened = true;
 
@@ -341,10 +355,35 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 // Close Download Program Dialog
                 //this._downloadProgramDialog.opened = false;
 
+                /**
+                 * @description Go to review mode and loads the workouts saved in the program
+                */
+                _reviewProgram(evt) {
+                  let workoutsOfProgram = [];
+                  this.reviewMode = !this.reviewMode;
+                  this.hidden = true;
+
+                  // Retrieve Program ID
+                  this.programId = evt.target.getAttribute("id");
+
+                  this.$.firebaseDocument.getStoredValue(`programs/${this.programId}/workouts`)
+                  .then(function(workouts) {
+                    if (workouts && workouts.length) { // true and array not empty
+                      for(let workout of workouts) { // loop through workouts
+                        this.$.firebaseDocument.getStoredValue(`workouts/${workout}`) // collect workout object w/ values
+                        .then(function(workoutData) { // if workout not empty
+                          workoutData["$key"] = workout; // Workout UID
+                          workoutsOfProgram.push(workoutData);
+                        }.bind(this));
+                      }
+                    }
+                    this.set("workoutsOfProgram", workoutsOfProgram);
+                  }.bind(this));
+                }
 
                 /**
                  * @description Sets active status to workout, thus the workout will apear available for athletes
-
+                 */
                 _setWorkoutActive(evt) {
                     // Extracts workoutId from clicked button
                     const workoutId = evt.target.getAttribute("id");
@@ -361,30 +400,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     }.bind(this));
                 }
 
-                /**
-                 * @description Go to review mode and loads the workouts saved in the program
-
-                _reviewProgram(evt) {
-                  let workoutsOfProgram = [];
-                  this.reviewMode = !this.reviewMode;
-                  this.hidden = true;
-                  this.programId = evt.target.getAttribute("id");
-
-                  this.$.firebaseDocument.getStoredValue(`programs/${this.programId}/workouts`)
-                  .then(function(workouts) {
-                    if (workouts && workouts.length) {
-                      for(let workout of workouts) {
-                        this.$.firebaseDocument.getStoredValue(`workouts/${workout}`)
-                        .then(function(workoutData) {
-                          workoutData["$key"] = workout;
-                          workoutsOfProgram.push(workoutData);
-                        }.bind(this));
-                      }
-                    }
-                    this.set("workoutsOfProgram", workoutsOfProgram);
-                  }.bind(this));
-                }
-*/
             }
             window.customElements.define(WrcAssignWorkouts.is, WrcAssignWorkouts);
         })();
