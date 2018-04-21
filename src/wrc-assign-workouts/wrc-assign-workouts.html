@@ -313,19 +313,19 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     console.log("New Search Inquiry:"); 
 
                     // Loop through collection of programs
-                    programCollection.forEach(function(programSelected) {
+                    programCollection.some(function(programSelected) {
                       if (program.days == programSelected.days &&
                           program.duration== programSelected.duration &&
                           program.program == programSelected.program  &&
                           program.type == programSelected.type
                           ){
 
+                          // Testing
+                          console.log("Program Match 🎉 , ID: " + programSelected.$key);
+
                           // Notification
                           self._appToast.text = 'The program has been downloaded successfully.';
                           self._appToast.open();
-
-                          // Testing
-                          console.log("Program Match 🎉 , ID: " + programSelected.$key);
 
                           // Download Program with this UID
                           self.programIdRequested =  programSelected.$key;
@@ -335,25 +335,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                           // Close Download Program Dialog
                           self._downloadProgramDialog.opened = false;
+
+                          // Break Loop
+                          return true;
                         } else {
 
                           // Testing
                           console.log("Program No Match ☹️ ID: " + programSelected.$key);
+
                           // Notification
-                          //self._appToast.text = 'Sorry, This program is not available.';
-                          //self._appToast.open();
+                          self._appToast.text = 'This program is currently unavailable.';
+                          self._appToast.open();
                           }
                     });
                 }
-
-                //this._downloadProgramDialog.opened = true;
-
-                // Notification
-                //this._appToast.text = 'The program has been downloading successfully.';
-                //this._appToast.open();
-
-                // Close Download Program Dialog
-                //this._downloadProgramDialog.opened = false;
 
                 /**
                  * @description Go to review mode and loads the workouts saved in the program
