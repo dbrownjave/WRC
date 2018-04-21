@@ -42,8 +42,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 @apply --layout-vertical;
             }
 
-            [hidden]{
-              display: none;
+            [hidden] {
+                display: none;
             }
 
             /* Program Selector */
@@ -96,6 +96,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             /* Active Status */
+
             .tag {
                 width: 70px;
                 height: 21px;
@@ -114,144 +115,137 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         </style>
 
         <!-- Firebase Document Configuration -->
-        <firebase-document
-            id="firebaseDocument"
-            app-name="wrc_software"></firebase-document>
+        <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
 
         <!-- Programs Query Configuration -->
-        <firebase-query
-            app-name="wrc_software"
-            path="programs"
-            data="{{programsData}}"></firebase-query>
+        <firebase-query app-name="wrc_software" path="programs" data="{{programsData}}"></firebase-query>
 
         <!-- Workouts Query Configuration -->
-        <firebase-query
-           app-name="wrc_software"
-           path="workouts"
-           data="{{workoutsData}}"
-           order-by-child="status"
-           equal-to="false"></firebase-query>
+        <firebase-query app-name="wrc_software" path="workouts" data="{{workoutsData}}" order-by-child="status" equal-to="false"></firebase-query>
 
         <!-- Element UI -->
         <main>
 
-          <!-- Program Cards -->
-          <div hidden$="{{hidden}}">
-            <div class="collection-wrapper">
-              <template is=dom-if if="{{programDownloaded}}">
-                <template is=dom-repeat items="[[programsData]]" as="program" filter="{{_computeProgramFilter(programIdRequested)}}">
-                  <div class="paper-form">
-                    <div class="pdf-wrapper">
-                      <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"class="option-menu">
-                        <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-                        <paper-listbox noink slot="dropdown-content">
-                          <paper-item id$="[[program.$key]]" on-tap="_reviewProgram">View</paper-item>
-                          <paper-item  on-tap="_setProgramActive">Remove</paper-item>
-                        </paper-listbox>
-                      </paper-menu-button>
-                      <div class="content-wrapper">
-                        <div class="season-title-program">{{program.program}}</div>
-                        <div class="program-title">{{program.duration}}</div>
-                        <div class="type-title">{{program.type}}</div>
-                      </div>
-                      <div class="tag">
-                        <div class="day-title">{{program.days}} Days</div>
-                      </div>
-                      </div>
-                    </div>
-                  </template>
-                </template>
+            <!-- Program Cards -->
+            <div hidden$="{{hidden}}">
+                <div class="collection-wrapper">
+                    <template is=dom-if if="{{programDownloaded}}">
+                        <template is=dom-repeat items="[[programsData]]" as="program">
+                            <div class="paper-form">
+                                <div class="pdf-wrapper">
+                                    <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"
+                                        class="option-menu">
+                                        <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+                                        <paper-listbox noink slot="dropdown-content">
+                                            <paper-item id$="[[program.$key]]" on-tap="_reviewProgram">View</paper-item>
+                                            <paper-item on-tap="_setProgramActive">Remove</paper-item>
+                                        </paper-listbox>
+                                    </paper-menu-button>
+                                    <div class="content-wrapper">
+                                        <div class="season-title-program">{{program.program}}</div>
+                                        <div class="program-title">{{program.duration}}</div>
+                                        <div class="type-title">{{program.type}}</div>
+                                    </div>
+                                    <div class="tag">
+                                        <div class="day-title">{{program.days}} Days</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+
+                <!-- Paper Fab to add new program -->
+                <paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}" on-tap="_openToDownload"></paper-fab>
+
             </div>
-
-            <!-- Paper Fab to add new program -->
-            <paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}" on-tap="_openToDownload"></paper-fab>
-
-          </div>
 
             <!-- Review Workouts content -->
             <div class="review-content" hidden$="{{!reviewMode}}">
-              <!-- Back button -->
-              <paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
+                <!-- Back button -->
+                <paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
 
-              <!-- Workouts of the program -->
-              <div class="collection-wrapper">
-                <template is=dom-repeat items="[[workoutsOfProgram]]" as="workout">
-                  <div class="paper-form" id$="[[workout.$key]]">
-                    <div class="pdf-wrapper">
-                      <paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
-                        <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-                        <paper-listbox noink slot="dropdown-content">
-                          <paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
-                          <paper-item id$="[[workout.$key]]" on-tap="_setWorkoutActive" data-option="review">Active</paper-item>
-                        </paper-listbox>
-                      </paper-menu-button>
+                <!-- Workouts of the program -->
+                <div class="collection-wrapper">
+                    <template is=dom-repeat items="[[workoutsOfProgram]]" as="workout">
+                        <div class="paper-form" id$="[[workout.$key]]">
+                            <div class="pdf-wrapper">
+                                <paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+                                    <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+                                    <paper-listbox noink slot="dropdown-content">
+                                        <paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
+                                        <paper-item id$="[[workout.$key]]" on-tap="_setWorkoutActive" data-option="review">Active</paper-item>
+                                    </paper-listbox>
+                                </paper-menu-button>
 
-                      <div class="content-wrapper">
-                        <div class="season-title-program">[[workout.season]]</div>
-                        <div class="program-title">[[workout.weeks]] Week Program</div>
-                        <div class="type-title">[[workout.type]]</div>
-                      </div>
-                      <!-- Active status -->
-                      <div class="tag" active$=[[workout.status]]>
-                        <div class="day-title">Week [[workout.week]]</div>
-                      </div>
-                    </div>
-                  </div>
-                </template>
-              </div>
+                                <div class="content-wrapper">
+                                    <div class="season-title-program">[[workout.season]]</div>
+                                    <div class="program-title">[[workout.weeks]] Week Program</div>
+                                    <div class="type-title">[[workout.type]]</div>
+                                </div>
+                                <!-- Active status -->
+                                <div class="tag" active$=[[workout.status]]>
+                                    <div class="day-title">Week [[workout.week]]</div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
             </div>
 
         </main>
     </template>
 
     <script>
-        (function() {
+        (function () {
             'use strict';
             class WrcAssignWorkouts extends Polymer.Element {
-                	// Element definition
-                	static get is() { return 'wrc-assign-workouts'; }
+                // Element definition
+                static get is() {
+                    return 'wrc-assign-workouts';
+                }
 
-                	/**
-                	* Element properties
-                	 */
-                	static get properties() {
-                  return {
-                    hidden: {
-                      type: Boolean,
-                      notify: true,
-                      value: false
-                    },
-                    reviewMode: {
-                      type: Boolean,
-                      notify: true,
-                      value: false
-                    },
-                    program: {
-                      type: Object,
-                      notify: true,
-                      value: {
-                        days: "",
-                        duration: "",
-                        season: "",
-                        type: ""
-                      }
-                    },
-                    programDownloaded: {
-                      type: Boolean,
-                      notify: true,
-                      value: false,
-                    },
-                    programIdRequested: {
-                      type: String,
-                      notify: true,
-                      value: " ",
-                      observer: '_programIdRequestChanged'
-                    },
-                    workoutsOfProgram: {
-                      type: Array,
-                      notify: true
-                    }
-                  };
+                /**
+                 * Element properties
+                 */
+                static get properties() {
+                    return {
+                        hidden: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
+                        reviewMode: {
+                            type: Boolean,
+                            notify: true,
+                            value: false
+                        },
+                        program: {
+                            type: Object,
+                            notify: true,
+                            value: {
+                                days: "",
+                                duration: "",
+                                season: "",
+                                type: ""
+                            }
+                        },
+                        programDownloaded: {
+                            type: Boolean,
+                            notify: true,
+                            value: true,
+                        },
+                        programIdRequested: {
+                            type: String,
+                            notify: true,
+                            value: " ",
+                            observer: '_programIdRequestChanged'
+                        },
+                        workoutsOfProgram: {
+                            type: Array,
+                            notify: true
+                        }
+                    };
                 }
 
                 ready() {
@@ -269,7 +263,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 /**
                  * @description Program observer, observes if new program is downloaded
-                */
+                 */
                 _programIdRequestChanged(programIdRequested) {
                     console.log("New Requested Program ID: " + programIdRequested);
                 }
@@ -280,9 +274,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {String} Id of the requested program
                  * @param {String} Id of program
                  * @return {String} the program Id that matches the requested Id program
-                */
+                 */
                 _computeProgramFilter(programIdRequest) {
-                    return function(program) {
+                    return function (program) {
                         return program.$key == programIdRequest;
                     };
                 }
@@ -296,16 +290,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * Opens program dialog to download
                  */
                 _openToDownload(e) {
-                  // Binding confirmation action + content
-                  this._downloadProgramDialog.acceptedCallback = this._downloadProgram.bind(this);
-                  this._downloadProgramDialog.opened = true;
+                    // Binding confirmation action + content
+                    this._downloadProgramDialog.acceptedCallback = this._downloadProgram.bind(this);
+                    this._downloadProgramDialog.opened = true;
                 }
 
                 /**
                  * Search queries programs and retrieves the request program ID.
                  *
                  * @param {Object} program information (content) from "Download Program Dialog"
-                */
+                 */
                 _downloadProgram(program) {
                     var self = this; // Store function value manually
                     var programCollection = this.programsData;
@@ -313,67 +307,67 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     console.log("New Search Inquiry:"); 
 
                     // Loop through collection of programs
-                    programCollection.some(function(programSelected) {
-                      if (program.days == programSelected.days &&
-                          program.duration== programSelected.duration &&
-                          program.program == programSelected.program  &&
-                          program.type == programSelected.type
-                          ){
+                    programCollection.some(function (programSelected) {
+                        if (program.days == programSelected.days &&
+                            program.duration == programSelected.duration &&
+                            program.program == programSelected.program &&
+                            program.type == programSelected.type
+                        ) {
 
-                          // Testing
-                          console.log("Program Match 🎉 , ID: " + programSelected.$key);
+                            // Testing
+                            console.log("Program Match 🎉 , ID: " + programSelected.$key);
 
-                          // Notification
-                          self._appToast.text = 'The program has been downloaded successfully.';
-                          self._appToast.open();
+                            // Notification
+                            self._appToast.text = 'The program has been downloaded successfully.';
+                            self._appToast.open();
 
-                          // Download Program with this UID
-                          self.programIdRequested =  programSelected.$key;
+                            // Download Program with this UID
+                            self.programIdRequested = programSelected.$key;
 
-                          // Program Downloaded Notifier
-                          self.programDownloaded = true;
+                            // Program Downloaded Notifier
+                            self.programDownloaded = true;
 
-                          // Close Download Program Dialog
-                          self._downloadProgramDialog.opened = false;
+                            // Close Download Program Dialog
+                            self._downloadProgramDialog.opened = false;
 
-                          // Break Loop
-                          return true;
+                            // Break Loop
+                            return true;
                         } else {
 
-                          // Testing
-                          console.log("Program No Match ☹️ ID: " + programSelected.$key);
+                            // Testing
+                            console.log("Program No Match ☹️ ID: " + programSelected.$key);
 
-                          // Notification
-                          self._appToast.text = 'This program is currently unavailable.';
-                          self._appToast.open();
-                          }
+                            // Notification
+                            self._appToast.text = 'This program is currently unavailable.';
+                            self._appToast.open();
+                        }
                     });
                 }
 
                 /**
                  * @description Go to review mode and loads the workouts saved in the program
-                */
+                 */
                 _reviewProgram(evt) {
-                  let workoutsOfProgram = [];
-                  this.reviewMode = !this.reviewMode;
-                  this.hidden = true;
+                    let workoutsOfProgram = [];
+                    this.reviewMode = !this.reviewMode;
+                    this.hidden = true;
 
-                  // Retrieve Program ID
-                  this.programId = evt.target.getAttribute("id");
+                    // Retrieve Program ID
+                    this.programId = evt.target.getAttribute("id");
 
-                  this.$.firebaseDocument.getStoredValue(`programs/${this.programId}/workouts`)
-                  .then(function(workouts) {
-                    if (workouts && workouts.length) { // true and array not empty
-                      for(let workout of workouts) { // loop through workouts
-                        this.$.firebaseDocument.getStoredValue(`workouts/${workout}`) // collect workout object w/ values
-                        .then(function(workoutData) { // if workout not empty
-                          workoutData["$key"] = workout; // Workout UID
-                          workoutsOfProgram.push(workoutData);
+                    this.$.firebaseDocument.getStoredValue(`programs/${this.programId}/workouts`)
+                        .then(function (workouts) {
+                            if (workouts && workouts.length) { // true and array not empty
+                                for (let workout of workouts) { // loop through workouts
+                                    this.$.firebaseDocument.getStoredValue(`workouts/${workout}`) // collect workout object w/ values
+                                        .then(function (workoutData) { // if workout not empty
+                                            workoutData["$key"] = workout; // Workout UID
+                                            workoutsOfProgram.push(workoutData);
+                                        }.bind(this));
+                                }
+                            }
+                            this.set("workoutsOfProgram", workoutsOfProgram);
                         }.bind(this));
-                      }
-                    }
-                    this.set("workoutsOfProgram", workoutsOfProgram);
-                  }.bind(this));
                 }
 
                 /**
@@ -384,15 +378,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     const workoutId = evt.target.getAttribute("id");
 
                     // Retrieves data from Firebase
-                    this.$.firebaseDocument.setStoredValue("workouts/" + workoutId +"/status", true)
-                    .then(function(res) {
-                        this._appToast.text = "The workout has been activated. Now it will be available for athletes.";
-                        this._appToast.open();
-                    }.bind(this))
-                    .catch(function(err) {
-                        this._appToast.text = "There has been an error activating the workout. Please try again.";
-                        this._appToast.open();
-                    }.bind(this));
+                    this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", true)
+                        .then(function (res) {
+                            this._appToast.text =
+                                "The workout has been activated. Now it will be available for athletes.";
+                            this._appToast.open();
+                        }.bind(this))
+                        .catch(function (err) {
+                            this._appToast.text =
+                                "There has been an error activating the workout. Please try again.";
+                            this._appToast.open();
+                        }.bind(this));
                 }
 
             }
