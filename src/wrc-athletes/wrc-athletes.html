@@ -53,6 +53,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../app-icons.html">
 <link rel="import" href="../fa-icons.html">
 
+<!-- PDF Workout -->
+<link rel="import" href="../wrc-athletes/pdf-workout.html">
+
 <dom-module id="wrc-athletes">
     <template>
         <style>
@@ -366,6 +369,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             id="firebaseDocument"
             app-name="wrc_software"></firebase-document>
 
+            <!-- Workouts Query Configuration -->
+        <firebase-query
+            app-name="wrc_software"
+            path="workouts"
+            data="{{workoutsData}}"
+            order-by-child="status"
+            equal-to="false"></firebase-query>
+
         <main>
             <template is="dom-if" if="[[!userReady]]">
                 <paper-spinner active></paper-spinner>
@@ -522,7 +533,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         (function() {
             'use strict';
 
-            class WrcAthletes extends Polymer.Element {
+            class WrcAthletes extends PdfWorkout(Polymer.Element) {
                 /**
                  * Element definition
                 */
@@ -779,17 +790,27 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
 
+
+                // TESTING PRINT ALL FUNCTIONALITY
+
+
+
+
+
                 /**
                  * Test Print all functionality
                 */
 
-                _printPdfCollection(e) {
+                _printPdfCollection() {
+                  console.log("Part 1");
                    var athletesData = this.athletesData;
+
+                   var self = this;
 
                    console.log(this.athletesData);
 
                     // Retrived Data
-                    function computeContent(data) {
+
                         // Array of content
                         var content = [];
 
@@ -797,51 +818,61 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         * Loop for each element in an array, in order.
                         * Note: Provide the array with any name to represent the element.
                         */
-                        data.forEach(function(athlete) { //
-
+                        athletesData.forEach(function(athlete) { //
+console.log("Part 1.5");
                             if (athlete.profile.active == "Yes") {
-                                // Push data (element) to array
-                                content.push(
-                                    {
-                                      text: athlete.profile.first + " " + athlete.profile.last,
-                                      style: 'header',
-                                    },
-                                    {
-                                      text: "Max Bench Press: " + athlete.stats.bench_press_value + "lbs",
-                                      style: 'subheader',
-                                      pageBreak: 'after'
-                                    }
-                                );
+
+console.log("Part 2");
+
+                              self._loadWorkoutData(athlete.stats);
+
+
                             }
                         });
-                        return content;
-                    }
 
-                    // This defines the content of the PDF. For more info read: http://pdfmake.org/index.html#/gettingstarted
-                    var pdfCollection = {
-                        pageOrientation: 'landscape',
-                        content: computeContent(athletesData),
-                        styles: {
-                            header: {
-                                fontSize: 25,
-                                bold: true,
-                                margin: [ 30, 180, 10, 20 ],
-                                alignment: 'center',
-                                color: '#757575'
-                            },
-
-                            subheader: {
-                              fontSize: 10,
-                              bold: true,
-                              alignment: 'center',
-                              color: '#757575'
-                            }
-                        }
-                    };
 
                     // This creates and opens the PDF in a new tab
-                    pdfMake.createPdf(pdfCollection).open();
+                    //pdfMake.createPdf(pdfCollection).open();
                 }
+
+
+
+
+
+
+                /**
+                 * @description Retrieves workout data from Firebase
+                */
+                _loadWorkoutData(athleteStats) {
+                  //evt.preventDefault();
+
+                  console.log("Part 3");
+
+                  // Extracts workoutId from clicked button
+                  //const workoutId = evt.target.getAttribute("id");
+
+                  // Retrieves data from Firebase
+                  this.$.firebaseDocument.getStoredValue("workouts/-LAPfqoZOKbicl5_ukOk") // Test Workout
+                  .then(function(snapshot) {
+                    console.log(snapshot);
+                    // Pass the retrieved workout to our generation function
+                    this._generatePreview(snapshot,athleteStats);
+                    console.log(snapshot);
+                    console.log(athleteStats);
+                  }.bind(this));
+                }
+
+
+                /**
+                 * @description Generates workout PDF Preview making use of the super class
+                 * @param {Object} workout - workout retrieved from firebase
+                 * @param {Object} athlete - stats retrieved from firebase
+                */
+                _generatePreview(workout, athleteStats) {
+                  console.log("Part 4");
+                  super._generatePreview(workout, athleteStats);
+                }
+
 
 
 
