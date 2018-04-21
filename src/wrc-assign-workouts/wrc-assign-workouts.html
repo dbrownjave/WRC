@@ -139,8 +139,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
           <div hidden$="{{hidden}}">
 
             <div class="collection-wrapper">
-              <template is=dom-if if="[[programDownloaded]]">
-             <template is=dom-repeat items="{{programsData}}" as="program" filter="_isProgramRequested">
+            <template is=dom-if if="{{programDownloaded}}">
+             <template is=dom-repeat items="[[programsData]]" as="program" filter="_isProgramRequested">
                     <div class="paper-form">
                         <div class="pdf-wrapper">
                             <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"
@@ -244,12 +244,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     programDownloaded: {
                       type: Boolean,
                       notify: true,
-                      value: false
+                      value: false,
                     },
                     programIdRequested: {
                       type: String,
                       notify: true,
-                      value: " "
+                      value: " ",
+                      observer: '_programIdRequestChanged'
                     }
                   };
                 }
@@ -267,23 +268,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._downloadProgramDialog = document.getElementById("downloadProgramDialog");
                 }
 
-                _isProgramRequested(program) {
-                    return program.$key == this.programIdRequested;
+
+                _programIdRequestChanged(programIdRequested) {
+                    console.log("New Requested Program ID: " + programIdRequested);
                 }
 
-                _computeProgramDownload(programId, programIdRequested) {
-                    console.log("programId:" + programId);
-                    console.log("programIdRequested: " + programIdRequested);
-
-                    programIdRequested = programId;
-
-                    if (programId == programIdRequested) {
-                      return true;
-                      console.log("Program Match 🎉 , ID: " + programIdRequested);
-                    } else {
-                      return false;
-                      console.log("Program No Match ☹️");
-                    }
+                _isProgramRequested(program) {
+                    return program.$key === this.programIdRequested;
                 }
 
                 // Returns to programs from editMode / reviewMode
@@ -298,19 +289,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
               }
 
               _downloadProgram(program) {
-                  // Store function value manually
-                  var self = this;
-
+                  var self = this; // Store function value manually
                   var programCollection = this.programsData;
-                  var programDownloaded = this.programDownloaded;
-                  var downloadedProgramID = this.ProgramIdRequested;
+
+                  console.log("New Search Inquiry:"); // Object  
 
                   // Loop through collection of programs
                   programCollection.forEach(function(programSelected) {
 
-                    console.log(programSelected); // Object  
+                    //console.log(programSelected); // Object  
 
-                    // TODO: Replace program data with form data
                     if (program.days == programSelected.days &&
                           program.duration== programSelected.duration &&
                           program.program == programSelected.program  &&
@@ -318,7 +306,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           ){
 
                           // Notification
-                          self._appToast.text = 'The program has been downloading successfully.';
+                          self._appToast.text = 'The program has been downloaded successfully.';
                           self._appToast.open();
 
                           // Testing
@@ -337,8 +325,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           // Testing
                           console.log("Program No Match ☹️ ID: " + programSelected.$key);
                           // Notification
-                          self._appToast.text = 'Sorry, This program is not available.';
-                          self._appToast.open();
+                          //self._appToast.text = 'Sorry, This program is not available.';
+                          //self._appToast.open();
                         }
                   });
               }
