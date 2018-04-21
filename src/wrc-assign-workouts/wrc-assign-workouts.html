@@ -140,7 +140,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             <div class="collection-wrapper">
             <template is=dom-if if="{{programDownloaded}}">
-             <template is=dom-repeat items="[[programsData]]" as="program" filter="_isProgramRequested">
+             <template is=dom-repeat items="[[programsData]]" as="program" filter="{{_computeProgramFilter(programIdRequested)}}">
                     <div class="paper-form">
                         <div class="pdf-wrapper">
                             <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"
@@ -268,13 +268,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._downloadProgramDialog = document.getElementById("downloadProgramDialog");
                 }
 
-
                 _programIdRequestChanged(programIdRequested) {
                     console.log("New Requested Program ID: " + programIdRequested);
                 }
 
-                _isProgramRequested(program) {
-                    return program.$key === this.programIdRequested;
+                _computeProgramFilter(programIdRequest) {
+                    return function(program) {
+                        return program.$key == programIdRequest;
+                    };
                 }
 
                 // Returns to programs from editMode / reviewMode
@@ -300,33 +301,33 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     //console.log(programSelected); // Object  
 
                     if (program.days == programSelected.days &&
-                          program.duration== programSelected.duration &&
-                          program.program == programSelected.program  &&
-                          program.type == programSelected.type
-                          ){
+                        program.duration== programSelected.duration &&
+                        program.program == programSelected.program  &&
+                        program.type == programSelected.type
+                        ){
 
-                          // Notification
-                          self._appToast.text = 'The program has been downloaded successfully.';
-                          self._appToast.open();
+                        // Notification
+                        self._appToast.text = 'The program has been downloaded successfully.';
+                        self._appToast.open();
 
-                          // Testing
-                          console.log("Program Match 🎉 , ID: " + programSelected.$key);
+                        // Testing
+                        console.log("Program Match 🎉 , ID: " + programSelected.$key);
 
-                          // Download Program with this UID
-                          self.programIdRequested =  programSelected.$key;
+                        // Download Program with this UID
+                        self.programIdRequested =  programSelected.$key;
 
-                          // Program Downloaded Notifier
-                          self.programDownloaded = true;
+                        // Program Downloaded Notifier
+                        self.programDownloaded = true;
 
-                          // Close Download Program Dialog
-                          self._downloadProgramDialog.opened = false;
-                        } else {
+                        // Close Download Program Dialog
+                        self._downloadProgramDialog.opened = false;
+                      } else {
 
-                          // Testing
-                          console.log("Program No Match ☹️ ID: " + programSelected.$key);
-                          // Notification
-                          //self._appToast.text = 'Sorry, This program is not available.';
-                          //self._appToast.open();
+                        // Testing
+                        console.log("Program No Match ☹️ ID: " + programSelected.$key);
+                        // Notification
+                        //self._appToast.text = 'Sorry, This program is not available.';
+                        //self._appToast.open();
                         }
                   });
               }
