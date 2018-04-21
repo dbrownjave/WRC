@@ -614,7 +614,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _userChanged(user) {
                     if (user) {
                         this.userReady = false;
-						            this.$.firebaseDocument.getStoredValue('/users')
+                        this.$.firebaseDocument.getStoredValue('/users')
                         .then(function (snapshot) {
                             this.userReady = true;
                         }.bind(this));
@@ -661,9 +661,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @return {void}
                 */
                 _saveAthlete(athleteInfo) {
-					if (this.action === 'add') {
+                    if (this.action === 'add') {
                         // Saves athlete in coach's private path
-						this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', athleteInfo)
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', athleteInfo)
                         .then(function() {
                             // Creates athlete private node
                             this.$.firebaseDocument.setStoredValue(athleteInfo.uid + '/metadata', {'path': this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', 'role': 'athlete'});
@@ -695,23 +695,23 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._appToast.open();
                         }.bind(this));
 
-						this._athletesDialog.opened = false;
-						this._appToast.text = 'The athlete has been saved successfully.';
-						this._appToast.open();
-						this._appProgressBar.hidden = true;
-					} else {
-						this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', athleteInfo)
-                        .catch(function (err) {
-                            this._appToast.text = 'There has been an error. Please try again.';
-                            this._appToast.open();
-                        }.bind(this));
+                  this._athletesDialog.opened = false;
+                  this._appToast.text = 'The athlete has been saved successfully.';
+                  this._appToast.open();
+                  this._appProgressBar.hidden = true;
+                  } else {
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', athleteInfo)
+                                .catch(function (err) {
+                                    this._appToast.text = 'There has been an error. Please try again.';
+                                    this._appToast.open();
+                                }.bind(this));
 
-						this._athletesDialog.opened = false;
-						this._appToast.text = 'The athlete has been modified successfully.';
-						this._appToast.open();
-						this._appProgressBar.hidden = true;
-                    }
-                }
+                    this._athletesDialog.opened = false;
+                    this._appToast.text = 'The athlete has been modified successfully.';
+                    this._appToast.open();
+                    this._appProgressBar.hidden = true;
+                  }
+              }
 
                 /**
                  * Athlete's profile dialog
@@ -780,50 +780,37 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {String} active status of the athlete
                  * @return {Boolean} true if status is Yes, otherwise false
-                */
+                 */
                 _computeActiveToggle(active) {
                     return (active === 'Yes') ? true : false;
                 }
 
-
-
-                // TESTING PRINT ALL FUNCTIONALITY
-
                 /**
-                 * Test Print all functionality
+                 * Print all athletes workouts
                  */
                 _printPdfCollection(evt) {
-                    console.log("Part 1");
                     var athletesData = this.athletesData;
                     var self = this;
-                    console.log(this.athletesData);
-                    // Retrived Data
-                    // Array of content
-                    var content = [];
-                    /**
-                     * Loop for each element in an array, in order.
-                     * Note: Provide the array with any name to represent the element.
-                     */
+
+                    // Loop for each element in an array, in order.
                     athletesData.forEach(function(athlete) { //
                         if (athlete.profile.active == "Yes") {
                             self._loadWorkoutData(athlete.stats,
                                 athlete.profile);
                         }
                     });
-                    // This creates and opens the PDF in a new tab
-                    //pdfMake.createPdf(pdfCollection).open();
                 }
+
                 /**
                  * @description Retrieves workout data from Firebase
                  */
                 _loadWorkoutData(athleteStats, athleteProfile) {
-                    //evt.preventDefault();
-                    console.log("Part 3");
+                    // TODO: Retrieve coach active workout ID
                     // Extracts workoutId from clicked button
                     //const workoutId = evt.target.getAttribute("id");
+
                     // Retrieves data from Firebase
-                    this.$.firebaseDocument.getStoredValue(
-                            "workouts/-LAPfqoZOKbicl5_ukOk") // Test Workout
+                    this.$.firebaseDocument.getStoredValue("workouts/-LAPfqoZOKbicl5_ukOk") // Test Workout
                         .then(function(snapshot) {
                             console.log(snapshot);
                             // Pass the retrieved workout to our generation function
@@ -834,92 +821,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             console.log(athleteProfile);
                         }.bind(this));
                 }
+
                 /**
                  * @description Generates workout PDF Preview making use of the super class
                  * @param {Object} workout - workout retrieved from firebase
                  * @param {Object} athlete - stats retrieved from firebase
                  */
                 _generatePreview(workout, athleteStats, athleteProfile) {
-                    console.log("Part 4");
-                    super._generatePreview(workout, athleteStats,
-                        athleteProfile);
+                    super._generatePreview(workout, athleteStats,athleteProfile);
                 }
 
-
-
-
-
-                /**
-                 * Test to create PDF
-                */
-                _generateStatsPDF(e) {
-                    // Gets athlete id
-                    this.athleteId = e.target.getAttribute('id');
-
-                    // Gets athlete's first name
-                    var first = e.target.getAttribute('first');
-
-                    // Gets athlete's last name
-                    var last = e.target.getAttribute('last');
-
-                    // Gets athlete's number
-                    var number = e.target.getAttribute('number');
-
-                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/stats')
-                    .then(function(athleteStats) {
-                        // This defines the content of the PDF. For more info read: http://pdfmake.org/index.html#/gettingstarted
-                        var statsPDF = {
-                            content: [
-                                {
-                                    text: first + ' ' + last + ' #' + number,
-                                    style: 'header'
-                                },
-                                {
-                                    text: [
-                                        {text: 'Bech Press: ', bold: true},
-                                        athleteStats.bench_press_value + 'lbs x ' + athleteStats.bench_press_reps + 'reps\n\n',
-                                        {text: 'Back Squat: ', bold: true},
-                                        athleteStats.back_squat_value + 'lbs x ' + athleteStats.back_squat_reps + 'reps\n\n',
-                                        {text: 'Front Squat: ', bold: true},
-                                        athleteStats.front_squat_value + 'lbs x ' + athleteStats.front_squat_reps + 'reps\n\n',
-                                        {text: 'Deadlift: ', bold: true},
-                                        athleteStats.deadlift_value + 'lbs x ' + athleteStats.deadlift_reps + 'reps\n\n',
-                                        {text: 'Hang / Power Clean: ', bold: true},
-                                        athleteStats.hang_power_clean_value + 'lbs x ' + athleteStats.hang_power_clean_reps + 'reps\n\n',
-                                        {text: 'Pull ups: ', bold: true},
-                                        athleteStats.pull_ups + 'reps\n\n',
-                                        {text: '40 Yard Dash: ', bold: true},
-                                        athleteStats.forty_yard_dash + '\n\n',
-                                        {text: '3 Cone Drill: ', bold: true},
-                                        athleteStats.three_cone_drill + '\n\n',
-                                        {text: '20 Yard Shuttle: ', bold: true},
-                                        athleteStats.twenty_yard_shuttle + '\n\n',
-                                        {text: '60 Yard Shuttle: ', bold: true},
-                                        athleteStats.sixty_yard_shuttle + '\n\n',
-                                        {text: 'Vertical Jump: ', bold: true},
-                                        athleteStats.vertical_jump + '\n\n',
-                                        {text: 'Broad Jump: ', bold: true},
-                                        athleteStats.broad_jump,
-                                    ]
-                                }
-                            ],
-                            styles: {
-                                header: {
-                                    fontSize: 20,
-                                    margin: [0, 0, 0, 14],
-                                    bold: true,
-                                    color: 'darkcyan'
-                                }
-                            }
-                        };
-
-                        // This creates and opens the PDF in a new tab
-                        pdfMake.createPdf(statsPDF).open();
-
-                        // If you want to download the PDF directly, use this:
-                        // pdfMake.createPdf(statsPDF).download('stats.pdf');
-                    }.bind(this));
-                }
             }
             window.customElements.define(WrcAthletes.is, WrcAthletes);
         })();
