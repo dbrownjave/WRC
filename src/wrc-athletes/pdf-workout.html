@@ -22,27 +22,31 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 * @param {Integer} max percentage of weight as Integer
 			 * @return {Integer}
 			*/
-			_computeWorkoutWeight(max) {
-				var athleteExerciseMax = 100;
+			_computeWorkoutWeight(exercise, percentage, athleteMax) {
 				var maxPercentage = 0;
 				var rawMaxResult = 0;
+				var MaxResult = 0;
 
-				if (max) {
+				//console.log(athleteMax.back_squat_value);
+
+				var athleteMaxBench =  10;
+
+				if (exercise == "Bench" && percentage) {
 						//alert( "Initial Value: " + max);
 
 						// Integer to Percentage Conversion
-						maxPercentage = (max / 100);
+						maxPercentage = (percentage / 100);
 						//alert("Percentage Converted: " + maxPercentage);
 
-						rawMaxResult = (maxPercentage * athleteExerciseMax)
+						rawMaxResult = (maxPercentage * athleteMaxBench);
 						//alert("Calculated " + rawMaxResult);
 						//alert("Rounded to Integer: " + Math.round(rawMaxResult));
 
 						// Convert max to weights equations
-						max = this._computeWeightFormat(rawMaxResult)
+						MaxResult = this._computeWeightFormat(rawMaxResult);
 						//alert("Weight Formated " + max);
 
-						return  max + 'lbs';
+						return  MaxResult + 'lbs';
 				} else {
 						// Removes default:  'lbs'
 						return " ";
@@ -89,10 +93,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 
 			// Generates Preview for Workout
-			_generatePreview(workout, stat) {
+			_generatePreview(workout, athleteMax, athleteInfo) {
 
-				console.log("PDF Stat:" + stat);
-				console.log("PDF Workout:" + workout);
+				console.log(athleteMax);
 
 				var pdfContent = {
 					// Page Orientation: [portrait or landscap]
@@ -106,7 +109,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 						// Header
 						{
-							text: stat.bench_press_value,
+							text: athleteInfo.first + " " + athleteInfo.last,
 							style: 'header'
 						},
 						{
@@ -451,7 +454,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 												{
 													// Weight
 													width: 34,
-													text: this._computeWorkoutWeight(workout.dayFour.rowOne.max),
+													text: this._computeWorkoutWeight(workout.dayFour.rowOne.exercise, workout.dayFour.rowOne.max, athleteMax),
 													style: 'weight'
 												},
 												{

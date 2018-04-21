@@ -787,92 +787,63 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
 
-
-
-
-
                 // TESTING PRINT ALL FUNCTIONALITY
-
-
-
-
 
                 /**
                  * Test Print all functionality
-                */
-
-                _printPdfCollection() {
-                  console.log("Part 1");
-                   var athletesData = this.athletesData;
-
-                   var self = this;
-
-                   console.log(this.athletesData);
-
+                 */
+                _printPdfCollection(evt) {
+                    console.log("Part 1");
+                    var athletesData = this.athletesData;
+                    var self = this;
+                    console.log(this.athletesData);
                     // Retrived Data
-
-                        // Array of content
-                        var content = [];
-
-                       /**
-                        * Loop for each element in an array, in order.
-                        * Note: Provide the array with any name to represent the element.
-                        */
-                        athletesData.forEach(function(athlete) { //
-console.log("Part 1.5");
-                            if (athlete.profile.active == "Yes") {
-
-console.log("Part 2");
-
-                              self._loadWorkoutData(athlete.stats);
-
-
-                            }
-                        });
-
-
+                    // Array of content
+                    var content = [];
+                    /**
+                     * Loop for each element in an array, in order.
+                     * Note: Provide the array with any name to represent the element.
+                     */
+                    athletesData.forEach(function(athlete) { //
+                        if (athlete.profile.active == "Yes") {
+                            self._loadWorkoutData(athlete.stats,
+                                athlete.profile);
+                        }
+                    });
                     // This creates and opens the PDF in a new tab
                     //pdfMake.createPdf(pdfCollection).open();
                 }
-
-
-
-
-
-
                 /**
                  * @description Retrieves workout data from Firebase
-                */
-                _loadWorkoutData(athleteStats) {
-                  //evt.preventDefault();
-
-                  console.log("Part 3");
-
-                  // Extracts workoutId from clicked button
-                  //const workoutId = evt.target.getAttribute("id");
-
-                  // Retrieves data from Firebase
-                  this.$.firebaseDocument.getStoredValue("workouts/-LAPfqoZOKbicl5_ukOk") // Test Workout
-                  .then(function(snapshot) {
-                    console.log(snapshot);
-                    // Pass the retrieved workout to our generation function
-                    this._generatePreview(snapshot,athleteStats);
-                    console.log(snapshot);
-                    console.log(athleteStats);
-                  }.bind(this));
+                 */
+                _loadWorkoutData(athleteStats, athleteProfile) {
+                    //evt.preventDefault();
+                    console.log("Part 3");
+                    // Extracts workoutId from clicked button
+                    //const workoutId = evt.target.getAttribute("id");
+                    // Retrieves data from Firebase
+                    this.$.firebaseDocument.getStoredValue(
+                            "workouts/-LAPfqoZOKbicl5_ukOk") // Test Workout
+                        .then(function(snapshot) {
+                            console.log(snapshot);
+                            // Pass the retrieved workout to our generation function
+                            this._generatePreview(snapshot,
+                                athleteStats, athleteProfile);
+                            console.log(snapshot);
+                            console.log(athleteStats);
+                            console.log(athleteProfile);
+                        }.bind(this));
                 }
-
-
                 /**
                  * @description Generates workout PDF Preview making use of the super class
                  * @param {Object} workout - workout retrieved from firebase
                  * @param {Object} athlete - stats retrieved from firebase
-                */
-                _generatePreview(workout, athleteStats) {
-                  console.log("Part 4");
-                  super._generatePreview(workout, athleteStats);
+                 */
+                _generatePreview(workout, athleteStats, athleteProfile) {
+                    console.log("Part 4");
+                    super._generatePreview(workout, athleteStats,
+                        athleteProfile);
                 }
-
 
 
 
