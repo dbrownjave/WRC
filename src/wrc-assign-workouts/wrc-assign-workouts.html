@@ -182,7 +182,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <div class="type-title">[[workout.type]]</div>
                                 </div>
                                 <!-- Active status -->
-                                <div class="tag" active$=[[workout.active]]>
+                                <div class="tag" active$=[[workout.active]] id="[[workout.$key]]">
                                     <div class="day-title">Week [[workout.week]]</div>
                                 </div>
                             </div>
@@ -428,6 +428,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     // Retrieves data from Firebase
                     this.$.firebaseDocument.setStoredValue(`workouts/${workoutId}/active`, true)
                         .then(function (res) {
+							// Once the workout has been set to active, the tag color will turns green
+							const reviewContent = this.root.querySelector(`.review-content`);
+							const activeWorkout = reviewContent.querySelector(`.tag[id="${workoutId}"]`);
+							activeWorkout.style.backgroundColor = "#45BE72";
+							
                             this._appToast.text =
                                 "The workout has been activated. Now it will be available for athletes.";
                             this._appToast.open();
