@@ -30,8 +30,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				exercise = exercise.toLowerCase();
 				var athleteMaxBench =  1000;
 
-
-
+				//
 				if ((exercise == "bench" || exercise == "bench press") ||
 					 (exercise == "back-squat" || exercise == "back squat") ||
 					 (exercise == "front-squat" || exercise == "front squat") ||
@@ -40,7 +39,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				{
 
 						//alert( "Initial Value: " + max);
-
 						// Integer to Percentage Conversion
 						maxPercentage = (percentage / 100);
 						//alert("Percentage Converted: " + maxPercentage);
@@ -57,9 +55,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				} else {
 						// Removes default:  'lbs'
 						return " ";
+
+					// TODO: Return Abbreviation for choice
 				}
-
-
 			}
 
 			// Weight Rounding Method to round the equation results; (e.g. floats/decimals) since weight's are (5,10,15...)
