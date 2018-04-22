@@ -129,29 +129,27 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <!-- Program Cards -->
             <div hidden$="{{hidden}}">
                 <div class="collection-wrapper">
-                    <template is=dom-if if="{{programDownloaded}}">
-                        <template is=dom-repeat items="[[programsData]]" as="program">
-                            <div class="paper-form">
-                                <div class="pdf-wrapper">
-                                    <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"
-                                        class="option-menu">
-                                        <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-                                        <paper-listbox noink slot="dropdown-content">
-                                            <paper-item id$="[[program.$key]]" on-tap="_reviewProgram">View</paper-item>
-                                            <paper-item on-tap="_setProgramActive">Remove</paper-item>
-                                        </paper-listbox>
-                                    </paper-menu-button>
-                                    <div class="content-wrapper">
-                                        <div class="season-title-program">{{program.program}}</div>
-                                        <div class="program-title">{{program.duration}}</div>
-                                        <div class="type-title">{{program.type}}</div>
-                                    </div>
-                                    <div class="tag">
-                                        <div class="day-title">{{program.days}} Days</div>
-                                    </div>
+                    <template is=dom-repeat items="[[downloadedPrograms]]" as="program">
+                        <div class="paper-form">
+                            <div class="pdf-wrapper">
+                                <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"
+                                    class="option-menu">
+                                    <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+                                    <paper-listbox noink slot="dropdown-content">
+                                        <paper-item id$="[[program.$key]]" on-tap="_reviewProgram">View</paper-item>
+                                        <paper-item on-tap="_setProgramActive">Remove</paper-item>
+                                    </paper-listbox>
+                                </paper-menu-button>
+                                <div class="content-wrapper">
+                                    <div class="season-title-program">{{program.program}}</div>
+                                    <div class="program-title">{{program.duration}}</div>
+                                    <div class="type-title">{{program.type}}</div>
+                                </div>
+                                <div class="tag">
+                                    <div class="day-title">{{program.days}} Days</div>
                                 </div>
                             </div>
-                        </template>
+                        </div>
                     </template>
                 </div>
 
@@ -210,7 +208,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 static get properties() {
                     return {
-                        user: Object,
+                        user: {
+                        	type: Object,
+                        	notify: true,
+							observer: '_userChanged'
+                        },
                         hidden: {
                             type: Boolean,
                             notify: true,
@@ -234,7 +236,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         programDownloaded: {
                             type: Boolean,
                             notify: true,
-                            value: false,
+                            value: true,
                         },
                         programIdRequested: {
                             type: String,
@@ -245,7 +247,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         workoutsOfProgram: {
                             type: Array,
                             notify: true
-                        }
+                        },
+						downloadedPrograms: {
+							type: Array,
+							notify: true
+						}
                     };
                 }
 
@@ -261,6 +267,26 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     // Open Download Program Dialog
                     this._downloadProgramDialog = document.getElementById("downloadProgramDialog");
                 }
+
+				/**
+				 * Observes for changes on user
+				*/
+				_userChanged(user) {
+					if (user) {
+						let downloadedPrograms = [];
+						this.$.firebaseDocument.getStoredValue(`${this.user.uid}/programs/path`)
+						.then(function(programPath) {
+							if (programPath) {
+								this.$.firebaseDocument.getStoredValue(`programs/${programPath}`)
+								.then(function(programData) {
+									programData["$key"] = programPath;
+									downloadedPrograms.push(programData);
+								}.bind(this));
+								this.set("downloadedPrograms", downloadedPrograms);
+							}
+						}.bind(this));
+					}
+				}
 
                 /**
                  * @description Program observer, observes if new program is downloaded
