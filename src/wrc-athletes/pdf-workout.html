@@ -27,13 +27,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				var rawMaxResult = 0;
 				var MaxResult = 0;
 
-				this.
-
-				console.log("computeWorkoutWeight:" + athleteMax);
-
+				exercise = exercise.toLowerCase();
 				var athleteMaxBench =  1000;
 
-				if (exercise == "Bench" && percentage) {
+
+
+				if ((exercise == "bench" || exercise == "bench press") ||
+					 (exercise == "back-squat" || exercise == "back squat") ||
+					 (exercise == "front-squat" || exercise == "front squat") ||
+					 (exercise == "dead-lift" || exercise == "deadlift") ||
+					 (exercise == "power clean" || exercise == "clean") && percentage)
+				{
+
 						//alert( "Initial Value: " + max);
 
 						// Integer to Percentage Conversion
@@ -53,6 +58,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						// Removes default:  'lbs'
 						return " ";
 				}
+
+
 			}
 
 			// Weight Rounding Method to round the equation results; (e.g. floats/decimals) since weight's are (5,10,15...)
