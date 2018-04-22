@@ -210,6 +210,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 static get properties() {
                     return {
+                        user: Object,
                         hidden: {
                             type: Boolean,
                             notify: true,
@@ -233,7 +234,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         programDownloaded: {
                             type: Boolean,
                             notify: true,
-                            value: true,
+                            value: false,
                         },
                         programIdRequested: {
                             type: String,
@@ -301,7 +302,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {Object} program information (content) from "Download Program Dialog"
                  */
                 _downloadProgram(program) {
-                    var self = this; // Store function value manually
                     var programCollection = this.programsData;
 
                     console.log("New Search Inquiry:"); 
@@ -318,17 +318,22 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             console.log("Program Match 🎉 , ID: " + programSelected.$key);
 
                             // Notification
-                            self._appToast.text = 'The program has been downloaded successfully.';
-                            self._appToast.open();
+                            this._appToast.text = 'The program has been downloaded successfully.';
+                            this._appToast.open();
 
                             // Download Program with this UID
-                            self.programIdRequested = programSelected.$key;
+                            this.programIdRequested = programSelected.$key;
+
+
 
                             // Program Downloaded Notifier
-                            self.programDownloaded = true;
+                            // this.programDownloaded = true;
 
                             // Close Download Program Dialog
-                            self._downloadProgramDialog.opened = false;
+                            this._downloadProgramDialog.opened = false;
+
+                            // Saves the downloaded program into coach info
+                            this.$.firebaseDocument.setStoredValue(`${this.user.uid}/programs`, {"path": programSelected.$key});
 
                             // Break Loop
                             return true;
@@ -338,10 +343,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             console.log("Program No Match ☹️ ID: " + programSelected.$key);
 
                             // Notification
-                            self._appToast.text = 'This program is currently unavailable.';
-                            self._appToast.open();
+                            this._appToast.text = 'This program is currently unavailable.';
+                            this._appToast.open();
                         }
-                    });
+                    }.bind(this));
                 }
 
                 /**
