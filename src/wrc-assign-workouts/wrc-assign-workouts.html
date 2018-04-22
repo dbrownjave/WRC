@@ -154,7 +154,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 </div>
 
                 <!-- Paper Fab to add new program -->
-                <paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{hidden}}" on-tap="_openToDownload"></paper-fab>
+                <paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{programDownloaded}}" on-tap="_openToDownload"></paper-fab>
 
             </div>
 
@@ -273,19 +273,30 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				*/
 				_userChanged(user) {
 					if (user) {
-						let downloadedPrograms = [];
-						this.$.firebaseDocument.getStoredValue(`${this.user.uid}/programs/path`)
-						.then(function(programPath) {
-							if (programPath) {
-								this.$.firebaseDocument.getStoredValue(`programs/${programPath}`)
-								.then(function(programData) {
-									programData["$key"] = programPath;
-									downloadedPrograms.push(programData);
-								}.bind(this));
-								this.set("downloadedPrograms", downloadedPrograms);
-							}
-						}.bind(this));
+						this._loadDownloadedPrograms();
 					}
+				}
+
+				/**
+				 * @description Load downloaded programs
+				*/
+				_loadDownloadedPrograms() {
+					let downloadedPrograms = [];
+					this.$.firebaseDocument.getStoredValue(`${this.user.uid}/programs/path`)
+					.then(function(programPath) {
+						if (programPath && programPath.length) {
+							this.set("programDownloaded", true);
+
+							this.$.firebaseDocument.getStoredValue(`programs/${programPath}`)
+							.then(function(programData) {
+								programData["$key"] = programPath;
+								downloadedPrograms.push(programData);
+							}.bind(this));
+							this.set("downloadedPrograms", downloadedPrograms);
+						} else {
+							this.set("programDownloaded", false);
+						}
+					}.bind(this));
 				}
 
                 /**
@@ -359,7 +370,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._downloadProgramDialog.opened = false;
 
                             // Saves the downloaded program into coach info
-                            this.$.firebaseDocument.setStoredValue(`${this.user.uid}/programs`, {"path": programSelected.$key});
+                            this.$.firebaseDocument.setStoredValue(`${this.user.uid}/programs`, {"path": programSelected.$key})
+							.then(function(res) {
+								this.$.firebaseDocument.setStoredValue(`programs/${programSelected.$key}/downloaded`, true)
+								.then(function(response) {
+									this._loadDownloadedPrograms();
+								}.bind(this));
+							}.bind(this));
 
                             // Break Loop
                             return true;
@@ -409,7 +426,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     const workoutId = evt.target.getAttribute("id");
 
                     // Retrieves data from Firebase
-                    this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", true)
+                    this.$.firebaseDocument.setStoredValue(`workouts/${workoutId}/active`, true)
                         .then(function (res) {
                             this._appToast.text =
                                 "The workout has been activated. Now it will be available for athletes.";
