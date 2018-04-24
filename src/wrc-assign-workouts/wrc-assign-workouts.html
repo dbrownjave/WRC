@@ -282,7 +282,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				*/
 				_loadDownloadedPrograms() {
 					let downloadedPrograms = [];
-					this.$.firebaseDocument.getStoredValue(`${this.user.uid}/programs/path`)
+					this.$.firebaseDocument.getStoredValue(`${this.user.uid}/downloaded_program/path`)
 					.then(function(programPath) {
 						if (programPath && programPath.length) {
 							this.set("programDownloaded", true);
@@ -370,7 +370,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._downloadProgramDialog.opened = false;
 
                             // Saves the downloaded program into coach info
-                            this.$.firebaseDocument.setStoredValue(`${this.user.uid}/programs`, {"path": programSelected.$key})
+                            this.$.firebaseDocument.setStoredValue(`${this.user.uid}/downloaded_program`, {"path": programSelected.$key})
 							.then(function(res) {
 								this.$.firebaseDocument.setStoredValue(`programs/${programSelected.$key}/downloaded`, true)
 								.then(function(response) {
@@ -432,7 +432,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							const reviewContent = this.root.querySelector(`.review-content`);
 							const activeWorkout = reviewContent.querySelector(`.tag[id="${workoutId}"]`);
 							activeWorkout.style.backgroundColor = "#45BE72";
-							
+
                             this._appToast.text =
                                 "The workout has been activated. Now it will be available for athletes.";
                             this._appToast.open();
