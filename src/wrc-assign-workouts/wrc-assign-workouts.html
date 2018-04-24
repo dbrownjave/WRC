@@ -448,8 +448,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         .then(function (res) {
 							// Once the workout has been set to active, the tag color will turns green
 							const reviewContent = this.root.querySelector(`.review-content`);
-							const activeWorkout = reviewContent.querySelector(`.tag[id="${workoutId}"]`);
-							activeWorkout.style.backgroundColor = "#45BE72";
+
+							// Gets current active workout and removes its active property
+							const currentActiveWorkout = reviewContent.querySelector(`.tag[active]`);
+							if (currentActiveWorkout) {
+								currentActiveWorkout.removeAttribute("active");
+							}
+
+							const newActiveWorkout = reviewContent.querySelector(`.tag[id="${workoutId}"]`);
+							newActiveWorkout.setAttribute("active", true);
 
                             this._appToast.text =
                                 "The workout has been activated. Now it will be available for athletes.";
