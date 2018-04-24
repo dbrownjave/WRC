@@ -251,6 +251,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						downloadedPrograms: {
 							type: Array,
 							notify: true
+						},
+						workoutId: {
+							type: String,
+							notify: true
 						}
                     };
                 }
@@ -275,6 +279,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					if (user) {
 						this._loadDownloadedPrograms();
 					}
+				}
+
+				/**
+				 * Retrieves activated workout from coach's node
+				*/
+				_retrieveActivatedWorkout() {
+					this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
+					.then(function(workoutId) {
+						if (workoutId && workoutId.length) {
+						this.workoutId = (workoutId && workoutId.length) ? workoutId : null;
+					}.bind(this));
 				}
 
 				/**
@@ -392,7 +407,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     }.bind(this));
                 }
 
-                /**
+				/**
                  * @description Go to review mode and loads the workouts saved in the program
                  */
                 _reviewProgram(evt) {
