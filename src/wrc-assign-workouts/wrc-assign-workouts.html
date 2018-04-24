@@ -408,8 +408,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             if (workouts && workouts.length) { // true and array not empty
                                 for (let workout of workouts) { // loop through workouts
                                     this.$.firebaseDocument.getStoredValue(`workouts/${workout}`) // collect workout object w/ values
-                                        .then(function (workoutData) { // if workout not empty
-                                            workoutData["$key"] = workout; // Workout UID
+                                        .then(function (workoutData) { // workout data (snapshot)
+                                            workoutData["$key"] = workout; // sets $key in the object due to retrieve data manually (without query) don't provide $key value
                                             workoutsOfProgram.push(workoutData);
                                         }.bind(this));
                                 }
@@ -426,7 +426,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     const workoutId = evt.target.getAttribute("id");
 
                     // Retrieves data from Firebase
-                    this.$.firebaseDocument.setStoredValue(`workouts/${workoutId}/active`, true)
+                    this.$.firebaseDocument.setStoredValue(`${this.user.uid}/activated_workout`, {"path": workoutId})
                         .then(function (res) {
 							// Once the workout has been set to active, the tag color will turns green
 							const reviewContent = this.root.querySelector(`.review-content`);
