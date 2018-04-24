@@ -455,6 +455,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								currentActiveWorkout.removeAttribute("active");
 							}
 
+							// Gets the new activated workout and sets active property to display green tag
 							const newActiveWorkout = reviewContent.querySelector(`.tag[id="${workoutId}"]`);
 							newActiveWorkout.setAttribute("active", true);
 
