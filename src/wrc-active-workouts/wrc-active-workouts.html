@@ -26,7 +26,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				// Element properties
 				static get properties() {
 					return {
-
+						user: {
+							type: Object,
+							notify: true
+						}
 					};
 				};
 			}
