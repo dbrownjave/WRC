@@ -6,11 +6,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Polymer -->
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<!-- Polymerfire Elements -->
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+
 <dom-module id="wrc-active-workouts">
 	<template>
 		<style></style>
 
+		<!-- Firebase Document Configuration -->
+		<firebase-document
+			id="firebaseDocument"
+			app-name="wrc_software"></firebase-document>
+
 		<h1>Component: wrc-active-workouts</h1>
+		<!-- TODO: Load activated workout and show -->
 	</template>
 
 	<script>
@@ -28,10 +37,27 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					return {
 						user: {
 							type: Object,
+							notify: true,
+							observer: '_userChanged'
+						},
+						coachUid: {
+							type: String,
 							notify: true
 						}
 					};
 				};
+
+				/**
+				 * Observes for changes on user property
+				 */
+				_userChanged(user) {
+					if (user) {
+						this.$.firebaseDocument.getStoredValue(`${this.user.uid}/metadata/path`)
+						.then(function(path) {
+							this.coachUid = path.split('/', 1)[0];
+						});
+					}
+				}
 			}
 			window.customElements.define(WrcActiveWorkouts.is, WrcActiveWorkouts);
 		}());
