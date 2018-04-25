@@ -137,7 +137,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
                                     <paper-listbox noink slot="dropdown-content">
                                         <paper-item id$="[[program.$key]]" on-tap="_reviewProgram">View</paper-item>
-                                        <paper-item on-tap="_setProgramActive">Remove</paper-item>
+                                        <paper-item id$="[[program.$key]]" on-tap="_openRemoveProgramDialog">Remove</paper-item>
                                     </paper-listbox>
                                 </paper-menu-button>
                                 <div class="content-wrapper">
@@ -270,6 +270,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // Open Download Program Dialog
                     this._downloadProgramDialog = document.getElementById("downloadProgramDialog");
+
+                    // Remove Workout Dialog
+                    this._removeProgramDialog = document.getElementById("appDeleteDialog");
                 }
 
 				/**
@@ -313,6 +316,40 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						}
 					}.bind(this));
 				}
+
+        /**
+				 * Opens remove program dialog
+				 */
+				_openRemoveProgramDialog(e) {
+					this.programId = e.target.getAttribute("id");
+
+					// Binding confirmation action
+					this._removeProgramDialog.acceptedCallback = this._removeProgram.bind(this);
+
+					this._removeProgramDialog.opened = true;
+					this._removeProgramDialog.title = "Remove Program";
+					this._removeProgramDialog.msg = "Are you sure you want to remove this Program?";
+					// TODO: Improve UX + Add More Detailed info.: All workouts from this program will release back to the workout collection.
+				}
+
+				/**
+				 * @description Removes programs from coaches program collection
+				 */
+				_removeProgram(response) {
+					if (response) {
+            this.$.firebaseDocument.destroy(`${this.user.uid}/downloaded_program`, {"path": this.programId})
+            .then(function () {
+              this._appToast.text = "The workout has been deleted successfully.";
+              this._appToast.open();
+              this._removeProgramDialog.opened = false;
+            }.bind(this))
+            .catch(function (err) {
+              this._appProgress.hidden = true;
+              this._appToast.text = "There has been an error. Please try again.";
+              this._appToast.open();
+            }.bind(this));
+					}
+        }
 
                 /**
                  * @description Program observer, observes if new program is downloaded
