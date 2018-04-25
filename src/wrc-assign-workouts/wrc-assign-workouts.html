@@ -152,11 +152,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         </div>
                     </template>
                 </div>
-
+            </div>
                 <!-- Paper Fab to add new program -->
                 <paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{programDownloaded}}" on-tap="_openToDownload"></paper-fab>
 
-            </div>
+
 
             <!-- Review Workouts content -->
             <div class="review-content" hidden$="{{!reviewMode}}">
@@ -343,6 +343,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
               this._appToast.open();
               this._removeProgramDialog.opened = false;
               this.set("hidden", true);
+              this.set("programDownloaded", false);
             }.bind(this))
             .catch(function (err) {
               this._appProgress.hidden = true;
