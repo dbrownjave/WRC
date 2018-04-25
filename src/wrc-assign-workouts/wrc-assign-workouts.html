@@ -343,7 +343,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
               this._appToast.open();
               this._removeProgramDialog.opened = false;
               this.set("hidden", true);
-              this.set("programDownloaded", false);
+              this.programDownloaded =   !this.programDownloaded;
             }.bind(this))
             .catch(function (err) {
               this._appProgress.hidden = true;
@@ -414,11 +414,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                             // Download Program with this UID
                             this.programIdRequested = programSelected.$key;
-
-
-
-                            // Program Downloaded Notifier
-                            // this.programDownloaded = true;
 
                             // Close Download Program Dialog
                             this._downloadProgramDialog.opened = false;
