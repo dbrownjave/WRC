@@ -317,7 +317,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					}.bind(this));
 				}
 
-        /**
+        		/**
 				 * Opens remove program dialog
 				 */
 				_openRemoveProgramDialog(e) {
@@ -337,21 +337,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 */
 				_removeProgram(response) {
 					if (response) {
-            this.$.firebaseDocument.destroy(`${this.user.uid}/downloaded_program`, {"path": this.programId})
-            .then(function () {
-              this._appToast.text = "The workout has been deleted successfully.";
-              this._appToast.open();
-              this._removeProgramDialog.opened = false;
-              this.set("hidden", true);
-              this.programDownloaded =   !this.programDownloaded;
-            }.bind(this))
-            .catch(function (err) {
-              this._appProgress.hidden = true;
-              this._appToast.text = "There has been an error. Please try again.";
-              this._appToast.open();
-            }.bind(this));
+			            this.$.firebaseDocument.destroy(`${this.user.uid}/downloaded_program`, {"path": this.programId})
+			            .then(function () {
+			              this._appToast.text = "The workout has been deleted successfully.";
+			              this._appToast.open();
+			              this._removeProgramDialog.opened = false;
+			              this.set("hidden", true);
+			              this.programDownloaded =   !this.programDownloaded;
+			            }.bind(this))
+			            .catch(function (err) {
+			              this._appProgress.hidden = true;
+			              this._appToast.text = "There has been an error. Please try again.";
+			              this._appToast.open();
+			            }.bind(this));
 					}
-        }
+		        }
 
                 /**
                  * @description Program observer, observes if new program is downloaded
