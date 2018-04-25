@@ -328,8 +328,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					this._removeProgramDialog.opened = true;
 					this._removeProgramDialog.title = "Remove Program";
-					this._removeProgramDialog.msg = "Are you sure you want to remove this Program?";
-					// TODO: Improve UX + Add More Detailed info.: All workouts from this program will release back to the workout collection.
+					this._removeProgramDialog.msg = `By removing the program you also remove the active workout for your athletes. Are you sure you want to delete it?`;
 				}
 
 				/**
@@ -337,18 +336,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 */
 				_removeProgram(response) {
 					if (response) {
-			            this.$.firebaseDocument.destroy(`${this.user.uid}/downloaded_program`, {"path": this.programId})
+			            this.$.firebaseDocument.destroy(`${this.user.uid}/downloaded_program`)
 			            .then(function () {
-			              this._appToast.text = "The workout has been deleted successfully.";
-			              this._appToast.open();
-			              this._removeProgramDialog.opened = false;
-			              this.set("hidden", true);
-			              this.programDownloaded =   !this.programDownloaded;
+							// Removes the activated workout.
+							this.$.firebaseDocument.destroy(`${this.user.uid}/activated_workout`);
+
+		              		this._appToast.text = "The program and its activated workout has been deleted successfully.";
+			              	this._appToast.open();
+			              	this._removeProgramDialog.opened = false;
+			              	this.set("hidden", true);
+			              	this.programDownloaded = !this.programDownloaded;
 			            }.bind(this))
 			            .catch(function (err) {
-			              this._appProgress.hidden = true;
-			              this._appToast.text = "There has been an error. Please try again.";
-			              this._appToast.open();
+			              	this._appProgress.hidden = true;
+			              	this._appToast.text = "There has been an error. Please try again.";
+			              	this._appToast.open();
 			            }.bind(this));
 					}
 		        }
@@ -421,11 +423,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             // Saves the downloaded program into coach info
                             this.$.firebaseDocument.setStoredValue(`${this.user.uid}/downloaded_program`, {"path": programSelected.$key})
 							.then(function(res) {
-								this.$.firebaseDocument.setStoredValue(`programs/${programSelected.$key}/downloaded`, true)
-								.then(function(response) {
-									this._loadDownloadedPrograms();
-								}.bind(this));
+								this._loadDownloadedPrograms();
 							}.bind(this));
+
+							this.programDownloaded = true;
+							this.hidden = false;
 
                             // Break Loop
                             return true;
