@@ -1,0 +1,36 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+-->
+
+<!-- Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="wrc-active-workouts">
+	<template>
+		<style></style>
+
+		<h1>Component: wrc-active-workouts</h1>
+	</template>
+
+	<script>
+		"use strict";
+
+		(function() {
+			class WrcActiveWorkouts extends Polymer.Element {
+				// Element definition
+				static get is() {
+					return "wrc-active-workouts";
+				};
+
+				// Element properties
+				static get properties() {
+					return {
+
+					};
+				};
+			}
+			window.customElements.define(WrcActiveWorkouts.is, WrcActiveWorkouts);
+		}());
+	</script>
+</dom-module>
