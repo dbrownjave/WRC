@@ -487,8 +487,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._removeProgramDialog.opened = false;
                             this.hidden = "true";
                             this.programDownloaded = !this.programDownloaded;
-                            // FIXME: Temporary fix to refresh page after deletion
-                            location.reload();
                         }.bind(this)).catch(function(err) {
                             this._appProgress.hidden = true;
                             this._appToast.text = "There has been an error. Please try again.";
