@@ -427,6 +427,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     // Remove Workout Dialog
                     this._removeProgramDialog = document.getElementById("appDeleteDialog");
                 }
+<<<<<<< HEAD
                 /**
                  * Observes for changes on user
                  */
@@ -495,6 +496,87 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         }.bind(this));
                     }
                 }
+=======
+
+				/**
+				 * Observes for changes on user
+				*/
+				_userChanged(user) {
+					if (user) {
+						this._retrieveActivatedWorkout();
+						this._loadDownloadedPrograms();
+					}
+				}
+
+				/**
+				 * Retrieves activated workout from coach's node
+				*/
+				_retrieveActivatedWorkout() {
+					this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
+					.then(function(workoutId) {
+						this.workoutId = (workoutId && workoutId.length) ? workoutId : null;
+					}.bind(this));
+				}
+
+				/**
+				 * @description Load downloaded programs
+				*/
+				_loadDownloadedPrograms() {
+					let downloadedPrograms = [];
+					this.$.firebaseDocument.getStoredValue(`${this.user.uid}/downloaded_program/path`)
+					.then(function(programPath) {
+						if (programPath && programPath.length) {
+							this.set("programDownloaded", true);
+
+							this.$.firebaseDocument.getStoredValue(`programs/${programPath}`)
+							.then(function(programData) {
+								programData["$key"] = programPath;
+								downloadedPrograms.push(programData);
+							}.bind(this));
+							this.set("downloadedPrograms", downloadedPrograms);
+						} else {
+							this.set("programDownloaded", false);
+						}
+					}.bind(this));
+				}
+
+        		/**
+				 * Opens remove program dialog
+				 */
+				_openRemoveProgramDialog(e) {
+					this.programId = e.target.getAttribute("id");
+
+					// Binding confirmation action
+					this._removeProgramDialog.acceptedCallback = this._removeProgram.bind(this);
+
+					this._removeProgramDialog.opened = true;
+					this._removeProgramDialog.title = "Remove Program";
+					this._removeProgramDialog.msg = "Are you sure you want to remove this Program?";
+					// TODO: Improve UX + Add More Detailed info.: All workouts from this program will release back to the workout collection.
+				}
+
+				/**
+				 * @description Removes programs from coaches program collection
+				 */
+				_removeProgram(response) {
+					if (response) {
+			            this.$.firebaseDocument.destroy(`${this.user.uid}/downloaded_program`, {"path": this.programId})
+			            .then(function () {
+			              this._appToast.text = "The workout has been deleted successfully.";
+			              this._appToast.open();
+			              this._removeProgramDialog.opened = false;
+			              this.set("hidden", true);
+			              this.programDownloaded =   !this.programDownloaded;
+			            }.bind(this))
+			            .catch(function (err) {
+			              this._appProgress.hidden = true;
+			              this._appToast.text = "There has been an error. Please try again.";
+			              this._appToast.open();
+			            }.bind(this));
+					}
+		        }
+
+>>>>>>> a49d3b0ab417dfe1b2a587ad581cfd3ada2c70b8
                 /**
                  * @description Program observer, observes if new program is downloaded
                  */
