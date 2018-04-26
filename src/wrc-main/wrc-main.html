@@ -484,7 +484,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         } else if (role === 'coach' && page !== 'athletes' && page !== 'assign-workouts' && page !== 'library') {
                             this.set("route.path", "main/athletes");
                         } else if (role === 'athlete' && page !== 'active-workouts' && page !== 'library') {
-                            this.set("route.path", "main/library");
+                            this.set("route.path", "main/active-workouts");
                         } else {
                             this.page = page;
                         }
@@ -531,7 +531,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 _showPage404() {
-                    this.page = '404';
+                    this.page = 'login';
                 }
 
                 /**
