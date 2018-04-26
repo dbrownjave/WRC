@@ -252,6 +252,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <!-- Programs Query Configuration -->
         <firebase-query app-name="wrc_software" path="programs" data="{{programsData}}"></firebase-query>
 
+		<!-- Workouts Query Configuration -->
+		<firebase-query app-name="wrc_software" path="workouts" data="{{workoutsData}}" order-by-child="status" equal-to="false"></firebase-query>
+
         <!-- Element UI -->
         <main>
 
@@ -459,8 +462,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this.$.firebaseDocument.getStoredValue(`programs/${programPath}`).then(function(programData) {
                                 programData["$key"] = programPath;
                                 downloadedPrograms.push(programData);
+								this.set("downloadedPrograms", downloadedPrograms);
                             }.bind(this));
-                            this.set("downloadedPrograms", downloadedPrograms);
                         } else {
                             this.set("programDownloaded", false);
                         }
@@ -491,81 +494,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _generatePreview(workout) {
                   super._generatePreview(workout);
                 }
-
-                /**
-                 * @description Opens remove program dialog
-                 */
-                _openRemoveProgramDialog(e) {
-                    this.programId = e.target.getAttribute("id");
-                    // Binding confirmation action
-                    this._removeProgramDialog.acceptedCallback = this._removeProgram.bind(this);
-                    this._removeProgramDialog.opened = true;
-                    this._removeProgramDialog.title = "Remove Program";
-                    this._removeProgramDialog.msg = "Are you sure you want to remove this Program?";
-                    // TODO: Improve UX + Add More Detailed info.: All workouts from this program will release back to the workout collection.
-                }
-
-                /**
-                 * @description Removes programs from coaches program collection
-                 */
-                _removeProgram(response) {
-                    if (response) {
-                        this.$.firebaseDocument.destroy(`${this.user.uid}/downloaded_program`, {"path": this.programId})
-                        .then(function() {
-                            this._appToast.text = "The workout has been deleted successfully.";
-                            this._appToast.open();
-                            this._removeProgramDialog.opened = false;
-                            this.hidden = "true";
-                            this.programDownloaded = !this.programDownloaded;
-                        }.bind(this)).catch(function(err) {
-                            this._appProgress.hidden = true;
-                            this._appToast.text = "There has been an error. Please try again.";
-                            this._appToast.open();
-                        }.bind(this));
-                    }
-                }
-
-				/**
-				 * Observes for changes on user
-				*/
-				_userChanged(user) {
-					if (user) {
-						this._retrieveActivatedWorkout();
-						this._loadDownloadedPrograms();
-					}
-				}
-
-				/**
-				 * Retrieves activated workout from coach's node
-				*/
-				_retrieveActivatedWorkout() {
-					this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
-					.then(function(workoutId) {
-						this.workoutId = (workoutId && workoutId.length) ? workoutId : null;
-					}.bind(this));
-				}
-
-				/**
-				 * @description Load downloaded programs
-				*/
-				_loadDownloadedPrograms() {
-					let downloadedPrograms = [];
-					this.$.firebaseDocument.getStoredValue(`${this.user.uid}/downloaded_program/path`)
-					.then(function(programPath) {
-						if (programPath && programPath.length) {
-							this.set("programDownloaded", true);
-
-							this.$.firebaseDocument.getStoredValue(`programs/${programPath}`)
-							.then(function(programData) {
-								programData["$key"] = programPath;
-								downloadedPrograms.push(programData);
-							}.bind(this));
-							this.set("downloadedPrograms", downloadedPrograms);
-						} else {
-							this.set("programDownloaded", false);
-						}
-					}.bind(this));
-				}
 
         		/**
 				 * Opens remove program dialog
