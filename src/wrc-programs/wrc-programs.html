@@ -239,10 +239,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					</template>
 				</div>
 
-				<!-- Paper Fab to add new workout -->
-				<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{reviewMode}}" on-tap="_openToAdd"></paper-fab>
+				<div hidden$="[[editMode]]">
+					<!-- Paper Fab to add new workout -->
+					<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{reviewMode}}" on-tap="_openToAdd"></paper-fab>
+				</div>
 
-			</div>
+				</div>
 
 			<!-- Review Workouts content -->
 			<div class="review-content" hidden$="{{!reviewMode}}">
@@ -372,9 +374,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				}
 
 				_computeHiddenPrograms(reviewMode, editMode) {
-					if (reviewMode || editMode) {
+					console.log(editMode);
+					console.log(reviewMode);
+					if (reviewMode) {
 						return true;
 					}
+
+					if (editMode) {
+						console.log("Edit: True");
+						this.reviewMode = false;
+						return true;
+					}
+
 					return false;
 				}
 
