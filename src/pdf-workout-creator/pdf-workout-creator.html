@@ -3,6 +3,7 @@
 Code developed by Dorian Brown in collaboration with Codeself, Inc.
 -->
 
+
 <!-- pdfMake script -->
 <script src="../../bower_components/pdfmake/build/pdfmake.min.js"></script>
 <script src="../../bower_components/pdfmake/build/vfs_fonts.js"></script>
@@ -10,9 +11,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <script>
 	"use strict";
 
+	var x = "HELLO";
+
+	console.log(x.toLowerCase());
+
 	const PdfWorkoutCreator = function(superClass) {
 		return class extends superClass {
-			// Athlete Max Calculation Test
+
+
+
+
 
 			/**
 			 * Prevents invalidations & returns max calculation results
@@ -22,31 +30,41 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 * @param {Integer} max percentage of weight as Integer
 			 * @return {Integer}
 			*/
-			_computeWorkoutWeight(max) {
+			_computeWorkoutWeight(max, e){
 				var athleteExerciseMax = 100;
 				var maxPercentage = 0;
 				var rawMaxResult = 0;
 
-				if (max) {
-						//alert( "Initial Value: " + max);
+				// Check for undeclared variables
+				if (typeof e ===  "undefined") {
+					console.log("😞 " + exercise);
+				} else {
+					console.log(e.toLowerCase());
+					var exercise = e.toLowerCase();
+				}
+
+				// Conditional statement to determine if weight is defined
+				if((exercise == "bench" || exercise == "bench press") ||
+					(exercise == "back-squat" || exercise == "back squat") ||
+					(exercise == "front-squat" || exercise == "front squat") ||
+					(exercise == "dead-lift" || exercise == "deadlift") ||
+					(exercise == "power clean" || exercise == "clean") && max)
+					{
 
 						// Integer to Percentage Conversion
 						maxPercentage = (max / 100);
-						//alert("Percentage Converted: " + maxPercentage);
 
 						rawMaxResult = (maxPercentage * athleteExerciseMax)
-						//alert("Calculated " + rawMaxResult);
-						//alert("Rounded to Integer: " + Math.round(rawMaxResult));
 
 						// Convert max to weights equations
 						max = this._computeWeightFormat(rawMaxResult)
-						//alert("Weight Formated " + max);
 
 						return  max + 'lbs';
-				} else {
-						// Removes default:  'lbs'
-						return " ";
-				}
+						} else {
+								// Removes default:  'lbs'
+								// Empty or exercise not defined
+								return " ";
+						}
 			}
 
 			// Weight Rounding Method to round the equation results; (e.g. floats/decimals) since weight's are (5,10,15...)
@@ -102,7 +120,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 						// Header
 						{
-							text: 'Jason Prater',
+							text: 'Name',
 							style: 'header'
 						},
 						{
@@ -339,7 +357,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 												{
 													// Weight
 													width: 34,
-													text: this._computeWorkoutWeight(workout.dayOne.rowOne.max),
+													text: this._computeWorkoutWeight(workout.dayOne.rowOne.max, workout.dayOne.rowOne.exercise),
 													style: 'weight'
 												},
 												{

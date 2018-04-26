@@ -561,7 +561,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							// Removes the activated workout.
 							this.$.firebaseDocument.destroy(`${this.user.uid}/activated_workout`);
 
-		              		this._appToast.text = "The program and its activated workout has been deleted successfully.";
+		              		this._appToast.text = "The program has been removed successfully.";
 			              	this._appToast.open();
 			              	this._removeProgramDialog.opened = false;
 			              	this.set("hidden", true);

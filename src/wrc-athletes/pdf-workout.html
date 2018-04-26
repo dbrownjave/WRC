@@ -25,12 +25,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 * @return {Integer}
 			*/
 			_computeWorkoutWeight(exercise, percentage, athleteMax) {
+				var self = this;
 				var maxPercentage = 0;
 				var rawMaxResult = 0;
 				var MaxResult = 0;
 
 				exercise = exercise.toLowerCase();
 				var athleteMaxBench =  1000;
+
+				console.log(exercise);
+				console.log(athleteMax);
+				alert(this.athleteMax.bench_press_value);
 
 				//
 				if ((exercise == "bench" || exercise == "bench press") ||
