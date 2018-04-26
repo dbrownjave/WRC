@@ -22,6 +22,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Polymerfire Elements -->
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 
 <!-- Vaadin Elements -->
 <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-grid.html">
@@ -404,8 +405,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <poly-filter-diacritic
                         filter="[[athleteFilter]]"
                         array-to-filter="[[athletesData]]"
-                        filtered-array="{{athletesDataFiltered}}"
-                        filter-by="first, last"></poly-filter-diacritic>
+                        filtered-array="{{athletesDataFiltered}}"></poly-filter-diacritic>
+
                     <!-- Search bar -->
                     <paper-search-bar query="{{athleteFilter}}" hideFilterButton=true> </paper-search-bar>
                   </div>
