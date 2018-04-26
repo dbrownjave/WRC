@@ -488,7 +488,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         } else {
                             this.page = page;
                         }
-                    }
+                    } else {
+						this.page = page || "login";
+					}
 
                     if (!this.$.drawer.persistent) {
                         this.$.drawer.close();
@@ -611,7 +613,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 logout() {
                     this.$.firebaseAuth.signOut();
-                    this.set('page', '');
                     this.set('routData.page', '');
                 }
 
