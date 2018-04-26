@@ -156,6 +156,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			<section class="activated-workout-wrapper" hidden="[[noWorkouts]]">
 				<template is="dom-repeat" items="[[activeWorkout]]" as="workout">
 					<div class="paper-form" id$="[[workout.$key]]" loading$="[[loadingWorkoutPreview]]">
+						<!-- Creates an overlay when loading the PDF Preview -->
 						<div class="overlay" hidden="[[!loadingWorkoutPreview]]">
 							<paper-spinner alt="Loading workout preview" active></paper-spinner>
 						</div>
@@ -225,6 +226,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					};
 				}
 
+				ready() {
+					super.ready();
+
+					// Toast
+					this._appToast = document.getElementById("appToast");
+				}
+
 				/**
 				 * Observes for changes on user property
 				 */
@@ -279,8 +287,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 								// Invoke generatePreview preview with 3 retrieved objects
 								this._generatePreview(workoutData, athleteStats, athleteData);
+							}.bind(this))
+							.catch(function(err) {
+								this._appToast = "An error has ocurred while loading the preview. Please try again";
+								this._appToast.open();
 							}.bind(this));
+						}.bind(this))
+						.catch(function(err) {
+							this._appToast = "An error has ocurred while loading the preview. Please try again";
+							this._appToast.open();
 						}.bind(this));
+					}.bind(this))
+					.catch(function(err) {
+						this._appToast = "An error has ocurred while loading the preview. Please try again";
+						this._appToast.open();
 					}.bind(this));
 				}
 
