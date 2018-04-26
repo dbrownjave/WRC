@@ -18,6 +18,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Polymerfire Elements -->
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 
+<!-- PDF Workout Creator -->
+<link rel="import" href="../pdf-workout-creator/pdf-workout-creator.html">
+
 <!-- Icons -->
 <link rel="import" href="../app-icons.html">
 <link rel="import" href="../fa-icons.html">
@@ -130,7 +133,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
 								<paper-listbox noink slot="dropdown-content">
 									<paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
-									<paper-item id$="[[workout.$key]]" on-tap="_setWorkoutActive" data-option="review">Active</paper-item>
 								</paper-listbox>
 							</paper-menu-button>
 
@@ -154,7 +156,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 		"use strict";
 
 		(function() {
-			class WrcActiveWorkouts extends Polymer.Element {
+			class WrcActiveWorkouts extends PdfWorkoutCreator(Polymer.Element) {
 				// Element definition
 				static get is() {
 					return "wrc-active-workouts";
@@ -184,7 +186,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 						}
 					};
-				};
+				}
 
 				/**
 				 * Observes for changes on user property
@@ -219,6 +221,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							}
 						}.bind(this));
 					}
+				}
+
+				/**
+				 * @description Load workout data on PDF Preview using athlete maxes
+				 */
+				_loadWorkoutData() {
+					// Loads athlete maxes
+					this.$.firebaseDocument.getStoredValue(`${this.coachUid}/athletes/${this.user.uid}/stats`)
+					.then(function(athleteStats) {
+						console.log(athleteStats);
+					});
 				}
 			}
 			window.customElements.define(WrcActiveWorkouts.is, WrcActiveWorkouts);
