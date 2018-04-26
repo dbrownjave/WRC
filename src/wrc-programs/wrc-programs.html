@@ -355,6 +355,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						workoutsOfProgram: {
 							type: Array,
 							notify: true
+						},
+						programsData: {
+								type: Object,
+								notify: true
 						}
 					}
 				};
@@ -514,11 +518,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						console.log(bindedWorkouts);
 
 						// Release workouts
-						var ProgramData = this.ProgramData;
+						var programsData = this.programsData;
+						console.log(programsData);
 
 						// Loop for each element in an array, in order.
-						if(ProgramData) {
-						ProgramData.forEach(function(workout) {
+						if(programsData) {
+						programsData.forEach(function(workout) {
 							this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", + workoutId + "/status", false);
 							console.log("workout ID: " + workoutId + "  Status: " + workout.status);
 						});
