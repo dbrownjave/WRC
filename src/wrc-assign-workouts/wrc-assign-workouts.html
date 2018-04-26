@@ -609,7 +609,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @description Program observer, observes if new program is downloaded
                  */
                 _programIdRequestChanged(programIdRequested) {
-                    console.log("New Requested Program ID: " + programIdRequested);
+                    // console.log("New Requested Program ID: " + programIdRequested);
                 }
                 /**
                  * Filters through programs, & search for requested program
@@ -642,7 +642,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 _downloadProgram(program) {
                     var programCollection = this.programsData;
-                    console.log("New Search Inquiry:"); 
+                    // console.log("New Search Inquiry:");
                     // Loop through collection of programs
                     programCollection.some(function(programSelected) {
                         if (program.days == programSelected.days
@@ -651,7 +651,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             && program.type == programSelected.type) {
 
                             // Testing
-                            console.log("Program Match 🎉 , ID: " + programSelected.$key);
+                            // console.log("Program Match 🎉 , ID: " + programSelected.$key);
                             // Notification
                             this._appToast.text = 'The program has been downloaded successfully.';
                             this._appToast.open();
@@ -673,7 +673,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             return true;
                         } else {
                             // Testing
-                            console.log("Program No Match ☹️ ID: " + programSelected.$key);
+                            // console.log("Program No Match ☹️ ID: " + programSelected.$key);
                             // Notification
                             this._appToast.text = 'This program is currently unavailable.';
                             this._appToast.open();
