@@ -373,6 +373,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					// Delete Workout Dialog
 					this._deleteProgramDialog = document.getElementById("appDeleteDialog");
+
 				}
 
 				_computeHiddenPrograms(reviewMode, editMode) {
@@ -389,6 +390,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					}
 
 					return false;
+
+
 				}
 
 				/**
@@ -509,6 +512,19 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", true);
 						}
 						console.log(bindedWorkouts);
+
+						// Release workouts
+						var ProgramData = this.ProgramData;
+
+						// Loop for each element in an array, in order.
+						if(ProgramData) {
+						ProgramData.forEach(function(workout) {
+							this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", + workoutId + "/status", false);
+							console.log("workout ID: " + workoutId + "  Status: " + workout.status);
+						});
+					}
+
+
 						this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", bindedWorkouts)
 							.then(function () {
 								this._appProgress.hidden = true;
