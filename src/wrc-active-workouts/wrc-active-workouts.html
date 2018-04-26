@@ -6,20 +6,148 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Polymer -->
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<!-- Paper Elements -->
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
 <!-- Polymerfire Elements -->
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 
+<!-- Icons -->
+<link rel="import" href="../app-icons.html">
+<link rel="import" href="../fa-icons.html">
+
+<!-- Shared Style  -->
+<link rel="import" href="../shared-styles.html">
+
 <dom-module id="wrc-active-workouts">
 	<template>
-		<style></style>
+		<style include="wrc-shared-styles">
+			/* General Style */
+			main {
+				padding: 1em 0em 2em 0em;
+				height: calc(100vh - (64px + 4em));
+				min-height: calc(100vh - (64px + 4em));
+				overflow: auto;
+
+				@apply --layout-vertical;
+			}
+
+			/* Program Selector */
+            .paper-form {
+                position: relative;
+                cursor: auto;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .paper-form>.pdf-wrapper {
+                @apply --layout-vertical;
+                @apply --layout-center;
+            }
+
+            paper-menu-button {
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+
+            .menu-icon {
+                color: #86919f;
+            }
+
+            paper-menu-button paper-listbox paper-item {
+                font-weight: normal;
+                text-decoration: none;
+                text-transform: none;
+                background-color: #fff;
+                cursor: pointer;
+            }
+
+            paper-menu-button paper-listbox .iron-selected {
+                font-weight: normal;
+                text-decoration: none;
+                text-transform: none;
+                background-color: #fff;
+            }
+
+            paper-item:focus:before {
+                background: #fff;
+            }
+
+            paper-item:active:before {
+                background: var(--paper-grey-300);
+                color: #000;
+            }
+
+            /* Active Status */
+            .tag {
+                width: 70px;
+                height: 21px;
+                border-radius: 3px;
+                background-color: #86919f;
+                text-align: center;
+                margin-top: 10px;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .tag[active] {
+                background-color: #45BE72;
+            }
+
+			/* Hidden */
+			[hidden] {
+				display: none;
+			}
+		</style>
 
 		<!-- Firebase Document Configuration -->
 		<firebase-document
 			id="firebaseDocument"
 			app-name="wrc_software"></firebase-document>
 
-		<h1>Component: wrc-active-workouts</h1>
-		<!-- TODO: Load activated workout and show -->
+		<main>
+			<!-- Section to show empty message if there is not activated workouts -->
+			<section class="empty-message-wrapper" hidden="[[!noWorkouts]]">
+				<!-- TODO: Show message for not active workouts -->
+				<h1>Dorian, make your magic lol</h1>
+			</section>
+
+			<!-- Section to show activated workout -->
+			<section class="activated-workout-wrapper" hidden="[[noWorkouts]]">
+				<template is="dom-repeat" items="[[activeWorkout]]" as="workout">
+					<div class="paper-form" id$="[[workout.$key]]">
+						<div class="pdf-wrapper">
+							<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+								<paper-listbox noink slot="dropdown-content">
+									<paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
+									<paper-item id$="[[workout.$key]]" on-tap="_setWorkoutActive" data-option="review">Active</paper-item>
+								</paper-listbox>
+							</paper-menu-button>
+
+							<div class="content-wrapper">
+								<div class="season-title-program">[[workout.season]]</div>
+								<div class="program-title">[[workout.weeks]] Week Program</div>
+								<div class="type-title">[[workout.type]]</div>
+							</div>
+							<!-- Active status -->
+							<div class="tag" active$=[[workout.active]] id="[[workout.$key]]">
+								<div class="day-title">Week [[workout.week]]</div>
+							</div>
+						</div>
+					</div>
+				</template>
+			</section>
+		</main>
 	</template>
 
 	<script>
@@ -42,7 +170,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						},
 						coachUid: {
 							type: String,
-							notify: true
+							notify: true,
+							observer: '_coachUidChanged'
+						},
+						noWorkouts: {
+							type: Boolean,
+							notify: true,
+							value: true
+						},
+						activeWorkout: {
+							type: Array,
+							notify: true,
+
 						}
 					};
 				};
@@ -55,7 +194,30 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						this.$.firebaseDocument.getStoredValue(`${this.user.uid}/metadata/path`)
 						.then(function(path) {
 							this.coachUid = path.split('/', 1)[0];
-						});
+						}.bind(this));
+					}
+				}
+
+				/**
+				 * Observes for changes on coach uid
+				 */
+				_coachUidChanged(uid) {
+					if (uid) {
+						let activeWorkout = [];
+						this.noWorkouts = true;
+
+						this.$.firebaseDocument.getStoredValue(`${uid}/activated_workout/path`)
+						.then(function(workout) {
+							if (workout && workout.length) {
+								this.noWorkouts = false;
+								this.$.firebaseDocument.getStoredValue(`workouts/${workout}`)
+								.then(function(workoutData) {
+									workoutData["$key"] = workout;
+									activeWorkout.push(workoutData);
+									this.set("activeWorkout", activeWorkout);
+								}.bind(this));
+							}
+						}.bind(this));
 					}
 				}
 			}
