@@ -252,27 +252,29 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				<paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
 
 				<!-- Workouts of the program -->
-				<template is=dom-repeat items="[[workoutsOfProgram]]" as="workout">
-					<div class="paper-form" id$="[[workout.$key]]">
-						<div class="pdf-wrapper">
-							<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
-								<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
-								<paper-listbox noink slot="dropdown-content">
-									<paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
-								</paper-listbox>
-							</paper-menu-button>
+				<div class="collection-wrapper">
+					<template is=dom-repeat items="[[workoutsOfProgram]]" as="workout">
+						<div class="paper-form" id$="[[workout.$key]]">
+							<div class="pdf-wrapper">
+								<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+									<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+									<paper-listbox noink slot="dropdown-content">
+										<paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
+									</paper-listbox>
+								</paper-menu-button>
 
-							<div class="content-wrapper">
-								<div class="season-title-program">[[workout.season]]</div>
-								<div class="program-title">[[workout.weeks]] Week Program</div>
-								<div class="type-title">[[workout.type]]</div>
-							</div>
-							<div class="tag">
-								<div class="day-title">Week [[workout.week]]</div>
+								<div class="content-wrapper">
+									<div class="season-title-program">[[workout.season]]</div>
+									<div class="program-title">[[workout.weeks]] Week Program</div>
+									<div class="type-title">[[workout.type]]</div>
+								</div>
+								<div class="tag">
+									<div class="day-title">Week [[workout.week]]</div>
+								</div>
 							</div>
 						</div>
-					</div>
-				</template>
+					</template>
+				</div>
 			</div>
 
 			<!-- Edit Workouts content -->
