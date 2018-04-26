@@ -23,7 +23,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 * @param {String} e = exercise
 			 * @return {Integer}
 			*/
-			_computeWorkoutWeight(max, e){
+			_computeWorkoutWeight_a(max, e){
 				var athleteExerciseMax = 100;
 				var maxPercentage = 0;
 				var rawMaxResult = 0;
@@ -59,6 +59,48 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								// Empty or exercise not defined
 								return " ";
 						}
+			}
+
+			/**
+			 * @description Compute max weight using athlete maxes
+			 *
+			 * @param {Number} max - max value from workout data
+			 * @param {String} exercise - exercise name from workout data
+			 * @param {Object} stats - athlete's max stats
+			 * @return {Number} max value for exercise based on athlete stats
+			 */
+			_computeWorkoutWeight(max_value, ex) {
+				let athleteExerciseMax = 100;
+				let max = +max_value;
+				const exercise = ex.toLowerCase();
+				const athleteStats = this.stats;
+				let maxPercentage = 0;
+				let rawMaxResult = 0;
+
+				if (exercise && max) {
+					if (athleteStats) {
+						if (exercise === "bench" || exercise === "bench press") {
+							athleteExerciseMax = athleteStats.bench_press_value;
+						} else if (exercise === "back-squat" || exercise === "back squat") {
+							athleteExerciseMax = athleteStats.back_squat_value;
+						} else if (exercise == "front-squat" || exercise == "front squat") {
+							athleteExerciseMax = athleteStats.front_squat_value;
+						} else if (exercise == "dead-lift" || exercise == "deadlift") {
+							athleteExerciseMax = athleteStats.deadlift_value;
+						} else if (exercise == "power clean" || exercise == "clean") {
+							athleteExerciseMax = athleteStats.hang_power_clean_value;
+						}
+					}
+
+					maxPercentage = (max / 100);
+					rawMaxResult = (maxPercentage * athleteExerciseMax);
+
+					// Convert max to weights equations
+					max = this._computeWeightFormat(rawMaxResult);
+					return max + "lbs";
+				} else {
+					return " ";
+				}
 			}
 
 			// Weight Rounding Method to round the equation results; (e.g. floats/decimals) since weight's are (5,10,15...)
@@ -101,7 +143,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 
 			// Generates Preview for Workout
-			_generatePreview(workout) {
+			_generatePreview(workout, stats, name) {
+				/**
+				 * Create a global stats object in case stats is not null,
+				 * otherwise, sets object to null
+				 */
+				this.stats = stats || null;
+
 				var pdfContent = {
 					// Page Orientation: [portrait or landscap]
 					pageOrientation: 'landscape',
@@ -114,7 +162,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 						// Header
 						{
-							text: 'Name',
+							text: name || 'Name',
 							style: 'header'
 						},
 						{

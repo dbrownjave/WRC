@@ -226,12 +226,40 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				/**
 				 * @description Load workout data on PDF Preview using athlete maxes
 				 */
-				_loadWorkoutData() {
-					// Loads athlete maxes
-					this.$.firebaseDocument.getStoredValue(`${this.coachUid}/athletes/${this.user.uid}/stats`)
-					.then(function(athleteStats) {
-						console.log(athleteStats);
-					});
+				_loadWorkoutData(evt) {
+					const workoutId = evt.target.getAttribute("id");
+					// Retrieve athlete's profile
+					this.$.firebaseDocument.getStoredValue(`${this.coachUid}/athletes/${this.user.uid}/profile`)
+					.then(function(athleteData) {
+						// Retrieve athlete's stats
+						this.$.firebaseDocument.getStoredValue(`${this.coachUid}/athletes/${this.user.uid}/stats`)
+						.then(function(athleteStats) {
+							// Retrieve workout data
+							this.$.firebaseDocument.getStoredValue(`workouts/${workoutId}`)
+							.then(function(workoutData) {
+								// Invoke generatePreview preview with 3 retrieved objects
+								this._generatePreview(workoutData, athleteStats, athleteData);
+							}.bind(this));
+						}.bind(this));
+					}.bind(this));
+				}
+
+				/**
+				 * @description Generate PDF Preview using athlete max stats
+				 *
+				 * @param {Object} workout - workout data for PDF Generation
+				 * @param {Object} stats - athlete max stats
+				 * @param {Object} athleteData - athlete profile data to extract name
+				 */
+				_generatePreview(workout, stats, athleteData) {
+					// Compose name using athlete profile data
+					const athleteName = `${athleteData.first} ${athleteData.last}`;
+
+					/**
+					 * Call super class generatePreview function using sending
+					 * workout data, athlete max stats and name
+					 */
+					super._generatePreview(workout, stats, athleteName);
 				}
 			}
 			window.customElements.define(WrcActiveWorkouts.is, WrcActiveWorkouts);
