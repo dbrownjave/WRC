@@ -21,6 +21,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
+<!-- PDF Workout Creator -->
+<link rel="import" href="../pdf-workout-creator/pdf-workout-creator.html">
+
 <!-- Icons -->
 <link rel="import" href="../app-icons.html">
 <link rel="import" href="../fa-icons.html">
@@ -355,7 +358,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
     <script>
         (function () {
             'use strict';
-            class WrcAssignWorkouts extends Polymer.Element {
+            class WrcAssignWorkouts extends PdfWorkoutCreator(Polymer.Element) {
                 // Element definition
                 static get is() {
                     return 'wrc-assign-workouts';
@@ -416,6 +419,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         }
                     };
                 }
+
                 ready() {
                     super.ready();
                     // Notification
@@ -437,6 +441,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this._loadDownloadedPrograms();
                     }
                 }
+
                 /**
                  * Retrieves activated workout from coach's node
                  */
@@ -445,6 +450,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this.workoutId = (workoutId && workoutId.length) ? workoutId : null;
                     }.bind(this));
                 }
+
                 /**
                  * @description Load downloaded programs
                  */
@@ -463,6 +469,32 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         }
                     }.bind(this));
                 }
+
+                /**
+                 * @description Retrieves workout data from Firebase
+                */
+                _loadWorkoutData(evt) {
+                  evt.preventDefault();
+
+                  // Extracts workoutId from clicked button
+                  const workoutId = evt.target.getAttribute("id");
+
+                  // Retrieves data from Firebase
+                  this.$.firebaseDocument.getStoredValue("workouts/" + workoutId)
+                  .then(function(snapshot) {
+                    // Pass the retrieved workout to our generation function
+                    this._generatePreview(snapshot);
+                  }.bind(this));
+                }
+
+                /**
+                 * @description Generates workout PDF Preview making use of the super class
+                 * @param {Object} workout - workout retrieved from firebase
+                */
+                _generatePreview(workout) {
+                  super._generatePreview(workout);
+                }
+
                 /**
                  * @description Opens remove program dialog
                  */
@@ -475,6 +507,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._removeProgramDialog.msg = "Are you sure you want to remove this Program?";
                     // TODO: Improve UX + Add More Detailed info.: All workouts from this program will release back to the workout collection.
                 }
+
                 /**
                  * @description Removes programs from coaches program collection
                  */
