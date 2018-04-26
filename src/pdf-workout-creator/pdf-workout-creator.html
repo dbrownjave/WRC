@@ -20,6 +20,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 * The 'max' is the percentage of an athlete exercise (max weight)
 			 *
 			 * @param {Integer} max percentage of weight as Integer
+			 * @param {String} e = exercise
 			 * @return {Integer}
 			*/
 			_computeWorkoutWeight(max, e){
@@ -29,7 +30,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				// Check for undeclared variables
 				if (typeof e ===  "undefined") {
-					console.log("😞 " + exercise);
+					console.log("😞 " + e);
+					//console.log(exercise error); // Debug line number
 				} else {
 					console.log(e.toLowerCase());
 					var exercise = e.toLowerCase();
@@ -407,7 +409,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										/*************** Day 3 ***************/
 										{
 											// Exercise
-											text: workout.dayTwo.rowOne.exercise,
+											text: workout.dayThree.rowOne.exercise,
 											style: 'exercise',
 											alignment: 'center'
 										},
@@ -421,7 +423,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 												{
 													// Weight
 													width: 34,
-													text: this._computeWorkoutWeight(workout.dayThree.rowOne.max, workout.dayTwo.rowOne.exercise),
+													text: this._computeWorkoutWeight(workout.dayThree.rowOne.max, workout.dayThree.rowOne.exercise),
 													style: 'weight'
 												},
 												{
@@ -3582,7 +3584,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 												{
 													// Weight
 													width: 34,
-													text: this._computeWorkoutWeight(workout.dayOne.rowTwentyThree.max, workout.dayOne.rowTwentyThree.exercis),
+													text: this._computeWorkoutWeight(workout.dayOne.rowTwentyThree.max, workout.dayOne.rowTwentyThree.exercise),
 													style: 'weight'
 												},
 												{
