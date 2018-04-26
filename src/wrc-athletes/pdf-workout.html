@@ -24,18 +24,23 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 * @param {String} exercise
 			 * @return {Integer}
 			*/
-			_computeWorkoutWeight(exercise, percentage, athleteMax) {
-				var self = this;
+			_computeWorkoutWeight(exercise, percentage, max) {
 				var maxPercentage = 0;
 				var rawMaxResult = 0;
 				var MaxResult = 0;
 
-				exercise = exercise.toLowerCase();
-				var athleteMaxBench =  1000;
+				// Check for undeclared variables
+				if (typeof exercise === "undefined" || max === "undefined") {
+					console.log("😞 " + exercise);
+				} else {
+					console.log("Before Exercise: " + exercise);
+					console.log("Before Max: " + max.bench_press_value);
+					exercise = exercise.toLowerCase();
+					console.log("😄 " + exercise);
+					///athleteMax = athleteMax.bench_press_value;
+					console.log("After Max: " + max);
+				}
 
-				console.log(exercise);
-				console.log(athleteMax);
-				alert(this.athleteMax.bench_press_value);
 
 				//
 				if ((exercise == "bench" || exercise == "bench press") ||
@@ -50,7 +55,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						maxPercentage = (percentage / 100);
 						//alert("Percentage Converted: " + maxPercentage);
 
-						rawMaxResult = (maxPercentage * athleteMaxBench);
+						rawMaxResult = (maxPercentage * max);
 						//alert("Calculated " + rawMaxResult);
 						//alert("Rounded to Integer: " + Math.round(rawMaxResult));
 
@@ -110,8 +115,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			_generatePreview(workout, athleteMax, athleteInfo) {
 
 				console.log(athleteMax);
+				console.log(athleteMax.bench_press_value);
 
 				var pdfContent = {
+
+
 					// Page Orientation: [portrait or landscap]
 					pageOrientation: 'landscape',
 
