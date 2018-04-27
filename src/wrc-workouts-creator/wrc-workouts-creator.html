@@ -8695,7 +8695,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 * Generates PDF Preview for workout
 				*/
 				_generatePdfPreview() {
-					super._generatePreview(this.workout);
+					const admin = "admin";
+
+					super._generatePreview(this.workout, this.workout);
 				}
 
 				/**
