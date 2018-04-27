@@ -89,10 +89,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 
 			// Generates Preview for Workout
-			_generatePreview(workout, stats, name) {
+			_generatePreview(workout, stats, name, printAllAthletePDF) {
 				console.log("PDF: Workout - " +  workout);
 				console.log("PDF: Stats - " +  stats);
 				console.log("PDF: Name - " +  name);
+				console.log("PDF: Print All: " + printAllAthletePDF);
 
 				/**
 				 * Create a global stats object in case stats is not null,
@@ -5109,7 +5110,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				}
 
 				// This creates and opens the PDF in a new tab
-				pdfMake.createPdf(pdfContent).open();
+				if (printAllAthletePDF == true) {
+					// open PDF collectively
+					console.log(printAllAthletePDF);
+				} else {
+					// open one PDF seperately
+					pdfMake.createPdf(pdfContent).open();
+				}
 			}
 		}
 	};
