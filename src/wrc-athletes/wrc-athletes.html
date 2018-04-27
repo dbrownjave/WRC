@@ -832,18 +832,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                         // Invoke generate preview with 4 retrieved objects
                         this._generatePreview(workoutData, athleteStats, athleteName, printAllAthletePDF);
-                      }.bind(this))
-        							.catch(function(err) {
-                        this._appToast.text = "There has been an error. Please try again.";
-  			              	this._appToast.open();
-                        console.error(err.message);
-        							}.bind(this));
-        						  }.bind(this))
-        						  .catch(function(err) {
-                        this._appToast.text = "There has been an error. Please try again.";
-  			              	this._appToast.open();
-                        console.error(err.message);
-        						  }.bind(this));
+                      }.bind(this));
+        							//.catch(function(err) {
+                      //  this._appToast.text = "There has been an error. Please try again.";
+  			              	//this._appToast.open();
+                      //  console.error(err.message);
+        							//}.bind(this));
+                    }.bind(this));
+        						  //.catch(function(err) {
+                      //  this._appToast.text = "There has been an error. Please try again.";
+  			              	//this._appToast.open();
+                      //  console.error(err.message);
+        						  //}.bind(this));
                 }
 
                 /**
