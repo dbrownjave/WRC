@@ -515,16 +515,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						console.log(bindedWorkouts);
 
 						// Release workouts
-						var programsData = this.programsData;
-						console.log(programsData);
+						//var programsData = this.programsData;
+						//console.log(programsData);
 
 						// Loop for each element in an array, in order.
-						if(programsData) {
-						programsData.forEach(function(workout) {
-							this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", + workoutId + "/status", false);
-							console.log("workout ID: " + workoutId + "  Status: " + workout.status);
-						});
-					}
+						///if(programsData) {
+						//programsData.forEach(function(workout) {
+						//	this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", + workoutId + "/status", false);
+						//	console.log("workout ID: " + workoutId + "  Status: " + workout.status);
+						//});
+					//}
 
 
 						this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", bindedWorkouts)
