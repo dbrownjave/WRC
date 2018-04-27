@@ -23,33 +23,26 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 * @return {Number} max value for exercise based on athlete stats
 			 */
 			_computeWorkoutWeight(max_value, ex) {
-				let athleteExerciseMax = 100;
-				let max = +max_value;
-				const exercise = ex.toLowerCase();
-				const athleteStats = this.stats;
 				let maxPercentage = 0;
 				let rawMaxResult = 0;
+				let athleteExerciseMax = max_value;
 
-				if (exercise && max) {
-					if (athleteStats) {
-						if (exercise === "bench" || exercise === "bench press") {
-							athleteExerciseMax = athleteStats.bench_press_value;
-						} else if (exercise === "back-squat" || exercise === "back squat") {
-							athleteExerciseMax = athleteStats.back_squat_value;
-						} else if (exercise == "front-squat" || exercise == "front squat") {
-							athleteExerciseMax = athleteStats.front_squat_value;
-						} else if (exercise == "dead-lift" || exercise == "deadlift") {
-							athleteExerciseMax = athleteStats.deadlift_value;
-						} else if (exercise == "power clean" || exercise == "clean") {
-							athleteExerciseMax = athleteStats.hang_power_clean_value;
-						}
-					}
+				const exercise = ex.toLowerCase();
+				const athleteStats = this.stats;
 
-					maxPercentage = (max / 100);
+				if((exercise == "bench" || exercise == "bench press") ||
+					(exercise == "back-squat" || exercise == "back squat") ||
+					(exercise == "front-squat" || exercise == "front squat") ||
+					(exercise == "dead-lift" || exercise == "deadlift") ||
+					(exercise == "power clean" || exercise == "clean"))
+					{
+
+					maxPercentage = (athleteExerciseMax / 100);
 					rawMaxResult = (maxPercentage * athleteExerciseMax);
 
 					// Convert max to weights equations
-					max = this._computeWeightFormat(rawMaxResult);
+					var max = this._computeWeightFormat(rawMaxResult);
+
 					return max + "lbs";
 				} else {
 					return " ";
