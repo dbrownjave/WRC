@@ -134,10 +134,47 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 @apply --layout-center-center;
             }
 
-			/* Hidden */
-			[hidden] {
-				display: none;
-			}
+
+						.motivation-title {
+							color: #AFB7C1;
+							font-size: 2.5em;
+							font-weight: 500;
+							opacity: .70;
+							text-align: center;
+							margin: 20% auto;
+						}
+
+						/* Hidden */
+						[hidden] {
+							display: none;
+						}
+
+						/*==========  Non-Mobile First Method  ==========*/
+
+						/* Small Devices, Tablets */
+						@media only screen and (max-width : 768px) {
+							.motivation-title {
+								font-size: 2em;
+								margin: 40% auto;
+							}
+						}
+
+						/* Extra Small Devices, Phones */
+						@media only screen and (max-width : 480px) {
+							.motivation-title {
+								font-size: 1.5em;
+								margin: 70% auto;
+							}
+						}
+
+						/* Custom, iPhone Retina */
+						@media only screen and (max-width : 320px) {
+							.motivation-title {
+								font-size: 1em;
+								margin: 70% auto;
+							}
+						}
+
 		</style>
 
 		<!-- Firebase Document Configuration -->
@@ -149,7 +186,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			<!-- Section to show empty message if there is not activated workouts -->
 			<section class="empty-message-wrapper" hidden="[[!noWorkouts]]">
 				<!-- TODO: Show message for not active workouts -->
-				<h1>Dorian, make your magic lol</h1>
+				<div class="motivation-title">No Workouts Available 😔</div>
 			</section>
 
 			<!-- Section to show activated workout -->
