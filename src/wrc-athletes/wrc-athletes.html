@@ -811,13 +811,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
                 /**
-                 * @description Retrieves workout data from Firebase
+                 * @description Retrieves active workout data from Firebase
+                 *
+                 * @param {Object} athleteStats - athlete max stats
+                 * @param {String} athleteName - first and last
                  */
                 _loadWorkoutData(athleteStats, athleteName) {
-                    // TODO: Retrieve coach active workout ID
-
-                    //console.log(this.user.uid + "/activated_workout/path");
-
                     // Retrieves activated workout path from coach's node
                     this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
                       .then(function(workoutId){
@@ -842,18 +841,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         						  }.bind(this));
                 }
 
-/*
-                        .then(function(snapshot) {
-                            console.log("Active Workout ID: " + snapshot);
-                            // Pass the retrieved workout to our generation function
-                            this._generatePreview(snapshot, athleteStats, athleteName);
-                        }.bind(this));
-                }
-*/
                 /**
                  * @description Generates workout PDF Preview making use of the super class
+                 *
                  * @param {Object} workout - workout retrieved from firebase
-                 * @param {Object} athlete - stats retrieved from firebase
+                 * @param {Object} athleteStats - stats retrieved from firebase
+                 * @param {String} athleteName - first and last
                  */
                 _generatePreview(workout, athleteStats, athleteName) {
                     super._generatePreview(workout, athleteStats, athleteName);
