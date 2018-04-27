@@ -54,8 +54,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../app-icons.html">
 <link rel="import" href="../fa-icons.html">
 
-<!-- PDF Workout -->
-<link rel="import" href="../wrc-athletes/pdf-workout.html">
+<!-- PDF Workout Creator -->
+<link rel="import" href="../pdf-workout-creator/pdf-workout-creator.html">
 
 <dom-module id="wrc-athletes">
     <template>
@@ -534,7 +534,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         (function() {
             'use strict';
 
-            class WrcAthletes extends PdfWorkout(Polymer.Element) {
+            class WrcAthletes extends PdfWorkoutCreator(Polymer.Element) {
                 /**
                  * Element definition
                 */
@@ -558,6 +558,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         },
                         athletesData: {
                             type: Object,
+                            notify: true
+                        },
+                        workoutId: {
+                            type: String,
                             notify: true
                         }
                     };
@@ -787,7 +791,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /**
-                 * Print all athletes workouts
+                 *  @description Print all athletes workouts
                  */
                 _printPdfCollection(evt) {
                     var athletesData = this.athletesData;
@@ -796,39 +800,63 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     // Loop for each element in an array, in order.
                     athletesData.forEach(function(athlete) { //
                         if (athlete.profile.active == "Yes") {
-                            self._loadWorkoutData(athlete.stats, athlete.profile);
+                          // Compose name using athlete profile data
+                          var athleteName = athlete.profile.first + " " + athlete.profile.last;
+                          console.log(athleteName);
+
+                          self._loadWorkoutData(athlete.stats, athleteName);
                         }
                     });
                 }
 
+
                 /**
                  * @description Retrieves workout data from Firebase
                  */
-                _loadWorkoutData(athleteStats, athleteProfile) {
+                _loadWorkoutData(athleteStats, athleteName) {
                     // TODO: Retrieve coach active workout ID
-                    // Extracts workoutId from clicked button
-                    //const workoutId = evt.target.getAttribute("id");
 
-                    // Retrieves data from Firebase
-                    this.$.firebaseDocument.getStoredValue("workouts/-LAPfqoZOKbicl5_ukOk") // Test Workout
-                        .then(function(snapshot) {
-                            console.log(snapshot);
-                            // Pass the retrieved workout to our generation function
-                            this._generatePreview(snapshot,
-                                athleteStats, athleteProfile);
-                            console.log(snapshot);
-                            console.log(athleteStats);
-                            console.log(athleteProfile);
-                        }.bind(this));
+                    //console.log(this.user.uid + "/activated_workout/path");
+
+                    // Retrieves activated workout path from coach's node
+                    this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
+                      .then(function(workoutId){
+                        this.workoutId = workoutId;
+                        console.log("Active Workout ID: " + workoutId);
+                    // Retrieve workout data
+                    this.$.firebaseDocument.getStoredValue(`workouts/${workoutId}`)
+                      .then(function(workoutData) {
+                        console.log("Workout Data: " + workoutId);
+
+                        // Invoke generatePreview preview with 3 retrieved objects
+                        this._generatePreview(workoutData, athleteStats, athleteName);
+                      }.bind(this))
+        							.catch(function(err) {
+                        this._appToast.text = "There has been an error. Please try again.";
+  			              	this._appToast.open();
+        							}.bind(this));
+        						  }.bind(this))
+        						  .catch(function(err) {
+                        this._appToast.text = "There has been an error. Please try again.";
+  			              	this._appToast.open();
+        						  }.bind(this));
                 }
 
+/*
+                        .then(function(snapshot) {
+                            console.log("Active Workout ID: " + snapshot);
+                            // Pass the retrieved workout to our generation function
+                            this._generatePreview(snapshot, athleteStats, athleteName);
+                        }.bind(this));
+                }
+*/
                 /**
                  * @description Generates workout PDF Preview making use of the super class
                  * @param {Object} workout - workout retrieved from firebase
                  * @param {Object} athlete - stats retrieved from firebase
                  */
-                _generatePreview(workout, athleteStats, athleteProfile) {
-                    super._generatePreview(workout, athleteStats,athleteProfile);
+                _generatePreview(workout, athleteStats, athleteName) {
+                    super._generatePreview(workout, athleteStats, athleteName);
                 }
 
             }
