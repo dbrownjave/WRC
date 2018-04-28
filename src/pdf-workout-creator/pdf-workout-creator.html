@@ -14,6 +14,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 	const PdfWorkoutCreator = function(superClass) {
 		return class extends superClass {
 
+			// Testing
+			test(){
+				console.log("Function Call");
+			}
+
+			_test(){
+				console.log("Foreach Call");
+			}
+
+
 			/**
 			 * @description Compute max weight using athlete maxes
 			 *
@@ -23,6 +33,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 * @return {Number} max value for exercise based on athlete stats
 			 */
         _computeWorkoutWeight(max_value, ex) {
+					console.log("MAX");
 				let maxPercentage = 0;
 				let rawMaxResult = 0;
 				let athleteExerciseMax = max_value;
@@ -94,21 +105,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 * @param {Object} pdfData - values for pdf content
 			 * @return {Object} PDF Content
 			 */
-
 			_computeContent(pdfData) {
+
+				// This is used to make the object available to the private methods.
+				var that = this;
 
 				// Array of content
 				var pdfCollection = [];
 				//console.log(pdfCollection);
 
 				// Loop for each element in an array, in order
-				pdfData.forEach(function(pdf) { // provide the array with any name to represent the element
+				pdfData.forEach(function(pdf){ // provide the array with any name to represent the element
 
 					var workout = pdf.workout;
 					var name = pdf.name;
 					var stats = pdf.stats;
-
-
 
 				// Push PDF to PDF collection
 				pdfCollection.push(
@@ -352,7 +363,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowOne.max, workout.dayOne.rowOne.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowOne.max, workout.dayOne.rowOne.exercise),
 											style: 'weight'
 										},
 										{
@@ -364,7 +375,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowOne.tempoOne, workout.dayOne.rowOne.tempoTwo, workout.dayOne.rowOne.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowOne.tempoOne, workout.dayOne.rowOne.tempoTwo, workout.dayOne.rowOne.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -388,7 +399,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowOne.max, workout.dayTwo.rowTwo.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowOne.max, workout.dayTwo.rowTwo.exercise),
 											style: 'weight'
 										},
 										{
@@ -400,7 +411,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowOne.tempoOne, workout.dayTwo.rowOne.tempoTwo, workout.dayTwo.rowOne.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowOne.tempoOne, workout.dayTwo.rowOne.tempoTwo, workout.dayTwo.rowOne.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -424,7 +435,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowOne.max, workout.dayThree.rowOne.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowOne.max, workout.dayThree.rowOne.exercise),
 											style: 'weight'
 										},
 										{
@@ -436,7 +447,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowOne.tempoOne, workout.dayThree.rowOne.tempoTwo, workout.dayThree.rowOne.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowOne.tempoOne, workout.dayThree.rowOne.tempoTwo, workout.dayThree.rowOne.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -460,7 +471,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowOne.max, workout.dayFour.rowOne.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowOne.max, workout.dayFour.rowOne.exercise),
 											style: 'weight'
 										},
 										{
@@ -472,7 +483,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowOne.tempoOne, workout.dayFour.rowOne.tempoTwo, workout.dayFour.rowOne.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowOne.tempoOne, workout.dayFour.rowOne.tempoTwo, workout.dayFour.rowOne.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -499,7 +510,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowTwo.max, workout.dayOne.rowTwo.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowTwo.max, workout.dayOne.rowTwo.exercise),
 											style: 'weight'
 										},
 										{
@@ -511,7 +522,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowTwo.tempoOne, workout.dayOne.rowTwo.tempoTwo, workout.dayOne.rowTwo.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowTwo.tempoOne, workout.dayOne.rowTwo.tempoTwo, workout.dayOne.rowTwo.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -535,7 +546,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowTwo.max, workout.dayTwo.rowTwo.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowTwo.max, workout.dayTwo.rowTwo.exercise),
 											style: 'weight'
 										},
 										{
@@ -547,7 +558,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowTwo.tempoOne, workout.dayTwo.rowTwo.tempoTwo, workout.dayTwo.rowTwo.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowTwo.tempoOne, workout.dayTwo.rowTwo.tempoTwo, workout.dayTwo.rowTwo.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -571,7 +582,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowTwo.max, workout.dayThree.rowTwo.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowTwo.max, workout.dayThree.rowTwo.exercise),
 											style: 'weight'
 										},
 										{
@@ -583,7 +594,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowTwo.tempoOne, workout.dayThree.rowTwo.tempoTwo, workout.dayThree.rowTwo.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowTwo.tempoOne, workout.dayThree.rowTwo.tempoTwo, workout.dayThree.rowTwo.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -607,7 +618,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowTwo.max, workout.dayFour.rowTwo.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowTwo.max, workout.dayFour.rowTwo.exercise),
 											style: 'weight'
 										},
 										{
@@ -619,7 +630,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowTwo.tempoOne, workout.dayFour.rowTwo.tempoTwo, workout.dayFour.rowTwo.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowTwo.tempoOne, workout.dayFour.rowTwo.tempoTwo, workout.dayFour.rowTwo.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -646,7 +657,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowThree.max, workout.dayOne.rowThree.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowThree.max, workout.dayOne.rowThree.exercise),
 											style: 'weight'
 										},
 										{
@@ -658,7 +669,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowThree.tempoOne, workout.dayOne.rowThree.tempoTwo, workout.dayOne.rowThree.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowThree.tempoOne, workout.dayOne.rowThree.tempoTwo, workout.dayOne.rowThree.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -682,7 +693,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowThree.max, workout.dayTwo.rowThree.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowThree.max, workout.dayTwo.rowThree.exercise),
 											style: 'weight'
 										},
 										{
@@ -694,7 +705,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowThree.tempoOne, workout.dayTwo.rowThree.tempoTwo, workout.dayTwo.rowThree.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowThree.tempoOne, workout.dayTwo.rowThree.tempoTwo, workout.dayTwo.rowThree.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -718,7 +729,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowThree.max, workout.dayThree.rowThree.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowThree.max, workout.dayThree.rowThree.exercise),
 											style: 'weight'
 										},
 										{
@@ -730,7 +741,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowThree.tempoOne, workout.dayThree.rowThree.tempoTwo, workout.dayThree.rowThree.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowThree.tempoOne, workout.dayThree.rowThree.tempoTwo, workout.dayThree.rowThree.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -754,7 +765,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowThree.max, workout.dayFour.rowThree.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowThree.max, workout.dayFour.rowThree.exercise),
 											style: 'weight'
 										},
 										{
@@ -765,7 +776,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										},
 										{ // Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowThree.tempoOne, workout.dayFour.rowThree.tempoTwo, workout.dayFour.rowThree.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowThree.tempoOne, workout.dayFour.rowThree.tempoTwo, workout.dayFour.rowThree.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -792,7 +803,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowFour.max, workout.dayOne.rowFour.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowFour.max, workout.dayOne.rowFour.exercise),
 											style: 'weight'
 										},
 										{
@@ -804,7 +815,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowFour.tempoOne, workout.dayOne.rowFour.tempoTwo, workout.dayOne.rowFour.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowFour.tempoOne, workout.dayOne.rowFour.tempoTwo, workout.dayOne.rowFour.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -828,7 +839,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowFour.max, workout.dayTwo.rowFour.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowFour.max, workout.dayTwo.rowFour.exercise),
 											style: 'weight'
 										},
 										{
@@ -840,7 +851,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowFour.tempoOne, workout.dayTwo.rowFour.tempoTwo, workout.dayTwo.rowFour.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowFour.tempoOne, workout.dayTwo.rowFour.tempoTwo, workout.dayTwo.rowFour.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -864,7 +875,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowFour.max, workout.dayThree.rowFour.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowFour.max, workout.dayThree.rowFour.exercise),
 											style: 'weight'
 										},
 										{
@@ -876,7 +887,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowFour.tempoOne, workout.dayThree.rowFour.tempoTwo, workout.dayThree.rowFour.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowFour.tempoOne, workout.dayThree.rowFour.tempoTwo, workout.dayThree.rowFour.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -900,7 +911,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowFour.max, workout.dayFour.rowFour.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowFour.max, workout.dayFour.rowFour.exercise),
 											style: 'weight'
 										},
 										{
@@ -912,7 +923,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowFour.tempoOne, workout.dayFour.rowFour.tempoTwo, workout.dayFour.rowFour.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowFour.tempoOne, workout.dayFour.rowFour.tempoTwo, workout.dayFour.rowFour.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -939,7 +950,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowFive.max, workout.dayOne.rowFive.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowFive.max, workout.dayOne.rowFive.exercise),
 											style: 'weight'
 										},
 										{
@@ -951,7 +962,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowFive.tempoOne, workout.dayOne.rowFive.tempoTwo, workout.dayOne.rowFive.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowFive.tempoOne, workout.dayOne.rowFive.tempoTwo, workout.dayOne.rowFive.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -975,7 +986,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowFive.max, workout.dayTwo.rowFive.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowFive.max, workout.dayTwo.rowFive.exercise),
 											style: 'weight'
 										},
 										{
@@ -987,7 +998,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowFive.tempoOne, workout.dayTwo.rowFive.tempoTwo, workout.dayTwo.rowFive.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowFive.tempoOne, workout.dayTwo.rowFive.tempoTwo, workout.dayTwo.rowFive.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1011,7 +1022,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowFive.max, workout.dayThree.rowFive.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowFive.max, workout.dayThree.rowFive.exercise),
 											style: 'weight'
 										},
 										{
@@ -1023,7 +1034,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowFive.tempoOne, workout.dayThree.rowFive.tempoTwo, workout.dayThree.rowFive.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowFive.tempoOne, workout.dayThree.rowFive.tempoTwo, workout.dayThree.rowFive.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1047,7 +1058,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowFive.max, workout.dayFour.rowFive.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowFive.max, workout.dayFour.rowFive.exercise),
 											style: 'weight'
 										},
 										{
@@ -1059,7 +1070,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowFive.tempoOne, workout.dayFour.rowFive.tempoTwo, workout.dayFour.rowFive.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowFive.tempoOne, workout.dayFour.rowFive.tempoTwo, workout.dayFour.rowFive.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1086,7 +1097,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowSix.max, workout.dayOne.rowSix.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowSix.max, workout.dayOne.rowSix.exercise),
 											style: 'weight'
 										},
 										{
@@ -1098,7 +1109,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowSix.tempoOne, workout.dayOne.rowSix.tempoTwo, workout.dayOne.rowSix.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowSix.tempoOne, workout.dayOne.rowSix.tempoTwo, workout.dayOne.rowSix.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1122,7 +1133,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowSix.max, workout.dayTwo.rowSix.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowSix.max, workout.dayTwo.rowSix.exercise),
 											style: 'weight'
 										},
 										{
@@ -1134,7 +1145,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowSix.tempoOne, workout.dayTwo.rowSix.tempoTwo, workout.dayTwo.rowSix.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowSix.tempoOne, workout.dayTwo.rowSix.tempoTwo, workout.dayTwo.rowSix.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1158,7 +1169,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowSix.max, workout.dayThree.rowSix.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowSix.max, workout.dayThree.rowSix.exercise),
 											style: 'weight'
 										},
 										{
@@ -1170,7 +1181,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowSix.tempoOne, workout.dayThree.rowSix.tempoTwo, workout.dayThree.rowSix.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowSix.tempoOne, workout.dayThree.rowSix.tempoTwo, workout.dayThree.rowSix.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1194,7 +1205,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowSix.max, workout.dayFour.rowSix.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowSix.max, workout.dayFour.rowSix.exercise),
 											style: 'weight'
 										},
 										{
@@ -1206,7 +1217,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowSix.tempoOne, workout.dayFour.rowSix.tempoTwo, workout.dayFour.rowSix.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowSix.tempoOne, workout.dayFour.rowSix.tempoTwo, workout.dayFour.rowSix.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1233,7 +1244,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowSeven.max, workout.dayOne.rowSeven.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowSeven.max, workout.dayOne.rowSeven.exercise),
 											style: 'weight'
 										},
 										{
@@ -1245,7 +1256,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowSeven.tempoOne, workout.dayOne.rowSeven.tempoTwo, workout.dayOne.rowSeven.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowSeven.tempoOne, workout.dayOne.rowSeven.tempoTwo, workout.dayOne.rowSeven.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1269,7 +1280,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowSeven.max, workout.dayTwo.rowSeven.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowSeven.max, workout.dayTwo.rowSeven.exercise),
 											style: 'weight'
 										},
 										{
@@ -1281,7 +1292,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowSeven.tempoOne, workout.dayTwo.rowSeven.tempoTwo, workout.dayTwo.rowSeven.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowSeven.tempoOne, workout.dayTwo.rowSeven.tempoTwo, workout.dayTwo.rowSeven.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1305,7 +1316,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowSeven.max, workout.dayThree.rowSeven.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowSeven.max, workout.dayThree.rowSeven.exercise),
 											style: 'weight'
 										},
 										{
@@ -1317,7 +1328,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowSeven.tempoOne, workout.dayThree.rowSeven.tempoTwo, workout.dayThree.rowSeven.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowSeven.tempoOne, workout.dayThree.rowSeven.tempoTwo, workout.dayThree.rowSeven.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1341,7 +1352,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowSeven.max, workout.dayFour.rowSeven.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowSeven.max, workout.dayFour.rowSeven.exercise),
 											style: 'weight'
 										},
 										{
@@ -1353,7 +1364,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowSeven.tempoOne, workout.dayFour.rowSeven.tempoTwo, workout.dayFour.rowSeven.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowSeven.tempoOne, workout.dayFour.rowSeven.tempoTwo, workout.dayFour.rowSeven.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1380,7 +1391,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowEight.max, workout.dayOne.rowEight.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowEight.max, workout.dayOne.rowEight.exercise),
 											style: 'weight'
 										},
 										{
@@ -1392,7 +1403,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowEight.tempoOne, workout.dayOne.rowEight.tempoTwo, workout.dayOne.rowEight.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowEight.tempoOne, workout.dayOne.rowEight.tempoTwo, workout.dayOne.rowEight.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1416,7 +1427,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowEight.max, workout.dayTwo.rowEight.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowEight.max, workout.dayTwo.rowEight.exercise),
 											style: 'weight'
 										},
 										{
@@ -1428,7 +1439,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowEight.tempoOne, workout.dayTwo.rowEight.tempoTwo, workout.dayTwo.rowEight.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowEight.tempoOne, workout.dayTwo.rowEight.tempoTwo, workout.dayTwo.rowEight.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1452,7 +1463,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowEight.max, workout.dayThree.rowEight.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowEight.max, workout.dayThree.rowEight.exercise),
 											style: 'weight'
 										},
 										{
@@ -1464,7 +1475,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowEight.tempoOne, workout.dayThree.rowEight.tempoTwo, workout.dayThree.rowEight.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowEight.tempoOne, workout.dayThree.rowEight.tempoTwo, workout.dayThree.rowEight.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1488,7 +1499,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowEight.max, workout.dayFour.rowEight.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowEight.max, workout.dayFour.rowEight.exercise),
 											style: 'weight'
 										},
 										{
@@ -1500,7 +1511,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowEight.tempoOne, workout.dayFour.rowEight.tempoTwo, workout.dayFour.rowEight.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowEight.tempoOne, workout.dayFour.rowEight.tempoTwo, workout.dayFour.rowEight.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1527,7 +1538,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowNine.max, workout.dayOne.rowNine.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowNine.max, workout.dayOne.rowNine.exercise),
 											style: 'weight'
 										},
 										{
@@ -1539,7 +1550,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowNine.tempoOne, workout.dayOne.rowNine.tempoTwo, workout.dayOne.rowNine.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowNine.tempoOne, workout.dayOne.rowNine.tempoTwo, workout.dayOne.rowNine.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1563,7 +1574,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowNine.max, workout.dayTwo.rowNine.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowNine.max, workout.dayTwo.rowNine.exercise),
 											style: 'weight'
 										},
 										{
@@ -1575,7 +1586,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowNine.tempoOne, workout.dayTwo.rowNine.tempoTwo, workout.dayTwo.rowNine.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowNine.tempoOne, workout.dayTwo.rowNine.tempoTwo, workout.dayTwo.rowNine.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1599,7 +1610,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowNine.max, workout.dayThree.rowNine.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowNine.max, workout.dayThree.rowNine.exercise),
 											style: 'weight'
 										},
 										{
@@ -1611,7 +1622,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowNine.tempoOne, workout.dayThree.rowNine.tempoTwo, workout.dayThree.rowNine.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowNine.tempoOne, workout.dayThree.rowNine.tempoTwo, workout.dayThree.rowNine.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1635,7 +1646,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowNine.max, workout.dayFour.rowNine.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowNine.max, workout.dayFour.rowNine.exercise),
 											style: 'weight'
 										},
 										{
@@ -1647,7 +1658,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowNine.tempoOne, workout.dayFour.rowNine.tempoTwo, workout.dayFour.rowNine.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowNine.tempoOne, workout.dayFour.rowNine.tempoTwo, workout.dayFour.rowNine.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1674,7 +1685,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowTen.max, workout.dayOne.rowTen.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowTen.max, workout.dayOne.rowTen.exercise),
 											style: 'weight'
 										},
 										{
@@ -1686,7 +1697,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowTen.tempoOne, workout.dayOne.rowTen.tempoTwo, workout.dayOne.rowTen.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowTen.tempoOne, workout.dayOne.rowTen.tempoTwo, workout.dayOne.rowTen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1710,7 +1721,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowTen.max, workout.dayTwo.rowTen.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowTen.max, workout.dayTwo.rowTen.exercise),
 											style: 'weight'
 										},
 										{
@@ -1722,7 +1733,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowTen.tempoOne, workout.dayTwo.rowTen.tempoTwo, workout.dayTwo.rowTen.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowTen.tempoOne, workout.dayTwo.rowTen.tempoTwo, workout.dayTwo.rowTen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1746,7 +1757,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowTen.max, workout.dayThree.rowTen.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowTen.max, workout.dayThree.rowTen.exercise),
 											style: 'weight'
 										},
 										{
@@ -1758,7 +1769,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowTen.tempoOne, workout.dayThree.rowTen.tempoTwo, workout.dayThree.rowTen.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowTen.tempoOne, workout.dayThree.rowTen.tempoTwo, workout.dayThree.rowTen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1782,7 +1793,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowTen.max, workout.dayFour.rowTen.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowTen.max, workout.dayFour.rowTen.exercise),
 											style: 'weight'
 										},
 										{
@@ -1794,7 +1805,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowTen.tempoOne, workout.dayFour.rowTen.tempoTwo, workout.dayFour.rowTen.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowTen.tempoOne, workout.dayFour.rowTen.tempoTwo, workout.dayFour.rowTen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1821,7 +1832,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowEleven.max, workout.dayOne.rowEleven.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowEleven.max, workout.dayOne.rowEleven.exercise),
 											style: 'weight'
 										},
 										{
@@ -1833,7 +1844,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowEleven.tempoOne, workout.dayOne.rowEleven.tempoTwo, workout.dayOne.rowEleven.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowEleven.tempoOne, workout.dayOne.rowEleven.tempoTwo, workout.dayOne.rowEleven.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1857,7 +1868,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowEleven.max, workout.dayTwo.rowEleven.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowEleven.max, workout.dayTwo.rowEleven.exercise),
 											style: 'weight'
 										},
 										{
@@ -1869,7 +1880,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowEleven.tempoOne, workout.dayTwo.rowEleven.tempoTwo, workout.dayTwo.rowEleven.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowEleven.tempoOne, workout.dayTwo.rowEleven.tempoTwo, workout.dayTwo.rowEleven.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 									},
@@ -1893,7 +1904,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowEleven.max, workout.dayThree.rowEleven.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowEleven.max, workout.dayThree.rowEleven.exercise),
 											style: 'weight'
 										},
 										{
@@ -1905,7 +1916,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowEleven.tempoOne, workout.dayThree.rowEleven.tempoTwo, workout.dayThree.rowEleven.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowEleven.tempoOne, workout.dayThree.rowEleven.tempoTwo, workout.dayThree.rowEleven.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1929,7 +1940,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowEleven.max, workout.dayFour.rowEleven.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowEleven.max, workout.dayFour.rowEleven.exercise),
 											style: 'weight'
 										},
 										{
@@ -1941,7 +1952,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowEleven.tempoOne, workout.dayFour.rowEleven.tempoTwo, workout.dayFour.rowEleven.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowEleven.tempoOne, workout.dayFour.rowEleven.tempoTwo, workout.dayFour.rowEleven.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -1968,7 +1979,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowTwelve.max, workout.dayOne.rowTwelve.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowTwelve.max, workout.dayOne.rowTwelve.exercise),
 											style: 'weight'
 										},
 										{
@@ -1980,7 +1991,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowTwelve.tempoOne, workout.dayOne.rowTwelve.tempoTwo, workout.dayOne.rowTwelve.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowTwelve.tempoOne, workout.dayOne.rowTwelve.tempoTwo, workout.dayOne.rowTwelve.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2004,7 +2015,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowTwelve.max, workout.dayTwo.rowTwelve.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowTwelve.max, workout.dayTwo.rowTwelve.exercise),
 											style: 'weight'
 										},
 										{
@@ -2016,7 +2027,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowTwelve.tempoOne, workout.dayTwo.rowTwelve.tempoTwo, workout.dayTwo.rowTwelve.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowTwelve.tempoOne, workout.dayTwo.rowTwelve.tempoTwo, workout.dayTwo.rowTwelve.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2040,7 +2051,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowTwelve.max, workout.dayThree.rowTwelve.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowTwelve.max, workout.dayThree.rowTwelve.exercise),
 											style: 'weight'
 										},
 										{
@@ -2052,7 +2063,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowTwelve.tempoOne, workout.dayThree.rowTwelve.tempoTwo, workout.dayThree.rowTwelve.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowTwelve.tempoOne, workout.dayThree.rowTwelve.tempoTwo, workout.dayThree.rowTwelve.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2076,7 +2087,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowTwelve.max, workout.dayFour.rowTwelve.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowTwelve.max, workout.dayFour.rowTwelve.exercise),
 											style: 'weight'
 										},
 										{
@@ -2088,7 +2099,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowTwelve.tempoOne, workout.dayFour.rowTwelve.tempoTwo, workout.dayFour.rowTwelve.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowTwelve.tempoOne, workout.dayFour.rowTwelve.tempoTwo, workout.dayFour.rowTwelve.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2115,7 +2126,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowThirteen.max, workout.dayOne.rowThirteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowThirteen.max, workout.dayOne.rowThirteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2127,7 +2138,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowThirteen.tempoOne, workout.dayOne.rowThirteen.tempoTwo, workout.dayOne.rowThirteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowThirteen.tempoOne, workout.dayOne.rowThirteen.tempoTwo, workout.dayOne.rowThirteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2151,7 +2162,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowThirteen.max, workout.dayTwo.rowThirteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowThirteen.max, workout.dayTwo.rowThirteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2163,7 +2174,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowThirteen.tempoOne, workout.dayTwo.rowThirteen.tempoTwo, workout.dayTwo.rowThirteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowThirteen.tempoOne, workout.dayTwo.rowThirteen.tempoTwo, workout.dayTwo.rowThirteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2187,7 +2198,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowThirteen.max, workout.dayThree.rowThirteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowThirteen.max, workout.dayThree.rowThirteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2199,7 +2210,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowThirteen.tempoOne, workout.dayThree.rowThirteen.tempoTwo, workout.dayThree.rowThirteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowThirteen.tempoOne, workout.dayThree.rowThirteen.tempoTwo, workout.dayThree.rowThirteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2223,7 +2234,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowThirteen.max, workout.dayFour.rowThirteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowThirteen.max, workout.dayFour.rowThirteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2235,7 +2246,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowThirteen.tempoOne, workout.dayFour.rowThirteen.tempoTwo, workout.dayFour.rowThirteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowThirteen.tempoOne, workout.dayFour.rowThirteen.tempoTwo, workout.dayFour.rowThirteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2262,7 +2273,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowFourteen.max, workout.dayOne.rowFourteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowFourteen.max, workout.dayOne.rowFourteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2274,7 +2285,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowFourteen.tempoOne, workout.dayOne.rowFourteen.tempoTwo, workout.dayOne.rowFourteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowFourteen.tempoOne, workout.dayOne.rowFourteen.tempoTwo, workout.dayOne.rowFourteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2298,7 +2309,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowFourteen.max, workout.dayTwo.rowFourteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowFourteen.max, workout.dayTwo.rowFourteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2310,7 +2321,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowFourteen.tempoOne, workout.dayTwo.rowFourteen.tempoTwo, workout.dayTwo.rowFourteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowFourteen.tempoOne, workout.dayTwo.rowFourteen.tempoTwo, workout.dayTwo.rowFourteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2334,7 +2345,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowFourteen.max, workout.dayThree.rowFourteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowFourteen.max, workout.dayThree.rowFourteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2346,7 +2357,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowFourteen.tempoOne, workout.dayThree.rowFourteen.tempoTwo, workout.dayThree.rowFourteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowFourteen.tempoOne, workout.dayThree.rowFourteen.tempoTwo, workout.dayThree.rowFourteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2370,7 +2381,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowFourteen.max, workout.dayFour.rowFourteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowFourteen.max, workout.dayFour.rowFourteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2382,7 +2393,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											 // Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowFourteen.tempoOne, workout.dayFour.rowFourteen.tempoTwo, workout.dayFour.rowFourteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowFourteen.tempoOne, workout.dayFour.rowFourteen.tempoTwo, workout.dayFour.rowFourteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2409,7 +2420,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowFifteen.max, workout.dayOne.rowFifteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowFifteen.max, workout.dayOne.rowFifteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2421,7 +2432,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowFifteen.tempoOne, workout.dayOne.rowFifteen.tempoTwo, workout.dayOne.rowFifteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowFifteen.tempoOne, workout.dayOne.rowFifteen.tempoTwo, workout.dayOne.rowFifteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2445,7 +2456,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowFifteen.max, workout.dayTwo.rowFifteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowFifteen.max, workout.dayTwo.rowFifteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2457,7 +2468,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowFifteen.tempoOne, workout.dayTwo.rowFifteen.tempoTwo, workout.dayTwo.rowFifteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowFifteen.tempoOne, workout.dayTwo.rowFifteen.tempoTwo, workout.dayTwo.rowFifteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2481,7 +2492,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowFifteen.max, workout.dayThree.rowFifteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowFifteen.max, workout.dayThree.rowFifteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2493,7 +2504,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowFifteen.tempoOne, workout.dayThree.rowFifteen.tempoTwo, workout.dayThree.rowFifteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowFifteen.tempoOne, workout.dayThree.rowFifteen.tempoTwo, workout.dayThree.rowFifteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2517,7 +2528,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowFifteen.max, workout.dayFour.rowFifteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowFifteen.max, workout.dayFour.rowFifteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2529,7 +2540,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowFifteen.tempoOne, workout.dayFour.rowFifteen.tempoTwo, workout.dayFour.rowFifteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowFifteen.tempoOne, workout.dayFour.rowFifteen.tempoTwo, workout.dayFour.rowFifteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2556,7 +2567,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowSixteen.max, workout.dayOne.rowSixteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowSixteen.max, workout.dayOne.rowSixteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2568,7 +2579,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowSixteen.tempoOne, workout.dayOne.rowSixteen.tempoTwo, workout.dayOne.rowSixteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowSixteen.tempoOne, workout.dayOne.rowSixteen.tempoTwo, workout.dayOne.rowSixteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2592,7 +2603,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowSixteen.max, workout.dayTwo.rowSixteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowSixteen.max, workout.dayTwo.rowSixteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2604,7 +2615,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowSixteen.tempoOne, workout.dayTwo.rowSixteen.tempoTwo, workout.dayTwo.rowSixteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowSixteen.tempoOne, workout.dayTwo.rowSixteen.tempoTwo, workout.dayTwo.rowSixteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2628,7 +2639,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowSixteen.max, workout.dayThree.rowSixteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowSixteen.max, workout.dayThree.rowSixteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2640,7 +2651,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowSixteen.tempoOne, workout.dayThree.rowSixteen.tempoTwo, workout.dayThree.rowSixteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowSixteen.tempoOne, workout.dayThree.rowSixteen.tempoTwo, workout.dayThree.rowSixteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2664,7 +2675,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowSixteen.max, workout.dayFour.rowSixteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowSixteen.max, workout.dayFour.rowSixteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2676,7 +2687,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowSixteen.tempoOne, workout.dayFour.rowSixteen.tempoTwo, workout.dayFour.rowSixteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowSixteen.tempoOne, workout.dayFour.rowSixteen.tempoTwo, workout.dayFour.rowSixteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2703,7 +2714,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowSeventeen.max, workout.dayOne.rowSeventeen.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowSeventeen.max, workout.dayOne.rowSeventeen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2715,7 +2726,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowSeventeen.tempoOne, workout.dayOne.rowSeventeen.tempoTwo, workout.dayOne.rowSeventeen.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowSeventeen.tempoOne, workout.dayOne.rowSeventeen.tempoTwo, workout.dayOne.rowSeventeen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2739,7 +2750,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowSeventeen.max, workout.dayTwo.rowSeventeen.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowSeventeen.max, workout.dayTwo.rowSeventeen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2751,7 +2762,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowSeventeen.tempoOne, workout.dayTwo.rowSeventeen.tempoTwo, workout.dayTwo.rowSeventeen.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowSeventeen.tempoOne, workout.dayTwo.rowSeventeen.tempoTwo, workout.dayTwo.rowSeventeen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2775,7 +2786,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowSeventeen.max, workout.dayThree.rowSeventeen.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowSeventeen.max, workout.dayThree.rowSeventeen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2787,7 +2798,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowSeventeen.tempoOne, workout.dayThree.rowSeventeen.tempoTwo, workout.dayThree.rowSeventeen.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowSeventeen.tempoOne, workout.dayThree.rowSeventeen.tempoTwo, workout.dayThree.rowSeventeen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2811,7 +2822,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowSeventeen.max, workout.dayFour.rowSeventeen.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowSeventeen.max, workout.dayFour.rowSeventeen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2823,7 +2834,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowSeventeen.tempoOne, workout.dayFour.rowSeventeen.tempoTwo, workout.dayFour.rowSeventeen.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowSeventeen.tempoOne, workout.dayFour.rowSeventeen.tempoTwo, workout.dayFour.rowSeventeen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2850,7 +2861,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowEighteen.max, workout.dayOne.rowEighteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowEighteen.max, workout.dayOne.rowEighteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2862,7 +2873,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowEighteen.tempoOne, workout.dayOne.rowEighteen.tempoTwo, workout.dayOne.rowEighteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowEighteen.tempoOne, workout.dayOne.rowEighteen.tempoTwo, workout.dayOne.rowEighteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2886,7 +2897,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowEighteen.max, workout.dayTwo.rowEighteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowEighteen.max, workout.dayTwo.rowEighteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2898,7 +2909,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowEighteen.tempoOne, workout.dayTwo.rowEighteen.tempoTwo, workout.dayTwo.rowEighteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowEighteen.tempoOne, workout.dayTwo.rowEighteen.tempoTwo, workout.dayTwo.rowEighteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2922,7 +2933,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowEighteen.max, workout.dayThree.rowEighteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowEighteen.max, workout.dayThree.rowEighteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2934,7 +2945,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowEighteen.tempoOne, workout.dayThree.rowEighteen.tempoTwo, workout.dayThree.rowEighteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowEighteen.tempoOne, workout.dayThree.rowEighteen.tempoTwo, workout.dayThree.rowEighteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2958,7 +2969,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowEighteen.max, workout.dayFour.rowEighteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowEighteen.max, workout.dayFour.rowEighteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -2970,7 +2981,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowEighteen.tempoOne, workout.dayFour.rowEighteen.tempoTwo, workout.dayFour.rowEighteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowEighteen.tempoOne, workout.dayFour.rowEighteen.tempoTwo, workout.dayFour.rowEighteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -2997,7 +3008,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowNineteen.max, workout.dayOne.rowNineteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowNineteen.max, workout.dayOne.rowNineteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -3009,7 +3020,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowNineteen.tempoOne, workout.dayOne.rowNineteen.tempoTwo, workout.dayOne.rowNineteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowNineteen.tempoOne, workout.dayOne.rowNineteen.tempoTwo, workout.dayOne.rowNineteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3033,7 +3044,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowNineteen.max, workout.dayTwo.rowNineteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowNineteen.max, workout.dayTwo.rowNineteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -3045,7 +3056,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowNineteen.tempoOne, workout.dayTwo.rowNineteen.tempoTwo, workout.dayTwo.rowNineteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowNineteen.tempoOne, workout.dayTwo.rowNineteen.tempoTwo, workout.dayTwo.rowNineteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3069,7 +3080,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowNineteen.max, workout.dayThree.rowNineteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowNineteen.max, workout.dayThree.rowNineteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -3081,7 +3092,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowNineteen.tempoOne, workout.dayThree.rowNineteen.tempoTwo, workout.dayThree.rowNineteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowNineteen.tempoOne, workout.dayThree.rowNineteen.tempoTwo, workout.dayThree.rowNineteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3105,7 +3116,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowNineteen.max, workout.dayFour.rowNineteen.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowNineteen.max, workout.dayFour.rowNineteen.exercise),
 											style: 'weight'
 										},
 										{
@@ -3117,7 +3128,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowNineteen.tempoOne, workout.dayFour.rowNineteen.tempoTwo, workout.dayFour.rowNineteen.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowNineteen.tempoOne, workout.dayFour.rowNineteen.tempoTwo, workout.dayFour.rowNineteen.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3144,7 +3155,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowTwenty.max, workout.dayOne.rowTwenty.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowTwenty.max, workout.dayOne.rowTwenty.exercise),
 											style: 'weight'
 										},
 										{
@@ -3156,7 +3167,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowTwenty.tempoOne, workout.dayOne.rowTwenty.tempoTwo, workout.dayOne.rowTwenty.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowTwenty.tempoOne, workout.dayOne.rowTwenty.tempoTwo, workout.dayOne.rowTwenty.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3180,7 +3191,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowTwenty.max, workout.dayTwo.rowTwenty.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowTwenty.max, workout.dayTwo.rowTwenty.exercise),
 											style: 'weight'
 										},
 										{
@@ -3192,7 +3203,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowTwenty.tempoOne, workout.dayTwo.rowTwenty.tempoTwo, workout.dayTwo.rowTwenty.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowTwenty.tempoOne, workout.dayTwo.rowTwenty.tempoTwo, workout.dayTwo.rowTwenty.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3216,7 +3227,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowTwenty.max, workout.dayThree.rowTwenty.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowTwenty.max, workout.dayThree.rowTwenty.exercise),
 											style: 'weight'
 										},
 										{
@@ -3228,7 +3239,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowTwenty.tempoOne, workout.dayThree.rowTwenty.tempoTwo, workout.dayThree.rowTwenty.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowTwenty.tempoOne, workout.dayThree.rowTwenty.tempoTwo, workout.dayThree.rowTwenty.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3252,7 +3263,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowTwenty.max, workout.dayFour.rowTwenty.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowTwenty.max, workout.dayFour.rowTwenty.exercise),
 											style: 'weight'
 										},
 										{
@@ -3264,7 +3275,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowTwenty.tempoOne, workout.dayFour.rowTwenty.tempoTwo, workout.dayFour.rowTwenty.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowTwenty.tempoOne, workout.dayFour.rowTwenty.tempoTwo, workout.dayFour.rowTwenty.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3291,7 +3302,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowTwentyOne.max, workout.dayOne.rowTwentyOne.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowTwentyOne.max, workout.dayOne.rowTwentyOne.exercise),
 											style: 'weight'
 										},
 										{
@@ -3303,7 +3314,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowTwentyOne.tempoOne, workout.dayOne.rowTwentyOne.tempoTwo, workout.dayOne.rowTwentyOne.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowTwentyOne.tempoOne, workout.dayOne.rowTwentyOne.tempoTwo, workout.dayOne.rowTwentyOne.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3327,7 +3338,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowTwentyOne.max, workout.dayTwo.rowTwentyOne.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowTwentyOne.max, workout.dayTwo.rowTwentyOne.exercise),
 											style: 'weight'
 										},
 										{
@@ -3339,7 +3350,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowTwentyOne.tempoOne, workout.dayTwo.rowTwentyOne.tempoTwo, workout.dayTwo.rowTwentyOne.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowTwentyOne.tempoOne, workout.dayTwo.rowTwentyOne.tempoTwo, workout.dayTwo.rowTwentyOne.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3363,7 +3374,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowTwentyOne.max, workout.dayThree.rowTwentyOne.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowTwentyOne.max, workout.dayThree.rowTwentyOne.exercise),
 											style: 'weight'
 										},
 										{
@@ -3375,7 +3386,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowTwentyOne.tempoOne, workout.dayThree.rowTwentyOne.tempoTwo, workout.dayThree.rowTwentyOne.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowTwentyOne.tempoOne, workout.dayThree.rowTwentyOne.tempoTwo, workout.dayThree.rowTwentyOne.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3399,7 +3410,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowTwentyOne.max, workout.dayFour.rowTwentyOne.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowTwentyOne.max, workout.dayFour.rowTwentyOne.exercise),
 											style: 'weight'
 										},
 										{
@@ -3411,7 +3422,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowTwentyOne.tempoOne, workout.dayFour.rowTwentyOne.tempoTwo, workout.dayFour.rowTwentyOne.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowTwentyOne.tempoOne, workout.dayFour.rowTwentyOne.tempoTwo, workout.dayFour.rowTwentyOne.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3438,7 +3449,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowTwentyTwo.max, workout.dayOne.rowTwentyTwo.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowTwentyTwo.max, workout.dayOne.rowTwentyTwo.exercise),
 											style: 'weight'
 										},
 										{
@@ -3450,7 +3461,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowTwentyTwo.tempoOne, workout.dayOne.rowTwentyTwo.tempoTwo, workout.dayOne.rowTwentyTwo.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowTwentyTwo.tempoOne, workout.dayOne.rowTwentyTwo.tempoTwo, workout.dayOne.rowTwentyTwo.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3474,7 +3485,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowTwentyTwo.max, workout.dayTwo.rowTwentyTwo.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowTwentyTwo.max, workout.dayTwo.rowTwentyTwo.exercise),
 											style: 'weight'
 										},
 										{
@@ -3486,7 +3497,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowTwentyTwo.tempoOne, workout.dayTwo.rowTwentyTwo.tempoTwo, workout.dayTwo.rowTwentyTwo.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowTwentyTwo.tempoOne, workout.dayTwo.rowTwentyTwo.tempoTwo, workout.dayTwo.rowTwentyTwo.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3510,7 +3521,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowTwentyTwo.max, workout.dayThree.rowTwentyTwo.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowTwentyTwo.max, workout.dayThree.rowTwentyTwo.exercise),
 											style: 'weight'
 										},
 										{
@@ -3522,7 +3533,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowTwentyTwo.tempoOne, workout.dayThree.rowTwentyTwo.tempoTwo, workout.dayThree.rowTwentyTwo.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowTwentyTwo.tempoOne, workout.dayThree.rowTwentyTwo.tempoTwo, workout.dayThree.rowTwentyTwo.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3546,7 +3557,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowTwentyTwo.max, workout.dayFour.rowTwentyTwo.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowTwentyTwo.max, workout.dayFour.rowTwentyTwo.exercise),
 											style: 'weight'
 										},
 										{
@@ -3558,7 +3569,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowTwentyTwo.tempoOne, workout.dayFour.rowTwentyTwo.tempoTwo, workout.dayFour.rowTwentyTwo.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowTwentyTwo.tempoOne, workout.dayFour.rowTwentyTwo.tempoTwo, workout.dayFour.rowTwentyTwo.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3585,7 +3596,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowTwentyThree.max, workout.dayOne.rowTwentyThree.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowTwentyThree.max, workout.dayOne.rowTwentyThree.exercise),
 											style: 'weight'
 										},
 										{
@@ -3597,7 +3608,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowTwentyThree.tempoOne, workout.dayOne.rowTwentyThree.tempoTwo, workout.dayOne.rowTwentyThree.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowTwentyThree.tempoOne, workout.dayOne.rowTwentyThree.tempoTwo, workout.dayOne.rowTwentyThree.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3621,7 +3632,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowTwentyThree.max, workout.dayTwo.rowTwentyThree.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowTwentyThree.max, workout.dayTwo.rowTwentyThree.exercise),
 											style: 'weight'
 										},
 										{
@@ -3633,7 +3644,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowTwentyThree.tempoOne, workout.dayTwo.rowTwentyThree.tempoTwo, workout.dayTwo.rowTwentyThree.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowTwentyThree.tempoOne, workout.dayTwo.rowTwentyThree.tempoTwo, workout.dayTwo.rowTwentyThree.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3657,7 +3668,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowTwentyThree.max, workout.dayThree.rowTwentyThree.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowTwentyThree.max, workout.dayThree.rowTwentyThree.exercise),
 											style: 'weight'
 										},
 										{
@@ -3669,7 +3680,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowTwentyThree.tempoOne, workout.dayThree.rowTwentyThree.tempoTwo, workout.dayThree.rowTwentyThree.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowTwentyThree.tempoOne, workout.dayThree.rowTwentyThree.tempoTwo, workout.dayThree.rowTwentyThree.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3693,7 +3704,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowTwentyThree.max, workout.dayFour.rowTwentyThree.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowTwentyThree.max, workout.dayFour.rowTwentyThree.exercise),
 											style: 'weight'
 										},
 										{
@@ -3705,7 +3716,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowTwentyThree.tempoOne, workout.dayFour.rowTwentyThree.tempoTwo, workout.dayFour.rowTwentyThree.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowTwentyThree.tempoOne, workout.dayFour.rowTwentyThree.tempoTwo, workout.dayFour.rowTwentyThree.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3732,7 +3743,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowTwentyFour.max, workout.dayOne.rowTwentyFour.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowTwentyFour.max, workout.dayOne.rowTwentyFour.exercise),
 											style: 'weight'
 										},
 										{
@@ -3744,7 +3755,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowTwentyFour.tempoOne, workout.dayOne.rowTwentyFour.tempoTwo, workout.dayOne.rowTwentyFour.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowTwentyFour.tempoOne, workout.dayOne.rowTwentyFour.tempoTwo, workout.dayOne.rowTwentyFour.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3768,7 +3779,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowTwentyFour.max, workout.dayTwo.rowTwentyFour.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowTwentyFour.max, workout.dayTwo.rowTwentyFour.exercise),
 											style: 'weight'
 										},
 										{
@@ -3780,7 +3791,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowTwentyFour.tempoOne, workout.dayTwo.rowTwentyFour.tempoTwo, workout.dayTwo.rowTwentyFour.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowTwentyFour.tempoOne, workout.dayTwo.rowTwentyFour.tempoTwo, workout.dayTwo.rowTwentyFour.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3804,7 +3815,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowTwentyFour.max, workout.dayThree.rowTwentyFour.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowTwentyFour.max, workout.dayThree.rowTwentyFour.exercise),
 											style: 'weight'
 										},
 										{
@@ -3816,7 +3827,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowTwentyFour.tempoOne, workout.dayThree.rowTwentyFour.tempoTwo, workout.dayThree.rowTwentyFour.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowTwentyFour.tempoOne, workout.dayThree.rowTwentyFour.tempoTwo, workout.dayThree.rowTwentyFour.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3840,7 +3851,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowTwentyFour.max, workout.dayFour.rowTwentyFour.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowTwentyFour.max, workout.dayFour.rowTwentyFour.exercise),
 											style: 'weight'
 										},
 										{
@@ -3852,7 +3863,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowTwentyFour.tempoOne, workout.dayFour.rowTwentyFour.tempoTwo, workout.dayFour.rowTwentyFour.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowTwentyFour.tempoOne, workout.dayFour.rowTwentyFour.tempoTwo, workout.dayFour.rowTwentyFour.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3879,7 +3890,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowTwentyFive.max, workout.dayOne.rowTwentyFive.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowTwentyFive.max, workout.dayOne.rowTwentyFive.exercise),
 											style: 'weight'
 										},
 										{
@@ -3891,7 +3902,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowTwentyFive.tempoOne, workout.dayOne.rowTwentyFive.tempoTwo, workout.dayOne.rowTwentyFive.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowTwentyFive.tempoOne, workout.dayOne.rowTwentyFive.tempoTwo, workout.dayOne.rowTwentyFive.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3915,7 +3926,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowTwentyFive.max, workout.dayTwo.rowTwentyFive.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowTwentyFive.max, workout.dayTwo.rowTwentyFive.exercise),
 											style: 'weight'
 										},
 										{
@@ -3927,7 +3938,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowTwentyFive.tempoOne, workout.dayTwo.rowTwentyFive.tempoTwo, workout.dayTwo.rowTwentyFive.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowTwentyFive.tempoOne, workout.dayTwo.rowTwentyFive.tempoTwo, workout.dayTwo.rowTwentyFive.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3951,7 +3962,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowTwentyFive.max, workout.dayThree.rowTwentyFive.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowTwentyFive.max, workout.dayThree.rowTwentyFive.exercise),
 											style: 'weight'
 										},
 										{
@@ -3963,7 +3974,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowTwentyFive.tempoOne, workout.dayThree.rowTwentyFive.tempoTwo, workout.dayThree.rowTwentyFive.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowTwentyFive.tempoOne, workout.dayThree.rowTwentyFive.tempoTwo, workout.dayThree.rowTwentyFive.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -3987,7 +3998,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowTwentyFive.max, workout.dayFour.rowTwentyFive.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowTwentyFive.max, workout.dayFour.rowTwentyFive.exercise),
 											style: 'weight'
 										},
 										{
@@ -3999,7 +4010,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowTwentyFive.tempoOne, workout.dayFour.rowTwentyFive.tempoTwo, workout.dayFour.rowTwentyFive.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowTwentyFive.tempoOne, workout.dayFour.rowTwentyFive.tempoTwo, workout.dayFour.rowTwentyFive.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4026,7 +4037,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowTwentySix.max, workout.dayOne.rowTwentySix.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowTwentySix.max, workout.dayOne.rowTwentySix.exercise),
 											style: 'weight'
 										},
 										{
@@ -4038,7 +4049,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowTwentySix.tempoOne, workout.dayOne.rowTwentySix.tempoTwo, workout.dayOne.rowTwentySix.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowTwentySix.tempoOne, workout.dayOne.rowTwentySix.tempoTwo, workout.dayOne.rowTwentySix.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4062,7 +4073,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowTwentySix.max, workout.dayTwo.rowTwentySix.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowTwentySix.max, workout.dayTwo.rowTwentySix.exercise),
 											style: 'weight'
 										},
 										{
@@ -4074,7 +4085,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowTwentySix.tempoOne, workout.dayTwo.rowTwentySix.tempoTwo, workout.dayTwo.rowTwentySix.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowTwentySix.tempoOne, workout.dayTwo.rowTwentySix.tempoTwo, workout.dayTwo.rowTwentySix.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4098,7 +4109,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowTwentySix.max, workout.dayThree.rowTwentySix.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowTwentySix.max, workout.dayThree.rowTwentySix.exercise),
 											style: 'weight'
 										},
 										{
@@ -4110,7 +4121,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowTwentySix.tempoOne, workout.dayThree.rowTwentySix.tempoTwo, workout.dayThree.rowTwentySix.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowTwentySix.tempoOne, workout.dayThree.rowTwentySix.tempoTwo, workout.dayThree.rowTwentySix.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4134,7 +4145,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowTwentySix.max, workout.dayFour.rowTwentySix.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowTwentySix.max, workout.dayFour.rowTwentySix.exercise),
 											style: 'weight'
 										},
 										{
@@ -4146,7 +4157,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowTwentySix.tempoOne, workout.dayFour.rowTwentySix.tempoTwo, workout.dayFour.rowTwentySix.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowTwentySix.tempoOne, workout.dayFour.rowTwentySix.tempoTwo, workout.dayFour.rowTwentySix.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4173,7 +4184,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowTwentySeven.max, workout.dayOne.rowTwentySeven.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowTwentySeven.max, workout.dayOne.rowTwentySeven.exercise),
 											style: 'weight'
 										},
 										{
@@ -4185,7 +4196,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowTwentySeven.tempoOne, workout.dayOne.rowTwentySeven.tempoTwo, workout.dayOne.rowTwentySeven.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowTwentySeven.tempoOne, workout.dayOne.rowTwentySeven.tempoTwo, workout.dayOne.rowTwentySeven.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4209,7 +4220,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowTwentySeven.max, workout.dayTwo.rowTwentySeven.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowTwentySeven.max, workout.dayTwo.rowTwentySeven.exercise),
 											style: 'weight'
 										},
 										{
@@ -4221,7 +4232,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowTwentySeven.tempoOne, workout.dayTwo.rowTwentySeven.tempoTwo, workout.dayTwo.rowTwentySeven.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowTwentySeven.tempoOne, workout.dayTwo.rowTwentySeven.tempoTwo, workout.dayTwo.rowTwentySeven.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4245,7 +4256,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowTwentySeven.max, workout.dayThree.rowTwentySeven.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowTwentySeven.max, workout.dayThree.rowTwentySeven.exercise),
 											style: 'weight'
 										},
 										{
@@ -4257,7 +4268,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowTwentySeven.tempoOne, workout.dayThree.rowTwentySeven.tempoTwo, workout.dayThree.rowTwentySeven.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowTwentySeven.tempoOne, workout.dayThree.rowTwentySeven.tempoTwo, workout.dayThree.rowTwentySeven.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4281,7 +4292,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowTwentySeven.max,  workout.dayFour.rowTwentySeven.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowTwentySeven.max,  workout.dayFour.rowTwentySeven.exercise),
 											style: 'weight'
 										},
 										{
@@ -4293,7 +4304,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowTwentySeven.tempoOne, workout.dayFour.rowTwentySeven.tempoTwo, workout.dayFour.rowTwentySeven.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowTwentySeven.tempoOne, workout.dayFour.rowTwentySeven.tempoTwo, workout.dayFour.rowTwentySeven.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4320,7 +4331,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowTwentyEight.max, workout.dayOne.rowTwentyEight.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowTwentyEight.max, workout.dayOne.rowTwentyEight.exercise),
 											style: 'weight'
 										},
 										{
@@ -4332,7 +4343,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowTwentyEight.tempoOne, workout.dayOne.rowTwentyEight.tempoTwo, workout.dayOne.rowTwentyEight.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowTwentyEight.tempoOne, workout.dayOne.rowTwentyEight.tempoTwo, workout.dayOne.rowTwentyEight.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4356,7 +4367,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowTwentyEight.max, workout.dayTwo.rowTwentyEight.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowTwentyEight.max, workout.dayTwo.rowTwentyEight.exercise),
 											style: 'weight'
 										},
 										{
@@ -4368,7 +4379,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowTwentyEight.tempoOne, workout.dayTwo.rowTwentyEight.tempoTwo, workout.dayTwo.rowTwentyEight.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowTwentyEight.tempoOne, workout.dayTwo.rowTwentyEight.tempoTwo, workout.dayTwo.rowTwentyEight.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4392,7 +4403,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowTwentyEight.max, workout.dayThree.rowTwentyEight.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowTwentyEight.max, workout.dayThree.rowTwentyEight.exercise),
 											style: 'weight'
 										},
 										{
@@ -4404,7 +4415,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowTwentyEight.tempoOne, workout.dayThree.rowTwentyEight.tempoTwo, workout.dayThree.rowTwentyEight.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowTwentyEight.tempoOne, workout.dayThree.rowTwentyEight.tempoTwo, workout.dayThree.rowTwentyEight.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4428,7 +4439,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowTwentyEight.max, workout.dayFour.rowTwentyEight.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowTwentyEight.max, workout.dayFour.rowTwentyEight.exercise),
 											style: 'weight'
 										},
 										{
@@ -4440,7 +4451,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowTwentyEight.tempoOne, workout.dayFour.rowTwentyEight.tempoTwo, workout.dayFour.rowTwentyEight.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowTwentyEight.tempoOne, workout.dayFour.rowTwentyEight.tempoTwo, workout.dayFour.rowTwentyEight.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4467,7 +4478,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowTwentyNine.max, workout.dayOne.rowTwentyNine.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowTwentyNine.max, workout.dayOne.rowTwentyNine.exercise),
 											style: 'weight'
 										},
 										{
@@ -4479,7 +4490,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowTwentyNine.tempoOne, workout.dayOne.rowTwentyNine.tempoTwo, workout.dayOne.rowTwentyNine.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowTwentyNine.tempoOne, workout.dayOne.rowTwentyNine.tempoTwo, workout.dayOne.rowTwentyNine.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4503,7 +4514,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowTwentyNine.max, workout.dayTwo.rowTwentyNine.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowTwentyNine.max, workout.dayTwo.rowTwentyNine.exercise),
 											style: 'weight'
 										},
 										{
@@ -4515,7 +4526,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowTwentyNine.tempoOne, workout.dayTwo.rowTwentyNine.tempoTwo, workout.dayTwo.rowTwentyNine.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowTwentyNine.tempoOne, workout.dayTwo.rowTwentyNine.tempoTwo, workout.dayTwo.rowTwentyNine.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4539,7 +4550,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowTwentyNine.max, workout.dayThree.rowTwentyNine.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowTwentyNine.max, workout.dayThree.rowTwentyNine.exercise),
 											style: 'weight'
 										},
 										{
@@ -4551,7 +4562,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowTwentyNine.tempoOne, workout.dayThree.rowTwentyNine.tempoTwo, workout.dayThree.rowTwentyNine.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowTwentyNine.tempoOne, workout.dayThree.rowTwentyNine.tempoTwo, workout.dayThree.rowTwentyNine.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4575,7 +4586,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowTwentyNine.max, workout.dayFour.rowTwentyNine.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowTwentyNine.max, workout.dayFour.rowTwentyNine.exercise),
 											style: 'weight'
 										},
 										{
@@ -4587,7 +4598,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowTwentyNine.tempoOne, workout.dayFour.rowTwentyNine.tempoTwo, workout.dayFour.rowTwentyNine.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowTwentyNine.tempoOne, workout.dayFour.rowTwentyNine.tempoTwo, workout.dayFour.rowTwentyNine.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4614,7 +4625,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowThirty.max, workout.dayOne.rowThirty.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowThirty.max, workout.dayOne.rowThirty.exercise),
 											style: 'weight'
 										},
 										{
@@ -4626,7 +4637,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowThirty.tempoOne, workout.dayOne.rowThirty.tempoTwo, workout.dayOne.rowThirty.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowThirty.tempoOne, workout.dayOne.rowThirty.tempoTwo, workout.dayOne.rowThirty.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4650,7 +4661,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowThirty.max, workout.dayTwo.rowThirty.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowThirty.max, workout.dayTwo.rowThirty.exercise),
 											style: 'weight'
 										},
 										{
@@ -4662,7 +4673,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowThirty.tempoOne, workout.dayTwo.rowThirty.tempoTwo, workout.dayTwo.rowThirty.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowThirty.tempoOne, workout.dayTwo.rowThirty.tempoTwo, workout.dayTwo.rowThirty.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4686,7 +4697,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowThirty.max, workout.dayThree.rowThirty.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowThirty.max, workout.dayThree.rowThirty.exercise),
 											style: 'weight'
 										},
 										{
@@ -4698,7 +4709,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowThirty.tempoOne, workout.dayThree.rowThirty.tempoTwo, workout.dayThree.rowThirty.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowThirty.tempoOne, workout.dayThree.rowThirty.tempoTwo, workout.dayThree.rowThirty.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4722,7 +4733,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowThirty.max, workout.dayFour.rowThirty.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowThirty.max, workout.dayFour.rowThirty.exercise),
 											style: 'weight'
 										},
 										{
@@ -4734,7 +4745,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowThirty.tempoOne, workout.dayFour.rowThirty.tempoTwo, workout.dayFour.rowThirty.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowThirty.tempoOne, workout.dayFour.rowThirty.tempoTwo, workout.dayFour.rowThirty.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4761,7 +4772,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowThirtyOne.max, workout.dayOne.rowThirtyOne.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowThirtyOne.max, workout.dayOne.rowThirtyOne.exercise),
 											style: 'weight'
 										},
 										{
@@ -4773,7 +4784,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowThirtyOne.tempoOne, workout.dayOne.rowThirtyOne.tempoTwo, workout.dayOne.rowThirtyOne.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowThirtyOne.tempoOne, workout.dayOne.rowThirtyOne.tempoTwo, workout.dayOne.rowThirtyOne.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4797,7 +4808,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowThirtyOne.max, workout.dayTwo.rowThirtyOne.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowThirtyOne.max, workout.dayTwo.rowThirtyOne.exercise),
 											style: 'weight'
 										},
 										{
@@ -4809,7 +4820,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowThirtyOne.tempoOne, workout.dayTwo.rowThirtyOne.tempoTwo, workout.dayTwo.rowThirtyOne.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowThirtyOne.tempoOne, workout.dayTwo.rowThirtyOne.tempoTwo, workout.dayTwo.rowThirtyOne.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4833,7 +4844,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowThirtyOne.max, workout.dayThree.rowThirtyOne.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowThirtyOne.max, workout.dayThree.rowThirtyOne.exercise),
 											style: 'weight'
 										},
 										{
@@ -4845,7 +4856,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowThirtyOne.tempoOne, workout.dayThree.rowThirtyOne.tempoTwo, workout.dayThree.rowThirtyOne.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowThirtyOne.tempoOne, workout.dayThree.rowThirtyOne.tempoTwo, workout.dayThree.rowThirtyOne.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4869,7 +4880,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowThirtyOne.max, workout.dayFour.rowThirtyOne.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowThirtyOne.max, workout.dayFour.rowThirtyOne.exercise),
 											style: 'weight'
 										},
 										{
@@ -4881,7 +4892,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowThirtyOne.tempoOne, workout.dayFour.rowThirtyOne.tempoTwo, workout.dayFour.rowThirtyOne.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowThirtyOne.tempoOne, workout.dayFour.rowThirtyOne.tempoTwo, workout.dayFour.rowThirtyOne.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4908,7 +4919,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayOne.rowThirtyTwo.max, workout.dayOne.rowThirtyTwo.exercise),
+											text: that._computeWorkoutWeight(workout.dayOne.rowThirtyTwo.max, workout.dayOne.rowThirtyTwo.exercise),
 											style: 'weight'
 										},
 										{
@@ -4920,7 +4931,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayOne.rowThirtyTwo.tempoOne, workout.dayOne.rowThirtyTwo.tempoTwo, workout.dayOne.rowThirtyTwo.tempoThree),
+											text: that._getExerciseTempo(workout.dayOne.rowThirtyTwo.tempoOne, workout.dayOne.rowThirtyTwo.tempoTwo, workout.dayOne.rowThirtyTwo.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4944,7 +4955,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayTwo.rowThirtyTwo.max, workout.dayTwo.rowThirtyTwo.exercise),
+											text: that._computeWorkoutWeight(workout.dayTwo.rowThirtyTwo.max, workout.dayTwo.rowThirtyTwo.exercise),
 											style: 'weight'
 										},
 										{
@@ -4956,7 +4967,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayTwo.rowThirtyTwo.tempoOne, workout.dayTwo.rowThirtyTwo.tempoTwo, workout.dayTwo.rowThirtyTwo.tempoThree),
+											text: that._getExerciseTempo(workout.dayTwo.rowThirtyTwo.tempoOne, workout.dayTwo.rowThirtyTwo.tempoTwo, workout.dayTwo.rowThirtyTwo.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -4980,7 +4991,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayThree.rowThirtyTwo.max, workout.dayThree.rowThirtyTwo.exercise),
+											text: that._computeWorkoutWeight(workout.dayThree.rowThirtyTwo.max, workout.dayThree.rowThirtyTwo.exercise),
 											style: 'weight'
 										},
 										{
@@ -4992,7 +5003,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayThree.rowThirtyTwo.tempoOne, workout.dayThree.rowThirtyTwo.tempoTwo, workout.dayThree.rowThirtyTwo.tempoThree),
+											text: that._getExerciseTempo(workout.dayThree.rowThirtyTwo.tempoOne, workout.dayThree.rowThirtyTwo.tempoTwo, workout.dayThree.rowThirtyTwo.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
@@ -5016,7 +5027,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Weight
 											width: 34,
-											text: this._computeWorkoutWeight(workout.dayFour.rowThirtyTwo.max, workout.dayFour.rowThirtyTwo.exercise),
+											text: that._computeWorkoutWeight(workout.dayFour.rowThirtyTwo.max, workout.dayFour.rowThirtyTwo.exercise),
 											style: 'weight'
 										},
 										{
@@ -5028,7 +5039,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 										{
 											// Tempo
 											width: 52,
-											text: this._getExerciseTempo(workout.dayFour.rowThirtyTwo.tempoOne, workout.dayFour.rowThirtyTwo.tempoTwo, workout.dayFour.rowThirtyTwo.tempoThree),
+											text: that._getExerciseTempo(workout.dayFour.rowThirtyTwo.tempoOne, workout.dayFour.rowThirtyTwo.tempoTwo, workout.dayFour.rowThirtyTwo.tempoThree),
 											alignment: 'center',
 											style: 'tempo',
 										},
