@@ -31,8 +31,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
-<!-- <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-checkbox.html">-->
-<!--<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-selection-column.html"> -->
 
 <!-- Paper Elements -->
 <link rel="import" href="../../bower_components/paper-search/paper-search-bar.html">
@@ -480,7 +478,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <div class="actions">
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
-                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:pdf" on-tap="_generateStatsPDF" first$="[[item.profile.first]]" last$="[[item.profile.last]]" number$="[[item.profile.number]]"></paper-icon-button>
+                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:pdf" on-tap="_generateAthletePDF" first$="[[item.profile.first]]" last$="[[item.profile.last]]" number$="[[item.profile.number]]"></paper-icon-button>
                                         <!-- <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button> -->
                                     </div>
                                 </template>
@@ -513,7 +511,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 <div class="card-actions">
                                     <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
                                     <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
-                                    <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:pdf" on-tap="_generateStatsPDF"></paper-icon-button>
+                                    <paper-icon-button id$="[[athlete.$key]]" noink icon="fa-icons:pdf" on-tap="_generateAthletePDF"></paper-icon-button>
                                 </div>
                             </paper-card>
                         </template>
@@ -751,11 +749,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     .then(function(athleteInfo) {
                         this._athleteStatsDialog.athleteInfo = athleteInfo;
                         this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/stats')
-                        .then(function(athleteStats) {
-                            this._athleteStatsDialog.user = this.user;
-                            this._athleteStatsDialog.athleteStats = athleteStats;
-                            this._athleteStatsDialog.opened = true;
-                        }.bind(this));
+                    .then(function(athleteStats) {
+                        this._athleteStatsDialog.user = this.user;
+                        this._athleteStatsDialog.athleteStats = athleteStats;
+                        this._athleteStatsDialog.opened = true;
+                    }.bind(this));
                     }.bind(this));
                 }
 
@@ -826,8 +824,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       .then(function(workoutId){
                         this.workoutId = workoutId;
 
-                    // Retrieve workout data
-                    this.$.firebaseDocument.getStoredValue(`workouts/${workoutId}`)
+                        // Retrieve workout data
+                        this.$.firebaseDocument.getStoredValue(`workouts/${workoutId}`)
                       .then(function(workoutData) {
 
                         // Invoke generate preview with 4 retrieved objects
@@ -844,6 +842,43 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
   			              	//this._appToast.open();
                       //  console.error(err.message);
         						  //}.bind(this));
+                }
+
+
+
+                /**
+                 *  @description Preview athlete individual workout
+                 */
+                _generateAthletePDF(evt) {
+                  this.athleteId = evt.target.getAttribute('id');
+
+                  var activeWorkoutId;
+
+                  // Retrieves activated workout path from coach's node
+                  this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
+                    .then(function(workoutId){
+                      activeWorkoutId = workoutId;
+                      console.log(activeWorkoutId);
+                    }.bind(this));
+
+                  // Retrieve workout data
+                  this.$.firebaseDocument.getStoredValue(`workouts/${activeWorkoutId}`)
+                    .then(function(workoutData) {
+
+                    // Invoke generate preview with 4 retrieved objects
+                    //this._generatePreview(workoutData, athleteStats, athleteName, printAllAthletePDF);
+                  }.bind(this));
+
+                  // retrieve athlete account
+                  this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
+                   .then(function(athlete){
+                     console.log(athlete.first);
+                   }.bind(this));
+
+
+    
+
+
                 }
 
                 /**

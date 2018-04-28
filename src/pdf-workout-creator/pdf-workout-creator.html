@@ -33,7 +33,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 * @return {Number} max value for exercise based on athlete stats
 			 */
         _computeWorkoutWeight(max_value, ex) {
-					console.log("MAX");
 				let maxPercentage = 0;
 				let rawMaxResult = 0;
 				let athleteExerciseMax = max_value;
@@ -112,7 +111,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				// Array of content
 				var pdfCollection = [];
-				//console.log(pdfCollection);
 
 				// Loop for each element in an array, in order
 				pdfData.forEach(function(pdf){ // provide the array with any name to represent the element
@@ -5055,6 +5053,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				); // EO Content Push
 			}); // EO Content Loop
 
+			console.log(pdfCollection);
+
 			return pdfCollection;
 		}
 
@@ -5162,15 +5162,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				} // EO Content
 
+				console.log("PDF Collection: "  + this._computeContent(pdfData));
+
 
 				// This creates and opens the PDF in a new tab
-				pdfMake.createPdf(pdfContent).open();
+
 				if (printAllAthletePDF == true) {
+						pdfMake.createPdf(pdfContent).open();
 					// open PDF collectively
 					console.log(printAllAthletePDF);
 				} else {
 					// open one PDF seperately
-					pdfMake.createPdf(pdfContent).open();
+					//pdfMake.createPdf(pdfContent).open();
 				}
 
 			}
