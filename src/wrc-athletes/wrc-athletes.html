@@ -561,6 +561,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         workoutId: {
                             type: String,
                             notify: true
+                        },
+                        pdfCollection: {
+                          type: Array,
+                          notfiy: true
                         }
                     };
                 }
@@ -824,8 +828,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this.$.firebaseDocument.getStoredValue(`workouts/${workoutId}`)
                       .then(function(workoutData) {
 
-                        // Invoke generate preview with 4 retrieved objects
-                        this._generatePreview(workoutData, athleteStats, athleteName);
+                        // Creates pdf with 3 necessary objects
+                        this._computePdfCollection(workoutData, athleteStats, athleteName);
                       }.bind(this));
         							//.catch(function(err) {
                       //  this._appToast.text = "There has been an error. Please try again.";
@@ -839,6 +843,43 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       //  console.error(err.message);
         						  //}.bind(this));
                 }
+
+
+
+                /*Test*/
+                /**
+                 * @description compute PDF collection
+                 *
+                 * @param {Object} athleteStats - athlete max stats
+                 * @param {String} athleteName - athlete first and last
+                 * @param {Object} athleteWorkout - athlete workout data
+                 */
+
+                 _computePdfCollection(workoutData, athleteStats, athleteName) {
+                  var pdfCollection = [];
+
+
+                   //pdfCollection = that.pdfCollection;
+
+                  pdfCollection.push({
+                    workoutData: workoutData,
+                    athleteStats: athleteStats,
+                    athleteName: athleteName
+                  });
+
+
+                   console.log(pdfCollection);
+
+
+
+
+
+                   // Invoke generate preview with 4 retrieved objects
+                   //this._generatePreview(workoutData, athleteStats, athleteName);
+
+                 }
+
+
 
 
 

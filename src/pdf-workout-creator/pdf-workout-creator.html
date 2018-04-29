@@ -118,6 +118,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 */
 			_computeContent(pdfData) {
 
+
+
+
 				// This is used to make the object available to the private methods.
 				var that = this;
 
@@ -126,7 +129,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				// Loop for each element in an array, in order
 				pdfData.forEach(function(pdf){ // provide the array with any name to represent the element
-
+					// Test
+console.log(pdfCollection.length);
+					
 					var workout = pdf.workout;
 					var name = pdf.name;
 					var stats = pdf.stats;
@@ -5064,6 +5069,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					} // EO Main Content
 				); // EO Content Push
 			}); // EO Content Loop
+
+			console.log(pdfCollection.length);
 
 			return pdfCollection;
 		}
