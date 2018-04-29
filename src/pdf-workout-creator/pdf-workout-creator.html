@@ -17,18 +17,35 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			/**
 			 * @description Compute max weight using athlete maxes
 			 *
-			 * @param {Number} max - max value from workout data
+			 * @param {Number} max_percentage - max value percentage from workout data
 			 * @param {String} exercise - exercise name from workout data
-			 * @param {Object} stats - athlete's max stats
-			 * @return {Number} max value for exercise based on athlete stats
 			 */
-        _computeWorkoutWeight(max_value, ex) {
+        _computeWorkoutWeight(max_percentage, ex) {
+				let rawMaxPercentage = max_percentage;
 				let maxPercentage = 0;
 				let rawMaxResult = 0;
-				let athleteExerciseMax = max_value;
+				let athleteExerciseMax = 0;
 
 				const exercise = ex.toLowerCase();
 				const athleteStats = this.stats;
+
+				console.log("First " + exercise);
+
+				if (athleteStats) {
+					if (exercise === "bench" || exercise === "bench press") {
+						athleteExerciseMax = athleteStats.bench_press_value;
+					} else if (exercise === "back-squat" || exercise === "back squat") {
+						athleteExerciseMax = athleteStats.back_squat_value;
+					} else if (exercise == "front-squat" || exercise == "front squat") {
+						athleteExerciseMax = athleteStats.front_squat_value;
+					} else if (exercise == "dead-lift" || exercise == "deadlift") {
+						athleteExerciseMax = athleteStats.deadlift_value;
+					} else if (exercise == "power clean" || exercise == "clean") {
+						athleteExerciseMax = athleteStats.hang_power_clean_value;
+					}
+				}
+
+				//console.log("Exercise Max: " + athleteExerciseMax);
 
 				if((exercise == "bench" || exercise == "bench press") ||
 					(exercise == "back-squat" || exercise == "back squat") ||
@@ -37,16 +54,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					(exercise == "power clean" || exercise == "clean"))
 					{
 
-					console.log("Match: " + exercise);
-					console.log(athleteExerciseMax);
+					// Convert max percentage {Integer} to {Double}
+					maxPercentage = (rawMaxPercentage / 100);
 
-					maxPercentage = (athleteExerciseMax / 100);
+					//console.log("Percentage: " + maxPercentage);
+
+					// Compute max exercise percentage
 					rawMaxResult = (maxPercentage * athleteExerciseMax);
 
 					// Convert max to weights equations
 					var max = this._computeWeightFormat(rawMaxResult);
 
-					console.log(max);
+					//console.log("Result Max: " + max);
 
 					return max + "lbs";
 				} else {
