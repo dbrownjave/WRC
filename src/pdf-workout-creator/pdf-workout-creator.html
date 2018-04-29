@@ -14,16 +14,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 	const PdfWorkoutCreator = function(superClass) {
 		return class extends superClass {
 
-			// Testing
-			test(){
-				console.log("Function Call");
-			}
-
-			_test(){
-				console.log("Foreach Call");
-			}
-
-
 			/**
 			 * @description Compute max weight using athlete maxes
 			 *
@@ -47,11 +37,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					(exercise == "power clean" || exercise == "clean"))
 					{
 
+					console.log("Match: " + exercise);
+					console.log(athleteExerciseMax);
+
 					maxPercentage = (athleteExerciseMax / 100);
 					rawMaxResult = (maxPercentage * athleteExerciseMax);
 
 					// Convert max to weights equations
 					var max = this._computeWeightFormat(rawMaxResult);
+
+					console.log(max);
 
 					return max + "lbs";
 				} else {
@@ -5053,19 +5048,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				); // EO Content Push
 			}); // EO Content Loop
 
-			console.log(pdfCollection);
-
 			return pdfCollection;
 		}
 
 
 			// Generates Preview for Workout
-			_generatePreview(workout, stats, name, printAllAthletePDF) {
+			_generatePreview(workout, stats, name) {
 				console.log("PDF: Workout - " +  workout);
 				console.log("PDF: Stats - " +  stats);
 				console.log("PDF: Name - " +  name);
-				console.log("PDF: Print All: " + printAllAthletePDF);
-
 
 
 				/**
@@ -5164,17 +5155,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				console.log("PDF Collection: "  + this._computeContent(pdfData));
 
-
 				// This creates and opens the PDF in a new tab
-
-				if (printAllAthletePDF == true) {
-						pdfMake.createPdf(pdfContent).open();
-					// open PDF collectively
-					console.log(printAllAthletePDF);
-				} else {
-					// open one PDF seperately
-					//pdfMake.createPdf(pdfContent).open();
-				}
+				pdfMake.createPdf(pdfContent).open();
 
 			}
 

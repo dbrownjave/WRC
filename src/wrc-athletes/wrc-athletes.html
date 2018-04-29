@@ -561,11 +561,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         workoutId: {
                             type: String,
                             notify: true
-                        },
-                        printAllAthletePDF: {
-                            type: Boolean,
-                            notify: true,
-                            value: true
                         }
                     };
                 }
@@ -798,7 +793,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 _printPdfCollection(evt) {
                     var athletesData = this.athletesData;
-                    var self = this;
+                    var that = this;
 
                     // Loop for each element in an array, in order.
                     athletesData.forEach(function(athlete) { //
@@ -806,7 +801,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           // Compose name using athlete profile data
                           var athleteName = athlete.profile.first + " " + athlete.profile.last;
 
-                          self._loadWorkoutData(athlete.stats, athleteName);
+                          that._loadWorkoutData(athlete.stats, athleteName);
                         }
                     });
                 }
@@ -818,7 +813,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {String} athleteName - first and last
                  */
                 _loadWorkoutData(athleteStats, athleteName) {
-                  var printAllAthletePDF = this.printAllAthletePDF;
+
+
                     // Retrieves activated workout path from coach's node
                     this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
                       .then(function(workoutId){
@@ -829,7 +825,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       .then(function(workoutData) {
 
                         // Invoke generate preview with 4 retrieved objects
-                        this._generatePreview(workoutData, athleteStats, athleteName, printAllAthletePDF);
+                        this._generatePreview(workoutData, athleteStats, athleteName);
                       }.bind(this));
         							//.catch(function(err) {
                       //  this._appToast.text = "There has been an error. Please try again.";
@@ -852,31 +848,41 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _generateAthletePDF(evt) {
                   this.athleteId = evt.target.getAttribute('id');
 
+                  var that = this;
                   var activeWorkoutId;
+
+                  // Retrieve athlete profile
+                  this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
+                   .then(function(athlete){
+                     // Compose name using athlete profile data
+                     var athleteName = athlete.first + " " + athlete.last;
+
+                     console.log(athlete.first);
+
+                   // Retrieve athlete stats
+                     this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/stats')
+                      .then(function(athleteStats){
+
+                        console.log(athleteStats);
 
                   // Retrieves activated workout path from coach's node
                   this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
                     .then(function(workoutId){
                       activeWorkoutId = workoutId;
-                      console.log(activeWorkoutId);
-                    }.bind(this));
 
                   // Retrieve workout data
                   this.$.firebaseDocument.getStoredValue(`workouts/${activeWorkoutId}`)
                     .then(function(workoutData) {
+                      console.log(workoutData);
 
                     // Invoke generate preview with 4 retrieved objects
-                    //this._generatePreview(workoutData, athleteStats, athleteName, printAllAthletePDF);
+                    that._generatePreview(workoutData,athleteStats, athleteName);
                   }.bind(this));
 
-                  // retrieve athlete account
-                  this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
-                   .then(function(athlete){
-                     console.log(athlete.first);
-                   }.bind(this));
+                  }.bind(this));
 
-
-    
+                  }.bind(this));
+                  }.bind(this));
 
 
                 }
@@ -887,11 +893,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {Object} workout - workout retrieved from firebase
                  * @param {Object} athleteStats - stats retrieved from firebase
                  * @param {String} athleteName - first and last
-                 * @param {Boolean} printAllAthletePDF - print all athletes workout collectively
                  */
-                _generatePreview(workout, athleteStats, athleteName, printAllAthletePDF) {
+                _generatePreview(workout, athleteStats, athleteName) {
 
-                    super._generatePreview(workout, athleteStats, athleteName, printAllAthletePDF);
+                    super._generatePreview(workout, athleteStats, athleteName);
                 }
 
             }
