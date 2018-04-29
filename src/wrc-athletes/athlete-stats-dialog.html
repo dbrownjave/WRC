@@ -836,7 +836,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           //alert("Calculating Clean Max Successful 🎉")
                         } else {
                           //alert("Error 💩")
-                          clean = (stats.hang_power_clean_value && stats.hang_power_clean_reps) ? (parseInt(stats.hang_power_clean_value) * parseInt(stats.hang_power_clean_reps) * e) + parseInt(athleteStats.hang_power_clean_value) : "0";
+                          clean = (stats.hang_power_clean_value && stats.hang_power_clean_reps) ? (parseInt(stats.hang_power_clean_value) * parseInt(stats.hang_power_clean_reps) * e) + parseInt(stats.hang_power_clean_value) : "0";
                           this.maxClean = this._roundMaxResult(clean);
                         }
 
