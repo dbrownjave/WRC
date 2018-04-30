@@ -136,7 +136,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					width: 610px;
 				}
             }
-            
+
             @media screen and (max-width: 425px) {
                 div.picture-wrapper label {
                     width: 135px;
@@ -318,9 +318,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this.$.newAccountsAuth.createUserWithEmailAndPassword(this.coachInfo.email, 'wrc2018')
                             .then(function(user) {
                                 // Extracts the new user information to get Unique ID
-                                var new_user_id = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyClKG12T8HwMcQZqMaArTrKVTeWwrAJxCE:new_accounts_app'));
+                                var new_user_id = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyA8x_v_ISriJLvBKODINC1h9dSyhrszv_s:new_accounts_app'));
+
+                                console.log(new_user_id);
                                 // Sets the new coach UI extracted from new user info
                                 this.coachInfo.uid = new_user_id.uid;
+
+                                console.log(this.coachInfo.uid);
+
                                 // Signs out the new user since it is automatically signed in
                                 this.$.newAccountsAuth.signOut();
                             }.bind(this))
@@ -352,7 +357,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						}
                     }
                 }
-                
+
                 /**
                  * Resets the form to default values
                 */
@@ -428,7 +433,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             }
                             this._resetForm();
                         }.bind(this));
-                        
+
                         this._appToast.text = 'The coach has been deleted.';
                         this._appToast.open();
                         this._deleteCoachDialog.opened = false;
