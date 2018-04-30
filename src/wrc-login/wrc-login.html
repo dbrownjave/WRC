@@ -44,16 +44,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             /* Header Style */
 
             .header-content {
-                padding: 5em 0;
+                padding: 6em 0 2em 0;
 
                 @apply --layout-vertical;
                 @apply --layout-center-center;
             }
 
-            .header-content iron-image {
-                width: 200px;
-                height: 200px;
-            }
 
             /* Section Style */
 
@@ -110,12 +106,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 box-shadow: 0 4px 5.5px -1px rgb(41,204,109, 0.20)
             }
 
+            .app-logo {
+              width: 100px;
+              height: 117px;
+            }
+
             /* Responsive */
 
             @media screen and (max-width: 425px) {
                 /* Header Style */
                 .header-content {
-                    padding: 0;
+                    padding: 3em 0 2em 0;
                 }
 
                 .header-content iron-image {
@@ -133,6 +134,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     padding: 2em;
                     width: 75%;
                 }
+
+                .app-logo {
+                  width: 70px;
+                  height: 77px;
+                }
             }
         </style>
 
@@ -145,12 +151,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <header>
 
                 <div class="header-content">
+                  <img class="app-logo" src="../images/app-icon/dashboard-icon.png" alt="">
                     <!--  <iron-image preload fade sizing="contain" src="../../images/app-images/wrc.png"></iron-image>-->
                 </div>
 
             </header>
             <section>
+
                 <div class="section-content">
+
                     <div class="signin-box">
                         <h3>Sign in</h3>
                         <iron-form id="loginForm">
