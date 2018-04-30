@@ -563,7 +563,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _userChanged(user) {
                     if (user) {
                         this.userReady = false;
-						this.$.firebaseDocument.getStoredValue('/users')
+						            this.$.firebaseDocument.getStoredValue('/users')
                         .then(function (snapshot) {
                             this.userReady = true;
                         }.bind(this));
