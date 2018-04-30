@@ -62,20 +62,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <!-- Firebase App Configuration -->
         <firebase-app
             name="wrc_software"
-            api-key="AIzaSyClKG12T8HwMcQZqMaArTrKVTeWwrAJxCE"
-            auth-domain="wrc-software-dev.firebaseapp.com"
-            database-url="https://wrc-software-dev.firebaseio.com"
-            storage-bucket="wrc-software-dev.appspot.com"
-            messaging-sender-id="128792901183"></firebase-app>
+            api-key="AIzaSyA8x_v_ISriJLvBKODINC1h9dSyhrszv_s"
+            auth-domain="wrc-software.firebaseapp.com"
+            database-url="https://wrc-software.firebaseio.com"
+            storage-bucket="wrc-software.appspot.com"
+            messaging-sender-id="984943033885"></firebase-app>
 
         <!-- Firebase App Configuration | This app is used for creating new user accounts -->
         <firebase-app
             name="new_accounts_app"
-            api-key="AIzaSyClKG12T8HwMcQZqMaArTrKVTeWwrAJxCE"
-            auth-domain="wrc-software-dev.firebaseapp.com"
-            database-url="https://wrc-software-dev.firebaseio.com"
-            storage-bucket="wrc-software-dev.appspot.com"
-            messaging-sender-id="128792901183"></firebase-app>
+            api-key="AIzaSyA8x_v_ISriJLvBKODINC1h9dSyhrszv_s"
+            auth-domain="wrc-software.firebaseapp.com"
+            database-url="https://wrc-software.firebaseio.com"
+            storage-bucket="wrc-software.appspot.com"
+            messaging-sender-id="984943033885"></firebase-app>
 
         <!-- Firebase Auth Configuration -->
         <firebase-auth
@@ -150,7 +150,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _routePageChanged(page) {
                     var firebaseToken = localStorage.getItem(
-                            'firebase:authUser:AIzaSyClKG12T8HwMcQZqMaArTrKVTeWwrAJxCE:wrc_software') ?
+                            'firebase:authUser:AIzaSyA8x_v_ISriJLvBKODINC1h9dSyhrszv_s:wrc_software') ?
                         true : false;
 
                     if (page === 'main' && !firebaseToken) {
@@ -188,7 +188,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 _signedInChanged(signedIn) {
                     var firebaseToken = localStorage.getItem(
-                            'firebase:authUser:AIzaSyClKG12T8HwMcQZqMaArTrKVTeWwrAJxCE:wrc_software') ?
+                            'firebase:authUser:AIzaSyA8x_v_ISriJLvBKODINC1h9dSyhrszv_s:wrc_software') ?
                         true : false;
 
                     if (!signedIn && !firebaseToken) {
