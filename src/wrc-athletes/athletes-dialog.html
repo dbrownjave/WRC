@@ -432,7 +432,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this.$.newAccountsAuth.createUserWithEmailAndPassword(this.athleteInfo.email, 'wrc2018')
                             .then(function(user) {
                                 // Extracts the new user information to get Unique ID
-                                var new_user_id = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyClKG12T8HwMcQZqMaArTrKVTeWwrAJxCE:new_accounts_app'));
+                                var new_user_id = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyA8x_v_ISriJLvBKODINC1h9dSyhrszv_s:new_accounts_app'));
                                 // Sets the new coach UI extracted from new user info
                                 this.athleteInfo.uid = new_user_id.uid;
                                 // Signs out the new user since it is automatically signed in
