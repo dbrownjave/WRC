@@ -320,11 +320,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 // Extracts the new user information to get Unique ID
                                 var new_user_id = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyA8x_v_ISriJLvBKODINC1h9dSyhrszv_s:new_accounts_app'));
 
-                                console.log(new_user_id);
                                 // Sets the new coach UI extracted from new user info
                                 this.coachInfo.uid = new_user_id.uid;
-
-                                console.log(this.coachInfo.uid);
 
                                 // Signs out the new user since it is automatically signed in
                                 this.$.newAccountsAuth.signOut();
@@ -365,6 +362,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.$.coachForm.reset();
                     this.coachInfo.profile_pic_name = 'default_profile.png';
                     this.coachInfo.profile_pic_url = '../../images/app-images/default_profile.png';
+                    this.$.profileImage.src = '../../images/app-images/default_profile.png';
                 }
 
                 /**
