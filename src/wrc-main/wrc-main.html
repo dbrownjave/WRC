@@ -620,6 +620,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 logout() {
                     this.$.firebaseAuth.signOut();
                     this.set('routData.page', '');
+					location.reload();
                 }
 
                 /**
