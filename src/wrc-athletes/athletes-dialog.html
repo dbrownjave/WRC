@@ -421,10 +421,35 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 }
 
                 /**
+                 * @description Saves profile image and data
+                */
+                _saveProfileImgAndAthleteData() {
+                    if (this.$.profilePicture.files[0]) {
+                        if (this.action === 'edit' && this.athleteInfo.profile_pic_name !== 'default_profile.png') {
+                            this.$.storageRef.path = '/profile-pics/' + this.athleteInfo.profile_pic_name;
+                            this.$.storageRef.delete();
+                        }
+                        this.$.firebaseStorage.put(this.$.profilePicture.files[0])
+                            .then(function () {
+                                this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0]
+                                        .name)
+                                    .then(function (url) {
+                                        this.athleteInfo.profile_pic_url = url;
+                                        this.athleteInfo.profile_pic_name = this.$.profilePicture.files[0].name;
+                                        this.acceptedCallback(this.athleteInfo);
+                                    }.bind(this));
+                            }.bind(this));
+                    } else {
+                        this.acceptedCallback(this.athleteInfo);
+                    }
+                }
+
+                /**
                  * Serializes the data from form and save selected profile image
                 */
                 _serializeForm() {
                     if (this.$.athleteForm.validate()) {
+                        console.log(`Action: ${this.action}`);
                         this._appProgressBar.hidden = false;
 
                         if (this.action === 'add') {
@@ -437,31 +462,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 this.athleteInfo.uid = new_user_id.uid;
                                 // Signs out the new user since it is automatically signed in
                                 this.$.newAccountsAuth.signOut();
+
+                                this._saveProfileImgAndAthleteData();
+
                             }.bind(this))
                             .catch(function(err) {
                                 this._appToast.text = 'An error has ocurred trying to create the new coach. Is possible that the email is already in use.';
                                 this._appToast.open();
                             }.bind(this));
+                        } else {
+                            this._saveProfileImgAndAthleteData();
                         }
-
-						if (this.$.profilePicture.files[0]) {
-                            if (this.action === 'edit' && this.athleteInfo.profile_pic_name !== 'default_profile.png') {
-                                this.$.storageRef.path = '/profile-pics/' + this.athleteInfo.profile_pic_name;
-                                this.$.storageRef.delete();
-                            }
-                            this.$.firebaseStorage.put(this.$.profilePicture.files[0])
-								.then(function () {
-									this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0]
-											.name)
-										.then(function (url) {
-											this.athleteInfo.profile_pic_url = url;
-											this.athleteInfo.profile_pic_name = this.$.profilePicture.files[0].name;
-											this.acceptedCallback(this.athleteInfo);
-										}.bind(this));
-								}.bind(this));
-						} else {
-							this.acceptedCallback(this.athleteInfo);
-						}
                     }
                 }
 
