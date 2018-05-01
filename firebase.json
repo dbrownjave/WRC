@@ -4,6 +4,12 @@
   },
   "hosting": {
     "public": "build/es6-bundled",
+	"rewrites": [
+		{
+			"source": "**",
+			"destination": "/index.html"
+		}
+	],
     "ignore": [
       "firebase.json",
       "**/.*",
