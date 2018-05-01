@@ -5123,7 +5123,7 @@ console.log(pdfCollection.length);
 
 
 			// Generates Preview for Workout
-			_generatePreview(workout, stats, name) {
+			_generatePreview(workout = {}, stats = {}, name = {}) {
 				console.log("PDF: Workout - " +  workout);
 				console.log("PDF: Stats - " +  stats);
 				console.log("PDF: Name - " +  name);
