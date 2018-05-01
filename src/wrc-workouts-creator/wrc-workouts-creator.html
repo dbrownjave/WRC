@@ -7477,6 +7477,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					// App Toast
 					this._appToast = document.getElementById("appToast");
 
+					// App Progress
+					this._progressBar = document.getElementById("appProgress");
+
 					// Assign items for each top combo box
 					this.$.seasonCombo.items = ['Off-season', 'Pre-season', 'In-season'];
 					this.$.typeCombo.items = ['Strength Phase', 'Power Phase', 'Correctional Phase'];
@@ -8706,6 +8709,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				_generateWorkout() {
 					if (this.workout && this.$.workoutSelectorForm.validate() && this.$.workoutWeekCombo.validate())
 					{
+						this._progressBar.hidden = false;
+						
 						this.$.firebaseDocument.push('workouts', this.workout)
 						.then(function() {
 							this._appToast.text = "The workout has been saved succesfully.";
@@ -8716,6 +8721,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							this.$.dayTwoForm.reset();
 							this.$.dayThreeForm.reset();
 							this.$.dayFourForm.reset();
+							this._progressBar.hidden = true;
 						}.bind(this))
 						.catch(function(err) {
 							this._appToast.text = "An error has ocurred saving the workout.";
