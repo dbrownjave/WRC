@@ -20,56 +20,104 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 */
         _computeWorkoutWeight(max_percentage, ex) {
 				let rawMaxPercentage = max_percentage;
-				let maxPercentage = 0;
-				let rawMaxResult = 0;
 				let athleteExerciseMax = 0;
 
 				const exercise = ex.toLowerCase();
 				const athleteStats = this.stats;
 
 				if (athleteStats) {
-					if (exercise === "bench" || exercise === "bench press") {
-						athleteExerciseMax = athleteStats.bench_press_value;
-					} else if (exercise === "back-squat" || exercise === "back squat") {
-						athleteExerciseMax = athleteStats.back_squat_value;
+					if (exercise == "bench" || exercise == "bench press") {
+						athleteExerciseMax = this._calculateMax(athleteStats.bench_press_value, athleteStats.bench_press_reps);
+						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
+
+					} else if (exercise == "back-squat" || exercise == "back squat") {
+						athleteExerciseMax = this._calculateMax(athleteStats.back_squat_value, athleteStats.back_squat_reps);
+						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
+
 					} else if (exercise == "front-squat" || exercise == "front squat") {
-						athleteExerciseMax = athleteStats.front_squat_value;
+						athleteExerciseMax = this._calculateMax(athleteStats.front_squat_value, athleteStats.front_squat_reps);
+						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
+
 					} else if (exercise == "dead-lift" || exercise == "deadlift") {
-						athleteExerciseMax = athleteStats.deadlift_value;
+						athleteExerciseMax = this._calculateMax(athleteStats.deadlift_value, athleteStats.deadlift_reps);
+						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
+
 					} else if (exercise == "power clean" || exercise == "clean") {
-						athleteExerciseMax = athleteStats.hang_power_clean_value;
+						athleteExerciseMax = this._calculateMax(athleteStats.hang_power_clean_value, athleteStats.hang_power_clean_reps);
+						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
+
+					} else {
+						return " ";
 					}
-				}
-
-				//console.log("Exercise Max: " + athleteExerciseMax);
-
-				if((exercise == "bench" || exercise == "bench press") ||
-					(exercise == "back-squat" || exercise == "back squat") ||
-					(exercise == "front-squat" || exercise == "front squat") ||
-					(exercise == "dead-lift" || exercise == "deadlift") ||
-					(exercise == "power clean" || exercise == "clean"))
-					{
-
-					// Convert max percentage {Integer} to {Double}
-					maxPercentage = (rawMaxPercentage / 100);
-
-					//console.log("Percentage: " + maxPercentage);
-
-					// Compute max exercise percentage
-					rawMaxResult = (maxPercentage * athleteExerciseMax);
-
-					// Convert max to weights equations
-					var max = this._computeWeightFormat(rawMaxResult);
-
-					//console.log("Result Max: " + max);
-
-					return max + "lbs";
-				} else {
-					return " ";
 				}
 			}
 
-			// Weight Rounding Method to round the equation results; (e.g. floats/decimals) since weight's are (5,10,15...)
+
+			/**
+			* Calculates athlete's exercise weight %
+			*
+			* @param {Integer} athleteExerciseMax is the athlete exercise max wieght
+			* @param {Integer} rawMaxPercentage percentage of the weight
+			* @return {Integer} athlete computed exercise weight using %
+			*/
+
+			_computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage) {
+				let maxPercentage = 0;
+				let rawMaxResult = 0;
+
+				console.log("computeAthleteExerciseMax: " + athleteExerciseMax);
+
+				// Convert max percentage {Integer} to {Double}
+				maxPercentage = (rawMaxPercentage / 100);
+
+				// Compute max exercise percentage
+				rawMaxResult = (maxPercentage * athleteExerciseMax);
+
+				// Convert max to weights equations
+				var max = this._computeWeightFormat(rawMaxResult);
+
+				console.log("FinalExerciseMax: " + max );
+
+				return max + "lbs";
+			}
+
+
+				/**
+				* Calculates Estimation of athlete max
+				*
+				* @param {Integer} exerciseValue is the athlete exercise wieght
+				* @param {Integer} exerciseReps
+				* @return {Integer} estimated max
+				*/
+			 _calculateMax(exerciseValue, exerciseReps) {
+
+					const athleteStats = this.stats;
+
+			    if (this.stats) {
+			    //console.log(athleteStats)
+			    }
+
+			    // Inital variable values
+			    var e = parseFloat(0.0333);
+
+					// the raw result =  to this, if ('weight and reps' have a value) [equation] else result = '0'
+
+					if (exerciseValue && exerciseReps) {
+						if (exerciseReps === '1') {
+							return exerciseValue;
+						} else {
+							var estMax = (exerciseValue && exerciseReps) ? (parseInt(exerciseValue) * parseInt(exerciseReps) * e) + parseInt(exerciseValue) : "0";
+							return this._computeWeightFormat(estMax);
+						}
+					}
+				}
+
+			/**
+			* Weight Rounding Method to round the equation results; (e.g. floats/decimals) since weight's are (5,10,15...)
+			*
+			* @param {Integer} rawEquationResult is the result without any rounding
+			* @return {Integer} result after rounding
+			*/
 			_computeWeightFormat(rawEquationResult) {
 				// Display before: rawEquationResult
 				//alert(this.rawEquationResult);
@@ -85,9 +133,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				//alert(lastDigit);
 
 				// Conditional statement to determine the rounding method
-				if (lastDigit >= 1 && lastDigit <= 5) {
+				if (lastDigit >= 1 && lastDigit < 5) {
 						return ((rawEquationResult - lastDigit));
-				} else if (lastDigit > 5 && lastDigit <= 9 && lastDigit != 0) {
+				} else if (lastDigit >= 5 && lastDigit <= 9 && lastDigit != 0) {
 						return (rawEquationResult - lastDigit) + 5;
 				} else {
 						return rawEquationResult;
@@ -129,7 +177,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				pdfData.forEach(function(pdf){ // provide the array with any name to represent the element
 					// Test
 console.log(pdfCollection.length);
-					
+
 					var workout = pdf.workout;
 					var name = pdf.name;
 					var stats = pdf.stats;
