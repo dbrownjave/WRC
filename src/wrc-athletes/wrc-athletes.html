@@ -404,7 +404,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <!-- Search filter -->
                     <div class="search-wrapper">
                         <!-- Polyfilter configuration -->
-                        <poly-filter-diacritic filter="[[athleteFilter]]" array-to-filter="[[athletesData]]" filtered-array="{{athletesDataFiltered}}"></poly-filter-diacritic>
+                        <poly-filter-diacritic
+                        filter="[[athleteFilter]]"
+                        array-to-filter="[[athletesData]]"
+                        filtered-array="{{athletesDataFiltered}}"></poly-filter-diacritic>
 
                         <!-- Search bar -->
                         <paper-search-bar query="{{athleteFilter}}" hideFilterButton=true> </paper-search-bar>
@@ -424,7 +427,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <vaadin-grid-column width="100px" flex-grow="0">
                                 <template class="header">
 
-                                    <vaadin-grid-sorter path="active" active$="[[item.profile.active]]">Active</vaadin-grid-sorter>
+                                    <vaadin-grid-sorter path="profile.active" active$="[[item.profile.active]]">Active</vaadin-grid-sorter>
                                 </template>
                                 <template>
 
@@ -437,7 +440,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <!-- Athlete number -->
                             <vaadin-grid-column width="70px" flex-grow="0">
                                 <template class="header">
-                                    <vaadin-grid-sorter path="number">#</vaadin-grid-sorter>
+                                    <vaadin-grid-sorter path="profile.number">#</vaadin-grid-sorter>
                                 </template>
                                 <template>[[item.profile.number]]</template>
                             </vaadin-grid-column>
@@ -445,7 +448,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <!-- First Name -->
                             <vaadin-grid-column>
                                 <template class="header">
-                                    <vaadin-grid-sorter path="first">First</vaadin-grid-sorter>
+                                    <vaadin-grid-sorter path="profile.first">First</vaadin-grid-sorter>
                                 </template>
                                 <template>[[item.profile.first]]</template>
                             </vaadin-grid-column>
@@ -453,7 +456,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <!-- Last Name -->
                             <vaadin-grid-column>
                                 <template class="header">
-                                    <vaadin-grid-sorter path="last">Last</vaadin-grid-sorter>
+                                    <vaadin-grid-sorter path="profile.last">Last</vaadin-grid-sorter>
                                 </template>
                                 <template>[[item.profile.last]]</template>
                             </vaadin-grid-column>
@@ -461,7 +464,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <!-- Position -->
                             <vaadin-grid-column>
                                 <template class="header">
-                                    <vaadin-grid-sorter path="pos">Position</vaadin-grid-sorter>
+                                    <vaadin-grid-sorter path="profile.pos">Position</vaadin-grid-sorter>
                                 </template>
                                 <template>[[item.profile.pos]]</template>
                             </vaadin-grid-column>
@@ -469,7 +472,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <!-- Year -->
                             <vaadin-grid-column width="100px" flex-grow="0">
                                 <template class="header">
-                                    <vaadin-grid-sorter path="year">Year</vaadin-grid-sorter>
+                                    <vaadin-grid-sorter path="profile.year">Year</vaadin-grid-sorter>
                                 </template>
                                 <template>[[item.profile.year]]</template>
                             </vaadin-grid-column>
