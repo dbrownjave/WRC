@@ -59,6 +59,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
     <template>
         <style>
             /* General Style */
+
             main {
                 padding: 2em 3em;
                 height: calc(100vh - (64px + 4em));
@@ -77,6 +78,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             /* header wrapper */
+
             div.wrapper-horizontal {
                 @apply --layout-horizontal;
             }
@@ -86,19 +88,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             /* icon buttons */
+
             .icon-button {
-              color: #737D8A;
+                color: #737D8A;
             }
 
             .icon-button:hover {
-              color: #425164;
+                color: #425164;
             }
 
             .printer-icon {
-              margin: 0 0 0 10px;
+                margin: 0 0 0 10px;
             }
 
             /* Empty Message */
+
             .empty-message {
                 width: 100%;
                 height: inherit;
@@ -155,6 +159,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             /* Athletes Wrapper */
+
             div.athletes-wrapper {
                 width: 100%;
             }
@@ -164,6 +169,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             /* Search Style */
+
             div.search-wrapper {
                 width: 95%;
                 margin-bottom: 24px;
@@ -173,12 +179,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 width: 100%;
             }
 
-            div.search-wrapper vaadin-text-field [slot='prefix']{
+            div.search-wrapper vaadin-text-field [slot='prefix'] {
                 margin-right: 12px;
                 color: var(--paper-grey-500);
             }
 
             /* Grid Wrapper */
+
             div.grid-wrapper {
                 width: 100%;
             }
@@ -190,66 +197,68 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             div.grid-wrapper vaadin-grid iron-icon {
-				        width: 17px;
+                width: 17px;
                 height: 17px;
-			      }
-
-      			div.grid-wrapper vaadin-grid iron-icon[active='Yes'] {
-      				color: #35BF2E;
-      			}
-
-      			div.grid-wrapper vaadin-grid iron-icon[active='No'] {
-      				color: var(--paper-grey-500);
-      			}
-
-            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
-      				@apply --layout-horizontal;
-      				@apply --layout-wrap;
-      				@apply --layout-end-justified;
-    			  }
-
-      			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
-      				color: #737D8A;
-      			}
-
-      			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
-      				color: #425164;
-      			}
-
-            /* Vaadin Grid  */
-            div.grid-wrapper vaadin-grid {
-              height: auto;
-              @apply --azul-shadow--grid-elevation-1;
-            }
-
-            div.grid-wrapper vaadin-grid iron-icon {
-              width: 15px;
-              height: 15px;
             }
 
             div.grid-wrapper vaadin-grid iron-icon[active='Yes'] {
-              color: #35BF2E;
+                color: #35BF2E;
             }
 
             div.grid-wrapper vaadin-grid iron-icon[active='No'] {
-              color: var(--paper-grey-500);
+                color: var(--paper-grey-500);
             }
 
             div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
-              @apply --layout-horizontal;
-              @apply --layout-wrap;
-              @apply --layout-end-justified;
+                @apply --layout-horizontal;
+                @apply --layout-wrap;
+                @apply --layout-end-justified;
             }
 
             div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
-              color: #737D8A;
+                color: #737D8A;
             }
 
             div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
-              color: #425164;
+                color: #425164;
+            }
+
+            /* Vaadin Grid  */
+
+            div.grid-wrapper vaadin-grid {
+                height: auto;
+                @apply --azul-shadow--grid-elevation-1;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon {
+                width: 15px;
+                height: 15px;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon[active='Yes'] {
+                color: #35BF2E;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon[active='No'] {
+                color: var(--paper-grey-500);
+            }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
+                @apply --layout-horizontal;
+                @apply --layout-wrap;
+                @apply --layout-end-justified;
+            }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
+                color: #737D8A;
+            }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
+                color: #425164;
             }
 
             /* Cards Wrapper */
+
             div.cards-wrapper {
                 width: 100%;
 
@@ -282,10 +291,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             paper-card div.card-content div.profile-picture {
                 background-color: #F3F4F5;
-				        overflow: hidden;
-				        border-radius: 10em;
-				        width: 70px;
-				        height: 70px;
+                overflow: hidden;
+                border-radius: 10em;
+                width: 70px;
+                height: 70px;
                 box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
                 margin-right: 12px;
             }
@@ -314,12 +323,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             paper-card div.card-content div.legend h3 iron-icon[active='Yes'] {
-				      color: #35BF2E;
-			      }
+                color: #35BF2E;
+            }
 
-			      paper-card div.card-content div.legend h3 iron-icon[active='No'] {
-				      color: var(--paper-grey-500);
-			      }
+            paper-card div.card-content div.legend h3 iron-icon[active='No'] {
+                color: var(--paper-grey-500);
+            }
 
             paper-card div.card-content div.legend p {
                 margin: 0;
@@ -328,6 +337,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             /* Fab */
+
             paper-fab {
                 position: fixed;
                 bottom: 2em;
@@ -338,6 +348,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             /* Responsive */
+
             @media screen and (max-width: 425px) {
                 /* General Style */
                 main {
@@ -364,17 +375,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <iron-media-query query="(max-width: 600px)" query-matches="{{responsiveScreen}}"></iron-media-query>
 
         <!-- Firebase Document Configuration -->
-        <firebase-document
-            id="firebaseDocument"
-            app-name="wrc_software"></firebase-document>
+        <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
 
-            <!-- Workouts Query Configuration -->
-        <firebase-query
-            app-name="wrc_software"
-            path="workouts"
-            data="{{workoutsData}}"
-            order-by-child="status"
-            equal-to="false"></firebase-query>
+        <!-- Workouts Query Configuration -->
+        <firebase-query app-name="wrc_software" path="workouts" data="{{workoutsData}}" order-by-child="status" equal-to="false"></firebase-query>
 
         <main>
             <template is="dom-if" if="[[!userReady]]">
@@ -396,41 +400,39 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <!-- Athletes Wrapper -->
             <div class="athletes-wrapper" hidden$="[[!_computeVisibleData(athletesData.length, userReady)]]">
 
-              <div class="wrapper-horizontal">
-                <!-- Search filter -->
-                <div class="search-wrapper">
-                    <!-- Polyfilter configuration -->
-                    <poly-filter-diacritic
-                        filter="[[athleteFilter]]"
-                        array-to-filter="[[athletesData]]"
-                        filtered-array="{{athletesDataFiltered}}"></poly-filter-diacritic>
+                <div class="wrapper-horizontal">
+                    <!-- Search filter -->
+                    <div class="search-wrapper">
+                        <!-- Polyfilter configuration -->
+                        <poly-filter-diacritic filter="[[athleteFilter]]" array-to-filter="[[athletesData]]" filtered-array="{{athletesDataFiltered}}"></poly-filter-diacritic>
 
-                    <!-- Search bar -->
-                    <paper-search-bar query="{{athleteFilter}}" hideFilterButton=true> </paper-search-bar>
-                  </div>
+                        <!-- Search bar -->
+                        <paper-search-bar query="{{athleteFilter}}" hideFilterButton=true> </paper-search-bar>
+                    </div>
 
-                  <!-- printer -->
-                  <div class="printer-icon">
-				    <paper-icon-button class="icon-button" noink icon="app-icons:printer" on-tap='_printPdfCollection'></paper-icon-button>
-                  </div>
-              </div>
+                    <!-- printer -->
+                    <div class="printer-icon">
+                        <paper-icon-button class="icon-button" noink icon="app-icons:printer" on-tap='_printPdfCollection'></paper-icon-button>
+                    </div>
+                </div>
 
                 <!-- Grid View -->
                 <template is="dom-if" if="[[!responsiveScreen]]">
                     <div class="grid-wrapper">
                         <vaadin-grid aria-label="Coaches Grid" items="[[athletesDataFiltered]]">
-                          <!-- Active -->
-                          <vaadin-grid-column width="100px" flex-grow="0">
-                              <template class="header">
+                            <!-- Active -->
+                            <vaadin-grid-column width="100px" flex-grow="0">
+                                <template class="header">
 
-                                  <vaadin-grid-sorter path="active" active$="[[item.profile.active]]">Active</vaadin-grid-sorter>
-                              </template>
-                              <template>
+                                    <vaadin-grid-sorter path="active" active$="[[item.profile.active]]">Active</vaadin-grid-sorter>
+                                </template>
+                                <template>
 
-                                 <paper-toggle-button id$="[[item.$key]]" noink checked="{{_computeActiveToggle(item.profile.active)}}" status$="[[item.profile.active]]" on-change="_changeAthleteActiveStatus"></paper-toggle-button>
-                                  <!--<toggle-icon icon="app-icons:dot" active$="[[item.profile.active]]"></toggle-icon> -->
-                              </template>
-                          </vaadin-grid-column>
+                                    <paper-toggle-button id$="[[item.$key]]" noink checked="{{_computeActiveToggle(item.profile.active)}}" status$="[[item.profile.active]]"
+                                        on-change="_changeAthleteActiveStatus"></paper-toggle-button>
+                                    <!--<toggle-icon icon="app-icons:dot" active$="[[item.profile.active]]"></toggle-icon> -->
+                                </template>
+                            </vaadin-grid-column>
 
                             <!-- Athlete number -->
                             <vaadin-grid-column width="70px" flex-grow="0">
@@ -478,7 +480,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <div class="actions">
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
                                         <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
-                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:pdf" on-tap="_generateAthletePDF" first$="[[item.profile.first]]" last$="[[item.profile.last]]" number$="[[item.profile.number]]"></paper-icon-button>
+                                        <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:pdf" on-tap="_generateAthletePDF" first$="[[item.profile.first]]"
+                                            last$="[[item.profile.last]]" number$="[[item.profile.number]]"></paper-icon-button>
                                         <!-- <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button> -->
                                     </div>
                                 </template>
@@ -494,11 +497,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             <paper-card>
                                 <div class="card-content">
                                     <div class="profile-picture">
-                                        <iron-image
-                                            fade
-                                            preload
-                                            sizing="cover"
-                                            src="[[athlete.profile.profile_pic_url]]"></iron-image>
+                                        <iron-image fade preload sizing="cover" src="[[athlete.profile.profile_pic_url]]"></iron-image>
                                     </div>
                                     <div class="legend">
                                         <h3>
@@ -529,18 +528,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
     <script src="../../bower_components/pdfmake/build/vfs_fonts.js"></script>
 
     <script>
-        (function() {
+        (function () {
             'use strict';
 
             class WrcAthletes extends PdfWorkoutCreator(Polymer.Element) {
                 /**
                  * Element definition
-                */
-                static get is() { return 'wrc-athletes'; }
+                 */
+                static get is() {
+                    return 'wrc-athletes';
+                }
 
                 /**
                  * Element properties
-                */
+                 */
                 static get properties() {
                     return {
                         userInfo: Object,
@@ -563,8 +564,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             notify: true
                         },
                         pdfCollection: {
-                          type: Array,
-                          notfiy: true
+                            type: Array,
+                            notfiy: true
                         }
                     };
                 }
@@ -594,7 +595,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {Number} length of the athletes array
                  * @param {Boolean} ready status of the user
                  * @return {Boolean}
-                */
+                 */
                 _computeVisibleEmptyMessage(length, ready) {
                     if (!ready) return false;
                     return (length > 0) ? false : true;
@@ -606,7 +607,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {Number} length of the athletes array
                  * @param {Boolean} ready status of the user
                  * @return {Boolean}
-                */
+                 */
                 _computeVisibleData(length, ready) {
                     if (!ready) return false;
                     return (length > 0) ? true : false;
@@ -617,20 +618,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {Object} user information
                  * @return {void}
-                */
+                 */
                 _userChanged(user) {
                     if (user) {
                         this.userReady = false;
                         this.$.firebaseDocument.getStoredValue('/users')
-                        .then(function (snapshot) {
-                            this.userReady = true;
-                        }.bind(this));
+                            .then(function (snapshot) {
+                                this.userReady = true;
+                            }.bind(this));
                     }
                 }
 
                 /**
                  * Opens athlete dialog to add
-                */
+                 */
                 _openToAdd() {
                     this.action = 'add';
                     this._athletesDialog._resetForm();
@@ -645,20 +646,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {Event} evt from tapped button
                  * @return {void}
-                */
+                 */
                 _openToEdit(evt) {
                     this.athleteId = evt.target.getAttribute('id');
                     this.action = 'edit';
                     this._athletesDialog.athleteInfo = null;
 
-                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
-                    .then(function(snapshot) {
-                        this._athletesDialog.athleteInfo = snapshot;
-                        this._athletesDialog.acceptedCallback = this._saveAthlete.bind(this);
-                        this._athletesDialog.action = 'edit';
-                        this._athletesDialog.opened = true;
-                        this._athletesDialog.user = this.user;
-                    }.bind(this));
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId +
+                            '/profile')
+                        .then(function (snapshot) {
+                            this._athletesDialog.athleteInfo = snapshot;
+                            this._athletesDialog.acceptedCallback = this._saveAthlete.bind(this);
+                            this._athletesDialog.action = 'edit';
+                            this._athletesDialog.opened = true;
+                            this._athletesDialog.user = this.user;
+                        }.bind(this));
                 }
 
                 /**
@@ -666,99 +668,109 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {Object} athleteInfo from dialog
                  * @return {void}
-                */
+                 */
                 _saveAthlete(athleteInfo) {
                     if (this.action === 'add') {
                         // Saves athlete in coach's private path
-                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', athleteInfo)
-                        .then(function() {
-                            // Creates athlete private node
-                            this.$.firebaseDocument.setStoredValue(athleteInfo.uid + '/metadata', {'path': this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', 'role': 'athlete'});
+                        this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid +
+                                '/profile', athleteInfo)
+                            .then(function () {
+                                // Creates athlete private node
+                                this.$.firebaseDocument.setStoredValue(athleteInfo.uid + '/metadata', {
+                                    'path': this.user.uid + '/athletes/' + athleteInfo.uid +
+                                        '/profile',
+                                    'role': 'athlete'
+                                });
 
-                            // Saves default maxes in athletes info
-                            this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/stats',
-                            {
-                                'bench_press_value': '0',
-                                'bench_press_reps': '0',
-                                'back_squat_value': '0',
-                                'back_squat_reps': '0',
-                                'front_squat_value': '0',
-                                'front_squat_reps': '0',
-                                'deadlift_value': '0',
-                                'deadlift_reps': '0',
-                                'hang_power_clean_value': '0',
-                                'hang_power_clean_reps': '0',
-                                'pull_ups': '0',
-                                'forty_yard_dash': '0',
-                                'three_cone_drill': '0',
-                                'twenty_yard_shuttle': '0',
-                                'sixty_yard_shuttle': '0',
-                                'vertical_jump': '0',
-                                'broad_jump': '0'
-                            });
-                        }.bind(this))
-                        .catch(function (err) {
-                            this._appToast.text = 'There has been an error. Please try again.';
-                            this._appToast.open();
-                        }.bind(this));
+                                // Saves default maxes in athletes info
+                                this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' +
+                                    athleteInfo.uid + '/stats', {
+                                        'bench_press_value': '0',
+                                        'bench_press_reps': '0',
+                                        'back_squat_value': '0',
+                                        'back_squat_reps': '0',
+                                        'front_squat_value': '0',
+                                        'front_squat_reps': '0',
+                                        'deadlift_value': '0',
+                                        'deadlift_reps': '0',
+                                        'hang_power_clean_value': '0',
+                                        'hang_power_clean_reps': '0',
+                                        'pull_ups': '0',
+                                        'forty_yard_dash': '0',
+                                        'three_cone_drill': '0',
+                                        'twenty_yard_shuttle': '0',
+                                        'sixty_yard_shuttle': '0',
+                                        'vertical_jump': '0',
+                                        'broad_jump': '0'
+                                    });
+                            }.bind(this))
+                            .catch(function (err) {
+                                this._appToast.text = 'There has been an error. Please try again.';
+                                this._appToast.open();
+                            }.bind(this));
 
-                  this._athletesDialog.opened = false;
-                  this._appToast.text = 'The athlete has been saved successfully.';
-                  this._appToast.open();
-                  this._appProgressBar.hidden = true;
-                  } else {
-                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', athleteInfo)
-                                .catch(function (err) {
-                                    this._appToast.text = 'There has been an error. Please try again.';
-                                    this._appToast.open();
-                                }.bind(this));
+                        this._athletesDialog.opened = false;
+                        this._appToast.text = 'The athlete has been saved successfully.';
+                        this._appToast.open();
+                        this._appProgressBar.hidden = true;
+                    } else {
+                        this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid +
+                                '/profile', athleteInfo)
+                            .catch(function (err) {
+                                this._appToast.text = 'There has been an error. Please try again.';
+                                this._appToast.open();
+                            }.bind(this));
 
-                    this._athletesDialog.opened = false;
-                    this._appToast.text = 'The athlete has been modified successfully.';
-                    this._appToast.open();
-                    this._appProgressBar.hidden = true;
-                  }
-              }
+                        this._athletesDialog.opened = false;
+                        this._appToast.text = 'The athlete has been modified successfully.';
+                        this._appToast.open();
+                        this._appProgressBar.hidden = true;
+                    }
+                }
 
                 /**
                  * Athlete's profile dialog
-                */
+                 */
                 _openAthleteProfileDialog(e) {
                     this.athleteId = e.target.getAttribute('id');
 
-                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
-                    .then(function(snapshot) {
-                        this._athleteProfileDialog.user = this.user;
-                        this._athleteProfileDialog.athleteId = this.athleteId;
-                        this._athleteProfileDialog.athleteInfo = snapshot;
-                        this._athleteProfileDialog.opened = true;
-                    }.bind(this), function(err) {
-                        this._appToast.text = 'An error has ocurred trying to retrieve the coach data. Please try again.';
-                        this._appToast.open();
-                    }.bind(this));
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId +
+                            '/profile')
+                        .then(function (snapshot) {
+                            this._athleteProfileDialog.user = this.user;
+                            this._athleteProfileDialog.athleteId = this.athleteId;
+                            this._athleteProfileDialog.athleteInfo = snapshot;
+                            this._athleteProfileDialog.opened = true;
+                        }.bind(this), function (err) {
+                            this._appToast.text =
+                                'An error has ocurred trying to retrieve the coach data. Please try again.';
+                            this._appToast.open();
+                        }.bind(this));
                 }
 
                 /**
                  * Athlete' stats dialog
-                */
+                 */
                 _openStatsDialog(e) {
                     this.athleteId = e.target.getAttribute('id');
 
-                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
-                    .then(function(athleteInfo) {
-                        this._athleteStatsDialog.athleteInfo = athleteInfo;
-                        this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/stats')
-                    .then(function(athleteStats) {
-                        this._athleteStatsDialog.user = this.user;
-                        this._athleteStatsDialog.athleteStats = athleteStats;
-                        this._athleteStatsDialog.opened = true;
-                    }.bind(this));
-                    }.bind(this));
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId +
+                            '/profile')
+                        .then(function (athleteInfo) {
+                            this._athleteStatsDialog.athleteInfo = athleteInfo;
+                            this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId +
+                                    '/stats')
+                                .then(function (athleteStats) {
+                                    this._athleteStatsDialog.user = this.user;
+                                    this._athleteStatsDialog.athleteStats = athleteStats;
+                                    this._athleteStatsDialog.opened = true;
+                                }.bind(this));
+                        }.bind(this));
                 }
 
                 /**
                  * Changes active status of the athlete in real-time from toggle-button
-                */
+                 */
                 _changeAthleteActiveStatus(e) {
                     this.athleteId = e.target.getAttribute('id');
 
@@ -770,12 +782,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     newStatus = (currentStatus === 'Yes') ? 'No' : 'Yes';
 
                     // Save new status into firebase
-                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile/active', newStatus)
-                    .catch(function(err) {
-                        // Catch any error from firebase
-                        this._appToast.text = 'There has been an error trying to change the active status';
-                        this._appToast.open();
-                    }.bind(this));
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + this.athleteId +
+                            '/profile/active', newStatus)
+                        .catch(function (err) {
+                            // Catch any error from firebase
+                            this._appToast.text =
+                                'There has been an error trying to change the active status';
+                            this._appToast.open();
+                        }.bind(this));
 
                     // Open toast with successful message
                     this._appToast.text = 'Active status has been changed successfully.';
@@ -800,12 +814,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     var that = this;
 
                     // Loop for each element in an array, in order.
-                    athletesData.forEach(function(athlete) { //
+                    athletesData.forEach(function (athlete) { //
                         if (athlete.profile.active == "Yes") {
-                          // Compose name using athlete profile data
-                          var athleteName = athlete.profile.first + " " + athlete.profile.last;
+                            // Compose name using athlete profile data
+                            var athleteName = athlete.profile.first + " " + athlete.profile.last;
 
-                          that._loadWorkoutData(athlete.stats, athleteName);
+                            that._loadWorkoutData(athlete.stats, athleteName);
                         }
                     });
                 }
@@ -821,27 +835,33 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // Retrieves activated workout path from coach's node
                     this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
-                      .then(function(workoutId){
-                        this.workoutId = workoutId;
+                        .then(function (workoutId) {
+                            this.workoutId = workoutId;
 
-                        // Retrieve workout data
-                        this.$.firebaseDocument.getStoredValue(`workouts/${workoutId}`)
-                      .then(function(workoutData) {
+                            if (workoutId && workoutId.length) {
+                                // Retrieve workout data
+                                this.$.firebaseDocument.getStoredValue(`workouts/${workoutId}`)
+                                    .then(function (workoutData) {
 
-                        // Creates pdf with 3 necessary objects
-                        this._computePdfCollection(workoutData, athleteStats, athleteName);
-                      }.bind(this));
-        							//.catch(function(err) {
-                      //  this._appToast.text = "There has been an error. Please try again.";
-  			              	//this._appToast.open();
-                      //  console.error(err.message);
-        							//}.bind(this));
-                    }.bind(this));
-        						  //.catch(function(err) {
-                      //  this._appToast.text = "There has been an error. Please try again.";
-  			              	//this._appToast.open();
-                      //  console.error(err.message);
-        						  //}.bind(this));
+                                        // Creates pdf with 3 necessary objects
+                                        this._computePdfCollection(workoutData, athleteStats,
+                                            athleteName);
+                                    }.bind(this));
+                                //.catch(function(err) {
+                                //  this._appToast.text = "There has been an error. Please try again.";
+                                //this._appToast.open();
+                                //  console.error(err.message);
+                                //}.bind(this));
+                            } else {
+                                this._appToast.text = `You don't have any active workout to Preview.`;
+                                this._appToast.open();
+                            }
+                        }.bind(this));
+                    //.catch(function(err) {
+                    //  this._appToast.text = "There has been an error. Please try again.";
+                    //this._appToast.open();
+                    //  console.error(err.message);
+                    //}.bind(this));
                 }
 
 
@@ -855,26 +875,26 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {Object} athleteWorkout - athlete workout data
                  */
 
-                 _computePdfCollection(workoutData, athleteStats, athleteName) {
-                  var pdfCollection = [];
+                _computePdfCollection(workoutData, athleteStats, athleteName) {
+                    var pdfCollection = [];
 
 
-                   //pdfCollection = that.pdfCollection;
+                    //pdfCollection = that.pdfCollection;
 
-                  pdfCollection.push({
-                    workoutData: workoutData,
-                    athleteStats: athleteStats,
-                    athleteName: athleteName
-                  });
-
-
-                   console.log(pdfCollection);
+                    pdfCollection.push({
+                        workoutData: workoutData,
+                        athleteStats: athleteStats,
+                        athleteName: athleteName
+                    });
 
 
-                   // Invoke generate preview with 4 retrieved objects
-                   this._generatePreview(workoutData, athleteStats, athleteName);
+                    console.log(pdfCollection);
 
-                 }
+
+                    // Invoke generate preview with 4 retrieved objects
+                    this._generatePreview(workoutData, athleteStats, athleteName);
+
+                }
 
 
 
@@ -884,43 +904,53 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *  @description Preview athlete individual workout
                  */
                 _generateAthletePDF(evt) {
-                  this.athleteId = evt.target.getAttribute('id');
+                    this.athleteId = evt.target.getAttribute('id');
 
-                  var that = this;
-                  var activeWorkoutId;
+                    var that = this;
+                    var activeWorkoutId;
 
-                  // Retrieve athlete profile
-                  this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
-                   .then(function(athlete){
-                     // Compose name using athlete profile data
-                     var athleteName = athlete.first + " " + athlete.last;
+                    // Retrieve athlete profile
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId +
+                            '/profile')
+                        .then(function (athlete) {
+                            // Compose name using athlete profile data
+                            var athleteName = athlete.first + " " + athlete.last;
 
-                     console.log(athlete.first);
+                            console.log(athlete.first);
 
-                   // Retrieve athlete stats
-                     this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/stats')
-                      .then(function(athleteStats){
+                            // Retrieve athlete stats
+                            this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId +
+                                    '/stats')
+                                .then(function (athleteStats) {
 
-                        console.log(athleteStats);
+                                    console.log(athleteStats);
 
-                  // Retrieves activated workout path from coach's node
-                  this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
-                    .then(function(workoutId){
-                      activeWorkoutId = workoutId;
+                                    // Retrieves activated workout path from coach's node
+                                    this.$.firebaseDocument.getStoredValue(
+                                            `${this.user.uid}/activated_workout/path`)
+                                        .then(function (workoutId) {
+                                            activeWorkoutId = workoutId;
 
-                  // Retrieve workout data
-                  this.$.firebaseDocument.getStoredValue(`workouts/${activeWorkoutId}`)
-                    .then(function(workoutData) {
-                      console.log(workoutData);
+                                            if (workoutId && workoutId.length) {
+                                                // Retrieve workout data
+                                                this.$.firebaseDocument.getStoredValue(
+                                                        `workouts/${activeWorkoutId}`)
+                                                    .then(function (workoutData) {
+                                                        console.log(workoutData);
 
-                    // Invoke generate preview with 4 retrieved objects
-                    that._generatePreview(workoutData,athleteStats, athleteName);
-                  }.bind(this));
+                                                        // Invoke generate preview with 4 retrieved objects
+                                                        that._generatePreview(workoutData,
+                                                            athleteStats, athleteName);
+                                                    }.bind(this));
+                                            } else {
+                                                this._appToast.text = `In order to preview PDF you must have an active workout.`;
+                                                this._appToast.open();
+                                            }
 
-                  }.bind(this));
+                                        }.bind(this));
 
-                  }.bind(this));
-                  }.bind(this));
+                                }.bind(this));
+                        }.bind(this));
 
 
                 }

@@ -41,162 +41,162 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <style>
             /* Dialog */
             paper-dialog {
-				      border-radius: 5px;
-              box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
-			      }
+                border-radius: 5px;
+                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+            }
 
             paper-dialog h2 {
-        			color: var(--azul-text-title);
-        			font-size: 1.6em;
-      			}
+                color: var(--azul-text-title);
+                font-size: 1.6em;
+            }
 
             paper-dialog .paper-dialog-title {
-              margin: -5px 0px 10px 0px !important;
-              @apply --layout-horizontal
+                margin: -5px 0px 10px 0px !important;
+                @apply --layout-horizontal
             }
 
             paper-dialog div.buttons {
-              margin-top: .5cm;
+                margin-top: .5cm;
 
-      				@apply --layout-horizontal;
-              @apply --layout-end-justified;
-      			}
+                @apply --layout-horizontal;
+                @apply --layout-end-justified;
+            }
 
             paper-dialog div.buttons[hidden] {
-              display: none;
+                display: none;
             }
 
             paper-dialog .buttons paper-button.save-button {
-              color: var(--azul-primary-button);
-              font-weight: normal;
+                color: var(--azul-primary-button);
+                font-weight: normal;
             }
 
-      			paper-dialog paper-button.edit-button {
-              color: var(--azul-primary-button);
-              font-weight: normal;
-      			}
+            paper-dialog paper-button.edit-button {
+                color: var(--azul-primary-button);
+                font-weight: normal;
+            }
 
             div.edit-button-container {
-              height: 10px;
-              margin: 17px 0 0 0;
+                height: 10px;
+                margin: 17px 0 0 0;
             }
 
-      			paper-dialog .buttons paper-button.cancel-button {
-        			color: var(--paper-grey-700);
-              font-weight: normal;
-      			}
+            paper-dialog .buttons paper-button.cancel-button {
+                color: var(--paper-grey-700);
+                font-weight: normal;
+            }
 
-      			paper-dialog .buttons paper-button.delete-button {
-      			  color: var(--paper-red-400);
-              font-weight: normal;
-      			}
+            paper-dialog .buttons paper-button.delete-button {
+                color: var(--paper-red-400);
+                font-weight: normal;
+            }
 
             /* Image Wrapper */
             div.image-wrapper {
-      				width: 100%;
+                width: 100%;
 
-    				  @apply --layout-vertical;
-              @apply --layout-center;
-      			}
+                @apply --layout-vertical;
+                @apply --layout-center;
+            }
 
             div.image-wrapper[hidden] {
-              display: none;
+                display: none;
             }
 
-      			div.image-wrapper iron-image {
-        			margin-bottom: 12px;
-        			background-color: #F3F4F5;
-        			overflow: hidden;
-        			border-radius: 10em;
-        			width: 150px;
-        			height: 150px;
-              box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+            div.image-wrapper iron-image {
+                margin-bottom: 12px;
+                background-color: #F3F4F5;
+                overflow: hidden;
+                border-radius: 10em;
+                width: 150px;
+                height: 150px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
 
-        			@apply --layout-vertical;
-        			@apply --layout-center-center;
-      			}
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
 
             /* Profile Pic Uploader */
-      			[type='file'] {
-      				display: none;
-      			}
-
-      			div.picture-wrapper {
-        			width: 100%;
-              margin-bottom: 12px;
-
-        			@apply --layout-vertical;
-        		  @apply --layout-center-center;
-      			}
-
-            div.picture-wrapper[hidden] {
-              display: none;
+            [type='file'] {
+                display: none;
             }
 
-      			div.picture-wrapper label {
-      				background-color: #F3F4F5;
-      				overflow: hidden;
-      				border-radius: 10em;
-      				width: 150px;
-      				height: 150px;
-                      box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+            div.picture-wrapper {
+                width: 100%;
+                margin-bottom: 12px;
 
-      				@apply --layout-vertical;
-      				@apply --layout-center-center;
-      			}
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
 
-      			div.picture-wrapper label:hover {
-      				background-color: var(--paper-grey-300);
-      			}
+            div.picture-wrapper[hidden] {
+                display: none;
+            }
 
-      			label iron-image {
-      				width: inherit;
-      				height: inherit;
-      				cursor: pointer;
-      			}
+            div.picture-wrapper label {
+                background-color: #F3F4F5;
+                overflow: hidden;
+                border-radius: 10em;
+                width: 150px;
+                height: 150px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            div.picture-wrapper label:hover {
+                background-color: var(--paper-grey-300);
+            }
+
+            label iron-image {
+                width: inherit;
+                height: inherit;
+                cursor: pointer;
+            }
 
             /* Email Wrapper */
             div.email-wrapper {
-              width: 100%;
-              text-align: center;
+                width: 100%;
+                text-align: center;
             }
 
             div.email-wrapper p {
-              color: var(--azul-text-title);
-              font-size: 1.1em;
-              margin-top: 0;
-              font-weight: 400;
+                color: var(--azul-text-title);
+                font-size: 1.1em;
+                margin-top: 0;
+                font-weight: 400;
             }
 
             /* Info Wrapper */
             div.info-wrapper {
-              @apply --layout-vertical;
+                @apply --layout-vertical;
             }
 
             div.info-wrapper[hidden] {
-              display: none;
+                display: none;
             }
 
             div.info-wrapper p {
-              margin-bottom: 0;
-              font-size: 1.1em;
-              color: var(--azul-text-title);
+                margin-bottom: 0;
+                font-size: 1.1em;
+                color: var(--azul-text-title);
             }
 
             div.info-wrapper p strong {
-              margin-right: 3px;
+                margin-right: 3px;
             }
 
             /* Form Wrapper */
             div.form-wrapper {
-              width: 100%;
+                width: 100%;
             }
 
             /* To keep dialog larger with large screens */
-			@media screen and (min-width: 600px) {
-				paper-dialog {
-					width: 610px;
-				}
+            @media screen and (min-width: 600px) {
+                paper-dialog {
+                    width: 610px;
+                }
             }
 
             [flex] {
@@ -205,35 +205,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         </style>
 
         <!-- Firebase Document Configuration -->
-        <firebase-document
-            id="firebaseDocument"
-            app-name="wrc_software"></firebase-document>
+        <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
 
         <!-- Firebase Storage Configuration -->
-        <firebase-storage-ref
-            id="storageRef"
-            app-name="wrc_software"></firebase-storage-ref>
+        <firebase-storage-ref id="storageRef" app-name="wrc_software"></firebase-storage-ref>
 
-        <firebase-storage-multiupload
-            id="firebaseStorage"
-            app-name="wrc_software"
-            path="profile-pics"></firebase-storage-multiupload>
+        <firebase-storage-multiupload id="firebaseStorage" app-name="wrc_software" path="profile-pics"></firebase-storage-multiupload>
 
         <!-- Element UI -->
-        <paper-dialog
-            opened="{{opened}}"
-            with-backdrop
-            entry-animation="scale-up-animation"
-            exit-animation="fade-out-animation">
+        <paper-dialog opened="{{opened}}" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation">
 
             <!--  Modal Header  -->
             <div class="paper-dialog-title">
-              <h2>[[coachInfo.first]] [[coachInfo.last]]</h2>
-              <span flex> </span>
-              <!--  Edit Button  -->
-              <div class="edit-button-container" hidden="[[editing]]">
-                <paper-button class="edit-button" on-tap="_toggleEditView">Edit</paper-button>
-              </div>
+                <h2>[[coachInfo.first]] [[coachInfo.last]]</h2>
+                <span flex> </span>
+                <!--  Edit Button  -->
+                <div class="edit-button-container" hidden="[[editing]]">
+                    <paper-button class="edit-button" on-tap="_toggleEditView">Edit</paper-button>
+                </div>
             </div>
 
 
@@ -262,8 +251,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         <span>[[coachInfo.email]]</span>
                     </p>
                     <p>
-                       <strong>Phone:</strong>
-                       <span>[[coachInfo.phone]]</span>
+                        <strong>Phone:</strong>
+                        <span>[[coachInfo.phone]]</span>
                     </p>
                     <p>
                         <strong>Team:</strong>
@@ -276,28 +265,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <iron-form id="coachForm">
                         <form>
                             <vaadin-form-layout>
-                                <vaadin-text-field
-                                    label="First Name"
-                                    name="first"
-                                    required
-                                    error-message="This field is required"
-                                    value="{{newCoachInfo.first}}"></vaadin-text-field>
-                                <vaadin-text-field
-                                    label="Last Name"
-                                    name="last"
-                                    required
-                                    error-message="This field is required"
-                                    value="{{newCoachInfo.last}}"></vaadin-text-field>
-                                <vaadin-text-field
-                                    label="Team"
-                                    name="team"
-                                    required
-                                    error-message="This field is required"
-                                    value="{{newCoachInfo.team}}"></vaadin-text-field>
-                                <vaadin-text-field
-                                    label="Phone"
-                                    name="phone"
-                                    value="{{newCoachInfo.phone}}"></vaadin-text-field>
+                                <vaadin-text-field label="First Name" name="first" required error-message="This field is required" value="{{newCoachInfo.first}}"></vaadin-text-field>
+                                <vaadin-text-field label="Last Name" name="last" required error-message="This field is required" value="{{newCoachInfo.last}}"></vaadin-text-field>
+                                <vaadin-text-field label="Team" name="team" required error-message="This field is required" value="{{newCoachInfo.team}}"></vaadin-text-field>
+                                <vaadin-text-field label="Phone" name="phone" value="{{newCoachInfo.phone}}"></vaadin-text-field>
                             </vaadin-form-layout>
                         </form>
                     </iron-form>
@@ -317,18 +288,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
     </template>
 
     <script>
-        (function() {
+        (function () {
             'use strict';
 
             class CoachProfileDialog extends Polymer.Element {
                 /**
                  * Element definition
-                */
-                static get is() { return 'coach-profile-dialog'; }
+                 */
+                static get is() {
+                    return 'coach-profile-dialog';
+                }
 
                 /**
                  * Element properties
-                */
+                 */
                 static get properties() {
                     return {
                         user: Object,
@@ -361,14 +334,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._deleteCoachDialog = document.getElementById('appDeleteDialog');
 
                     const fileUpload = this.$.profilePicture;
-					              fileUpload.addEventListener('change', function(e) {
+                    fileUpload.addEventListener('change', function (e) {
                         this._createImgPreview(e.target.files[0]);
                     }.bind(this));
                 }
 
                 /**
                  * Resets the coach info when closing
-                */
+                 */
                 _resetCoachInfo() {
                     this.coachInfo = null;
                 }
@@ -378,14 +351,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {String} image selected by user
                  * @return {void}
-                */
+                 */
                 _createImgPreview(image) {
                     this.$.profileImage.src = URL.createObjectURL(image);
                 }
 
                 /**
                  * Switch to edit view
-                */
+                 */
                 _toggleEditView() {
                     this.newCoachInfo = (this.editing) ? null : this.coachInfo;
 
@@ -396,7 +369,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 /**
                  * Serializes form data and saves into coach data
-                */
+                 */
                 _serializeCoachForm() {
                     if (this.$.coachForm.validate()) {
                         this._appProgressBar.hidden = false;
@@ -406,14 +379,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this.$.storageRef.delete();
 
                             this.$.firebaseStorage.put(this.$.profilePicture.files[0])
-                            .then(function() {
-                                this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0].name)
-                                .then(function (url) {
-                                    this.newCoachInfo.profile_pic_url = url;
-                                    this.newCoachInfo.profile_pic_name = this.$.profilePicture.files[0].name;
-                                    this._saveCoachInfo();
+                                .then(function () {
+                                    this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture
+                                            .files[0].name)
+                                        .then(function (url) {
+                                            this.newCoachInfo.profile_pic_url = url;
+                                            this.newCoachInfo.profile_pic_name = this.$.profilePicture
+                                                .files[0].name;
+                                            this._saveCoachInfo();
+                                        }.bind(this));
                                 }.bind(this));
-                            }.bind(this));
                         } else {
                             this._saveCoachInfo();
                         }
@@ -426,13 +401,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * This is neeed to do not duplicate function, due to when we are saving
                  * new profile picture we have to wait for firebase response until save info because we need
                  * downloadURL from new profile pic.
-                */
+                 */
                 _saveCoachInfo() {
-                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/coaches/' + this.coachId, this.newCoachInfo)
-                    .catch(function(err) {
-                        this._appToast.text = 'There has been an error. Please try again.';
-                        this._appToast.open();
-                    }.bind(this));
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/coaches/' + this.coachId, this
+                            .newCoachInfo)
+                        .catch(function (err) {
+                            this._appToast.text = 'There has been an error. Please try again.';
+                            this._appToast.open();
+                        }.bind(this));
 
                     this._appToast.text = 'The coach has been modified successfully.';
                     this._appToast.open();
@@ -446,7 +422,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 /**
                  * Opens the delete confirmation dialog
-                */
+                 */
                 _openDeleteDialog() {
                     // Binding confirmation action + content
                     this._deleteCoachDialog.acceptedCallback = this._deleteCoach.bind(this);
@@ -462,9 +438,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  *
                  * @param {Boolean} response from delete confirmation dialog
                  * @return {void}
-                */
+                 */
                 _deleteCoach(response) {
                     if (response) {
+
                         // Deletes the coach information from the administrator data
                         this.$.firebaseDocument.destroy(this.user.uid + '/coaches/' + this.coachId)
                         .then(function() {
@@ -473,13 +450,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
                                 this.$.storageRef.delete();
                             }
+                        
+                            // Deletes the coach's node
+                            // Have in count that this WILL DELETE coach's athletes
+                            this.$.firebaseDocument.destroy(this.coachInfo.uid);
+                        
                             this.coachInfo = null;
                         }.bind(this));
-
+                        
                         // Notification
                         this._appToast.text = 'The coach has been deleted successfully.';
                         this._appToast.open();
-
+                        
                         // Close Delete + Profile Dialog
                         this._deleteCoachDialog.opened = false;
                         this.opened = false;
