@@ -113,6 +113,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 @apply --layout-horizontal;
                 @apply --layout-center-center;
                 @apply --layout-center;
+
+                -webkit-font-smoothing: subpixel-antialiased;
+                -webkit-text-stroke:1px transparent;
             }
 
             app-drawer div.menu-container {
@@ -174,8 +177,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             div[slot='dropdown-trigger'] span {
                 color: var(--azul-text-title);
                 margin-right: 24px;
-                font-weight: lighter;
+                font-weight: 300;
                 font-size: .9em;
+
+                -webkit-font-smoothing: subpixel-antialiased;
+                -webkit-text-stroke:1px transparent;
             }
 
             div[slot='dropdown-trigger'] span:hover {
@@ -215,7 +221,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             .drawer-list a span {
                 font-size: 1em;
-                font-weight: lighter;
+                font-weight: 300;
+
+                -webkit-font-smoothing: subpixel-antialiased;
+                -webkit-text-stroke:1px transparent;
             }
 
             .drawer-list a:hover {
