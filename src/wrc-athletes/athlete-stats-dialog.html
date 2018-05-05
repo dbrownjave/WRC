@@ -499,7 +499,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         <div class="agility-wrapper">
                           <p>
                               <strong class="title">Broad Jump:</strong>
-                              <span>{{athleteStats.broad_jump}} ft</span>
+                              <span>{{athleteStats.broad_jump_ft}} ft {{athleteStats.broad_jump_in}} in</span>
                           </p>
                         </div>
                       </div>
@@ -691,7 +691,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <vaadin-text-field
                                         colspan="2"
                                         label="Broad Jump"
-                                        name="broad_jump"
+                                        name="broad_jump_ft"
                                         value="{{athleteStats.broad_jump_ft}}">
                                         <div slot="suffix">ft</div>
                                     </vaadin-text-field>
@@ -699,7 +699,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     <vaadin-text-field
                                       class="no-tf-label"
                                       colspan="2"
-                                      name="broad_jump"
+                                      name="broad_jump_in"
                                       value="{{athleteStats.broad_jump_in}}">
                                       <div slot="suffix">in</div>
                                     </vaadin-text-field>
@@ -750,16 +750,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             type: Boolean,
                             notify: true,
                             value: false
-                        },
-                        broad_jump_in: {
-                          type: Number,
-                          notify:true,
-                          value:'0'
-                        },
-                        broad_jump_ft: {
-                          type: Number,
-                          notify:true,
-                          value:'0'
                         },
                         maxBenchPress: {
                           type: Number,
