@@ -26,23 +26,23 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				const athleteStats = this.stats;
 
 				if (athleteStats) {
-					if (exercise == "bench" || exercise == "bench press") {
+					if (exercise == "bench" || exercise == "bench press" || exercise == "benchpress") {
 						athleteExerciseMax = this._calculateMax(athleteStats.bench_press_value, athleteStats.bench_press_reps);
 						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
 
-					} else if (exercise == "back-squat" || exercise == "back squat") {
+					} else if (exercise == "back-squat" || exercise == "back squat" || exercise == "backsquat" ) {
 						athleteExerciseMax = this._calculateMax(athleteStats.back_squat_value, athleteStats.back_squat_reps);
 						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
 
-					} else if (exercise == "front-squat" || exercise == "front squat") {
+					} else if (exercise == "front-squat" || exercise == "front squat" || exercise == "frontsquat" ) {
 						athleteExerciseMax = this._calculateMax(athleteStats.front_squat_value, athleteStats.front_squat_reps);
 						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
 
-					} else if (exercise == "dead-lift" || exercise == "deadlift") {
+					} else if (exercise == "dead-lift" || exercise == "dead lift" || exercise == "deadlift") {
 						athleteExerciseMax = this._calculateMax(athleteStats.deadlift_value, athleteStats.deadlift_reps);
 						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
 
-					} else if (exercise == "power clean" || exercise == "clean") {
+					} else if (exercise == "power clean" || exercise == "clean" || exercise == "hang clean" || exercise == "hang")) {
 						athleteExerciseMax = this._calculateMax(athleteStats.hang_power_clean_value, athleteStats.hang_power_clean_reps);
 						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
 
