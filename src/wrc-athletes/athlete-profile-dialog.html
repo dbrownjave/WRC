@@ -708,6 +708,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
                                 this.$.storageRef.delete();
                             }
+
+                            this.$.firebaseDocument.destroy(this.athleteId);
+
                             this._resetForm();
                         }.bind(this));
 
