@@ -40,10 +40,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../app-icons.html">
 <link rel="import" href="../fa-icons.html">
 
+<!-- Shared Style  -->
+<link rel="import" href="../shared-styles.html">
+
 
 <dom-module id="athlete-stats-dialog">
     <template>
-        <style>
+        <style include="wrc-shared-styles">
             /* Dialog */
             paper-dialog {
                 border-radius: 5px;
@@ -169,7 +172,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
     			}
 
           div.horizontal-fields-broad-jump vaadin-text-field {
-              width: 57.5%;
+              width: 28.5%;
           }
 
           [slot='suffix'], [slot='prefix'] {
@@ -684,15 +687,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                   </div>
                                 <div class="horizontal-fields" colspan="2">
                                   <div class="horizontal-fields-broad-jump">
+
                                     <vaadin-text-field
                                         colspan="2"
                                         label="Broad Jump"
                                         name="broad_jump"
-                                        value="{{athleteStats.broad_jump}}">
+                                        value="{{athleteStats.broad_jump_ft}}">
                                         <div slot="suffix">ft</div>
                                     </vaadin-text-field>
+                                    <span flex></span>
+                                    <vaadin-text-field
+                                      class="no-tf-label"
+                                      colspan="2"
+                                      name="broad_jump"
+                                      value="{{athleteStats.broad_jump_in}}">
+                                      <div slot="suffix">in</div>
+                                    </vaadin-text-field>
                                   </div>
-                                </div>
+                                  </div>
                             </vaadin-form-layout>
                         </form>
                     </iron-form>
@@ -740,12 +752,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             value: false
                         },
                         broad_jump_in: {
-                          type: String,
+                          type: Number,
                           notify:true,
                           value:'0'
                         },
                         broad_jump_ft: {
-                          type: String,
+                          type: Number,
                           notify:true,
                           value:'0'
                         },
