@@ -193,6 +193,22 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _closeDialog() {
                     this.acceptedCallback(false);
                 }
+
+                /**
+                 * Reload the current document
+                */
+
+                _refreshPage(){
+
+                  /**
+                   *
+                   * @description location.reload(forceGet)- Optional specifies the type of reloading
+                   *
+                   * true - Reloads the current page from the server
+                   * false - Default. Reloads the current page from the cache.
+                   */
+                  location.reload();
+                }
             }
             window.customElements.define(VerifyEmailDialog.is, VerifyEmailDialog);
         })();
