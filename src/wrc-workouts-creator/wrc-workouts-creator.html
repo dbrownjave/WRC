@@ -47,7 +47,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <dom-module id="wrc-workouts-creator">
 	<template>
-        <style>
+        <style include="wrc-shared-styles">
             /* Main Wrapper */
             main {
                 padding: 2em 3em;
@@ -192,6 +192,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			app-name="wrc_software"></firebase-document>
 
         <main>
+
+
+							<paper-spinner active></paper-spinner>
+
+
             <div class="creator-wrapper">
                 <h3>New Weekly Workout</h3>
                 <div class="workout-selector">
@@ -8710,7 +8715,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					if (this.workout && this.$.workoutSelectorForm.validate() && this.$.workoutWeekCombo.validate())
 					{
 						this._progressBar.hidden = false;
-						
+
 						this.$.firebaseDocument.push('workouts', this.workout)
 						.then(function() {
 							this._appToast.text = "The workout has been saved succesfully.";
