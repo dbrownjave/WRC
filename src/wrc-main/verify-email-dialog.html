@@ -32,31 +32,31 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <style>
             /* Dialog Style */
             paper-dialog {
-				border-radius: 5px;
+				        border-radius: 5px;
                 box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
-			}
+			      }
 
             paper-dialog h2 {
-				color: var(--azul-text-title);
-				font-size: 1.6em;
+        				color: var(--azul-text-title);
+        				font-size: 1.6em;
                 text-align: center;
                 margin: 0 0 16px;
-			}
+			       }
 
             paper-dialog div.buttons {
-				@apply --layout-horizontal;
-				@apply --layout-end-justified;
-			}
+      				@apply --layout-horizontal;
+      				@apply --layout-end-justified;
+      			}
 
             paper-dialog .buttons paper-button {
-				color: var(--azul-primary);
-                font-weight: 500;
-			}
+      				color: var(--azul-primary);
+              font-weight: 500;
+      			}
 
             paper-dialog .buttons paper-button.cancel-button {
-				color: var(--azul-primary-text);
+				        color: var(--azul-primary-text);
                 font-weight: normal;
-			}
+			      }
 
             div.legend {
                 @apply --layout-vertical;
@@ -74,17 +74,31 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             div.legend p {
                 color: var(--azul-text-title);
-                font-weight: lighter;
+                font-weight: 500;
                 font-size: 1.1em;
+
+                -webkit-font-smoothing: subpixel-antialiased;
+                -webkit-text-stroke:1px transparent;
             }
 
             div.legend ul {
+              color: var(--azul-text-title);
+              font-weight: 400;
+              font-size: 1.1em;
+
+              -webkit-font-smoothing: subpixel-antialiased;
+              -webkit-text-stroke:1px transparent;
+            }
+
+            div.legend li {
                 margin: 0;
                 padding: 0;
                 color: var(--azul-text-title);
-                font-weight: lighter;
-                font-size: 1em;
-                margin-left: 1.1em;
+                font-weight: 300;
+                font-size: .9em;
+
+                -webkit-font-smoothing: subpixel-antialiased;
+                -webkit-text-stroke:1px transparent;
             }
 
             /* To keep dialog larger with large screens */
