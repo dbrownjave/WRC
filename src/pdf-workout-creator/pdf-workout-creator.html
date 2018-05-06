@@ -42,8 +42,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						athleteExerciseMax = this._calculateMax(athleteStats.deadlift_value, athleteStats.deadlift_reps);
 						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
 
-					} else if (exercise == "power clean" || exercise == "clean" || exercise == "hang clean" || exercise == "hang" || exercise == "ps/hc" || 
-										 exercise == "ps / hc" || exercise == "pc" || exercise == "hc" || exercise == "pc/hc" || exercise == "pc / hc") {
+					} else if (exercise == "power clean" || exercise == "clean" || exercise == "hang clean" || exercise == "hang" || exercise == "ps/hc" ||
+										 exercise == "ps / hc" || exercise == "pc" || exercise == "hc" || exercise == "pc/hc" || exercise == "pc / hc" || exercise == "hc/ps" ||
+					 										 exercise == "hc / ps" || exercise == "hc/pc" || exercise == "hc / pc" || exercise == "ps") {
 						athleteExerciseMax = this._calculateMax(athleteStats.hang_power_clean_value, athleteStats.hang_power_clean_reps);
 						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
 
