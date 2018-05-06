@@ -29,18 +29,19 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <dom-module id="verify-email-dialog">
     <template>
-        <style>
-            /* Dialog Style */
-            paper-dialog {
-				        border-radius: 5px;
-                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
-			      }
+        <style include="wrc-shared-styles">
+
+        paper-dialog {
+          height: 290px;
+          width: 550px !important;
+          margin-top: 10px;
+        }
 
             paper-dialog h2 {
-        				color: var(--azul-text-title);
-        				font-size: 1.6em;
+        				font-size: 2em;
+                font-weight: 400;
                 text-align: center;
-                margin: 0 0 16px;
+                margin: 0 0 5px;
 			       }
 
             paper-dialog div.buttons {
@@ -49,21 +50,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       			}
 
             paper-dialog .buttons paper-button {
-      				color: var(--azul-primary);
+      				color: var(--azul-color-shuttleGray);
               font-weight: 500;
       			}
-
-            paper-dialog .buttons paper-button.cancel-button {
-				        color: var(--azul-primary-text);
-                font-weight: normal;
-			      }
 
             div.legend {
                 @apply --layout-vertical;
             }
 
             div.legend iron-icon {
-                margin-bottom: 24px;
+                margin-bottom: 16px;
                 --iron-icon-width: 80px;
                 --iron-icon-height: 80px;
                 --iron-icon-fill-color: var(--paper-red-300);
@@ -74,8 +70,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             div.legend p {
                 color: var(--azul-text-title);
-                font-weight: 500;
+                font-weight: 400;
+                text-align: center;
                 font-size: 1.1em;
+                margin-bottom: 20px;
 
                 -webkit-font-smoothing: subpixel-antialiased;
                 -webkit-text-stroke:1px transparent;
@@ -87,7 +85,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
               font-size: 1.1em;
 
               -webkit-font-smoothing: subpixel-antialiased;
-              -webkit-text-stroke:1px transparent;
+              -webkit-text-stroke:.6px transparent;
             }
 
             div.legend li {
@@ -101,12 +99,30 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 -webkit-text-stroke:1px transparent;
             }
 
+            .sign-out-button {
+              color: var(--azul-primary-text);
+              font-weight: 400 !important;
+              margin: 5px 0 0 0;
+            }
+
+            .done-button {
+              color: #4d98f7 !important;
+            }
+
+            div.mail-box-icon {
+              text-align: center;
+              display:inline-block;
+              font-size: 5em;
+              margin-top: 40px;
+              margin-bottom: 40px;
+            }
+
             /* To keep dialog larger with large screens */
-			@media screen and (min-width: 600px) {
-				paper-dialog {
-					width: 610px;
-				}
-			}
+    			@media screen and (min-width: 600px) {
+    				paper-dialog {
+    					width: 610px;
+    				}
+    			}
 
             [flex] {
                 @apply --layout-flex;
@@ -120,23 +136,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             exit-animation="fade-out-animation">
 
             <paper-dialog-scrollable>
+                  <paper-button class="sign-out-button" on-tap="_closeDialog" class="cancel-button">Sign out</paper-button>
+
                 <div class="legend">
-                    <iron-icon icon="fa-icons:exclamation-circle"></iron-icon>
-                    <h2>Your email is not verified</h2>
+                  <div class="mail-box-icon"> 📬 </div>
+                    <h2>Verify your account</h2>
                     <p>
-                        In order to use WRC Software please follow the next instructions:
+                        Please verify your email for your WRC account.
                     </p>
-                    <ul>
-                        <li>Press <strong>VERIFY</strong> to receive the verification link.</li>
-                        <li>Check your email inbox and follow the instructions received.</li>
-                        <li>Once you have verified your email refresh the page to use WRC Software normally.</li>
-                    </ul>
                 </div>
             </paper-dialog-scrollable>
             <div class="buttons">
-                <paper-button on-tap="_closeDialog" class="cancel-button">Sign out</paper-button>
                 <span flex></span>
-                <paper-button on-tap="_triggerAcceptedCallback">Verify</paper-button>
+                <paper-button on-tap="_triggerAcceptedCallback">Verify My Email</paper-button>
+                <paper-button class="done-button" on-tap="_refreshPage">Got it</paper-button>
             </div>
         </paper-dialog>
     </template>
