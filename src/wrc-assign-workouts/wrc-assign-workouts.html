@@ -420,12 +420,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 ready() {
                     super.ready();
+                    
                     // Notification
                     this._appToast = document.getElementById("appToast");
+                    this._appToastPopupDisabled = document.getElementById('appToastPopupDisabled');
+
                     // App Progress bar
                     this._appProgress = document.getElementById("appProgressBar");
+
                     // Open Download Program Dialog
                     this._downloadProgramDialog = document.getElementById("downloadProgramDialog");
+
                     // Remove Workout Dialog
                     this._removeProgramDialog = document.getElementById("appDeleteDialog");
                 }
@@ -490,7 +495,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {Object} workout - workout retrieved from firebase
                 */
                 _generatePreview(workout) {
-                  super._generatePreview(workout);
+                  /**
+                   * Call super class generatePreview function, sending workout data
+                   */
+                  var computePdfPreview = super._generatePreview(workout);
+
+                  // Notify user that pop-up is disabled
+                  if (computePdfPreview === false) {
+                    this._appToastPopupDisabled.text = " 🚫 Pop-ups Blocked. ";
+                    this._appToastPopupDisabled.open();
+                    console.log("Pop-up Window Blocker Enabled");
+                  }
                 }
 
         		/**

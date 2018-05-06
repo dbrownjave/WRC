@@ -267,7 +267,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					super.ready();
 
 					// Toast
-					this._appToast = document.getElementById("appToast");
+					this._appToast = document.getElementById('appToast');
+					this.this._appToastPopupDisabled = document.getElementById('this._appToastPopupDisabled')
 				}
 
 				/**
@@ -353,10 +354,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					const athleteName = `${athleteData.first} ${athleteData.last}`;
 
 					/**
-					 * Call super class generatePreview function using sending
+					 * Call super class generatePreview function sending
 					 * workout data, athlete max stats and name
 					 */
-					super._generatePreview(workout, stats, athleteName);
+					var computePdfPreview = super._generatePreview(workout, athleteStats, athleteName);
+
+					// Notify user that pop-up is disabled
+					if (computePdfPreview === false) {
+						this._appToastPopupDisabled.text = " 🚫 Pop-ups Blocked. ";
+						this._appToastPopupDisabled.open();
+						console.log("Pop-up Window Blocker Enabled");
+					}
 				}
 			}
 			window.customElements.define(WrcActiveWorkouts.is, WrcActiveWorkouts);

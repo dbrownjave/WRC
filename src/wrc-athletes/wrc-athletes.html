@@ -661,8 +661,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.action = 'edit';
                     this._athletesDialog.athleteInfo = null;
 
-                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId +
-                            '/profile')
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
                         .then(function (snapshot) {
                             this._athletesDialog.athleteInfo = snapshot;
                             this._athletesDialog.acceptedCallback = this._saveAthlete.bind(this);
@@ -962,13 +961,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {String} athleteName - first and last
                  */
                 _generatePreview(workout, athleteStats, athleteName) {
-                    var computePdfPreview = super._generatePreview(workout, athleteStats, athleteName);
+                  /**
+                   * Call super class generatePreview function sending
+                   * workout data, athlete max stats and name
+                   */
+                  var computePdfPreview = super._generatePreview(workout, athleteStats, athleteName);
 
-                    // Notify user that pop-up is disabled
-                    if (computePdfPreview === false) {
-                      this._appToastPopupDisabled.text = " 🚫 Pop-ups Blocked. ";
-                      this._appToastPopupDisabled.open();
-                    }
+                  // Notify user that pop-up is disabled
+                  if (computePdfPreview === false) {
+                    this._appToastPopupDisabled.text = " 🚫 Pop-ups Blocked. ";
+                    this._appToastPopupDisabled.open();
+                    console.log("Pop-up Window Blocker Enabled");
+                  }
                 }
             }
             window.customElements.define(WrcAthletes.is, WrcAthletes);

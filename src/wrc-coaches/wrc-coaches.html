@@ -609,7 +609,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @return {void}
                 */
                 _saveCoach(coachInfo) {
-					if (this.action === 'add') {
+					          if (this.action === 'add') {
                         // Saves coach into admin private info
 						            this.$.firebaseDocument.setStoredValue(this.user.uid + '/coaches/' + coachInfo.uid, coachInfo)
                         .then(function() {

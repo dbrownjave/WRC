@@ -5234,14 +5234,11 @@ console.log(pdfCollection.length);
 				try {
 					// This creates and opens the PDF in a new tab
 					var computePdfPreview = pdfMake.createPdf(pdfContent).open();
-
-					console.log("Pop-up Window Blocker Disabled");
-
+					
 					// if popup blocker enabled return true
 					return computePdfPreview;
 				}
 				catch(err) {
-				  console.log("Pop-up Window Blocker Enabled");
 					// if popup blocker enabled return false or undefined
 					return false;
 				}
