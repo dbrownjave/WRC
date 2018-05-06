@@ -5225,30 +5225,28 @@ console.log(pdfCollection.length);
 
 				//console.log("PDF Collection: "  + this._computeContent(pdfData));
 
-				// This creates and opens the PDF in a new tab
-				var computePdfPreview = pdfMake.createPdf(pdfContent).open();
-
 				/**
 				 * @description notify if pdf window is opened successfully
 				 *
 				 * @param {Boolean} computePdfPreview
 				 * @return true if popup blocker disabled
 				*/
-				if(!computePdfPreview) {
+				try {
+					// This creates and opens the PDF in a new tab
+					var computePdfPreview = pdfMake.createPdf(pdfContent).open();
+
 					console.log("Pop-up Window Blocker Disabled");
-					return !computePdfPreview;
-				}
 
-				// TODO: Determine to notfiy if popup blocker is enabled
-				if(computePdfPreview || computePdfPreview === undefined || computePdfPreview === null) {
-					console.log("Pop-up Window Blocker Enabled");
-					console.log(computePdfPreview);
-
-					// if popup blocker enabled return false or undefined
+					// if popup blocker enabled return true
 					return computePdfPreview;
 				}
-			}
+				catch(err) {
+				  console.log("Pop-up Window Blocker Enabled");
+					// if popup blocker enabled return false or undefined
+					return false;
+				}
 
+			}
 		}
 	};
 </script>

@@ -523,6 +523,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             <!-- Paper Fab to add new athlete -->
             <paper-fab icon="app-icons:person-add" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(athletesData.length, userReady)]]"></paper-fab>
+
+            <paper-toast id="test" duration="0" text="This toast will stay opened until you close it, or open another toast.">
+              <paper-button onclick="toast1.toggle()" class="yellow-button">Close now!</paper-button>
+            </paper-toast>
+
         </main>
     </template>
 
@@ -590,6 +595,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // App Toast
                     this._appToast = document.getElementById('appToast');
+                    this._appToastPopupDisabled = document.getElementById('appToastPopupDisabled');
                 }
 
                 /**
@@ -718,8 +724,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this._appToast.open();
                         this._appProgressBar.hidden = true;
                     } else {
-                        this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid +
-                                '/profile', athleteInfo)
+                        this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', athleteInfo)
                             .catch(function (err) {
                                 this._appToast.text = 'There has been an error. Please try again.';
                                 this._appToast.open();
@@ -738,8 +743,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _openAthleteProfileDialog(e) {
                     this.athleteId = e.target.getAttribute('id');
 
-                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId +
-                            '/profile')
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
                         .then(function (snapshot) {
                             this._athleteProfileDialog.user = this.user;
                             this._athleteProfileDialog.athleteId = this.athleteId;
@@ -958,13 +962,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {String} athleteName - first and last
                  */
                 _generatePreview(workout, athleteStats, athleteName) {
-
                     var computePdfPreview = super._generatePreview(workout, athleteStats, athleteName);
 
-                    // Notified if pdf window is opened successfully (true/false)
-                    console.log(computePdfPreview);
+                    // Notify user that pop-up is disabled
+                    if (computePdfPreview === false) {
+                      this._appToastPopupDisabled.text = " 🚫 Pop-ups Blocked";
+                      this._appToastPopupDisabled.open();
+                    }
                 }
-
             }
             window.customElements.define(WrcAthletes.is, WrcAthletes);
         })();
