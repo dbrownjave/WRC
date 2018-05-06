@@ -266,9 +266,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				ready() {
 					super.ready();
 
-					// Toast
+					// App Toast
 					this._appToast = document.getElementById('appToast');
-					this._appToastPopupDisabled = document.getElementById('appToastPopupDisabled')
+					this._appToastPopupDisabled = document.getElementById('appToastPopupDisabled');
 				}
 
 				/**
@@ -357,7 +357,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					 * Call super class generatePreview function sending
 					 * workout data, athlete max stats and name
 					 */
-					var computePdfPreview = super._generatePreview(workout, athleteStats, athleteName);
+					var computePdfPreview = super._generatePreview(workout, stats, athleteName);
 
 					// Notify user that pop-up is disabled
 					if (computePdfPreview === false) {
