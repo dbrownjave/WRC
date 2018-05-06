@@ -108,6 +108,30 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				--paper-progress-active-color: var(--azul-primary);
 			}
+
+			paper-button {
+				width: 30px !important;
+				padding: 3px;
+			}
+
+			a
+			a:active
+			a:hover,
+			a:link,
+			a:visited
+			{
+				color: #4FBE79;
+				font-weight: bold;
+				text-transform: uppercase;
+				text-decoration: none;
+				display: inline-block;
+				padding-left: 40px;
+			}
+
+			paper-toast #appToastPopupDisabled {
+				width: 180px !important;
+			}
+
 		</style>
 	</head>
 
@@ -118,8 +142,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 		<!-- App Toast -->
 		<paper-toast id="appToast" duration="4000"></paper-toast>
 
-		<paper-toast id="appToastPopupDisabled" duration="4000" text="This toast will stay opened until you close it, or open another toast.">
-  	<paper-button onclick="toast1.toggle()" class="">Help?</paper-button>
+		<paper-toast id="appToastPopupDisabled" duration="4000">
+			<a href="https://support.norton.com/sp/en/us/home/current/solutions/v107843274_EndUserProfile_en_us">Enable</a>
 		</paper-toast>
 
 		<!-- Recover Dialog -->
