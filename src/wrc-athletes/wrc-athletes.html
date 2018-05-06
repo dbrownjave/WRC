@@ -914,8 +914,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     var activeWorkoutId;
 
                     // Retrieve athlete profile
-                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId +
-                            '/profile')
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile')
                         .then(function (athlete) {
                             // Compose name using athlete profile data
                             var athleteName = athlete.first + " " + athlete.last;
@@ -923,40 +922,32 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             console.log(athlete.first);
 
                             // Retrieve athlete stats
-                            this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId +
-                                    '/stats')
-                                .then(function (athleteStats) {
+                            this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/stats')
+                              .then(function (athleteStats) {
 
-                                    console.log(athleteStats);
+                                console.log(athleteStats);
 
-                                    // Retrieves activated workout path from coach's node
-                                    this.$.firebaseDocument.getStoredValue(
-                                            `${this.user.uid}/activated_workout/path`)
-                                        .then(function (workoutId) {
-                                            activeWorkoutId = workoutId;
+                                // Retrieves activated workout path from coach's node
+                                this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
+                                  .then(function (workoutId) {
+                                    activeWorkoutId = workoutId;
 
-                                            if (workoutId && workoutId.length) {
-                                                // Retrieve workout data
-                                                this.$.firebaseDocument.getStoredValue(
-                                                        `workouts/${activeWorkoutId}`)
-                                                    .then(function (workoutData) {
-                                                        console.log(workoutData);
+                                      if (workoutId && workoutId.length) {
+                                        // Retrieve workout data
+                                        this.$.firebaseDocument.getStoredValue(`workouts/${activeWorkoutId}`)
+                                          .then(function (workoutData) {
+                                            console.log(workoutData);
 
-                                                        // Invoke generate preview with 4 retrieved objects
-                                                        that._generatePreview(workoutData,
-                                                            athleteStats, athleteName);
-                                                    }.bind(this));
-                                            } else {
-                                                this._appToast.text = `In order to preview PDF you must have an active workout.`;
-                                                this._appToast.open();
-                                            }
-
+                                            // Invoke generate preview with 4 retrieved objects
+                                            that._generatePreview(workoutData,athleteStats, athleteName);
+                                          }.bind(this));
+                                          } else {
+                                            this._appToast.text = `In order to preview PDF you must have an active workout.`;
+                                            this._appToast.open();
+                                          }
                                         }.bind(this));
-
                                 }.bind(this));
                         }.bind(this));
-
-
                 }
 
                 /**
@@ -968,7 +959,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 _generatePreview(workout, athleteStats, athleteName) {
 
-                    super._generatePreview(workout, athleteStats, athleteName);
+                    var computePdfPreview = super._generatePreview(workout, athleteStats, athleteName);
+
+                    // Notified if pdf window is opened successfully (true/false)
+                    console.log(computePdfPreview);
                 }
 
             }

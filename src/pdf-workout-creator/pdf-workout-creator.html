@@ -5223,11 +5223,30 @@ console.log(pdfCollection.length);
 
 				} // EO Content
 
-				console.log("PDF Collection: "  + this._computeContent(pdfData));
+				//console.log("PDF Collection: "  + this._computeContent(pdfData));
 
 				// This creates and opens the PDF in a new tab
-				pdfMake.createPdf(pdfContent).open();
+				var computePdfPreview = pdfMake.createPdf(pdfContent).open();
 
+				/**
+				 * @description notify if pdf window is opened successfully
+				 *
+				 * @param {Boolean} computePdfPreview
+				 * @return true if popup blocker disabled
+				*/
+				if(!computePdfPreview) {
+					console.log("Pop-up Window Blocker Disabled");
+					return !computePdfPreview;
+				}
+
+				// TODO: Determine to notfiy if popup blocker is enabled
+				if(computePdfPreview || computePdfPreview === undefined || computePdfPreview === null) {
+					console.log("Pop-up Window Blocker Enabled");
+					console.log(computePdfPreview);
+
+					// if popup blocker enabled return false or undefined
+					return computePdfPreview;
+				}
 			}
 
 		}
