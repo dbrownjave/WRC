@@ -6,11 +6,12 @@ Weight Room Coach Software is a web application for coaches & athletes, to contr
 
 To work on WRC, follow the next instructions:
 
-* **NPM:** install npm from [here](https://www.npmjs.com/get-npm?utm_source=house&utm_medium=homepage&utm_campaign=free%20orgs&utm_term=Install%20npm),
-* **Polymer CLI:** install the Polymer CLI using npm i -g polymer-cli,
-* **Bower:** install bower using npm i -g bower,
+* **NPM:** install `npm` from [here](https://www.npmjs.com/get-npm?utm_source=house&utm_medium=homepage&utm_campaign=free%20orgs&utm_term=Install%20npm),
+* **Git:** install `git` from [here](https://git-scm.com/downloads),
+* **Polymer CLI:** install the Polymer CLI using `npm i -g polymer-cli`,
+* **Bower:** install bower using `npm i -g bower`,
 * **Clone:** clone the repo to your local files,
-* **Serve using Polymer CLI:** go to your project folder via terminal and use the ```polymer serve``` command.
+* **Serve using Polymer CLI:** go to your project folder via terminal and use the `polymer serve` command.
 
 ## Building app
 
