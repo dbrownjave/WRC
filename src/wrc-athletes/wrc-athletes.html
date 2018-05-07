@@ -680,19 +680,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _saveAthlete(athleteInfo) {
                     if (this.action === 'add') {
                         // Saves athlete in coach's private path
-                        this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid +
-                                '/profile', athleteInfo)
+                        this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', athleteInfo)
                             .then(function () {
                                 // Creates athlete private node
                                 this.$.firebaseDocument.setStoredValue(athleteInfo.uid + '/metadata', {
-                                    'path': this.user.uid + '/athletes/' + athleteInfo.uid +
-                                        '/profile',
+                                    'path': this.user.uid + '/athletes/' + athleteInfo.uid + '/profile',
                                     'role': 'athlete'
                                 });
 
                                 // Saves default maxes in athletes info
-                                this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' +
-                                    athleteInfo.uid + '/stats', {
+                                this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/stats', {
                                         'bench_press_value': '0',
                                         'bench_press_reps': '0',
                                         'back_squat_value': '0',
@@ -838,8 +835,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {String} athleteName - first and last
                  */
                 _loadWorkoutData(athleteStats, athleteName) {
-
-
                     // Retrieves activated workout path from coach's node
                     this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
                         .then(function (workoutId) {
@@ -902,9 +897,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._generatePreview(workoutData, athleteStats, athleteName);
 
                 }
-
-
-
 
 
                 /**
