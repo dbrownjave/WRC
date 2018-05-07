@@ -1,58 +1,30 @@
 # WRC Software
 
-This project is developed with Polymer 2.0
+Weight Room Coach Software is a web application for coaches & athletes, to control their workouts and profiles.
 
-### Reviewing UI
+## How to work on WRC
 
-To review the UI follow the next instructions
+To work on WRC, follow the next instructions:
 
-* **NPM** install npm from [here](https://www.npmjs.com/get-npm?utm_source=house&utm_medium=homepage&utm_campaign=free%20orgs&utm_term=Install%20npm)
-* **Polymer CLI** install the Polymer CLI using npm i -g polymer-cli
-* **Bower** install bower using npm i -g bower
-* **Install bower components** navigate to project path and execute bower install command to install the bower components
-* **Serve using Polymer CLI** go to your project path via terminal and use the "polymer serve" command
-* **Open in browser** use the  command "polymer serve" and go to "localhost:port" (by default port will be 8081)
+* **NPM:** install npm from [here](https://www.npmjs.com/get-npm?utm_source=house&utm_medium=homepage&utm_campaign=free%20orgs&utm_term=Install%20npm),
+* **Polymer CLI:** install the Polymer CLI using npm i -g polymer-cli,
+* **Bower:** install bower using npm i -g bower,
+* **Serve using Polymer CLI:** go to your project folder via terminal and use the ```polymer serve``` command.
 
-**Please add/edit the following code to firebase-auth on bower_components/polymerfire/firebase-auth.html**
+## Building app
 
-* function > _handleSignIn
-```
-_handleSignIn: function(promise, action) {
-    return promise
-    .then(function(user) {
-        this.fire('success', action);
-    }.bind(this))
-    .catch(function(err) {
-        this.fire('error', err);
-        throw err;
-    }.bind(this));
-}
-```
+To build the app run the ```polymer build``` command and once completed, do the following:
 
-* function > signInWithEmailAndPassword
-```
-signInWithEmailAndPassword: function(email, password) {
-    return this._handleSignIn(this.auth.signInWithEmailAndPassword(email, password), 'auth');
-}
-```
+1. **Remove "weird code":** in the files ```wrc-athletes.html``` and ```pdf-workout-creator.html``` remove all the "weird code" which actually is the `pdfmake` library imported, but it is causing issues.
+2. **Add `pdfmake` folder to `build/es6-bundled/bower_components`:** copy the `pdfmake` folder from local `bower_components` and copy it to the `bower_components` in the `build` folder.
+3. **Import `pdfmake` to `build` files:** in the files mentioned in step 1, import the `pdfmake` library like this `<script src="../../bower_components/pdfmake/build/pdfmake.min.js"></script>` and `<script src="../../bower_components/pdfmake/build/vfs_fonts.js"></script>`. Please note the order, first `pdfmake` and then the `fonts`.
 
-* function > sendPasswordResetEmail
-```
-sendPasswordResetEmail: function(email) {
-    return this._handleSignIn(this.auth.sendPasswordResetEmail(email), 'recover');
-}
-```
+## Testing `build` app
 
-### In iron-form element
+To test the `build` app before deploying just run the following command: `polymer serve build/es6-bundled`.
 
-* function > reset
-```
-replace:
-    node.value = defaults.value;
-    node.checked = defaults.checked;
+## Deploying app
 
-with:
-    node.value = null;
-    node.checked = false;
-    node.invalid = false;
-```
+Once you built the app and added the `pdfmake` library as mentioned above, just run `firebase deploy` to deploy the app to the global host.
+
+###### WRC Software is designed, created and supported by @ZEUSOFCS in collaboration with @codeselfinc
