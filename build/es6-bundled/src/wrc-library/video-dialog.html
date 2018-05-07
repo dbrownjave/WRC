@@ -1,0 +1,209 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+--><!-- Polymer --><!-- Paper Elements --><!-- Iron Elements --><!-- Vaadin Elements --><!-- Suji Elements --><!-- Neon Elements --><div hidden="" by-polymer-bundler=""><link rel="import" href="../suji/lib/themes/azul/azul-theme.html"><link rel="import" href="../suji/lib/colors/suji-color-palette.html"><link rel="import" href="../suji/lib/themes/azul/azul-dialog.html"></div><dom-module id="video-dialog">
+    <template>
+        <style>
+            /* Dialog */
+            paper-dialog {
+				      border-radius: 5px;
+                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+			       }
+
+            paper-dialog h2 {
+      				color: var(--azul-text-title);
+      				font-size: 1.6em;
+      			}
+
+      			paper-dialog div p {
+      				font-weight: lighter;
+      				line-height: 1em;
+      			}
+
+      			paper-dialog div.buttons {
+              margin-top: .5cm;
+      				@apply --layout-horizontal;
+      				@apply --layout-end-justified;
+      			}
+
+      			paper-dialog .buttons paper-button.save-button {
+      				color: var(--azul-primary-button-text);
+              font-weight: normal;
+      			}
+
+      			paper-dialog .buttons paper-button.cancel-button {
+      				color: var(--paper-grey-700);
+              font-weight: normal;
+      			}
+
+      			paper-dialog .buttons paper-button.delete-button {
+      				color: var(--paper-red-400);
+              font-weight: normal;
+      			}
+
+            div.image-wrapper {
+                margin-bottom: 12px;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            div.image-wrapper iron-image {
+                width: 120px;
+                height: 120px;
+            }
+
+            div.image-wrapper h3 {
+                margin: 0;
+                color: var(--paper-grey-500);
+                font-size: 1.1em;
+                font-weight: normal;
+            }
+
+            vaadin-text-field [slot='prefix'] {
+                color: var(--paper-grey-500);
+            }
+
+            /* To keep dialog larger with large screens */
+      			@media screen and (min-width: 400px) {
+      				paper-dialog {
+      					width: 410px;
+      				}
+      			}
+
+      			[hidden] {
+      				display: none;
+      			}
+
+            [flex] {
+                @apply --layout-flex;
+            }
+        </style>
+
+        <paper-dialog opened="{{opened}}" with-backdrop="" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+
+            <h2>[[title]] Video</h2>
+            <paper-dialog-scrollable>
+                <div class="image-wrapper">
+                    <iron-image preload="" fade="" sizing="contain" src="../../images/app-images/upload.png"></iron-image>
+                    <h3>Upload video to library</h3>
+                </div>
+                <div class="form-wrapper">
+                    <iron-form id="videoForm">
+                        <form>
+                            <vaadin-form-layout>
+                                <vaadin-text-field colspan="2" label="Title" name="title" required="" error-message="Enter the title" value="{{videoInfo.title}}"></vaadin-text-field>
+
+                                <vaadin-text-field colspan="2" label="ID" name="id" required="" error-message="Enter the video id" value="{{videoInfo.id}}">
+                                    <span slot="prefix">watch?v=</span>
+                                </vaadin-text-field>
+
+                                <vaadin-combo-box id="videoCategory" colspan="2" label="Category" name="category" required="" error-message="Select the category" value="{{videoInfo.category}}"></vaadin-combo-box>
+                            </vaadin-form-layout>
+                        </form>
+                    </iron-form>
+                </div>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button dialog-dismiss="" class="cancel-button" on-tap="_resetForm">Cancel</paper-button>
+                <span flex=""></span>
+                <paper-button class="save-button" on-tap="_serializeData">Save</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+(function () {
+    'use strict';
+
+    var VideoDialog = function (_Polymer$Element) {
+        babelHelpers.inherits(VideoDialog, _Polymer$Element);
+
+        function VideoDialog() {
+            babelHelpers.classCallCheck(this, VideoDialog);
+            return babelHelpers.possibleConstructorReturn(this, (VideoDialog.__proto__ || Object.getPrototypeOf(VideoDialog)).apply(this, arguments));
+        }
+
+        babelHelpers.createClass(VideoDialog, [{
+            key: 'ready',
+            value: function ready() {
+                babelHelpers.get(VideoDialog.prototype.__proto__ || Object.getPrototypeOf(VideoDialog.prototype), 'ready', this).call(this);
+
+                // Categories
+                this.$.videoCategory.items = ['Recommended', 'Tutorial', 'Recent'];
+
+                // App Progress Bar
+                this._appProgressBar = document.getElementById('appProgressBar');
+            }
+
+            /**
+             * Resets video form
+            */
+
+        }, {
+            key: '_resetForm',
+            value: function _resetForm() {
+                this.videoInfo = null;
+            }
+
+            /**
+             * Serializes data from form
+            */
+
+        }, {
+            key: '_serializeData',
+            value: function _serializeData() {
+                console.log("Saving Video Form");
+
+                if (this.$.videoForm.validate()) {
+                    this._appProgressBar.hidden = false;
+
+                    // Serialize Form is to retrieve the form data
+                    this.videoInfo = this.$.videoForm.serializeForm();
+
+                    // Transfer form data
+                    this.acceptedCallback(this.videoInfo);
+                }
+            }
+        }], [{
+            key: 'is',
+
+            /**
+             * Element definition
+            */
+            get: function get() {
+                return 'video-dialog';
+            }
+
+            /**
+             * Element properties
+            */
+
+        }, {
+            key: 'properties',
+            get: function get() {
+                return {
+                    acceptedCallback: Function,
+                    opened: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
+                    videoInfo: {
+                        type: Object,
+                        notify: true,
+                        value: {
+                            title: '',
+                            id: '',
+                            category: ''
+                        }
+                    }
+                };
+            }
+        }]);
+        return VideoDialog;
+    }(Polymer.Element);
+
+    window.customElements.define(VideoDialog.is, VideoDialog);
+})();</script>
+</dom-module>

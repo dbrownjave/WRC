@@ -1,0 +1,2099 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+--><!-- Polymer --><!-- Paper Elements --><!-- Iron Elements --><!-- Polymerfire Elements --><!-- Paper Elements --><!-- Vaadin Elements --><!-- Polyfilter --><!-- Suji Elements --><!-- Neon Elements --><!-- Google Elements --><!-- Icons --><div hidden="" by-polymer-bundler=""><link rel="import" href="../suji/lib/themes/azul/azul-theme.html"><link rel="import" href="../suji/lib/colors/suji-color-palette.html"><!--
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at https://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at https://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at https://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at https://polymer.github.io/PATENTS.txt
+--><!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><!--
+Element access to Web Storage API (window.localStorage).
+
+Keeps `value` property in sync with localStorage.
+
+Value is saved as json by default.
+
+### Usage:
+
+`ls-sample` will automatically save changes to its value.
+
+    <dom-module id="ls-sample">
+      <iron-localstorage name="my-app-storage"
+        value="{{cartoon}}"
+        on-iron-localstorage-load-empty="initializeDefaultCartoon"
+      ></iron-localstorage>
+    </dom-module>
+
+    <script>
+      Polymer({
+        is: 'ls-sample',
+        properties: {
+          cartoon: {
+            type: Object
+          }
+        },
+        // initializes default if nothing has been stored
+        initializeDefaultCartoon: function() {
+          this.cartoon = {
+            name: "Mickey",
+            hasEars: true
+          }
+        },
+        // use path set api to propagate changes to localstorage
+        makeModifications: function() {
+          this.set('cartoon.name', "Minions");
+          this.set('cartoon.hasEars', false);
+        }
+      });
+    </script>
+
+### Tech notes:
+
+* * `value.*` is observed, and saved on modifications. You must use
+    path change notification methods such as `set()` to modify value
+    for changes to be observed.
+
+* * Set `auto-save-disabled` to prevent automatic saving.
+
+* * Value is saved as JSON by default.
+
+* * To delete a key, set value to null
+
+* Element listens to StorageAPI `storage` event, and will reload upon receiving it.
+
+* **Warning**: do not bind value to sub-properties until Polymer
+[bug 1550](https://github.com/Polymer/polymer/issues/1550)
+is resolved. Local storage will be blown away.
+`<iron-localstorage value="{{foo.bar}}"` will cause **data loss**.
+
+@demo demo/index.html
+@hero hero.svg
+-->
+<dom-module id="iron-localstorage" assetpath="../../bower_components/iron-localstorage/"></dom-module>
+<script>
+
+Polymer({
+  is: 'iron-localstorage',
+
+  properties: {
+    /**
+     * localStorage item key
+     */
+    name: {
+      type: String,
+      value: ''
+    },
+    /**
+     * The data associated with this storage.
+     * If set to null item will be deleted.
+     * @type {*}
+     */
+    value: {
+      type: Object,
+      notify: true
+    },
+
+    /**
+     * If true: do not convert value to JSON on save/load
+     */
+    useRaw: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Value will not be saved automatically if true. You'll have to do it manually with `save()`
+     */
+    autoSaveDisabled: {
+      type: Boolean,
+      value: false
+    },
+    /**
+     * Last error encountered while saving/loading items
+     */
+    errorMessage: {
+      type: String,
+      notify: true
+    },
+
+    /** True if value has been loaded */
+    _loaded: {
+      type: Boolean,
+      value: false
+    }
+  },
+
+  observers: ['_debounceReload(name,useRaw)', '_trySaveValue(autoSaveDisabled)', '_trySaveValue(value.*)'],
+
+  ready: function ready() {
+    this._boundHandleStorage = this._handleStorage.bind(this);
+  },
+
+  attached: function attached() {
+    window.addEventListener('storage', this._boundHandleStorage);
+  },
+
+  detached: function detached() {
+    window.removeEventListener('storage', this._boundHandleStorage);
+  },
+
+  _handleStorage: function _handleStorage(ev) {
+    if (ev.key == this.name) {
+      this._load(true);
+    }
+  },
+
+  _trySaveValue: function _trySaveValue() {
+    if (this.autoSaveDisabled === undefined || this._doNotSave) {
+      return;
+    }
+
+    if (this._loaded && !this.autoSaveDisabled) {
+      this.debounce('save', this.save);
+    }
+  },
+
+  _debounceReload: function _debounceReload() {
+    if (this.name !== undefined && this.useRaw !== undefined) {
+      this.debounce('reload', this.reload);
+    }
+  },
+
+  /**
+   * Loads the value again. Use if you modify
+   * localStorage using DOM calls, and want to
+   * keep this element in sync.
+   */
+  reload: function reload() {
+    this._loaded = false;
+    this._load();
+  },
+
+  /**
+   * loads value from local storage
+   * @param {boolean=} externalChange true if loading changes from a different window
+   */
+  _load: function _load(externalChange) {
+    try {
+      var v = window.localStorage.getItem(this.name);
+    } catch (ex) {
+      this.errorMessage = ex.message;
+
+      this._error("Could not save to localStorage.  Try enabling cookies for this page.", ex);
+    };
+
+    if (v === null) {
+      this._loaded = true;
+      this._doNotSave = true; // guard for save watchers
+      this.value = null;
+      this._doNotSave = false;
+      this.fire('iron-localstorage-load-empty', { externalChange: externalChange }, { composed: true });
+    } else {
+      if (!this.useRaw) {
+        try {
+          // parse value as JSON
+          v = JSON.parse(v);
+        } catch (x) {
+          this.errorMessage = "Could not parse local storage value";
+          Polymer.Base._error("could not parse local storage value", v);
+          v = null;
+        }
+      }
+      this._loaded = true;
+      this._doNotSave = true;
+      this.value = v;
+      this._doNotSave = false;
+      this.fire('iron-localstorage-load', { externalChange: externalChange }, { composed: true });
+    }
+  },
+
+  /**
+   * Saves the value to localStorage. Call to save if autoSaveDisabled is set.
+   * If `value` is null or undefined, deletes localStorage.
+   */
+  save: function save() {
+    var v = this.useRaw ? this.value : JSON.stringify(this.value);
+    try {
+      if (this.value === null || this.value === undefined) {
+        window.localStorage.removeItem(this.name);
+      } else {
+        window.localStorage.setItem(this.name, /** @type {string} */v);
+      }
+    } catch (ex) {
+      // Happens in Safari incognito mode,
+      this.errorMessage = ex.message;
+      Polymer.Base._error("Could not save to localStorage. Incognito mode may be blocking this action", ex);
+    }
+  }
+
+  /**
+   * Fired when value loads from localStorage.
+   *
+   * @event iron-localstorage-load
+   * @param {{externalChange:boolean}} detail -
+   *     externalChange: true if change occured in different window.
+   */
+
+  /**
+   * Fired when loaded value does not exist.
+   * Event handler can be used to initialize default value.
+   *
+   * @event iron-localstorage-load-empty
+   * @param {{externalChange:boolean}} detail -
+   *     externalChange: true if change occured in different window.
+   */
+});</script>
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at https://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at https://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at https://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at https://polymer.github.io/PATENTS.txt
+--><!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><script>
+(function () {
+  "use strict";
+  /**
+   * `Polymer.IronJsonpLibraryBehavior` loads a jsonp library.
+   * Multiple components can request same library, only one copy will load.
+   *
+   * Some libraries require a specific global function be defined.
+   * If this is the case, specify the `callbackName` property.
+   *
+   * You should use an HTML Import to load library dependencies
+   * when possible instead of using this element.
+   *
+   * @hero hero.svg
+   * @demo demo/index.html
+   * @polymerBehavior
+   */
+
+  Polymer.IronJsonpLibraryBehavior = {
+
+    properties: {
+      /**
+       * True if library has been successfully loaded
+       */
+      libraryLoaded: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        readOnly: true
+      },
+      /**
+       * Not null if library has failed to load
+       */
+      libraryErrorMessage: {
+        type: String,
+        value: null,
+        notify: true,
+        readOnly: true
+        // Following properties are to be set by behavior users
+        /**
+         * Library url. Must contain string `%%callback%%`.
+         *
+         * `%%callback%%` is a placeholder for jsonp wrapper function name
+         *
+         * Ex: https://maps.googleapis.com/maps/api/js?callback=%%callback%%
+         * @property libraryUrl
+         */
+        /**
+         * Set if library requires specific callback name.
+         * Name will be automatically generated if not set.
+         * @property callbackName
+         */
+        /**
+         * name of event to be emitted when library loads. Standard is `api-load`
+         * @property notifyEvent
+         */
+        /**
+         * event with name specified in `notifyEvent` attribute
+         * will fire upon successful load2
+         * @event `notifyEvent`
+         */
+      } },
+
+    observers: ['_libraryUrlChanged(libraryUrl)'],
+
+    _libraryUrlChanged: function _libraryUrlChanged(libraryUrl) {
+      // can't load before ready because notifyEvent might not be set
+      if (this._isReady && this.libraryUrl) this._loadLibrary();
+    },
+
+    _libraryLoadCallback: function _libraryLoadCallback(err, result) {
+      if (err) {
+        Polymer.Base._warn("Library load failed:", err.message);
+        this._setLibraryErrorMessage(err.message);
+      } else {
+        this._setLibraryErrorMessage(null);
+        this._setLibraryLoaded(true);
+        if (this.notifyEvent) this.fire(this.notifyEvent, result, { composed: true });
+      }
+    },
+
+    /** loads the library, and fires this.notifyEvent upon completion */
+    _loadLibrary: function _loadLibrary() {
+      LoaderMap.require(this.libraryUrl, this._libraryLoadCallback.bind(this), this.callbackName);
+    },
+
+    ready: function ready() {
+      this._isReady = true;
+      if (this.libraryUrl) this._loadLibrary();
+    }
+  };
+
+  /**
+   * LoaderMap keeps track of all Loaders
+   */
+  var LoaderMap = {
+    apiMap: {}, // { hash -> Loader }
+
+    /**
+     * @param {Function} notifyCallback loaded callback fn(result)
+     * @param {string} jsonpCallbackName name of jsonpcallback. If API does not provide it, leave empty. Optional.
+     */
+    require: function require(url, notifyCallback, jsonpCallbackName) {
+
+      // make hashable string form url
+      var name = this.nameFromUrl(url);
+
+      // create a loader as needed
+      if (!this.apiMap[name]) this.apiMap[name] = new Loader(name, url, jsonpCallbackName);
+
+      // ask for notification
+      this.apiMap[name].requestNotify(notifyCallback);
+    },
+
+    nameFromUrl: function nameFromUrl(url) {
+      return url.replace(/[\:\/\%\?\&\.\=\-\,]/g, '_') + '_api';
+    }
+  };
+
+  /** @constructor */
+  var Loader = function Loader(name, url, callbackName) {
+    this.notifiers = []; // array of notifyFn [ notifyFn* ]
+
+    // callback is specified either as callback name
+    // or computed dynamically if url has callbackMacro in it
+    if (!callbackName) {
+      if (url.indexOf(this.callbackMacro) >= 0) {
+        callbackName = name + '_loaded';
+        url = url.replace(this.callbackMacro, callbackName);
+      } else {
+        this.error = new Error('IronJsonpLibraryBehavior a %%callback%% parameter is required in libraryUrl');
+        // TODO(sjmiles): we should probably fallback to listening to script.load
+        return;
+      }
+    }
+    this.callbackName = callbackName;
+    window[this.callbackName] = this.success.bind(this);
+    this.addScript(url);
+  };
+
+  Loader.prototype = {
+
+    callbackMacro: '%%callback%%',
+    loaded: false,
+
+    addScript: function addScript(src) {
+      var script = document.createElement('script');
+      script.src = src;
+      script.onerror = this.handleError.bind(this);
+      var s = document.querySelector('script') || document.body;
+      s.parentNode.insertBefore(script, s);
+      this.script = script;
+    },
+
+    removeScript: function removeScript() {
+      if (this.script.parentNode) {
+        this.script.parentNode.removeChild(this.script);
+      }
+      this.script = null;
+    },
+
+    handleError: function handleError(ev) {
+      this.error = new Error("Library failed to load");
+      this.notifyAll();
+      this.cleanup();
+    },
+
+    success: function success() {
+      this.loaded = true;
+      this.result = Array.prototype.slice.call(arguments);
+      this.notifyAll();
+      this.cleanup();
+    },
+
+    cleanup: function cleanup() {
+      delete window[this.callbackName];
+    },
+
+    notifyAll: function notifyAll() {
+      this.notifiers.forEach(function (notifyCallback) {
+        notifyCallback(this.error, this.result);
+      }.bind(this));
+      this.notifiers = [];
+    },
+
+    requestNotify: function requestNotify(notifyCallback) {
+      if (this.loaded || this.error) {
+        notifyCallback(this.error, this.result);
+      } else {
+        this.notifiers.push(notifyCallback);
+      }
+    }
+  };
+})();</script>
+
+<!--
+  Loads specified jsonp library.
+
+  Example:
+
+      <iron-jsonp-library
+        library-url="https://apis.google.com/js/plusone.js?onload=%%callback%%"
+        notify-event="api-load"
+        library-loaded="{{loaded}}"></iron-jsonp-library>
+
+  Will emit 'api-load' event when loaded, and set 'loaded' to true
+
+  Implemented by  Polymer.IronJsonpLibraryBehavior. Use it
+  to create specific library loader elements.
+
+  @demo
+-->
+<script>
+Polymer({
+
+  is: 'iron-jsonp-library',
+
+  behaviors: [Polymer.IronJsonpLibraryBehavior],
+
+  properties: {
+    /**
+     * Library url. Must contain string `%%callback%%`.
+     *
+     * `%%callback%%` is a placeholder for jsonp wrapper function name
+     *
+     * Ex: https://maps.googleapis.com/maps/api/js?callback=%%callback%%
+     */
+    libraryUrl: String,
+    /**
+     * Set if library requires specific callback name.
+     * Name will be automatically generated if not set.
+     */
+    callbackName: String,
+    /**
+     * event with name specified in 'notifyEvent' attribute
+     * will fire upon successful load
+     */
+    notifyEvent: String
+    /**
+     * event with name specified in 'notifyEvent' attribute
+     * will fire upon successful load
+     * @event `notifyEvent`
+     */
+
+  }
+});</script>
+<!--
+Dynamically loads the Google Youtube Iframe API, firing the `api-load` event when ready.
+
+Any number of components can use `<google-youtube-api>` elements, and the library will only be loaded once.
+
+https://developers.google.com/youtube/iframe_api_reference
+-->
+<script>
+Polymer({
+
+  is: 'google-youtube-api',
+
+  behaviors: [Polymer.IronJsonpLibraryBehavior],
+
+  properties: {
+
+    /** @private */
+    libraryUrl: {
+      type: String,
+      value: 'https://www.youtube.com/iframe_api'
+    },
+
+    /**
+     * Fired when the API library is loaded and available.
+     * @event api-load
+     */
+    /**
+     * Name of event fired when library loads.
+     */
+    notifyEvent: {
+      type: String,
+      value: 'api-load'
+    },
+
+    callbackName: {
+      type: String,
+      value: 'onYouTubeIframeAPIReady'
+    }
+
+  },
+
+  get api() {
+    return YT;
+  }
+
+});</script>
+<!--
+`google-youtube` encapsulates the YouTube player into a web component.
+
+    <google-youtube
+      video-id="..."
+      height="270px"
+      width="480px"
+      rel="0"
+      start="5"
+      autoplay="1">
+    </google-youtube>
+
+`google-youtube` supports all of the [embedded player parameters](https://developers.google.com/youtube/player_parameters). Each can be set as an attribute on `google-youtube`.
+
+The standard set of [YouTube player events](https://developers.google.com/youtube/iframe_api_reference#Events) are exposed, as well as methods for playing, pausing, seeking to a specific time, and loading a new video.
+
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--google-youtube-container`  | Mixin applied to the container div | `{}`
+`--google-youtube-thumbnail`  | Mixin for the video thumbnail      | `{}`
+`--google-youtube-iframe`     | Mixin for the embeded iframe       | `{}`
+
+
+@demo
+-->
+<dom-module id="google-youtube" assetpath="../../bower_components/google-youtube/">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      :host([fluid]) {
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+      }
+
+      :host([fluid]) iframe,
+      :host([fluid]) #thumbnail {
+        vertical-align: bottom;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+      }
+
+      iframe {
+        @apply --google-youtube-iframe;
+      }
+
+      #container {
+        max-width: 100%;
+        max-height: 100%;
+        @apply --google-youtube-container;
+      }
+
+      #thumbnail {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        @apply --google-youtube-thumbnail;
+      }
+    </style>
+    <div id="container" style$="{{_computeContainerStyle(width, height)}}">
+      <template is="dom-if" if="{{thumbnail}}">
+        <img id="thumbnail" src$="{{thumbnail}}" title="YouTube video thumbnail." alt="YouTube video thumbnail." on-tap="_handleThumbnailTap">
+      </template>
+
+      <template is="dom-if" if="{{!thumbnail}}">
+        <template is="dom-if" if="[[shouldLoadApi]]">
+          <google-youtube-api on-api-load="_apiLoad"></google-youtube-api>
+        </template>
+      </template>
+
+      <!-- Use this._playsupportedLocalStorage as the value, since this.playsupported is set to
+           true as soon as initial playback has started, and we don't want that cached. -->
+      <iron-localstorage name="google-youtube-playsupported" value="{{_playsupportedLocalStorage}}" on-iron-localstorage-load="_useExistingPlaySupportedValue" on-iron-localstorage-load-empty="_determinePlaySupported">
+      </iron-localstorage>
+
+      <div id="player"></div>
+    </div>
+  </template>
+  <script>
+Polymer({
+  is: 'google-youtube',
+  /**
+  * Fired when the YouTube player is fully initialized and ready for use.
+  *
+  * @event google-youtube-ready
+  */
+
+  /**
+  * Fired when the state of the player changes. `e.detail.data` is set to one of
+  * [the documented](https://developers.google.com/youtube/iframe_api_reference#onStateChange)
+  * states.
+  *
+  * @event google-youtube-state-change
+  */
+
+  /**
+  * Fired when playback fails due to an error. `e.detail.data` is set to one of
+  * [the documented](https://developers.google.com/youtube/iframe_api_reference#onError)
+  * error codes.
+  *
+  * @event google-youtube-error
+  */
+
+  properties: {
+    /**
+    * Sets the id of the video to play. Changing this attribute will trigger a call
+    * to load a new video into the player (if `this.autoplay` is set to `1` and `playsupported` is true)
+    * or cue a new video otherwise.
+    *
+    * The underlying YouTube embed will not be added to the page unless
+    * `videoId` or `list` property is set.
+    *
+    * You can [search for videos programmatically](https://developers.google.com/youtube/v3/docs/search/list)
+    * using the YouTube Data API, or just hardcode known video ids to display on your page.
+    */
+    videoId: {
+      type: String,
+      value: '',
+      observer: '_videoIdChanged'
+    },
+
+    /**
+    * The list parameter, in conjunction with the listType parameter, identifies the content that will load in the player.
+    * If the listType parameter value is search, then the list parameter value specifies the search query.
+    * If the listType parameter value is user_uploads, then the list parameter value identifies the YouTube channel whose uploaded videos will be loaded.
+    * If the listType parameter value is playlist, then the list parameter value specifies a YouTube playlist ID. In the parameter value, you need to prepend the playlist ID with the letters PL as shown in the example below.
+    *
+    * See https://developers.google.com/youtube/player_parameters#list
+    */
+    list: {
+      type: String,
+      value: ''
+    },
+
+    /**
+    * See https://developers.google.com/youtube/player_parameters#listtype
+    */
+    listType: String,
+
+    /**
+    * Decides whether YouTube API should be loaded.
+    */
+    shouldLoadApi: {
+      type: Boolean,
+      computed: '_computeShouldLoadApi(list, videoId)'
+    },
+
+    /**
+    * Whether programmatic `<video>.play()` for initial playback is supported in the current browser.
+    *
+    * Most mobile browsers [do not support](https://developer.apple.com/library/safari/documentation/AudioVideo/Conceptual/Using_HTML5_Audio_Video/Device-SpecificConsiderations/Device-SpecificConsiderations.html#//apple_ref/doc/uid/TP40009523-CH5-SW1) autoplaying or scripted playback of videos.
+    * If you attempt to automatically initiate playback of a `<google-youtube>`, e.g. by calling the `play()` method before
+    * playback has initially begun, the YouTube Player will enter an unrecoverable "stuck" state.
+    * To protect against this, check the value of `playsupported` and don't call `play()` if it is set to `false`.
+    * (You can hide/disable your custom play button, etc.)
+    *
+    * The `playsupported` value is determined at runtime, by dynamically creating a `<video>` element with an
+    * inlined data source and calling `play()` on it. (Inspired by [Modernizr](https://github.com/Modernizr/Modernizr/blob/master/feature-detects/video/autoplay.js).)
+    *
+    * If you would rather not incur the minimal overhead involved in going through this process, you can explicitly set
+    * `playsupported` to `true` or `false` when initializing `<google-youtube>`. This is only recommended if you know that
+    * your web app will never (or only) be used on mobile browsers.
+    */
+    playsupported: {
+      type: Boolean,
+      value: null,
+      notify: true
+    },
+
+    /**
+    * "1" if video should start automatically
+    */
+    autoplay: {
+      type: Number,
+      value: 0
+    },
+    /**
+    * Whether playback has started.
+    *
+    * This defaults to `false` and is set to `true` once the first 'playing' event is fired by
+    * the underlying YouTube Player API.
+    *
+    * Once set to `true`, it will remain that way indefinitely.
+    * Paused/buffering/ended events won't cause `playbackstarted` to reset to `false`.
+    * Nor will loading a new video into the player.
+    */
+    playbackstarted: {
+      type: Boolean,
+      value: false,
+      notify: true
+    },
+
+    /**
+    * Sets the height of the player on the page.
+    * Accepts anything valid for a CSS measurement, e.g. '200px' or '50%'.
+    * If the unit of measurement is left off, 'px' is assumed.
+    */
+    height: {
+      type: String,
+      value: '270px'
+    },
+
+    /**
+    * Sets the width of the player on the page.
+    * Accepts anything valid for a CSS measurement, e.g. '200px' or '50%'.
+    * If the unit of measurement is left off, 'px' is assumed.
+    */
+    width: {
+      type: String,
+      value: '480px'
+    },
+
+    /**
+    * Exposes the current player state.
+    * Using this attribute is an alternative to listening to `google-youtube-state-change` events,
+    * and can simplify the logic in templates with conditional binding.
+    *
+    * The [possible values](https://developers.google.com/youtube/iframe_api_reference#onStateChange):
+    *   - -1 (unstarted)
+    *   - 0 (ended)
+    *   - 1 (playing)
+    *   - 2 (paused)
+    *   - 3 (buffering)
+    *   - 5 (video cued)
+    */
+    state: {
+      type: Number,
+      value: -1,
+      notify: true
+    },
+
+    /**
+    * Exposes the current playback time, in seconds.
+    *
+    * You can divide this value by the `duration` to determine the playback percentage.
+    */
+    currenttime: {
+      type: Number,
+      value: 0,
+      notify: true
+    },
+
+    /**
+    * Exposes the video duration, in seconds.
+    *
+    * You can divide the `currenttime` to determine the playback percentage.
+    *
+    * @attribute duration
+    * @type number
+    */
+    duration: {
+      type: Number,
+      value: 1, // To avoid divide-by-zero errors if used before video is cued.
+      notify: true
+    },
+
+    /**
+    * Exposes the current playback time, formatted as a (HH:)MM:SS string.
+    */
+    currenttimeformatted: {
+      type: String,
+      value: '0:00',
+      notify: true
+    },
+
+    /**
+    * Exposes the video duration, formatted as a (HH:)MM:SS string.
+    */
+    durationformatted: {
+      type: String,
+      value: '0:00', // To avoid divide-by-zero errors if used before video is cued.
+      notify: true
+    },
+
+    /**
+    * The fraction of the bytes that have been loaded for the current video, in the range [0-1].
+    */
+    fractionloaded: {
+      type: Number,
+      value: 0,
+      notify: true
+    },
+
+    /**
+    * A shorthand to enable a set of player attributes that, used together, simulate a "chromeless" YouTube player.
+    *
+    * Equivalent to setting the following attributes:
+    * - `controls="0"`
+    * - `modestbranding="1"`
+    * - `showinfo="0"`
+    * - `iv_load_policy="3"`
+    * - `rel="0"`
+    *
+    * The "chromeless" player has minimal YouTube branding in cued state, and the native controls
+    * will be disabled during playback. Creating your own custom play/pause/etc. controls is recommended.
+    */
+    chromeless: {
+      type: Boolean,
+      value: false
+    },
+    /**
+    * The URL of an image to use as a custom thumbnail.
+    *
+    * This is optional; if not provided, the standard YouTube embed (which uses the thumbnail associated
+    * with the video on YouTube) will be used.
+    *
+    * If `thumbnail` is set, than an `<img>` containing the thumbnail will be used in lieu of the actual
+    * YouTube embed. When the thumbnail is clicked, the `<img>` is swapped out for the actual YouTube embed,
+    * which will have [`autoplay=1`](https://developers.google.com/youtube/player_parameters#autoplay) set by default (in additional to any other player parameters specified on this element).
+    *
+    * Please note that `autoplay=1` won't actually autoplay videos on mobile browsers, so two taps will be required
+    * to play the video there. Also, on desktop browsers, setting `autoplay=1` will prevent the playback
+    * from [incrementing the view count](https://support.google.com/youtube/answer/1714329) for the video.
+    */
+    thumbnail: {
+      type: String,
+      value: ''
+    },
+
+    /**
+    * If `fluid` is set, then the player will set its width to 100% to fill
+    * the parent container, while adding `padding-top` to preserve the
+    * aspect ratio provided by `width` and `height`. If `width` and `height`
+    * have not been set, the player will fall back to a 16:9 aspect ratio.
+    * This is useful for responsive designs where you don't want to
+    * introduce letterboxing on your video.
+    */
+    fluid: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+    * Returns the player's current volume, an integer between 0 and 100.
+    * Note that `getVolume()` will return the volume even if the player is muted.
+    */
+    volume: {
+      type: Number,
+      value: 100,
+      notify: true
+    },
+
+    /**
+    * This function retrieves the playback rate of the currently playing video.
+    * The default playback rate is 1, which indicates that the video is playing at normal speed.
+    * Playback rates may include values like `0.25`, `0.5`, `1`, `1.5`, and `2`.
+    */
+    playbackrate: {
+      type: Number,
+      value: 1,
+      notify: true
+    },
+
+    /**
+    * This function retrieves the actual video quality of the current video.
+    * Possible return values are `highres`, `hd1080`, `hd720`, `large`, `medium` and `small`.
+    * It will also return `undefined` if there is no current video.
+    */
+    playbackquality: {
+      type: String,
+      value: '',
+      notify: true
+    }
+
+  },
+
+  _computeContainerStyle: function _computeContainerStyle(width, height) {
+    return 'width:' + width + '; height:' + height;
+  },
+
+  _computeShouldLoadApi: function _computeShouldLoadApi(videoId, list) {
+    return Boolean(videoId || list);
+  },
+
+  _useExistingPlaySupportedValue: function _useExistingPlaySupportedValue() {
+    this.playsupported = this._playsupportedLocalStorage;
+  },
+
+  /**
+  * Detects whether programmatic <video>.play() is supported in the current browser.
+  *
+  * This is triggered via on-ironlocalstorage-load-empty. The logic is:
+  * - If playsupported is explicitly set to true or false on the element, use that.
+  * - Otherwise, if there's a cached value in localStorage, use that.
+  * - Otherwise, create a hidden <video> element and call play() on it:
+  *   - If playback starts, playsupported is true.
+  *   - If playback doesn't start (within 500ms), playsupported is false.
+  *   - Whatever happens, cache the result in localStorage.
+  */
+  _determinePlaySupported: function _determinePlaySupported() {
+    // If playsupported isn't already being overridden by the page using this component,
+    // then attempt to determine if it's supported.
+    // This is deliberately checking with ==, to match either undefined or null.
+    if (this.playsupported == null) {
+      // Run a new playback test.
+      var timeout;
+      var videoElement = document.createElement('video');
+
+      if ('play' in videoElement) {
+        videoElement.id = 'playtest';
+        // Some browsers will refuse to play videos with 'display: none' set,
+        // so position the video well offscreen instead.
+        // Modify the .style property directly instead of using CSS to work around polyfill
+        // issues; see https://github.com/GoogleWebComponents/google-youtube/issues/49
+        videoElement.style.position = 'absolute';
+        videoElement.style.top = '-9999px';
+        videoElement.style.left = '-9999px';
+
+        var mp4Source = document.createElement('source');
+        mp4Source.src = "data:video/mp4;base64,AAAAFGZ0eXBNU05WAAACAE1TTlYAAAOUbW9vdgAAAGxtdmhkAAAAAM9ghv7PYIb+AAACWAAACu8AAQAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAnh0cmFrAAAAXHRraGQAAAAHz2CG/s9ghv4AAAABAAAAAAAACu8AAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAFAAAAA4AAAAAAHgbWRpYQAAACBtZGhkAAAAAM9ghv7PYIb+AAALuAAANq8AAAAAAAAAIWhkbHIAAAAAbWhscnZpZGVBVlMgAAAAAAABAB4AAAABl21pbmYAAAAUdm1oZAAAAAAAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAx1cmwgAAAAAQAAAVdzdGJsAAAAp3N0c2QAAAAAAAAAAQAAAJdhdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAFAAOABIAAAASAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGP//AAAAEmNvbHJuY2xjAAEAAQABAAAAL2F2Y0MBTUAz/+EAGGdNQDOadCk/LgIgAAADACAAAAMA0eMGVAEABGjuPIAAAAAYc3R0cwAAAAAAAAABAAAADgAAA+gAAAAUc3RzcwAAAAAAAAABAAAAAQAAABxzdHNjAAAAAAAAAAEAAAABAAAADgAAAAEAAABMc3RzegAAAAAAAAAAAAAADgAAAE8AAAAOAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA4AAAAOAAAAFHN0Y28AAAAAAAAAAQAAA7AAAAA0dXVpZFVTTVQh0k/Ou4hpXPrJx0AAAAAcTVREVAABABIAAAAKVcQAAAAAAAEAAAAAAAAAqHV1aWRVU01UIdJPzruIaVz6ycdAAAAAkE1URFQABAAMAAAAC1XEAAACHAAeAAAABBXHAAEAQQBWAFMAIABNAGUAZABpAGEAAAAqAAAAASoOAAEAZABlAHQAZQBjAHQAXwBhAHUAdABvAHAAbABhAHkAAAAyAAAAA1XEAAEAMgAwADAANQBtAGUALwAwADcALwAwADYAMAA2ACAAMwA6ADUAOgAwAAABA21kYXQAAAAYZ01AM5p0KT8uAiAAAAMAIAAAAwDR4wZUAAAABGjuPIAAAAAnZYiAIAAR//eBLT+oL1eA2Nlb/edvwWZflzEVLlhlXtJvSAEGRA3ZAAAACkGaAQCyJ/8AFBAAAAAJQZoCATP/AOmBAAAACUGaAwGz/wDpgAAAAAlBmgQCM/8A6YEAAAAJQZoFArP/AOmBAAAACUGaBgMz/wDpgQAAAAlBmgcDs/8A6YEAAAAJQZoIBDP/AOmAAAAACUGaCQSz/wDpgAAAAAlBmgoFM/8A6YEAAAAJQZoLBbP/AOmAAAAACkGaDAYyJ/8AFBAAAAAKQZoNBrIv/4cMeQ==";
+        videoElement.appendChild(mp4Source);
+
+        var webmSource = document.createElement('source');
+        webmSource.src = "data:video/webm;base64,GkXfo49CgoR3ZWJtQoeBAUKFgQEYU4BnAQAAAAAAF60RTZt0vE27jFOrhBVJqWZTrIIQA027jFOrhBZUrmtTrIIQbE27jFOrhBFNm3RTrIIXmU27jFOrhBxTu2tTrIIWs+xPvwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFUmpZuQq17GDD0JATYCjbGliZWJtbCB2MC43LjcgKyBsaWJtYXRyb3NrYSB2MC44LjFXQY9BVlNNYXRyb3NrYUZpbGVEiYRFnEAARGGIBc2Lz1QNtgBzpJCy3XZ0KNuKNZS4+fDpFxzUFlSua9iu1teBAXPFhL4G+bmDgQG5gQGIgQFVqoEAnIEAbeeBASMxT4Q/gAAAVe6BAIaFVl9WUDiqgQEj44OEE95DVSK1nIN1bmTgkbCBULqBPJqBAFSwgVBUuoE87EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB9DtnVB4eeBAKC4obaBAAAAkAMAnQEqUAA8AABHCIWFiIWEiAICAAamYnoOC6cfJa8f5Zvda4D+/7YOf//nNefQYACgnKGWgQFNANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQKbANEBAAEQEAAYABhYL/QACIhgAPuC/rKgnKGWgQPoANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQU1ANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQaDANEBAAEQEAAYABhYL/QACIhgAPuC/rKgnKGWgQfQANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQkdANEBAAEQEBRgAGFgv9AAIiGAAPuC/rOgnKGWgQprANEBAAEQEAAYABhYL/QACIhgAPuC/rKgnKGWgQu4ANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQ0FANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQ5TANEBAAEQEAAYABhYL/QACIhgAPuC/rKgnKGWgQ+gANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgRDtANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgRI7ANEBAAEQEAAYABhYL/QACIhgAPuC/rIcU7trQOC7jLOBALeH94EB8YIUzLuNs4IBTbeH94EB8YIUzLuNs4ICm7eH94EB8YIUzLuNs4ID6LeH94EB8YIUzLuNs4IFNbeH94EB8YIUzLuNs4IGg7eH94EB8YIUzLuNs4IH0LeH94EB8YIUzLuNs4IJHbeH94EB8YIUzLuNs4IKa7eH94EB8YIUzLuNs4ILuLeH94EB8YIUzLuNs4INBbeH94EB8YIUzLuNs4IOU7eH94EB8YIUzLuNs4IPoLeH94EB8YIUzLuNs4IQ7beH94EB8YIUzLuNs4ISO7eH94EB8YIUzBFNm3SPTbuMU6uEH0O2dVOsghTM";
+        videoElement.appendChild(webmSource);
+
+        document.body.appendChild(videoElement);
+
+        this.async(function () {
+          // Ideally, we'll get a 'playing' event if we're on a browser that supports
+          // programmatic play().
+          videoElement.onplaying = function (e) {
+            clearTimeout(timeout);
+
+            this.playsupported = e && e.type === 'playing' || videoElement.currentTime !== 0;
+            this._playsupportedLocalStorage = this.playsupported;
+
+            videoElement.onplaying = null;
+
+            document.body.removeChild(videoElement);
+          }.bind(this);
+
+          // If we haven't received a 'playing' event within 500ms, then we're most likely on a browser that doesn't
+          // support programmatic plays. Do a final check after 500ms and set this.playsupported at that point.
+          timeout = setTimeout(videoElement.onplaying, 500);
+
+          // Try to initiate playback...
+          videoElement.play();
+        });
+      } else {
+        // If there's no play() method then we know that it's not supported.
+        this.playsupported = false;
+        this._playsupportedLocalStorage = false;
+      }
+    }
+  },
+
+  /**
+  * Sets fluid width/height.
+  *
+  * If the fluid attribute is set, the aspect ratio of the video will
+  * be inferred (if set in pixels), or assumed to be 16:9. The element
+  * will give itself enough top padding to force the player to use the
+  * correct aspect ratio, even as the screen size changes.
+  *
+  */
+  ready: function ready() {
+    if (this.hasAttribute('fluid')) {
+      var ratio = parseInt(this.height, 10) / parseInt(this.width, 10);
+      if (isNaN(ratio)) {
+        ratio = 9 / 16;
+      }
+      ratio *= 100;
+      this.width = '100%';
+      this.height = 'auto';
+      this.$.container.style['padding-top'] = ratio + '%';
+    }
+  },
+
+  /**
+  * Clean up the underlying Player `<iframe>` when we're removed from the DOM.
+  */
+  detached: function detached() {
+    if (this._player) {
+      this._player.destroy();
+    }
+  },
+
+  /**
+  * Plays the current video.
+  *
+  * Note that on certain mobile browsers, playback
+  * [can't be initiated programmatically](https://developers.google.com/youtube/iframe_api_reference#Mobile_considerations).
+  *
+  * If `this.playsupported` is not `true`, calling `play()` will have no effect.
+  *
+  * @method play
+  */
+  play: function play() {
+    if (this._player && this._player.playVideo && this.playsupported) {
+      this._player.playVideo();
+    }
+  },
+
+  /**
+  * Modifies the volume of the current video.
+  *
+  * Developers should take care not to break expected user experience by programmatically
+  * modifying the volume on mobile browsers.
+  * Note that the YouTube player, in addition, does not display volume controls in a
+  * mobile environment.
+  *
+  * @method setVolume
+  * @param {number} volume The new volume, an integer between 0 (muted) and 100 (loudest).
+  */
+  setVolume: function setVolume(volume) {
+    if (this._player && this._player.setVolume) {
+      this._player.setVolume(volume);
+    }
+  },
+
+  /**
+  * Mutes the current video.
+  *
+  * Developers should take care not to break expected user experience by programmatically
+  * modifying the volume on mobile browsers.
+  * Note that the YouTube player, in addition, does not display volume controls in a
+  * mobile environment.
+  *
+  * @method mute
+  */
+  mute: function mute() {
+    if (this._player && this._player.mute) {
+      this._player.mute();
+    }
+  },
+
+  /**
+  * Unmutes the current video.
+  *
+  * Developers should take care not to break expected user experience by programmatically
+  * modifying the volume on mobile browsers.
+  * Note that the YouTube player, in addition, does not display volume controls in a
+  * mobile environment.
+  *
+  * @method unMute
+  */
+  unMute: function unMute() {
+    if (this._player && this._player.unMute) {
+      this._player.unMute();
+    }
+  },
+
+  /**
+  * Pauses the current video.
+  *
+  * @method pause
+  */
+  pause: function pause() {
+    if (this._player && this._player.pauseVideo) {
+      this._player.pauseVideo();
+    }
+  },
+
+  /**
+  * Skips ahead (or back) to the specified number of seconds.
+  *
+  * @method seekTo
+  * @param {number} seconds Number of seconds to seek to.
+  */
+  seekTo: function seekTo(seconds) {
+    if (this._player && this._player.seekTo) {
+      this._player.seekTo(seconds, true);
+
+      // Explicitly call _updatePlaybackStats() to ensure that the new playback info is
+      // reflected in the bound attributes.
+      // The 100ms delay is somewhat arbitrary, but the YouTube player does need time to
+      // update its internal state following the call to player.seekTo().
+      this.async(function () {
+        this._updatePlaybackStats();
+      }, 100);
+    }
+  },
+
+  /**
+  * This function sets the suggested playback rate for the current video.
+  * If the playback rate changes, it will only change for the video that is already cued or being played.
+  * If you set the playback rate for a cued video, that rate will still be in effect when the `playVideo` function is called or the user initiates playback directly through the player controls.
+  * In addition, calling functions to cue or load videos or playlists (`cueVideoById`, `loadVideoById`, etc.) will reset the playback rate to 1.
+  *
+  * Calling this function does not guarantee that the playback rate will actually change.
+  * However, if the playback rate does change, the `onPlaybackRateChange` event will fire, and your code should respond to the event rather than the fact that it called the `setPlaybackRate` function.
+  *
+  * The `getAvailablePlaybackRates` method will return the possible playback rates for the currently playing video.
+  * However, if you set the `suggestedRate` parameter to a non-supported integer or float value, the player will round that value down to the nearest supported value in the direction of 1.
+  *
+  * @method setPlaybackRate
+  * @param {number} suggestedRate Playback rate for the current video.
+  */
+  setPlaybackRate: function setPlaybackRate(suggestedRate) {
+    if (this._player && this._player.setPlaybackRate) {
+      this._player.setPlaybackRate(suggestedRate);
+    }
+  },
+
+  /**
+  * This function sets the suggested video quality for the current video.
+  * The function causes the video to reload at its current position in the new quality.
+  * If the playback quality does change, it will only change for the video being played.
+  * Calling this function does not guarantee that the playback quality will actually change.
+  * However, if the playback quality does change, the `onPlaybackQualityChange` event will fire, and your code should respond to the event rather than the fact that it called the `setPlaybackQuality` function.
+  *
+  * The `suggestedQuality` parameter value can be `small`, `medium`, `large`, `hd720`, `hd1080`, `highres` or `default`.
+  * We recommend that you set the parameter value to default, which instructs YouTube to select the most appropriate playback quality, which will vary for different users, videos, systems and other playback conditions.
+  *
+  * When you suggest a playback quality for a video, the suggested quality will only be in effect for that video.
+  * You should select a playback quality that corresponds to the size of your video player.
+  * For example, if your page displays a `1280px` by `720px` video player, a `hd720` quality video will actually look better than an `hd1080` quality video.
+  * We recommend calling the `getAvailableQualityLevels()` function to determine which quality levels are available for a video.
+  *
+  * The list below shows the playback quality levels that correspond to different standard player sizes.
+  * We recommend that you set the height of your video player to one of the values listed below and that you size your player to use 16:9 aspect ratio.
+  * As stated above, even if you choose a standard player size, we also recommend that you set the `suggestedQuality` parameter value to default to enable YouTube to select the most appropriate playback quality.
+  *
+  * - `small`: Player height is 240px, and player dimensions are at least 320px by 240px for 4:3 aspect ratio.
+  * - `medium`: Player height is 360px, and player dimensions are 640px by 360px (for 16:9 aspect ratio) or 480px by 360px (for 4:3 aspect ratio).
+  * - `large`: Player height is 480px, and player dimensions are 853px by 480px (for 16:9 aspect ratio) or 640px by 480px (for 4:3 aspect ratio).
+  * - `hd720`: Player height is 720px, and player dimensions are 1280px by 720px (for 16:9 aspect ratio) or 960px by 720px (for 4:3 aspect ratio).
+  * - `hd1080`: Player height is 1080px, and player dimensions are 1920px by 1080px (for 16:9 aspect ratio) or 1440px by 1080px (for 4:3 aspect ratio).
+  * - `highres`: Player height is greater than 1080px, which means that the player's aspect ratio is greater than 1920px by 1080px.
+  * - `default`: YouTube selects the appropriate playback quality. This setting effectively reverts the quality level to the default state and nullifies any previous efforts to set playback quality using the `cueVideoById`, `loadVideoById` or `setPlaybackQuality` functions.
+  *
+  * If you call the `setPlaybackQuality` function with a `suggestedQuality` level that is not available for the video, then the quality will be set to the next lowest level that is available.
+  * For example, if you request a quality level of large, and that is unavailable, then the playback quality will be set to medium (as long as that quality level is available).
+  *
+  * In addition, setting `suggestedQuality` to a value that is not a recognized quality level is equivalent to setting `suggestedQuality` to default.
+  *
+  * @method setPlaybackQuality
+  * @param {string} suggestedQuality Playback quality for the current video.
+  */
+  setPlaybackQuality: function setPlaybackQuality(suggestedQuality) {
+    if (this._player && this._player.setPlaybackQuality) {
+      this._player.setPlaybackQuality(suggestedQuality);
+    }
+  },
+
+  _videoIdChanged: function _videoIdChanged() {
+    if (!this.videoId) {
+      return;
+    }
+
+    this.currenttime = 0;
+    this.currenttimeformatted = this._toHHMMSS(0);
+    this.fractionloaded = 0;
+    this.duration = 1;
+    this.durationformatted = this._toHHMMSS(0);
+
+    if (!this._player || !this._player.cueVideoById) {
+      this._pendingVideoId = this.videoId;
+    } else {
+      // Figure out whether we should cue or load (which will autoplay) the next video.
+      if (this.playsupported && this.attributes['autoplay'] && this.attributes['autoplay'].value == '1') {
+        this._player.loadVideoById(this.videoId);
+      } else {
+        this._player.cueVideoById(this.videoId);
+      }
+    }
+  },
+
+  _player: null,
+  __updatePlaybackStatsInterval: null,
+  _pendingVideoId: '',
+
+  _apiLoad: function _apiLoad() {
+    // Establish some defaults. Attributes set on the google-youtube element
+    // can override defaults, or specify additional player parameters. See
+    // https://developers.google.com/youtube/player_parameters
+    var playerVars = {
+      playsinline: 1,
+      controls: 2,
+      autohide: 1,
+      // This will (intentionally) be overwritten if this.attributes['autoplay'] is set.
+      autoplay: this.autoplay
+    };
+
+    if (this.chromeless) {
+      playerVars.controls = 0;
+      playerVars.modestbranding = 1;
+      playerVars.showinfo = 0;
+      // Disable annotations.
+      playerVars.iv_load_policy = 3;
+      // Disable related videos on the end screen.
+      playerVars.rel = 0;
+    }
+
+    for (var i = 0; i < this.attributes.length; i++) {
+      var attribute = this.attributes[i];
+      playerVars[attribute.nodeName] = attribute.value;
+    }
+
+    this._player = new YT.Player(this.$.player, {
+      videoId: this.videoId,
+      width: '100%',
+      height: '100%',
+      playerVars: playerVars,
+      events: {
+        onReady: function (e) {
+          if (this._pendingVideoId && this._pendingVideoId != this.videoId) {
+            this._player.cueVideoById(this._pendingVideoId);
+            this._pendingVideoId = '';
+          }
+
+          this.fire('google-youtube-ready', e);
+        }.bind(this),
+        onStateChange: function (e) {
+          this.state = e.data;
+
+          // The YouTube Player API only exposes playback data about a video once
+          // playback has begun.
+          if (this.state == 1) {
+            this.playbackstarted = true;
+
+            // After playback has begun, play() can always be used to resume playback if the video is paused.
+            this.playsupported = true;
+
+            this.duration = this._player.getDuration();
+            this.durationformatted = this._toHHMMSS(this.duration);
+
+            if (!this.__updatePlaybackStatsInterval) {
+              this.__updatePlaybackStatsInterval = setInterval(this._updatePlaybackStats.bind(this), 1000);
+            }
+          } else {
+            // We only need to update the stats if the video is playing.
+            if (this.__updatePlaybackStatsInterval) {
+              clearInterval(this.__updatePlaybackStatsInterval);
+              this.__updatePlaybackStatsInterval = null;
+            }
+          }
+
+          this.fire('google-youtube-state-change', e);
+        }.bind(this),
+        onPlaybackQualityChange: function (e) {
+          this.playbackquality = e.data;
+        }.bind(this),
+        onPlaybackRateChange: function (e) {
+          this.playbackrate = e.data;
+        }.bind(this),
+        onError: function (e) {
+          // Set the player state to 0 ('ended'), since playback will have stopped.
+          this.state = 0;
+
+          this.fire('google-youtube-error', e);
+        }.bind(this)
+      }
+    });
+  },
+
+  _updatePlaybackStats: function _updatePlaybackStats() {
+    this.currenttime = Math.round(this._player.getCurrentTime());
+    this.currenttimeformatted = this._toHHMMSS(this.currenttime);
+    this.fractionloaded = this._player.getVideoLoadedFraction();
+    this.volume = this._player.getVolume();
+  },
+
+  _toHHMMSS: function _toHHMMSS(totalSeconds) {
+    var hours = Math.floor(totalSeconds / 3600);
+    totalSeconds -= hours * 3600;
+    var minutes = Math.floor(totalSeconds / 60);
+    var seconds = Math.round(totalSeconds - minutes * 60);
+
+    var hourPortion = '';
+    if (hours > 0) {
+      hourPortion += hours + ':';
+
+      if (minutes < 10) {
+        minutes = '0' + minutes;
+      }
+    }
+
+    if (seconds < 10) {
+      seconds = '0' + seconds;
+    }
+
+    return hourPortion + minutes + ':' + seconds;
+  },
+
+  _handleThumbnailTap: function _handleThumbnailTap() {
+    this.autoplay = 1;
+    this.thumbnail = '';
+  }
+});</script>
+</dom-module>
+
+<link rel="import" href="../app-icons.html"><link rel="import" href="../fa-icons.html"></div><dom-module id="wrc-library">
+    <template>
+        <style>
+            /* General Style */
+            main {
+                padding: 2em 3em;
+                height: calc(100vh - (64px + 4em));
+                min-height: calc(100vh - (64px + 4em));
+                overflow-y: auto;
+
+                @apply --layout-vertical;
+                @apply --layout-center;
+            }
+
+            paper-spinner {
+                --paper-spinner-layer-1-color: var(--azul-primary);
+                --paper-spinner-layer-2-color: var(--azul-primary);
+                --paper-spinner-layer-3-color: var(--azul-primary);
+                --paper-spinner-layer-4-color: var(--azul-primary);
+            }
+
+            [flex] {
+                @apply --layout-flex;
+            }
+
+            paper-item {
+                cursor: pointer;
+            }
+
+            /* Empty Message */
+            .empty-message {
+                width: 100%;
+                height: inherit;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .empty-message .icon-container {
+                border-radius: 300em;
+                width: 200px;
+                height: 200px;
+                background-color: var(--azul-text-title);
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .icon-container iron-icon {
+                color: #fff;
+                width: 90px;
+                height: 90px;
+                margin-top: 32px;
+                margin-left: 6px;
+            }
+
+            .empty-message p {
+                margin-top: 24px;
+                text-align: center;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .empty-message p strong {
+                font-size: 1.2em;
+                font-weight: bold;
+                color: var(--azul-text-title);
+                margin-bottom: 15px;
+                text-align: center;
+            }
+
+            .empty-message p span {
+                font-size: 1em;
+                font-weight: lighter;
+                color: var(--paper-grey-600);
+                margin-bottom: 24px;
+                text-align: center;
+            }
+
+            .empty-message p paper-button {
+                margin: 0;
+                color: #fff;
+                background-color: var(--azul-primary);
+            }
+
+            /* Fab */
+            paper-fab {
+                position: fixed;
+                bottom: 2em;
+                right: 2em;
+
+                --paper-fab-background: var(--azul-primary);
+                --paper-fab-keyboard-focus-background: var(--azul-primary);
+            }
+
+            /* Library Wrapper */
+            div.library-wrapper {
+                width: 100%;
+            }
+
+            div.library-wrapper[hidden] {
+                display: none;
+            }
+
+            /* Search Style */
+            div.search-wrapper {
+                width: 100%;
+                margin-bottom: 24px;
+            }
+
+            div.search-wrapper vaadin-text-field {
+                width: 100%;
+            }
+
+            div.search-wrapper vaadin-text-field [slot='prefix']{
+                margin-right: 12px;
+                color: var(--paper-grey-500);
+            }
+
+            /* No results found */
+            div.no-results-wrapper {
+                width: 100%;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            div.no-results-wrapper iron-image {
+                width: 200px;
+                height: 200px;
+                margin-top: 15%;
+            }
+
+            div.no-results-wrapper h3 {
+                color: var(--azul-text-title);
+                margin-bottom: 0;
+            }
+
+            div.no-results-wrapper p {
+                color: var(--paper-grey-500);
+                font-size: .8em;
+            }
+
+            /* Videos Wrapper */
+            div.videos-wrapper {
+                @apply --layout-horizontal;
+                @apply --layout-wrap;
+            }
+
+            /* Video */
+            div.video-wrapper {
+                border-radius: 5px;
+                margin-right: 32px;
+                max-width: 310px;
+                overflow: hidden;
+                margin-bottom: 32px;
+                -webkit-box-shadow: 0 10px 60px rgba(125, 147, 178, .35);
+                box-shadow: 0 10px 60px rgba(125, 147, 178, .35);
+            }
+
+            div.video-wrapper google-youtube {
+                width: 310px;
+                height: 190px;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+                overflow: hidden;
+            }
+
+            div.video-wrapper .video-info {
+                padding: 10px;
+                padding-right: 3px;
+
+                @apply --layout-horizontal;
+                @apply --layout-center;
+            }
+
+            div.video-wrapper .video-info p {
+                margin: 0;
+                padding: 0;
+                white-space: pre-wrap;
+
+                @apply --layout-vertical;
+            }
+
+            div.video-wrapper .video-info p strong {
+                color: var(--azul-text-title);
+                font-size: 1.1em;
+                font-weight: 400;
+                margin: 0;
+                padding: 0;
+                margin-bottom: 5px;
+            }
+
+            div.video-wrapper .video-info p span {
+                border-radius: 3px;
+                background-color: #e3e6ea;
+                padding: .2em .5em;
+                color: var(--paper-grey-600);
+                width: max-content;
+                font-weight: 300;
+                font-size: .8em;
+
+                -webkit-font-smoothing: subpixel-antialiased;
+                -webkit-text-stroke:1px transparent;
+            }
+
+            div.video-wrapper .video-info paper-icon-button {
+                color: var(--paper-grey-600);
+            }
+
+            div.video-wrapper .video-info paper-icon-button:hover {
+                color: var(--paper-grey-900);
+            }
+
+            /* Category Wrapper */
+            div.category-wrapper {
+                margin-bottom: 36px;
+            }
+
+            div.category-wrapper h3 {
+                color: var(--azul-text-title);
+                font-weight: 500;
+                font-size: 1.2em;
+
+            }
+
+            /* Responsive */
+            @media screen and (max-width: 425px) {
+                /* General Style */
+                main {
+                    padding: 1em;
+                    height: calc(100vh - (64px + 2em));
+                    min-height: calc(100vh - (64px + 2em));
+
+                    @apply --layout-vertical;
+                    @apply --layout-center;
+                }
+
+                paper-fab {
+                    bottom: 1em;
+                    right: 1em;
+                }
+
+                /* Videos Wrapper */
+                div.videos-wrapper {
+                    width: 100%;
+
+                    @apply --layout-vertical;
+                    @apply --layout-wrap;
+                }
+
+                /* Video */
+                div.video-wrapper {
+                    margin-right: 0;
+                    max-width: auto;
+                    margin-bottom: 24px;
+                    width: 100%;
+                    min-width: 100%;
+                }
+
+                div.video-wrapper google-youtube {
+                    width: 100%;
+                    height: 190px;
+                }
+            }
+
+            [hidden] {
+                display: none;
+            }
+        </style>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
+
+        <main>
+            <template is="dom-if" if="[[!userReady]]">
+                <paper-spinner active=""></paper-spinner>
+            </template>
+
+            <!-- Empty Library Message -->
+            <div class="empty-message" hidden$="[[!_computeVisibleEmptyMessage(libraryData.length, userReady)]]">
+                <div class="icon-container">
+                    <iron-icon icon="fa-icons:video"></iron-icon>
+                </div>
+                <p>
+                    <strong>The video library is empty</strong>
+                    <span>Add a new video and it will show up here</span>
+                    <paper-button raised="" on-tap="_openToAdd">New Video</paper-button>
+                </p>
+            </div>
+
+            <!-- Library Data -->
+            <div class="library-wrapper" hidden$="[[!_computeVisibleData(libraryData.length, userReady)]]">
+
+                <!-- Search filter -->
+                <div class="search-wrapper">
+                    <!-- Polyfilter configuration -->
+                    <poly-filter-diacritic filter="[[libraryFilter]]" array-to-filter="[[libraryData]]" filtered-array="{{libraryDataFiltered}}" filter-by="title"></poly-filter-diacritic>
+                    <!-- Search bar -->
+                    <paper-search-bar query="{{libraryFilter}}" hidefilterbutton="true"> </paper-search-bar>
+                </div>
+
+                <!-- No results found -->
+                <template is="dom-if" if="[[noResultsFiltered]]">
+                    <div class="no-results-wrapper">
+                        <iron-image preload="" fade="" sizing="contain" src="../../images/app-images/search.svg"></iron-image>
+                        <h3>No results found</h3>
+                        <p>Please update your search and try again</p>
+                    </div>
+                </template>
+
+                <!-- Filtered Data Display -->
+                <template is="dom-if" if="[[filtering]]">
+                    <div class="videos-wrapper">
+                        <template id="videoRepeater" is="dom-repeat" items="[[libraryDataFiltered]]" as="video">
+                            <div class="video-wrapper">
+                                <google-youtube video-id="[[video.id]]" fluid=""></google-youtube>
+                                <div class="video-info">
+                                    <p>
+                                        <strong>[[video.title]]</strong>
+                                        <span>[[video.category]]</span>
+                                    </p>
+                                    <span flex=""></span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- No Filtered Data Display -->
+                <template is="dom-if" if="[[!filtering]]">
+                    <!-- Recommended -->
+                    <div class="category-wrapper">
+                        <h3>Recommended</h3>
+                        <div class="videos-wrapper">
+                            <template is="dom-repeat" items="[[libraryData]]" as="video" filter="_searchRecommended">
+                                <div class="video-wrapper">
+                                    <google-youtube video-id="[[video.id]]" fluid=""></google-youtube>
+                                    <div class="video-info">
+                                        <p>
+                                            <strong>[[video.title]]</strong>
+                                            <span>[[video.category]]</span>
+                                        </p>
+                                        <span flex=""></span>
+                                        <paper-menu-button hidden="[[!_isAdmin(userRole)]]" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="10">
+                                            <paper-icon-button slot="dropdown-trigger" icon="app-icons:more-vert"></paper-icon-button>
+                                            <paper-listbox slot="dropdown-content">
+                                                <paper-item id$="[[video.$key]]" on-tap="_openToEdit">Edit</paper-item>
+                                                <paper-item id$="[[video.$key]]" on-tap="_openDeleteVideoDialog">Delete</paper-item>
+                                            </paper-listbox>
+                                        </paper-menu-button>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Tutorials -->
+                    <div class="category-wrapper">
+                        <h3>Tutorials</h3>
+                        <div class="videos-wrapper">
+                            <template is="dom-repeat" items="[[libraryData]]" as="video" filter="_searchTutorials">
+                                <div class="video-wrapper">
+                                    <google-youtube video-id="[[video.id]]" fluid=""></google-youtube>
+                                    <div class="video-info">
+                                        <p>
+                                            <strong>[[video.title]]</strong>
+                                            <span>[[video.category]]</span>
+                                        </p>
+                                        <span flex=""></span>
+                                        <paper-menu-button hidden="[[!_isAdmin(userRole)]]" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="10">
+                                            <paper-icon-button slot="dropdown-trigger" icon="app-icons:more-vert"></paper-icon-button>
+                                            <paper-listbox slot="dropdown-content">
+                                                <paper-item id$="[[video.$key]]" on-tap="_openToEdit">Edit</paper-item>
+                                                <paper-item id$="[[video.$key]]" on-tap="_openDeleteVideoDialog">Delete</paper-item>
+                                            </paper-listbox>
+                                        </paper-menu-button>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Recent -->
+                    <div class="category-wrapper">
+                        <h3>Recently uploaded</h3>
+                        <div class="videos-wrapper">
+                            <template is="dom-repeat" items="[[libraryData]]" as="video" filter="_searchRecent">
+                                <div class="video-wrapper">
+                                    <google-youtube video-id="[[video.id]]" fluid=""></google-youtube>
+                                    <div class="video-info">
+                                        <p>
+                                            <strong>[[video.title]]</strong>
+                                            <span>[[video.category]]</span>
+                                        </p>
+                                        <span flex=""></span>
+                                        <paper-menu-button hidden="[[!_isAdmin(userRole)]]" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="10">
+                                            <paper-icon-button slot="dropdown-trigger" icon="app-icons:more-vert"></paper-icon-button>
+                                            <paper-listbox slot="dropdown-content">
+                                                <paper-item id$="[[video.$key]]" on-tap="_openToEdit">Edit</paper-item>
+                                                <paper-item id$="[[video.$key]]" on-tap="_openDeleteVideoDialog">Delete</paper-item>
+                                            </paper-listbox>
+                                        </paper-menu-button>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Paper Fab to add new video -->
+            <template is="dom-if" if="[[_isAdmin(userRole)]]">
+                <paper-fab src="../icons/fab-icon/plus-icon@2x.png" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(libraryData.length, userReady)]]"></paper-fab>
+            </template>
+        </main>
+    </template>
+
+    <script>
+(function () {
+    'use strict';
+
+    var WrcLibrary = function (_Polymer$Element) {
+        babelHelpers.inherits(WrcLibrary, _Polymer$Element);
+
+        function WrcLibrary() {
+            babelHelpers.classCallCheck(this, WrcLibrary);
+            return babelHelpers.possibleConstructorReturn(this, (WrcLibrary.__proto__ || Object.getPrototypeOf(WrcLibrary)).apply(this, arguments));
+        }
+
+        babelHelpers.createClass(WrcLibrary, [{
+            key: 'ready',
+            value: function ready() {
+                babelHelpers.get(WrcLibrary.prototype.__proto__ || Object.getPrototypeOf(WrcLibrary.prototype), 'ready', this).call(this);
+
+                // Video Dialog
+                this._videoDialog = document.getElementById('videoDialog');
+
+                // Delete video dialog
+                this._deleteVideoDialog = document.getElementById('appDeleteDialog');
+
+                // App Progress Bar
+                this._appProgressBar = document.getElementById('appProgressBar');
+
+                // App Toast
+                this._appToast = document.getElementById('appToast');
+            }
+
+            /**
+             * Filter for video changed
+             *
+             * @param {String} filter entered
+             * @return {void}
+            */
+
+        }, {
+            key: '_filterChanged',
+            value: function _filterChanged(filter) {
+                this.filtering = filter.length > 0 ? true : false;
+            }
+
+            /**
+             * Filtered library data changed
+             *
+             * @param {Object} data from filtered poly-filter
+             * @return {void}
+            */
+
+        }, {
+            key: '_filteredDataChanged',
+            value: function _filteredDataChanged(filter, data) {
+                if (filter.length > 0) {
+                    if (data.length < 1) {
+                        this.noResultsFiltered = true;
+                    } else {
+                        this.noResultsFiltered = false;
+                    }
+                }
+            }
+
+            /**
+             * Observers the user for changes
+             *
+             * @param {Object} user information
+             * @return {void}
+            */
+
+        }, {
+            key: '_userChanged',
+            value: function _userChanged(user) {
+                if (user) {
+                    this.userReady = false;
+                    this.$.firebaseDocument.getStoredValue('library').then(function (snapshot) {
+                        this.userReady = true;
+                    }.bind(this));
+                }
+            }
+
+            /**
+             * Determines if the library data is empty to show the message
+             *
+             * @param {Number} length of the library array
+             * @param {Boolean} ready status of the user
+             * @return {Boolean}
+            */
+
+        }, {
+            key: '_computeVisibleEmptyMessage',
+            value: function _computeVisibleEmptyMessage(length, ready) {
+                if (!ready) return false;
+                return length > 0 ? false : true;
+            }
+
+            /**
+             * Determines if the library data has elements to show data
+             *
+             * @param {Number} length of the library array
+             * @param {Boolean} ready status of the user
+             * @return {Boolean}
+            */
+
+        }, {
+            key: '_computeVisibleData',
+            value: function _computeVisibleData(length, ready) {
+                if (!ready) return false;
+                return length > 0 ? true : false;
+            }
+
+            /**
+             * Opens video dialog to add
+            */
+
+        }, {
+            key: '_openToAdd',
+            value: function _openToAdd() {
+                this.action = 'add';
+                this._videoDialog._resetForm();
+                this._videoDialog.title = 'New';
+                console.log("acceptedCallback: " + this._videoDialog.acceptedCallback);
+                this._videoDialog.acceptedCallback = this._saveVideo.bind(this);
+                this._videoDialog.opened = true;
+            }
+
+            /**
+             * Opens video dialog to edit
+            */
+
+        }, {
+            key: '_openToEdit',
+            value: function _openToEdit(e) {
+                this.action = 'edit';
+                this.videoId = e.target.getAttribute('id');
+
+                this.$.firebaseDocument.getStoredValue('library/' + this.videoId).then(function (videoData) {
+                    this._videoDialog.title = 'Edit';
+                    this._videoDialog.videoInfo = videoData;
+                    this._videoDialog.acceptedCallback = this._saveVideo.bind(this);
+                    this._videoDialog.opened = true;
+                }.bind(this));
+            }
+
+            /**
+             * Saves the video in the library
+             *
+             * @param {Object} videoInfo from dialog
+             * @return {video}
+            */
+
+        }, {
+            key: '_saveVideo',
+            value: function _saveVideo(videInfo) {
+                if (this.action === 'add') {
+                    this.$.firebaseDocument.push('library', videInfo).catch(function (err) {
+                        this._appToast.text = 'There has been an error. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
+                    this._videoDialog.opened = false;
+                    this._appToast.text = 'The video has been saved successfully.';
+                    this._appToast.open();
+                    this._appProgressBar.hidden = true;
+                } else {
+                    this.$.firebaseDocument.setStoredValue('library/' + this.videoId, videInfo).catch(function (err) {
+                        this._appToast.text = 'There has been an error. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
+                    this._videoDialog.opened = false;
+                    this._appToast.text = 'The video has been edited successfully.';
+                    this._appToast.open();
+                    this._appProgressBar.hidden = true;
+                }
+            }
+
+            /**
+             * Filter videos to match recommended category
+             *
+             * @param {Object} video from repeat template
+             * @return {Object} videos that has recommended as category
+            */
+
+        }, {
+            key: '_searchRecommended',
+            value: function _searchRecommended(video) {
+                return video.category.match(new RegExp('recommended', 'ig'));
+            }
+
+            /**
+             * Filter videos to match tutorial category
+             *
+             * @param {Object} video from repeat template
+             * @return {Object} videos that has tutorial as category
+            */
+
+        }, {
+            key: '_searchTutorials',
+            value: function _searchTutorials(video) {
+                return video.category.match(new RegExp('tutorial', 'ig'));
+            }
+
+            /**
+             * Filter videos to match recent category
+             *
+             * @param {Object} video from repeat template
+             * @return {Object} videos that has recent as category
+            */
+
+        }, {
+            key: '_searchRecent',
+            value: function _searchRecent(video) {
+                return video.category.match(new RegExp('recent', 'ig'));
+            }
+
+            /**
+             * Verifies the role of the user
+             *
+             * @param {String} role of the user
+             * @return {Boolean} true if the user admin, otherwise false
+            */
+
+        }, {
+            key: '_isAdmin',
+            value: function _isAdmin(role) {
+                return role === 'admin' ? true : false;
+            }
+
+            /**
+             * Opens delete video dialog
+            */
+
+        }, {
+            key: '_openDeleteVideoDialog',
+            value: function _openDeleteVideoDialog(e) {
+                this.videoId = e.target.getAttribute('id');
+
+                // Binding confirmation action
+                this._deleteVideoDialog.acceptedCallback = this._deleteVideo.bind(this);
+
+                this._deleteVideoDialog.opened = true;
+                this._deleteVideoDialog.title = "Delete Video";
+                this._deleteVideoDialog.msg = "Are you sure you want to delete this video?";
+            }
+
+            /**
+             * Deletes video from library
+             *
+             * @param {Boolean} response from delete dialog
+             * @return {void}
+            */
+
+        }, {
+            key: '_deleteVideo',
+            value: function _deleteVideo(response) {
+                if (response) {
+                    this.$.firebaseDocument.destroy('/library/' + this.videoId).catch(function (err) {
+                        this._appToast.text = 'There has been an error. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
+
+                    this._deleteVideoDialog.opened = false;
+                    this._appToast.text = 'The video has been deleted successfully.';
+                    this._appToast.open();
+                    this._appProgressBar.hidden = true;
+                }
+            }
+        }], [{
+            key: 'is',
+
+            /**
+             * Element definition
+            */
+            get: function get() {
+                return 'wrc-library';
+            }
+
+            /**
+             * Element properties
+            */
+
+        }, {
+            key: 'properties',
+            get: function get() {
+                return {
+                    userRole: String,
+                    userReady: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
+                    user: {
+                        type: Object,
+                        notify: true,
+                        observer: '_userChanged'
+                    },
+                    libraryData: {
+                        type: Object,
+                        notify: true
+                    },
+                    noResultsFiltered: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
+                    filtering: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    }
+                };
+            }
+
+            /**
+             * Element observers
+            */
+
+        }, {
+            key: 'observers',
+            get: function get() {
+                return ['_filterChanged(libraryFilter)', '_filteredDataChanged(libraryFilter, libraryDataFiltered)'];
+            }
+        }]);
+        return WrcLibrary;
+    }(Polymer.Element);
+
+    window.customElements.define(WrcLibrary.is, WrcLibrary);
+})();</script>
+</dom-module>

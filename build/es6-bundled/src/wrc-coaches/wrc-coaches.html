@@ -1,0 +1,638 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+--><!-- Polymer --><!-- Paper Elements --><!-- Iron Elements --><!-- Polymerfire Elements --><!-- Vaadin Elements --><!-- <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-checkbox.html">--><!--<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-selection-column.html"> --><!-- Polyfilter --><!-- Suji Elements --><!-- Neon Elements --><!-- Icons --><div hidden="" by-polymer-bundler=""><link rel="import" href="../suji/lib/themes/azul/azul-theme.html"><link rel="import" href="../suji/lib/colors/suji-color-palette.html"><link rel="import" href="../app-icons.html"><link rel="import" href="../fa-icons.html"></div><dom-module id="wrc-coaches">
+    <template>
+        <style>
+            /* General Style */
+            main {
+                padding: 2em 3em;
+                height: calc(100vh - (64px + 4em));
+                min-height: calc(100vh - (64px + 4em));
+                overflow: auto;
+
+                @apply --layout-vertical;
+                @apply --layout-center;
+            }
+
+            paper-spinner {
+                --paper-spinner-layer-1-color: var(--azul-primary);
+                --paper-spinner-layer-2-color: var(--azul-primary);
+                --paper-spinner-layer-3-color: var(--azul-primary);
+                --paper-spinner-layer-4-color: var(--azul-primary);
+            }
+
+            [flex] {
+                @apply --layout-flex;
+            }
+
+            /* Empty Message */
+            .empty-message {
+                width: 100%;
+                height: inherit;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .empty-message .icon-container {
+                border-radius: 300em;
+                width: 200px;
+                height: 200px;
+                background-color: var(--azul-text-title);
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .icon-container iron-icon {
+                color: #fff;
+                width: 90px;
+                height: 90px;
+            }
+
+            .empty-message p {
+                margin-top: 24px;
+                text-align: center;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .empty-message p strong {
+                font-size: 1.2em;
+                font-weight: bold;
+                color: var(--azul-text-title);
+                margin-bottom: 15px;
+                text-align: center;
+            }
+
+            .empty-message p span {
+                font-size: 1em;
+                font-weight: lighter;
+                color: var(--paper-grey-600);
+                margin-bottom: 24px;
+                text-align: center;
+            }
+
+            .empty-message p paper-button {
+                margin: 0;
+                color: #fff;
+                background-color: var(--azul-primary);
+            }
+
+            /* Fab */
+            paper-fab {
+                position: fixed;
+                bottom: 2em;
+                right: 2em;
+
+                --paper-fab-background: var(--azul-primary);
+                --paper-fab-keyboard-focus-background: var(--azul-primary);
+            }
+
+            /* Coaches Wrapper */
+            div.coaches-wrapper {
+                width: 100%;
+            }
+
+            div.coaches-wrapper[hidden] {
+                display: none;
+            }
+
+            /* Search Style */
+            div.search-wrapper {
+                width: 100%;
+                margin-bottom: 24px;
+            }
+
+            div.search-wrapper vaadin-text-field {
+                width: 100%;
+            }
+
+            div.search-wrapper vaadin-text-field [slot='prefix']{
+                margin-right: 12px;
+                color: var(--paper-grey-500);
+            }
+
+            /* Grid Wrapper */
+            div.grid-wrapper {
+                width: 100%;
+            }
+
+            div.grid-wrapper vaadin-grid {
+              height: auto;
+              @apply --azul-shadow--grid-elevation-1;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon {
+				        width: 17px;
+                height: 17px;
+			      }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
+      				@apply --layout-horizontal;
+      				@apply --layout-wrap;
+      				@apply --layout-end-justified;
+    			  }
+
+      			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
+      				color: #737D8A;
+      			}
+
+      			div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
+      				color: #425164;
+      			}
+
+            /* Vaadin Grid  */
+            div.grid-wrapper vaadin-grid {
+              height: auto;
+              @apply --azul-shadow--grid-elevation-1;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon {
+              width: 15px;
+              height: 15px;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon[active='Yes'] {
+              color: #35BF2E;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon[active='No'] {
+              color: var(--paper-grey-500);
+            }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
+              @apply --layout-horizontal;
+              @apply --layout-wrap;
+              @apply --layout-end-justified;
+            }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
+              color: #737D8A;
+            }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
+              color: #425164;
+            }
+
+            /* Cards Wrapper */
+            div.cards-wrapper {
+                width: 100%;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            div.cards-wrapper paper-card {
+                width: 100%;
+                margin-bottom: 24px;
+
+                @apply --azul-shadow--grid-elevation-1;
+            }
+
+            div.cards-wrapper paper-card div.card-header {
+                padding: 1em;
+            }
+
+            div.cards-wrapper paper-card div.card-header h2 {
+                margin: 0;
+                color: var(--azul-text-title);
+                font-size: 1.1em;
+            }
+
+            div.cards-wrapper paper-card div.card-content {
+                padding: .5em 1em 1em;
+
+                @apply --layout-horizontal;
+                @apply --layout-center;
+            }
+
+            div.cards-wrapper paper-card div.card-content div.image-wrapper {
+        				background-color: #F3F4F5;
+        				overflow: hidden;
+        				border-radius: 10em;
+        				width: 70px;
+        				height: 70px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+                margin-right: 20px;
+
+                @apply --layout-vertical;
+				        @apply --layout-center-center;
+            }
+
+            div.cards-wrapper paper-card div.card-content div.image-wrapper iron-image {
+                width: inherit;
+                height: inherit;
+                border-radius: 10em;
+                z-index: 0;
+            }
+
+            div.cards-wrapper paper-card div.card-content div.coach-info p {
+                margin-top: 0;
+                margin-bottom: 8px;
+            }
+
+            div.cards-wrapper paper-card div.card-content div.coach-info p strong {
+                color: var(--azul-text-title);
+                margin-right: 3px;
+                font-size: .9em;
+            }
+
+            div.cards-wrapper paper-card div.card-content div.coach-info p span {
+                color: var(--azul-text-title);
+                font-size: .9em;
+                font-weight: lighter;
+            }
+
+            div.cards-wrapper paper-card div.card-actions {
+                @apply --layout-horizontal;
+                @apply --layout-end-justified;
+            }
+
+            div.cards-wrapper paper-card div.card-actions paper-icon-button {
+                color: #737D8A;
+            }
+
+            /* Responsive */
+            @media screen and (max-width: 425px) {
+                /* General Style */
+                main {
+                    padding: 1em;
+                    height: calc(100vh - (64px + 2em));
+                    min-height: calc(100vh - (64px + 2em));
+
+                    @apply --layout-vertical;
+                    @apply --layout-center;
+                }
+
+                paper-fab {
+                    bottom: 1em;
+                    right: 1em;
+                }
+            }
+
+            [hidden] {
+                display: none;
+            }
+        </style>
+
+        <!-- This media query matches small screens to hide the grid and show responsive cards -->
+        <iron-media-query query="(max-width: 600px)" query-matches="{{responsiveScreen}}"></iron-media-query>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
+
+        <!-- Element UI -->
+        <main>
+            <template is="dom-if" if="[[!userReady]]">
+                <paper-spinner active=""></paper-spinner>
+            </template>
+
+            <!-- Empty Teams Message -->
+            <div class="empty-message" hidden$="[[!_computeVisibleEmptyMessage(coachesData.length, userReady)]]">
+                <div class="icon-container">
+                    <iron-icon icon="app-icons:person"></iron-icon>
+                </div>
+                <p>
+                    <strong>You don't have coaches</strong>
+                    <span>Add a coach and it will show up here</span>
+                    <paper-button raised="" on-tap="_openToAdd">Add Coach</paper-button>
+                </p>
+            </div>
+
+            <!-- Coaches Wrapper -->
+            <div class="coaches-wrapper" hidden$="[[!_computeVisibleData(coachesData.length, userReady)]]">
+                <!-- Search filter -->
+                <div class="search-wrapper">
+                    <!-- Polyfilter configuration -->
+                    <poly-filter-diacritic filter="[[coachFilter]]" array-to-filter="[[coachesData]]" filtered-array="{{coachesDataFiltered}}" filter-by="first, last"></poly-filter-diacritic>
+                    <!-- Search bar -->
+                    <paper-search-bar query="{{coachFilter}}" hidefilterbutton="true"> </paper-search-bar>
+                </div>
+
+                <!-- Grid View -->
+                <template is="dom-if" if="[[!responsiveScreen]]">
+                    <div class="grid-wrapper">
+                        <vaadin-grid aria-label="Coaches Grid" items="[[coachesDataFiltered]]">
+
+                            <!-- First Name -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="first">First</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.first]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- Last Name -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="last">Last</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.last]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- Username ** this can't be edited **
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="last">Email</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.email]]</template>
+                            </vaadin-grid-column>
+                            -->
+
+                            <!-- Team -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="team">Team</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.team]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- Sport: Default (Football) -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="sport">Sport</vaadin-grid-sorter>
+                                </template>
+                                <template>Football</template>
+                            </vaadin-grid-column>
+
+
+                            <!-- Phone -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="last">Phone number</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.phone]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- Actions -->
+                            <vaadin-grid-column>
+                                <template class="header"></template>
+                                <template class="horizontal-layout">
+                                    <div class="actions">
+                                        <paper-icon-button id$="[[item.$key]]" noink="" icon="fa-icons:player-card" on-tap="_openCoachProfileDialog"></paper-icon-button>
+                                        <!-- <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button> -->
+                                    </div>
+                                </template>
+                            </vaadin-grid-column>
+                        </vaadin-grid>
+                    </div>
+                </template>
+
+                <!-- Cards View -->
+                <template is="dom-if" if="[[responsiveScreen]]">
+                    <div class="cards-wrapper">
+                        <template is="dom-repeat" items="[[coachesDataFiltered]]" as="coach">
+                            <paper-card>
+                                <div class="card-header">
+                                    <h2>[[coach.first]] [[coach.last]]</h2>
+                                </div>
+                                <div class="card-content">
+                                    <div class="image-wrapper">
+                                        <iron-image preload="" fade="" sizing="cover" src="[[coach.profile_pic_url]]"></iron-image>
+                                    </div>
+                                    <div class="coach-info">
+                                        <p>
+                                            <strong>Username:</strong>
+                                            <span>[[coach.email]]</span>
+                                        </p>
+                                        <p>
+                                            <strong>Phone number:</strong>
+                                            <span>[[coach.phone]]</span>
+                                        </p>
+                                        <p>
+                                            <strong>Team:</strong>
+                                            <span>[[coach.team]]</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <paper-icon-button id$="[[coach.$key]]" noink="" icon="fa-icons:player-card" on-tap="_openCoachProfileDialog"></paper-icon-button>
+                                    <!-- <paper-icon-button id$="[[coach.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button> -->
+                                </div>
+                            </paper-card>
+                        </template>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Paper Fab to add new coach -->
+            <paper-fab icon="app-icons:person-add" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(coachesData.length, userReady)]]"></paper-fab>
+        </main>
+    </template>
+
+    <script>
+(function () {
+    'use strict';
+
+    var WrcCoaches = function (_Polymer$Element) {
+        babelHelpers.inherits(WrcCoaches, _Polymer$Element);
+
+        function WrcCoaches() {
+            babelHelpers.classCallCheck(this, WrcCoaches);
+            return babelHelpers.possibleConstructorReturn(this, (WrcCoaches.__proto__ || Object.getPrototypeOf(WrcCoaches)).apply(this, arguments));
+        }
+
+        babelHelpers.createClass(WrcCoaches, [{
+            key: 'ready',
+            value: function ready() {
+                babelHelpers.get(WrcCoaches.prototype.__proto__ || Object.getPrototypeOf(WrcCoaches.prototype), 'ready', this).call(this);
+
+                // Coaches Dialog
+                this._coachesDialog = document.getElementById('coachesDialog');
+
+                // Coach Profile Dialog
+                this._coachProfileDialog = document.getElementById('coachProfileDialog');
+
+                // App Progress Bar
+                this._appProgressBar = document.getElementById('appProgressBar');
+
+                // App Toast
+                this._appToast = document.getElementById('appToast');
+            }
+
+            /**
+             * Determines if the coaches data is empty to show the message
+             *
+             * @param {Number} length of the coaches array
+             * @param {Boolean} ready status of the user
+             * @return {Boolean}
+            */
+
+        }, {
+            key: '_computeVisibleEmptyMessage',
+            value: function _computeVisibleEmptyMessage(length, ready) {
+                if (!ready) return false;
+                return length > 0 ? false : true;
+            }
+
+            /**
+             * Determines if the coaches data has elements to show data
+             *
+             * @param {Number} length of the coaches array
+             * @param {Boolean} ready status of the user
+             * @return {Boolean}
+            */
+
+        }, {
+            key: '_computeVisibleData',
+            value: function _computeVisibleData(length, ready) {
+                if (!ready) return false;
+                return length > 0 ? true : false;
+            }
+
+            /**
+             * Observers the user for changes
+             *
+             * @param {Object} user information
+             * @return {void}
+            */
+
+        }, {
+            key: '_userChanged',
+            value: function _userChanged(user) {
+                if (user) {
+                    this.userReady = false;
+                    this.$.firebaseDocument.getStoredValue('/users').then(function (snapshot) {
+                        this.userReady = true;
+                    }.bind(this));
+                }
+            }
+
+            /**
+             * Opens coaches dialog to add
+            */
+
+        }, {
+            key: '_openToAdd',
+            value: function _openToAdd() {
+                this.action = 'add';
+                this._coachesDialog._resetForm();
+                this._coachesDialog.acceptedCallback = this._saveCoach.bind(this);
+                this._coachesDialog.action = 'add';
+                this._coachesDialog.opened = true;
+                this._coachesDialog.user = this.user;
+            }
+
+            /**
+             * Opens coaches dialog to edit
+             *
+             * @param {Event} evt from tapped button
+             * @return {void}
+            */
+
+        }, {
+            key: '_openToEdit',
+            value: function _openToEdit(evt) {
+                this.coachId = evt.target.getAttribute('id');
+                this.action = 'edit';
+
+                this.$.firebaseDocument.getStoredValue(this.user.uid + '/coaches/' + this.coachId).then(function (snapshot) {
+                    this._coachesDialog.coachInfo = snapshot;
+                    this._coachesDialog.acceptedCallback = this._saveCoach.bind(this);
+                    this._coachesDialog.action = 'edit';
+                    this._coachesDialog.opened = true;
+                    this._coachesDialog.user = this.user;
+                }.bind(this));
+            }
+
+            /**
+             * Saves coach to database
+             *
+             * @param {Object} coachInfo from dialog
+             * @return {void}
+            */
+
+        }, {
+            key: '_saveCoach',
+            value: function _saveCoach(coachInfo) {
+                if (this.action === 'add') {
+                    // Saves coach into admin private info
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/coaches/' + coachInfo.uid, coachInfo).then(function () {
+                        // Saves coach metadata
+                        this.$.firebaseDocument.setStoredValue(coachInfo.uid + '/metadata', { 'path': this.user.uid + '/coaches/' + coachInfo.uid, 'role': 'coach' });
+                    }.bind(this)).catch(function (err) {
+                        this._appToast.text = 'There has been an error. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
+
+                    this._coachesDialog.opened = false;
+                    this._appToast.text = 'The coach has been saved successfully.';
+                    this._appToast.open();
+                    this._appProgressBar.hidden = true;
+                } else {
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/coaches/' + coachInfo.uid, coachInfo).catch(function (err) {
+                        this._appToast.text = 'There has been an error. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
+
+                    this._coachesDialog.opened = false;
+                    this._appToast.text = 'The coach has been modified successfully.';
+                    this._appToast.open();
+                    this._appProgressBar.hidden = true;
+                }
+            }
+
+            /**
+             * Opens the coach's profile dialog
+            */
+
+        }, {
+            key: '_openCoachProfileDialog',
+            value: function _openCoachProfileDialog(e) {
+                this.coachId = e.target.getAttribute('id');
+
+                this.$.firebaseDocument.getStoredValue(this.user.uid + '/coaches/' + this.coachId).then(function (snapshot) {
+                    this._coachProfileDialog.user = this.user;
+                    this._coachProfileDialog.coachId = this.coachId;
+                    this._coachProfileDialog.coachInfo = snapshot;
+                    this._coachProfileDialog.opened = true;
+                }.bind(this), function (err) {
+                    this._appToast.text = 'An error has ocurred trying to retrieve the coach data. Please try again.';
+                    this._appToast.open();
+                }.bind(this));
+            }
+        }], [{
+            key: 'is',
+
+            /**
+            * Element definition
+            */
+            get: function get() {
+                return 'wrc-coaches';
+            }
+
+            /**
+             * Element properties
+            */
+
+        }, {
+            key: 'properties',
+            get: function get() {
+                return {
+                    userReady: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
+                    user: {
+                        type: Object,
+                        notify: true,
+                        observer: '_userChanged'
+                    },
+                    coachesData: {
+                        type: Object,
+                        notify: true
+                    }
+                };
+            }
+        }]);
+        return WrcCoaches;
+    }(Polymer.Element);
+
+    window.customElements.define(WrcCoaches.is, WrcCoaches);
+})();</script>
+</dom-module>

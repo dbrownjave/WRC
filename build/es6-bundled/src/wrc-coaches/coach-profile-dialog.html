@@ -1,0 +1,469 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+--><!-- Polymer --><!-- Paper Elements --><!-- Iron Elements --><!-- Vaadin Elements --><!-- Polymerfire Elements --><!-- Suji Elements --><!-- Neon Elements --><div hidden="" by-polymer-bundler=""><link rel="import" href="../suji/lib/themes/azul/azul-theme.html"><link rel="import" href="../suji/lib/colors/suji-color-palette.html"><link rel="import" href="../suji/lib/themes/azul/azul-dialog.html"></div><dom-module id="coach-profile-dialog">
+    <template>
+        <style>
+            /* Dialog */
+            paper-dialog {
+                border-radius: 5px;
+                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+            }
+
+            paper-dialog h2 {
+                color: var(--azul-text-title);
+                font-size: 1.6em;
+            }
+
+            paper-dialog .paper-dialog-title {
+                margin: -5px 0px 10px 0px !important;
+                @apply --layout-horizontal
+            }
+
+            paper-dialog div.buttons {
+                margin-top: .5cm;
+
+                @apply --layout-horizontal;
+                @apply --layout-end-justified;
+            }
+
+            paper-dialog div.buttons[hidden] {
+                display: none;
+            }
+
+            paper-dialog .buttons paper-button.save-button {
+                color: var(--azul-primary-button);
+                font-weight: normal;
+            }
+
+            paper-dialog paper-button.edit-button {
+                color: var(--azul-primary-button);
+                font-weight: normal;
+            }
+
+            div.edit-button-container {
+                height: 10px;
+                margin: 17px 0 0 0;
+            }
+
+            paper-dialog .buttons paper-button.cancel-button {
+                color: var(--paper-grey-700);
+                font-weight: normal;
+            }
+
+            paper-dialog .buttons paper-button.delete-button {
+                color: var(--paper-red-400);
+                font-weight: normal;
+            }
+
+            /* Image Wrapper */
+            div.image-wrapper {
+                width: 100%;
+
+                @apply --layout-vertical;
+                @apply --layout-center;
+            }
+
+            div.image-wrapper[hidden] {
+                display: none;
+            }
+
+            div.image-wrapper iron-image {
+                margin-bottom: 12px;
+                background-color: #F3F4F5;
+                overflow: hidden;
+                border-radius: 10em;
+                width: 150px;
+                height: 150px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            /* Profile Pic Uploader */
+            [type='file'] {
+                display: none;
+            }
+
+            div.picture-wrapper {
+                width: 100%;
+                margin-bottom: 12px;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            div.picture-wrapper[hidden] {
+                display: none;
+            }
+
+            div.picture-wrapper label {
+                background-color: #F3F4F5;
+                overflow: hidden;
+                border-radius: 10em;
+                width: 150px;
+                height: 150px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            div.picture-wrapper label:hover {
+                background-color: var(--paper-grey-300);
+            }
+
+            label iron-image {
+                width: inherit;
+                height: inherit;
+                cursor: pointer;
+            }
+
+            /* Email Wrapper */
+            div.email-wrapper {
+                width: 100%;
+                text-align: center;
+            }
+
+            div.email-wrapper p {
+                color: var(--azul-text-title);
+                font-size: 1.1em;
+                margin-top: 0;
+                font-weight: 400;
+            }
+
+            /* Info Wrapper */
+            div.info-wrapper {
+                @apply --layout-vertical;
+            }
+
+            div.info-wrapper[hidden] {
+                display: none;
+            }
+
+            div.info-wrapper p {
+                margin-bottom: 0;
+                font-size: 1.1em;
+                color: var(--azul-text-title);
+            }
+
+            div.info-wrapper p strong {
+                margin-right: 3px;
+            }
+
+            /* Form Wrapper */
+            div.form-wrapper {
+                width: 100%;
+            }
+
+            /* To keep dialog larger with large screens */
+            @media screen and (min-width: 600px) {
+                paper-dialog {
+                    width: 610px;
+                }
+            }
+
+            [flex] {
+                @apply --layout-flex;
+            }
+        </style>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
+
+        <!-- Firebase Storage Configuration -->
+        <firebase-storage-ref id="storageRef" app-name="wrc_software"></firebase-storage-ref>
+
+        <firebase-storage-multiupload id="firebaseStorage" app-name="wrc_software" path="profile-pics"></firebase-storage-multiupload>
+
+        <!-- Element UI -->
+        <paper-dialog opened="{{opened}}" with-backdrop="" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+
+            <!--  Modal Header  -->
+            <div class="paper-dialog-title">
+                <h2>[[coachInfo.first]] [[coachInfo.last]]</h2>
+                <span flex=""> </span>
+                <!--  Edit Button  -->
+                <div class="edit-button-container" hidden="[[editing]]">
+                    <paper-button class="edit-button" on-tap="_toggleEditView">Edit</paper-button>
+                </div>
+            </div>
+
+
+            <paper-dialog-scrollable>
+                <!-- Info image -->
+                <div class="image-wrapper" hidden="[[editing]]">
+                    <iron-image preload="" fade="" sizing="cover" src="[[coachInfo.profile_pic_url]]"></iron-image>
+                </div>
+
+                <!-- Profile image that allows user to change it -->
+                <div class="picture-wrapper" hidden="[[!editing]]">
+                    <input type="file" name="profile_pic" id="profilePicture">
+                    <label for="profilePicture">
+                        <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
+                        <iron-image id="profileImage" preload="" fade="" sizing="cover" src="[[coachInfo.profile_pic_url]]"></iron-image>
+                    </label>
+                </div>
+
+                <div class="email-wrapper">
+                    <p>[[coachInfo.email]]</p>
+                </div>
+                <!-- Info -->
+                <div class="info-wrapper" hidden="[[editing]]">
+                    <p>
+                        <strong>Email:</strong>
+                        <span>[[coachInfo.email]]</span>
+                    </p>
+                    <p>
+                        <strong>Phone:</strong>
+                        <span>[[coachInfo.phone]]</span>
+                    </p>
+                    <p>
+                        <strong>Team:</strong>
+                        <span>[[coachInfo.team]]</span>
+                    </p>
+                </div>
+
+                <!-- Edit Form -->
+                <div class="form-wrapper" hidden="[[!editing]]">
+                    <iron-form id="coachForm">
+                        <form>
+                            <vaadin-form-layout>
+                                <vaadin-text-field label="First Name" name="first" required="" error-message="This field is required" value="{{newCoachInfo.first}}"></vaadin-text-field>
+                                <vaadin-text-field label="Last Name" name="last" required="" error-message="This field is required" value="{{newCoachInfo.last}}"></vaadin-text-field>
+                                <vaadin-text-field label="Team" name="team" required="" error-message="This field is required" value="{{newCoachInfo.team}}"></vaadin-text-field>
+                                <vaadin-text-field label="Phone" name="phone" value="{{newCoachInfo.phone}}"></vaadin-text-field>
+                            </vaadin-form-layout>
+                        </form>
+                    </iron-form>
+                </div>
+            </paper-dialog-scrollable>
+            <div class="buttons" hidden="[[editing]]">
+                <paper-button class="delete-button" on-tap="_openDeleteDialog">Delete</paper-button>
+                <span flex=""></span>
+                <paper-button class="cancel-button" dialog-dismiss="" on-tap="_resetCoachInfo">Close</paper-button>
+            </div>
+            <div class="buttons" hidden="[[!editing]]">
+                <paper-button class="cancel-button" on-tap="_toggleEditView">Cancel</paper-button>
+                <span flex=""></span>
+                <paper-button class="save-button" on-tap="_serializeCoachForm">Save</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+(function () {
+    'use strict';
+
+    var CoachProfileDialog = function (_Polymer$Element) {
+        babelHelpers.inherits(CoachProfileDialog, _Polymer$Element);
+
+        function CoachProfileDialog() {
+            babelHelpers.classCallCheck(this, CoachProfileDialog);
+            return babelHelpers.possibleConstructorReturn(this, (CoachProfileDialog.__proto__ || Object.getPrototypeOf(CoachProfileDialog)).apply(this, arguments));
+        }
+
+        babelHelpers.createClass(CoachProfileDialog, [{
+            key: 'ready',
+            value: function ready() {
+                babelHelpers.get(CoachProfileDialog.prototype.__proto__ || Object.getPrototypeOf(CoachProfileDialog.prototype), 'ready', this).call(this);
+
+                // App Progress Bar
+                this._appProgressBar = document.getElementById('appProgressBar');
+
+                // App Toast
+                this._appToast = document.getElementById('appToast');
+
+                // Delete Coach Dialog
+                this._deleteCoachDialog = document.getElementById('appDeleteDialog');
+
+                var fileUpload = this.$.profilePicture;
+                fileUpload.addEventListener('change', function (e) {
+                    this._createImgPreview(e.target.files[0]);
+                }.bind(this));
+            }
+
+            /**
+             * Resets the coach info when closing
+             */
+
+        }, {
+            key: '_resetCoachInfo',
+            value: function _resetCoachInfo() {
+                this.coachInfo = null;
+            }
+
+            /**
+             * Creates image preview for profile picture
+             *
+             * @param {String} image selected by user
+             * @return {void}
+             */
+
+        }, {
+            key: '_createImgPreview',
+            value: function _createImgPreview(image) {
+                this.$.profileImage.src = URL.createObjectURL(image);
+            }
+
+            /**
+             * Switch to edit view
+             */
+
+        }, {
+            key: '_toggleEditView',
+            value: function _toggleEditView() {
+                this.newCoachInfo = this.editing ? null : this.coachInfo;
+
+                this.editing = !this.editing;
+                this.opened = false;
+                this.opened = true;
+            }
+
+            /**
+             * Serializes form data and saves into coach data
+             */
+
+        }, {
+            key: '_serializeCoachForm',
+            value: function _serializeCoachForm() {
+                if (this.$.coachForm.validate()) {
+                    this._appProgressBar.hidden = false;
+
+                    if (this.$.profilePicture.files[0]) {
+                        this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
+                        this.$.storageRef.delete();
+
+                        this.$.firebaseStorage.put(this.$.profilePicture.files[0]).then(function () {
+                            this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0].name).then(function (url) {
+                                this.newCoachInfo.profile_pic_url = url;
+                                this.newCoachInfo.profile_pic_name = this.$.profilePicture.files[0].name;
+                                this._saveCoachInfo();
+                            }.bind(this));
+                        }.bind(this));
+                    } else {
+                        this._saveCoachInfo();
+                    }
+                }
+            }
+
+            /**
+             * Execute saving script
+             *
+             * This is neeed to do not duplicate function, due to when we are saving
+             * new profile picture we have to wait for firebase response until save info because we need
+             * downloadURL from new profile pic.
+             */
+
+        }, {
+            key: '_saveCoachInfo',
+            value: function _saveCoachInfo() {
+                this.$.firebaseDocument.setStoredValue(this.user.uid + '/coaches/' + this.coachId, this.newCoachInfo).catch(function (err) {
+                    this._appToast.text = 'There has been an error. Please try again.';
+                    this._appToast.open();
+                }.bind(this));
+
+                this._appToast.text = 'The coach has been modified successfully.';
+                this._appToast.open();
+                this._appProgressBar.hidden = true;
+                this.editing = false;
+                this.opened = false;
+                this.coachInfo = null;
+                this.coachInfo = this.newCoachInfo;
+                this.opened = true;
+            }
+
+            /**
+             * Opens the delete confirmation dialog
+             */
+
+        }, {
+            key: '_openDeleteDialog',
+            value: function _openDeleteDialog() {
+                // Binding confirmation action + content
+                this._deleteCoachDialog.acceptedCallback = this._deleteCoach.bind(this);
+                this._deleteCoachDialog.title = "Delete Coach";
+                this._deleteCoachDialog.msg = "Are you sure you want to delete this Coach?";
+
+                // Open Dialog
+                this._deleteCoachDialog.opened = true;
+            }
+
+            /**
+             * Deletes the coach
+             *
+             * @param {Boolean} response from delete confirmation dialog
+             * @return {void}
+             */
+
+        }, {
+            key: '_deleteCoach',
+            value: function _deleteCoach(response) {
+                if (response) {
+
+                    // Deletes the coach information from the administrator data
+                    this.$.firebaseDocument.destroy(this.user.uid + '/coaches/' + this.coachId).then(function () {
+                        // Deletes profile picture
+                        if (this.coachInfo.profile_pic_name !== 'default_profile.png') {
+                            this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
+                            this.$.storageRef.delete();
+                        }
+
+                        // Deletes the coach's node
+                        // Have in count that this WILL DELETE coach's athletes
+                        this.$.firebaseDocument.destroy(this.coachInfo.uid);
+
+                        this.coachInfo = null;
+                    }.bind(this));
+
+                    // Notification
+                    this._appToast.text = 'The coach has been deleted successfully.';
+                    this._appToast.open();
+
+                    // Close Delete + Profile Dialog
+                    this._deleteCoachDialog.opened = false;
+                    this.opened = false;
+                }
+            }
+        }], [{
+            key: 'is',
+
+            /**
+             * Element definition
+             */
+            get: function get() {
+                return 'coach-profile-dialog';
+            }
+
+            /**
+             * Element properties
+             */
+
+        }, {
+            key: 'properties',
+            get: function get() {
+                return {
+                    user: Object,
+                    coachId: String,
+                    coachInfo: Object,
+                    newCoachInfo: Object,
+                    opened: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
+                    editing: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    }
+                };
+            }
+        }]);
+        return CoachProfileDialog;
+    }(Polymer.Element);
+
+    window.customElements.define(CoachProfileDialog.is, CoachProfileDialog);
+})();</script>
+</dom-module>

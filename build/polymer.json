@@ -1,0 +1,115 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/wrc-app/wrc-app.html",
+  "fragments": [
+    "src/pdf-workout-creator/pdf-workout-creator.html",
+    "src/shared/dialogs/wrc-delete-dialog.html",
+    "src/suji/lib/colors/suji-color-palette.html",
+    "src/suji/lib/elements/suji-dialog.html",
+    "src/suji/lib/themes/azul/azul-dialog.html",
+    "src/suji/lib/themes/azul/azul-theme.html",
+    "src/wrc-active-workouts/wrc-active-workouts.html",
+    "src/wrc-assign-workouts/download-program-dialog.html",
+    "src/wrc-assign-workouts/wrc-assign-workouts.html",
+    "src/wrc-athletes/athlete-profile-dialog.html",
+    "src/wrc-athletes/athlete-stats-dialog.html",
+    "src/wrc-athletes/athletes-dialog.html",
+    "src/wrc-athletes/delete-athlete-dialog.html",
+    "src/wrc-athletes/wrc-athletes.html",
+    "src/wrc-coaches/coach-profile-dialog.html",
+    "src/wrc-coaches/wrc-coaches.html",
+    "src/wrc-library/video-dialog.html",
+    "src/wrc-library/wrc-library.html",
+    "src/wrc-loading/wrc-loading.html",
+    "src/wrc-login/recover-password-dialog.html",
+    "src/wrc-login/wrc-login.html",
+    "src/wrc-main/max-calculator-dialog.html",
+    "src/wrc-main/settings-dialog.html",
+    "src/wrc-main/user-profile-dialog.html",
+    "src/wrc-main/verify-email-dialog.html",
+    "src/wrc-main/wrc-main.html",
+    "src/wrc-programs/add-program-dialog.html",
+    "src/wrc-programs/wrc-programs.html",
+    "src/wrc-workout-collection/wrc-workout-collection.html",
+    "src/wrc-workouts/add-workout-dialog.html",
+    "src/wrc-workouts/wrc-workouts.html",
+    "src/wrc-workouts-creator/wrc-workouts-creator.html",
+    "src/app-icons.html",
+    "src/fa-icons.html",
+    "src/shared-styles.html"
+  ],
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "icons/**/*",
+    "index.html",
+    "src/wrc-app/wrc-app.html",
+    "src/pdf-workout-creator/pdf-workout-creator.html",
+    "src/shared/dialogs/wrc-delete-dialog.html",
+    "src/suji/lib/colors/suji-color-palette.html",
+    "src/suji/lib/elements/suji-dialog.html",
+    "src/suji/lib/themes/azul/azul-dialog.html",
+    "src/suji/lib/themes/azul/azul-theme.html",
+    "src/wrc-active-workouts/wrc-active-workouts.html",
+    "src/wrc-assign-workouts/download-program-dialog.html",
+    "src/wrc-assign-workouts/wrc-assign-workouts.html",
+    "src/wrc-athletes/athlete-profile-dialog.html",
+    "src/wrc-athletes/athlete-stats-dialog.html",
+    "src/wrc-athletes/athletes-dialog.html",
+    "src/wrc-athletes/delete-athlete-dialog.html",
+    "src/wrc-athletes/wrc-athletes.html",
+    "src/wrc-coaches/coach-profile-dialog.html",
+    "src/wrc-coaches/wrc-coaches.html",
+    "src/wrc-library/video-dialog.html",
+    "src/wrc-library/wrc-library.html",
+    "src/wrc-loading/wrc-loading.html",
+    "src/wrc-login/recover-password-dialog.html",
+    "src/wrc-login/wrc-login.html",
+    "src/wrc-main/max-calculator-dialog.html",
+    "src/wrc-main/settings-dialog.html",
+    "src/wrc-main/user-profile-dialog.html",
+    "src/wrc-main/verify-email-dialog.html",
+    "src/wrc-main/wrc-main.html",
+    "src/wrc-programs/add-program-dialog.html",
+    "src/wrc-programs/wrc-programs.html",
+    "src/wrc-workout-collection/wrc-workout-collection.html",
+    "src/wrc-workouts/add-workout-dialog.html",
+    "src/wrc-workouts/wrc-workouts.html",
+    "src/wrc-workouts-creator/wrc-workouts-creator.html",
+    "src/app-icons.html",
+    "src/fa-icons.html",
+    "src/shared-styles.html"
+  ],
+  "extraDependencies": [
+    "bower_components/webcomponentsjs/*.js",
+    "manifest.json",
+    "bower_components/webcomponentsjs/*.js"
+  ],
+  "builds": [
+    {
+      "name": "es6-bundled",
+      "browserCapabilities": [
+        "es2015"
+      ],
+      "js": {
+        "minify": false,
+        "compile": true
+      },
+      "css": {
+        "minify": false
+      },
+      "html": {
+        "minify": false
+      },
+      "bundle": true,
+      "addServiceWorker": true,
+      "addPushManifest": false,
+      "preset": "es6-bundled"
+    }
+  ],
+  "lint": {
+    "rules": [
+      "polymer-2"
+    ]
+  }
+}

@@ -1,0 +1,625 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+--><!-- Polymer --><!-- Paper Elements --><!-- Polymerfire Elements --><!-- Iron Elements --><!-- Vaadin Elements --><!-- PDF Workout Creator --><!-- Icons --><!-- Shared Style  --><div hidden="" by-polymer-bundler=""><link rel="import" href="../pdf-workout-creator/pdf-workout-creator.html"><link rel="import" href="../app-icons.html"><link rel="import" href="../fa-icons.html"><link rel="import" href="../shared-styles.html"></div><dom-module id="wrc-programs">
+	<template>
+		<style include="wrc-shared-styles">
+			/* General Style */
+
+			main {
+				padding: 1em 0em 2em 0em;
+				height: calc(100vh - (64px + 4em));
+				min-height: calc(100vh - (64px + 4em));
+				overflow: auto;
+			}
+
+			/* Header Section */
+
+			div.title {
+				@apply --layout-horizontal;
+				@apply --layout-center-justified;
+			}
+
+			paper-icon-button.back-button {
+				margin: 10px 0 0 15px;
+			}
+
+			.header-section {
+				@apply --layout-horizontal;
+			}
+
+			div.title h3 {
+				font-size: 1.6em;
+				font-weight: 400;
+				font-style: normal;
+				font-stretch: normal;
+				line-height: normal;
+				letter-spacing: 1px;
+				color: #6a7582;
+				margin: -38px 0 20px 0;
+
+				@apply --layout-center;
+				@apply --layout-vertical;
+			}
+
+			/* Paper Fab */
+
+			paper-fab.finish-button {
+				--paper-fab-background: #5ac381;
+				--paper-fab-keyboard-focus-background: #5ac381;
+			}
+
+			/* Iron Selector */
+
+			iron-selector {
+				@apply --layout-wrap;
+				@apply --layout-horizontal;
+			}
+
+			.menu-item-selected {
+				border-style: none;
+				background-color: white;
+			}
+
+			.paper-form.iron-selected {
+				border-style: solid;
+				border-color: rgba(66, 141, 255, .60);
+			  border-width: 3px;
+				color: white;
+
+				box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
+			}
+
+			.option-menu .iron-selected {
+				text-transform: none;
+				font-weight: normal;
+				background-color: white !important;
+			}
+
+			.option-menu paper-item {
+				text-transform: none;
+				font-weight: normal;
+				text-decoration: none;
+
+				--paper-item-selected: red;
+
+			}
+
+			/* PDF Workout */
+
+			.menu-icon {
+				margin-left: 10em;
+				color: #86919f;
+			}
+
+			.menu-icon:hover {
+				color: #636E7A;
+			}
+
+			.paper-form {
+				position: relative;
+				/* z-index: 102; */
+			}
+
+			.paper-form>.pdf-wrapper {
+				@apply --layout-vertical;
+				@apply --layout-center;
+			}
+
+			.content-wrapper {
+				display: block;
+				margin: .5cm auto 0 auto;
+			}
+
+			.start-button {
+				width: 110px;
+				height: 30px;
+				border-radius: 3.1px;
+				background-color: #5ac381;
+				box-shadow: 0 4px 15px 0 rgba(90, 195, 129, 0.54);
+				margin: 60px 0 0 0;
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			.start-button>.title {
+				font-size: 1em;
+				font-weight: 400;
+				letter-spacing: 0.4px;
+				text-align: center;
+				color: white;
+			}
+
+			[hidden] {
+				display: none;
+			}
+
+			/* Responsive */
+
+			@media screen and (max-width: 600px) {
+				div.title h3 {
+					font-size: 1.4em;
+				}
+
+				div.collection-wrapper {
+					@apply --layout-wrap;
+					@apply --layout-vertical;
+					@apply --layout-center;
+				}
+			}
+		</style>
+
+		<!-- Firebase Document Configuration -->
+		<firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
+
+		<!-- Workouts Query Configuration -->
+		<firebase-query app-name="wrc_software" path="workouts" data="{{workoutsData}}" order-by-child="status" equal-to="false"></firebase-query>
+
+		<!-- Programs Query Configuration -->
+		<firebase-query app-name="wrc_software" path="programs" data="{{programsData}}"></firebase-query>
+
+		<!-- Element UI -->
+		<main>
+
+			<div hidden$="{{hidden}}">
+
+				<!-- Program Cards -->
+				<div class="collection-wrapper">
+					<template is="dom-repeat" items="{{programsData}}" as="program">
+						<div class="paper-form" hidden$="[[_computeHiddenPrograms(reviewMode, editMode)]]" id$="[[program.$key]]">
+							<div class="pdf-wrapper">
+								<paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+									<paper-icon-button class="menu-icon default-transiton" noink="" slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+									<paper-listbox noink="" slot="dropdown-content" selected="{{selectedMenuItem}}">
+										<paper-item id$="[[program.$key]]" on-tap="_reviewProgram" data-option="review">Review</paper-item>
+										<paper-item id$="[[program.$key]]" on-tap="_editProgram" data-option="edit">Edit</paper-item>
+										<paper-item id$="[[program.$key]]" on-tap="_openDeleteProgramDialog">Delete</paper-item>
+									</paper-listbox>
+								</paper-menu-button>
+
+								<!-- card content -->
+								<div class="content-wrapper">
+									<div class="season-title-program">[[program.program]]</div>
+									<div class="program-title">[[program.duration]] Program</div>
+									<div class="type-title">[[program.type]]</div>
+								</div>
+								<div class="tag">
+									<div class="day-title">[[program.days]] Days</div>
+								</div>
+							</div>
+						</div>
+					</template>
+				</div>
+
+				<div hidden$="[[editMode]]">
+					<!-- Paper Fab to add new workout -->
+					<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{reviewMode}}" on-tap="_openToAdd"></paper-fab>
+				</div>
+
+				</div>
+
+			<!-- Review Workouts content -->
+			<div class="review-content" hidden$="{{!reviewMode}}">
+				<!-- Back button -->
+				<paper-icon-button noink="" class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
+
+				<!-- Workouts of the program -->
+				<div class="collection-wrapper">
+					<template is="dom-repeat" items="[[workoutsOfProgram]]" as="workout">
+						<div class="paper-form" id$="[[workout.$key]]">
+							<div class="pdf-wrapper">
+								<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+									<paper-icon-button class="menu-icon default-transiton" noink="" slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+									<paper-listbox noink="" slot="dropdown-content">
+										<paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
+									</paper-listbox>
+								</paper-menu-button>
+
+								<div class="content-wrapper">
+									<div class="season-title-program">[[workout.season]]</div>
+									<div class="program-title">[[workout.weeks]] Week Program</div>
+									<div class="type-title">[[workout.type]]</div>
+								</div>
+								<div class="tag">
+									<div class="day-title">Week [[workout.week]]</div>
+								</div>
+							</div>
+						</div>
+					</template>
+				</div>
+			</div>
+
+			<!-- Edit Workouts content -->
+			<div class="edit-content" hidden$="{{!editMode}}">
+				<!-- Back button -->
+				<paper-icon-button noink="" class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
+
+				<div class="title">
+					<h3>Select Workouts for Program</h3>
+				</div>
+
+				<!-- Workouts Cards Selector -->
+				<iron-selector multi="">
+					<template is="dom-repeat" items="{{workoutsData}}" as="workout">
+						<div class="paper-form" id$="[[workout.$key]]">
+							<div class="pdf-wrapper">
+								<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+									<paper-icon-button class="menu-icon default-transiton" noink="" slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+									<paper-listbox noink="" slot="dropdown-content">
+										<paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
+									</paper-listbox>
+								</paper-menu-button>
+								<div class="content-wrapper">
+									<div class="season-title-program">[[workout.season]]</div>
+									<div class="program-title">[[workout.weeks]] Week Program</div>
+									<div class="type-title">[[workout.type]]</div>
+								</div>
+								<div class="tag">
+									<div class="day-title">Week [[workout.week]]</div>
+								</div>
+							</div>
+						</div>
+					</template>
+				</iron-selector>
+			</div>
+
+			<!-- Finish button -->
+			<paper-fab src="../icons/fab-icon/check-mark.png" hidden$="{{!editMode}}" on-tap="_bindWorkoutsToProgram" class="finish-button"></paper-fab>
+
+		</main>
+	</template>
+
+	<script>
+'use strict';
+
+(function () {
+	var WrcPrograms = function (_PdfWorkoutCreator) {
+		babelHelpers.inherits(WrcPrograms, _PdfWorkoutCreator);
+
+		function WrcPrograms() {
+			babelHelpers.classCallCheck(this, WrcPrograms);
+			return babelHelpers.possibleConstructorReturn(this, (WrcPrograms.__proto__ || Object.getPrototypeOf(WrcPrograms)).apply(this, arguments));
+		}
+
+		babelHelpers.createClass(WrcPrograms, [{
+			key: 'ready',
+			value: function ready() {
+				babelHelpers.get(WrcPrograms.prototype.__proto__ || Object.getPrototypeOf(WrcPrograms.prototype), 'ready', this).call(this);
+
+				// Add Program Dialog
+				this._addProgramDialog = document.getElementById('addProgramDialog');
+
+				// App Toast
+				this._appToast = document.getElementById("appToast");
+				this._appToastPopupDisabled = document.getElementById('appToastPopupDisabled');
+
+				// App Progress bar
+				this._appProgress = document.getElementById("appProgressBar");
+
+				// Delete Workout Dialog
+				this._deleteProgramDialog = document.getElementById("appDeleteDialog");
+			}
+		}, {
+			key: '_computeHiddenPrograms',
+			value: function _computeHiddenPrograms(reviewMode, editMode) {
+				if (reviewMode) {
+					return true;
+				}
+
+				if (editMode) {
+					this.reviewMode = false;
+					return true;
+				}
+
+				return false;
+			}
+
+			/**
+    * Reset 'paper-menu-button' user selection
+    */
+
+		}, {
+			key: '_resetMenuSelection',
+			value: function _resetMenuSelection() {
+				this.selectedMenuItem = null;
+			}
+
+			/**
+    * Opens delete program dialog
+    */
+
+		}, {
+			key: '_openDeleteProgramDialog',
+			value: function _openDeleteProgramDialog(e) {
+				this.programId = e.target.getAttribute("id");
+
+				// Binding confirmation action
+				this._deleteProgramDialog.acceptedCallback = this._deleteProgram.bind(this);
+
+				this._deleteProgramDialog.opened = true;
+				this._deleteProgramDialog.title = "Delete Program";
+				this._deleteProgramDialog.msg = "Are you sure you want to delete this Program?";
+				// TODO: Improve UX + Add More Detailed info.: All workouts from this program will release back to the workout collection.
+			}
+
+			/**
+    * @description Deletes Program and releases all binded workouts
+    */
+
+		}, {
+			key: '_deleteProgram',
+			value: function _deleteProgram(response) {
+				if (response) {
+					this.$.firebaseDocument.getStoredValue("programs/" + this.programId + "/workouts").then(function (workouts) {
+						if (workouts && workouts.length) {
+							var _iteratorNormalCompletion = true;
+							var _didIteratorError = false;
+							var _iteratorError = undefined;
+
+							try {
+								for (var _iterator = workouts[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+									var workout = _step.value;
+
+									this.$.firebaseDocument.setStoredValue("workouts/" + workout + "/status", false);
+								}
+							} catch (err) {
+								_didIteratorError = true;
+								_iteratorError = err;
+							} finally {
+								try {
+									if (!_iteratorNormalCompletion && _iterator.return) {
+										_iterator.return();
+									}
+								} finally {
+									if (_didIteratorError) {
+										throw _iteratorError;
+									}
+								}
+							}
+						}
+						this.$.firebaseDocument.destroy("programs/" + this.programId);
+						this._appToast.text = "The workout has been deleted successfully.";
+						this._appToast.open();
+						this._deleteProgramDialog.opened = false;
+					}.bind(this));
+				}
+			}
+
+			/**
+    * Opens program dialog to add
+    */
+
+		}, {
+			key: '_openToAdd',
+			value: function _openToAdd() {
+				this._addProgramDialog.acceptedCallback = this._onProgramDialog.bind(this);
+				this._addProgramDialog.opened = true;
+			}
+
+			/**
+    * Saves new program
+    */
+
+		}, {
+			key: '_onProgramDialog',
+			value: function _onProgramDialog(programInfo) {
+				this._appProgress.hidden = false;
+				this.$.firebaseDocument.push("programs", programInfo).then(function () {
+					this._appProgress.hidden = true;
+					this._appToast.text = "The program has been created succesfully.";
+					this._appToast.open();
+					this._addProgramDialog.resetForm();
+					this._addProgramDialog.opened = false;
+				}.bind(this)).catch(function (err) {
+					this._appProgress.hidden = true;
+					this._appToast.text = "There has been an error. Please try again.";
+					this._appToast.open();
+				}.bind(this));
+			}
+
+			// Returns to programs from editMode / reviewMode
+
+		}, {
+			key: '_backToPrograms',
+			value: function _backToPrograms() {
+				this.editMode = this.reviewMode = false;
+			}
+
+			/**
+    * @description Go to review mode and loads the workouts saved in the program
+   */
+
+		}, {
+			key: '_reviewProgram',
+			value: function _reviewProgram(evt) {
+				var workoutsOfProgram = [];
+				this.reviewMode = true;
+				this.programId = evt.target.getAttribute("id");
+
+				this.$.firebaseDocument.getStoredValue('programs/' + this.programId + '/workouts').then(function (workouts) {
+					var _this2 = this;
+
+					if (workouts && workouts.length) {
+						var _iteratorNormalCompletion2 = true;
+						var _didIteratorError2 = false;
+						var _iteratorError2 = undefined;
+
+						try {
+							var _loop = function _loop() {
+								var workout = _step2.value;
+
+								_this2.$.firebaseDocument.getStoredValue('workouts/' + workout).then(function (workoutData) {
+									workoutData["$key"] = workout;
+									workoutsOfProgram.push(workoutData);
+								}.bind(_this2));
+							};
+
+							for (var _iterator2 = workouts[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+								_loop();
+							}
+						} catch (err) {
+							_didIteratorError2 = true;
+							_iteratorError2 = err;
+						} finally {
+							try {
+								if (!_iteratorNormalCompletion2 && _iterator2.return) {
+									_iterator2.return();
+								}
+							} finally {
+								if (_didIteratorError2) {
+									throw _iteratorError2;
+								}
+							}
+						}
+					}
+					this.set("workoutsOfProgram", workoutsOfProgram);
+				}.bind(this));
+			}
+		}, {
+			key: '_editProgram',
+			value: function _editProgram(evt) {
+				this.editMode = true;
+				this.programId = evt.target.getAttribute("id");
+			}
+
+			/**
+    * Binds selected workouts to program
+    */
+
+		}, {
+			key: '_bindWorkoutsToProgram',
+			value: function _bindWorkoutsToProgram() {
+				var selectableWorkouts = this.root.querySelector("iron-selector");
+				var selectedWorkouts = selectableWorkouts.querySelectorAll(".iron-selected");
+				if (selectedWorkouts && selectedWorkouts.length > 0) {
+					this._appProgress.hidden = false;
+					var bindedWorkouts = [];
+					for (var i = 0; i < selectedWorkouts.length; i++) {
+						var workoutId = selectedWorkouts[i].id;
+						bindedWorkouts.push(workoutId);
+						this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", true);
+					}
+					console.log(bindedWorkouts);
+
+					// Release workouts
+					//var programsData = this.programsData;
+					//console.log(programsData);
+
+					// Loop for each element in an array, in order.
+					///if(programsData) {
+					//programsData.forEach(function(workout) {
+					//	this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", + workoutId + "/status", false);
+					//	console.log("workout ID: " + workoutId + "  Status: " + workout.status);
+					//});
+					//}
+
+
+					this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", bindedWorkouts).then(function () {
+						this._appProgress.hidden = true;
+						this._appToast.text = "The workouts has been assigned succesfully.";
+						this._appToast.open();
+						this.editMode = false;
+					}.bind(this)).catch(function (err) {
+						this._appProgress.hidden = true;
+						this._appToast.text = "There has been an error. Please try again.";
+						this._appToast.open();
+					}.bind(this));
+				} else {
+					this._appToast.text = "Please select at least one workout";
+					this._appToast.open();
+				}
+			}
+
+			/**
+    * @description Retrieves workout data from Firebase
+   */
+
+		}, {
+			key: '_loadWorkoutData',
+			value: function _loadWorkoutData(evt) {
+				evt.preventDefault();
+
+				// Extracts workoutId from clicked button
+				var workoutId = evt.target.getAttribute("id");
+
+				// Retrieves data from Firebase
+				this.$.firebaseDocument.getStoredValue("workouts/" + workoutId).then(function (snapshot) {
+					// Pass the retrieved workout to our generation function
+					this._generatePreview(snapshot);
+				}.bind(this));
+			}
+
+			/**
+    * @description Generates workout PDF Preview making use of the super class
+    * @param {Object} workout - workout retrieved from firebase
+   */
+
+		}, {
+			key: '_generatePreview',
+			value: function _generatePreview(workout) {
+				/**
+     * Call super class generatePreview function, sending workout data
+     */
+				var computePdfPreview = babelHelpers.get(WrcPrograms.prototype.__proto__ || Object.getPrototypeOf(WrcPrograms.prototype), '_generatePreview', this).call(this, workout);
+
+				// Notify user that pop-up is disabled
+				if (computePdfPreview === false) {
+					this._appToastPopupDisabled.text = " 🚫 Pop-ups Blocked. ";
+					this._appToastPopupDisabled.open();
+					console.log("Pop-up Window Blocker Enabled");
+				}
+			}
+		}], [{
+			key: 'is',
+
+			// Element definition
+			get: function get() {
+				return 'wrc-programs';
+			}
+
+			/**
+    * Element properties
+    */
+
+		}, {
+			key: 'properties',
+			get: function get() {
+				return {
+					hidden: {
+						type: Boolean,
+						notify: true,
+						value: false
+					},
+					reviewMode: {
+						type: Boolean,
+						notify: true,
+						value: false
+					},
+					editMode: {
+						type: Boolean,
+						notify: true,
+						value: false
+					},
+					selectedMenuItem: {
+						type: Object,
+						notify: true,
+						value: null
+					},
+					workoutsOfProgram: {
+						type: Array,
+						notify: true
+					},
+					programsData: {
+						type: Object,
+						notify: true
+					}
+				};
+			}
+		}]);
+		return WrcPrograms;
+	}(PdfWorkoutCreator(Polymer.Element));
+
+	window.customElements.define(WrcPrograms.is, WrcPrograms);
+})();</script>
+</dom-module>

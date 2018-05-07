@@ -1,0 +1,728 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+--><!-- Polymer --><!-- Paper Elements --><!-- Polymerfire Elements --><!-- Iron Elements --><!-- PDF Workout Creator --><!-- Icons --><!-- Shared Style  --><div hidden="" by-polymer-bundler=""><link rel="import" href="../pdf-workout-creator/pdf-workout-creator.html"><link rel="import" href="../app-icons.html"><link rel="import" href="../fa-icons.html"><link rel="import" href="../shared-styles.html"></div><dom-module id="wrc-assign-workouts">
+    <template>
+        <style include="wrc-shared-styles">
+            /* General Style */
+
+            main {
+                padding: 1em 0em 2em 0em;
+                height: calc(100vh - (64px + 4em));
+                min-height: calc(100vh - (64px + 4em));
+                overflow: auto;
+
+                @apply --layout-vertical;
+            }
+
+            [hidden] {
+                display: none;
+            }
+
+            /* Program Selector */
+
+            .paper-form {
+                position: relative;
+                cursor: auto;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .paper-form>.pdf-wrapper {
+                @apply --layout-vertical;
+                @apply --layout-center;
+            }
+
+            paper-menu-button {
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+
+            .menu-icon {
+                color: #86919f;
+            }
+
+            paper-menu-button paper-listbox paper-item {
+                font-weight: normal;
+                text-decoration: none;
+                text-transform: none;
+                background-color: #fff;
+                cursor: pointer;
+            }
+
+            paper-menu-button paper-listbox .iron-selected {
+                font-weight: normal;
+                text-decoration: none;
+                text-transform: none;
+                background-color: #fff;
+            }
+
+            paper-item:focus:before {
+                background: #fff;
+            }
+
+            paper-item:active:before {
+                background: var(--paper-grey-300);
+                color: #000;
+            }
+
+            /* Active Status */
+
+            .tag {
+                width: 70px;
+                height: 21px;
+                border-radius: 3px;
+                background-color: #86919f;
+                text-align: center;
+                margin-top: 10px;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .tag[active] {
+                background-color: #45BE72;
+            }
+
+            /* Empty Workout State */
+
+            .motivation-msg {
+              margin: 2cm 0cm 0cm 0cm;
+            }
+
+            .motivation-title {
+              color: #AFB7C1;
+              font-size: 4.5em;
+              font-weight: 500;
+              text-align: center;
+              opacity: .70;
+            }
+
+            .biceps-icon {
+              width: 175px;
+              height: 175px;
+              display: block;
+              margin: 1cm auto 0 auto;
+            }
+
+            .add-workout-title {
+              color: #788290;
+              font-size: 2em;
+              display: block;
+              margin-bottom: .7em;
+              right: 3em;
+              bottom: 4em;
+              position: absolute;
+            }
+
+            .arrow-curve {
+              width: 85px;
+              height: 85px;
+              display: block;
+              right: 7.5em;
+
+              bottom: 3em;
+              position: absolute;
+            }
+
+            /* Responsive */
+            @media screen and (max-width: 600px) {
+
+              paper-fab {
+                bottom: 1em;
+                right: 1em;
+              }
+
+              /* Empty Workout State */
+              .motivation-msg {
+                margin: 2cm 0cm 0cm 0cm;
+              }
+
+              .motivation-title {
+                font-size: 2em;
+              }
+
+              .biceps-icon {
+                width: 140px;
+                height: 140px;
+              }
+
+              .add-workout-title {
+                font-size: 2em;
+                margin-bottom: -.5em;
+                right: 1em;
+                bottom: 4em;
+              }
+
+              .arrow-curve {
+                width: 60px;
+                height: 60px;
+                right: 5.2em;
+
+                bottom: 2.5em;
+                position: absolute;
+              }
+            }
+
+            /* Responsive Small Devices */
+
+            @media screen and (max-width: 425px) {
+              /* General Style */
+              main {
+                padding: 1em;
+                height: calc(100vh - (64px + 2em));
+                min-height: calc(100vh - (64px + 2em));
+
+                @apply --layout-vertical;
+                @apply --layout-center;
+              }
+              paper-fab {
+                bottom: 1em;
+                right: 1em;
+              }
+
+              /* Empty Workout State */
+              .motivation-msg {
+                margin: 2cm 0cm 0cm 0cm;
+              }
+
+              .motivation-title {
+                font-size: 1.5em;
+              }
+
+              .biceps-icon {
+                width: 100px;
+                height: 100px;
+              }
+
+              .add-workout-title {
+                font-size: 1.4em;
+                margin-bottom: -.5em;
+                right: 2em;
+                bottom: 4.5em;
+              }
+
+              .arrow-curve {
+                width: 40px;
+                height: 40px;
+                right: 5.2em;
+
+                bottom: 2.5em;
+                position: absolute;
+              }
+            }
+
+        </style>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
+
+        <!-- Programs Query Configuration -->
+        <firebase-query app-name="wrc_software" path="programs" data="{{programsData}}"></firebase-query>
+
+		<!-- Workouts Query Configuration -->
+		<firebase-query app-name="wrc_software" path="workouts" data="{{workoutsData}}" order-by-child="status" equal-to="false"></firebase-query>
+
+        <!-- Element UI -->
+        <main>
+
+          <!-- Loading Indicator  -->
+          <template is="dom-if" if="[[!userReady]]">
+            <paper-spinner active=""></paper-spinner>
+          </template>
+
+          <!--  Empty Workout Message  -->
+          <div hidden$="{{programDownloaded}}">
+            <div class="motivation-msg center-layout">
+
+              <!-- motivatonal message  -->
+              <div class="motivation-title">
+                Lets Get Started!
+              </div>
+
+              <!--  biceps-icon -->
+              <div class="biceps-icon">
+                <img class="biceps-icon" src="../images/app-images/flexed-biceps.png" alt="Biceps Icon">
+              </div>
+            </div>
+
+            <!--  add workout helper -->
+            <div class="add-workout-title">Add Program</div>
+            <div>
+              <img class="arrow-curve" src="../images/app-images/arrow-curve.png" alt="arrow">
+            </div>
+          </div>
+
+            <!-- Program Cards -->
+            <div hidden$="{{hidden}}">
+                <div class="collection-wrapper">
+                    <template is="dom-repeat" items="[[downloadedPrograms]]" as="program">
+                        <div class="paper-form">
+                            <div class="pdf-wrapper">
+                                <paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+                                    <paper-icon-button class="menu-icon default-transiton" noink="" slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+                                    <paper-listbox noink="" slot="dropdown-content">
+                                        <paper-item id$="[[program.$key]]" on-tap="_reviewProgram">View</paper-item>
+                                        <paper-item id$="[[program.$key]]" on-tap="_openRemoveProgramDialog">Remove</paper-item>
+                                    </paper-listbox>
+                                </paper-menu-button>
+                                <div class="content-wrapper">
+                                    <div class="season-title-program">{{program.program}}</div>
+                                    <div class="program-title">{{program.duration}}</div>
+                                    <div class="type-title">{{program.type}}</div>
+                                </div>
+                                <div class="tag">
+                                    <div class="day-title">{{program.days}} Days</div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+                <!-- Paper Fab to add new program -->
+                <paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{programDownloaded}}" on-tap="_openToDownload"></paper-fab>
+
+
+
+            <!-- Review Workouts content -->
+            <div class="review-content" hidden$="{{!reviewMode}}">
+                <!-- Back button -->
+                <paper-icon-button noink="" class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
+
+                <!-- Workouts of the program -->
+                <div class="collection-wrapper">
+                    <template is="dom-repeat" items="[[workoutsOfProgram]]" as="workout">
+                        <div class="paper-form" id$="[[workout.$key]]">
+                            <div class="pdf-wrapper">
+                                <paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+                                    <paper-icon-button class="menu-icon default-transiton" noink="" slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+                                    <paper-listbox noink="" slot="dropdown-content">
+                                        <paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
+                                        <paper-item id$="[[workout.$key]]" on-tap="_setWorkoutActive" data-option="review">Active</paper-item>
+                                    </paper-listbox>
+                                </paper-menu-button>
+
+                                <div class="content-wrapper">
+                                    <div class="season-title-program">[[workout.season]]</div>
+                                    <div class="program-title">[[workout.weeks]] Week Program</div>
+                                    <div class="type-title">[[workout.type]]</div>
+                                </div>
+                                <!-- Active status -->
+                                <div class="tag" active$="[[workout.active]]" id="[[workout.$key]]">
+                                    <div class="day-title">Week [[workout.week]]</div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+        </main>
+    </template>
+
+    <script>
+(function () {
+    'use strict';
+
+    var WrcAssignWorkouts = function (_PdfWorkoutCreator) {
+        babelHelpers.inherits(WrcAssignWorkouts, _PdfWorkoutCreator);
+
+        function WrcAssignWorkouts() {
+            babelHelpers.classCallCheck(this, WrcAssignWorkouts);
+            return babelHelpers.possibleConstructorReturn(this, (WrcAssignWorkouts.__proto__ || Object.getPrototypeOf(WrcAssignWorkouts)).apply(this, arguments));
+        }
+
+        babelHelpers.createClass(WrcAssignWorkouts, [{
+            key: 'ready',
+            value: function ready() {
+                babelHelpers.get(WrcAssignWorkouts.prototype.__proto__ || Object.getPrototypeOf(WrcAssignWorkouts.prototype), 'ready', this).call(this);
+
+                // Notification
+                this._appToast = document.getElementById("appToast");
+                this._appToastPopupDisabled = document.getElementById('appToastPopupDisabled');
+
+                // App Progress bar
+                this._appProgress = document.getElementById("appProgressBar");
+
+                // Open Download Program Dialog
+                this._downloadProgramDialog = document.getElementById("downloadProgramDialog");
+
+                // Remove Workout Dialog
+                this._removeProgramDialog = document.getElementById("appDeleteDialog");
+            }
+
+            /**
+             * Observes for changes on user
+             */
+
+        }, {
+            key: '_userChanged',
+            value: function _userChanged(user) {
+                if (user) {
+                    this._retrieveActivatedWorkout();
+                    this._loadDownloadedPrograms();
+                }
+            }
+
+            /**
+             * Retrieves activated workout from coach's node
+             */
+
+        }, {
+            key: '_retrieveActivatedWorkout',
+            value: function _retrieveActivatedWorkout() {
+                this.$.firebaseDocument.getStoredValue(this.user.uid + '/activated_workout/path').then(function (workoutId) {
+                    this.workoutId = workoutId && workoutId.length ? workoutId : null;
+                }.bind(this));
+            }
+
+            /**
+             * @description Load downloaded programs
+             */
+
+        }, {
+            key: '_loadDownloadedPrograms',
+            value: function _loadDownloadedPrograms() {
+                var downloadedPrograms = [];
+                this.$.firebaseDocument.getStoredValue(this.user.uid + '/downloaded_program/path').then(function (programPath) {
+                    if (programPath && programPath.length) {
+                        this.set("programDownloaded", true);
+                        this.$.firebaseDocument.getStoredValue('programs/' + programPath).then(function (programData) {
+                            programData["$key"] = programPath;
+                            downloadedPrograms.push(programData);
+                            this.set("downloadedPrograms", downloadedPrograms);
+                        }.bind(this));
+                    } else {
+                        this.set("programDownloaded", false);
+                    }
+                }.bind(this));
+            }
+
+            /**
+             * @description Retrieves workout data from Firebase
+            */
+
+        }, {
+            key: '_loadWorkoutData',
+            value: function _loadWorkoutData(evt) {
+                evt.preventDefault();
+
+                // Extracts workoutId from clicked button
+                var workoutId = evt.target.getAttribute("id");
+
+                // Retrieves data from Firebase
+                this.$.firebaseDocument.getStoredValue("workouts/" + workoutId).then(function (snapshot) {
+                    // Pass the retrieved workout to our generation function
+                    this._generatePreview(snapshot);
+                }.bind(this));
+            }
+
+            /**
+             * @description Generates workout PDF Preview making use of the super class
+             * @param {Object} workout - workout retrieved from firebase
+            */
+
+        }, {
+            key: '_generatePreview',
+            value: function _generatePreview(workout) {
+                /**
+                 * Call super class generatePreview function, sending workout data
+                 */
+                var computePdfPreview = babelHelpers.get(WrcAssignWorkouts.prototype.__proto__ || Object.getPrototypeOf(WrcAssignWorkouts.prototype), '_generatePreview', this).call(this, workout);
+
+                // Notify user that pop-up is disabled
+                if (computePdfPreview === false) {
+                    this._appToastPopupDisabled.text = " 🚫 Pop-ups Blocked. ";
+                    this._appToastPopupDisabled.open();
+                    console.log("Pop-up Window Blocker Enabled");
+                }
+            }
+
+            /**
+            * Opens remove program dialog
+            */
+
+        }, {
+            key: '_openRemoveProgramDialog',
+            value: function _openRemoveProgramDialog(e) {
+                this.programId = e.target.getAttribute("id");
+
+                // Binding confirmation action
+                this._removeProgramDialog.acceptedCallback = this._removeProgram.bind(this);
+
+                this._removeProgramDialog.opened = true;
+                this._removeProgramDialog.title = "Remove Program";
+                this._removeProgramDialog.msg = 'By removing the program you also remove the active workout for your athletes. Are you sure you want to delete it?';
+            }
+
+            /**
+             * @description Removes programs from coaches program collection
+             */
+
+        }, {
+            key: '_removeProgram',
+            value: function _removeProgram(response) {
+                if (response) {
+                    this.$.firebaseDocument.destroy(this.user.uid + '/downloaded_program').then(function () {
+                        // Removes the activated workout.
+                        this.$.firebaseDocument.destroy(this.user.uid + '/activated_workout');
+
+                        this._appToast.text = "The program has been removed successfully.";
+                        this._appToast.open();
+                        this._removeProgramDialog.opened = false;
+                        this.set("hidden", true);
+                        this.programDownloaded = !this.programDownloaded;
+                    }.bind(this)).catch(function (err) {
+                        this._appProgress.hidden = true;
+                        this._appToast.text = "There has been an error. Please try again.";
+                        this._appToast.open();
+                    }.bind(this));
+                }
+            }
+
+            /**
+             * @description Program observer, observes if new program is downloaded
+             */
+
+        }, {
+            key: '_programIdRequestChanged',
+            value: function _programIdRequestChanged(programIdRequested) {}
+            // console.log("New Requested Program ID: " + programIdRequested);
+
+            /**
+             * Filters through programs, & search for requested program
+             *
+             * @param {String} Id of the requested program
+             * @param {String} Id of program
+             * @return {String} the program Id that matches the requested Id program
+             */
+
+        }, {
+            key: '_computeProgramFilter',
+            value: function _computeProgramFilter(programIdRequest) {
+                return function (program) {
+                    return program.$key == programIdRequest;
+                };
+            }
+            // Returns to programs from editMode / reviewMode
+
+        }, {
+            key: '_backToPrograms',
+            value: function _backToPrograms() {
+                this.hidden = this.reviewMode = false;
+            }
+            /**
+             * @description Opens program dialog to download
+             */
+
+        }, {
+            key: '_openToDownload',
+            value: function _openToDownload(e) {
+                // Binding confirmation action + content
+                this._downloadProgramDialog.acceptedCallback = this._downloadProgram.bind(this);
+                this._downloadProgramDialog.opened = true;
+            }
+            /**
+             * @description Search queries programs and retrieves the request program ID.
+             *
+             * @param {Object} program information (content) from "Download Program Dialog"
+             */
+
+        }, {
+            key: '_downloadProgram',
+            value: function _downloadProgram(program) {
+                var programCollection = this.programsData;
+                // console.log("New Search Inquiry:");
+                // Loop through collection of programs
+                programCollection.some(function (programSelected) {
+                    if (program.days == programSelected.days && program.duration == programSelected.duration && program.program == programSelected.program && program.type == programSelected.type) {
+
+                        // Testing
+                        // console.log("Program Match 🎉 , ID: " + programSelected.$key);
+                        // Notification
+                        this._appToast.text = 'The program has been downloaded successfully.';
+                        this._appToast.open();
+                        // Download Program with this UID
+                        this.programIdRequested = programSelected.$key;
+                        // Close Download Program Dialog
+                        this._downloadProgramDialog.resetForm();
+                        this._downloadProgramDialog.opened = false;
+                        // Saves the downloaded program into coach info
+                        this.$.firebaseDocument.setStoredValue(this.user.uid + '/downloaded_program', { "path": programSelected.$key }).then(function (res) {
+                            this._loadDownloadedPrograms();
+                        }.bind(this));
+
+                        this.programDownloaded = true;
+                        this.hidden = false;
+
+                        // Break Loop
+                        return true;
+                    } else {
+                        // Testing
+                        // console.log("Program No Match ☹️ ID: " + programSelected.$key);
+                        // Notification
+                        this._appToast.text = 'This program is currently unavailable.';
+                        this._appToast.open();
+                    }
+                }.bind(this));
+            }
+            /**
+             * @description Go to review mode and loads the workouts saved in the program
+             */
+
+        }, {
+            key: '_reviewProgram',
+            value: function _reviewProgram(evt) {
+                var workoutsOfProgram = [];
+                this.reviewMode = !this.reviewMode;
+                this.hidden = true;
+                // Retrieve Program ID
+                this.programId = evt.target.getAttribute("id");
+                this.$.firebaseDocument.getStoredValue('programs/' + this.programId + '/workouts').then(function (workouts) {
+                    var _this2 = this;
+
+                    if (workouts && workouts.length) {
+                        // true and array not empty
+                        var _iteratorNormalCompletion = true;
+                        var _didIteratorError = false;
+                        var _iteratorError = undefined;
+
+                        try {
+                            var _loop = function _loop() {
+                                var workout = _step.value;
+                                // loop through workouts
+                                _this2.$.firebaseDocument.getStoredValue('workouts/' + workout) // collect workout object w/ values
+                                .then(function (workoutData) {
+                                    // workout data (snapshot)
+                                    if (this.workoutId === workout) {
+                                        workoutData["active"] = true;
+                                    }
+                                    workoutData["$key"] = workout; // sets $key in the object due to retrieve data manually (without query) don't provide $key value
+                                    workoutsOfProgram.push(workoutData);
+                                }.bind(_this2));
+                            };
+
+                            for (var _iterator = workouts[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                                _loop();
+                            }
+                        } catch (err) {
+                            _didIteratorError = true;
+                            _iteratorError = err;
+                        } finally {
+                            try {
+                                if (!_iteratorNormalCompletion && _iterator.return) {
+                                    _iterator.return();
+                                }
+                            } finally {
+                                if (_didIteratorError) {
+                                    throw _iteratorError;
+                                }
+                            }
+                        }
+                    }
+                    this.set("workoutsOfProgram", workoutsOfProgram);
+                }.bind(this));
+            }
+            /**
+             * @description Sets active status to workout, thus the workout will apear available for athletes
+             */
+
+        }, {
+            key: '_setWorkoutActive',
+            value: function _setWorkoutActive(evt) {
+                // Extracts workoutId from clicked button
+                var workoutId = evt.target.getAttribute("id");
+                // Retrieves data from Firebase
+                this.$.firebaseDocument.setStoredValue(this.user.uid + '/activated_workout', { "path": workoutId }).then(function (res) {
+                    // Once the workout has been set to active, the tag color will turns green
+                    var reviewContent = this.root.querySelector('.review-content');
+                    // Gets current active workout and removes its active property
+                    var currentActiveWorkout = reviewContent.querySelector('.tag[active]');
+                    if (currentActiveWorkout) {
+                        currentActiveWorkout.removeAttribute("active");
+                    }
+                    // Gets the new activated workout and sets active property to display green tag
+                    var newActiveWorkout = reviewContent.querySelector('.tag[id="' + workoutId + '"]');
+                    newActiveWorkout.setAttribute("active", true);
+                    this._appToast.text = "The workout has been activated. Now it will be available for athletes.";
+                    this._appToast.open();
+                }.bind(this)).catch(function (err) {
+                    this._appToast.text = "There has been an error activating the workout. Please try again.";
+                    this._appToast.open();
+                }.bind(this));
+            }
+        }], [{
+            key: 'is',
+
+            // Element definition
+            get: function get() {
+                return 'wrc-assign-workouts';
+            }
+
+            /**
+             * Element properties
+             */
+
+        }, {
+            key: 'properties',
+            get: function get() {
+                return {
+                    user: {
+                        type: Object,
+                        notify: true,
+                        observer: '_userChanged'
+                    },
+                    hidden: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
+                    reviewMode: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
+                    program: {
+                        type: Object,
+                        notify: true,
+                        value: {
+                            days: "",
+                            duration: "",
+                            season: "",
+                            type: ""
+                        }
+                    },
+                    programDownloaded: {
+                        type: Boolean,
+                        notify: true,
+                        value: true
+                    },
+                    programIdRequested: {
+                        type: String,
+                        notify: true,
+                        value: " ",
+                        observer: '_programIdRequestChanged'
+                    },
+                    workoutsOfProgram: {
+                        type: Array,
+                        notify: true
+                    },
+                    downloadedPrograms: {
+                        type: Array,
+                        notify: true
+                    },
+                    workoutId: {
+                        type: String,
+                        notify: true
+                    }
+                };
+            }
+        }]);
+        return WrcAssignWorkouts;
+    }(PdfWorkoutCreator(Polymer.Element));
+
+    window.customElements.define(WrcAssignWorkouts.is, WrcAssignWorkouts);
+})();</script>
+</dom-module>

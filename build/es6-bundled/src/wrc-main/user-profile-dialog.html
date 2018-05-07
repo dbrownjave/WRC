@@ -1,0 +1,439 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+--><!-- Polymer --><!-- Paper Elements --><!-- Iron Elements --><!-- Vaadin Elements --><!-- Polymerfire Elements --><!-- Suji Elements --><!-- Neon Elements --><div hidden="" by-polymer-bundler=""><link rel="import" href="../suji/lib/themes/azul/azul-theme.html"><link rel="import" href="../suji/lib/colors/suji-color-palette.html"><link rel="import" href="../suji/lib/themes/azul/azul-dialog.html"></div><dom-module id="user-profile-dialog">
+    <template>
+        <style>
+            /* General Style */
+            [flex] {
+                @apply --layout-flex;
+            }
+
+            /* Dialog Style */
+            paper-dialog {
+				        border-radius: 5px;
+                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+			      }
+
+            paper-dialog h2 {
+        				color: var(--azul-text-title);
+        				font-size: 1.6em;
+      			}
+
+            paper-dialog .buttons paper-button {
+                margin-top: .5cm;
+
+				        color: var(--azul-primary-button);
+                font-weight: normal;
+			      }
+
+      			paper-dialog .buttons paper-button.cancel-button {
+      				color: var(--paper-grey-700);
+              font-weight: normal;
+      			}
+
+            paper-dialog .buttons paper-button.update-button {
+              color: var(--azul-primary-button-text);
+              font-weight: normal;
+            }
+
+            /* Profile Pic Uploader */
+      			[type='file'] {
+      				display: none;
+      			}
+
+      			div.picture-wrapper {
+      				width: 100%;
+                      margin-bottom: 24px;
+
+      				@apply --layout-vertical;
+      				@apply --layout-center-center;
+      			}
+
+      			div.picture-wrapper label {
+      				margin-bottom: 12px;
+      				background-color: #F3F4F5;
+      				overflow: hidden;
+      				border-radius: 10em;
+      				width: 150px;
+      				height: 150px;
+                      box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+      				@apply --layout-vertical;
+      				@apply --layout-center-center;
+      			}
+
+      			div.picture-wrapper label:hover {
+      				background-color: var(--paper-grey-300);
+      			}
+
+      			label iron-image {
+      				width: inherit;
+      				height: inherit;
+      				cursor: pointer;
+			      }
+
+            div.picture-wrapper p {
+                font-size: 1.1em;
+                font-weight: normal;
+                color: var(--azul-text-title);
+                margin: 0.5em 0 0;
+            }
+
+            /* Form */
+            vaadin-form-layout {
+      				@apply --layout-vertical;
+      			}
+
+      			div.horizontal-wrapper {
+      				@apply --layout-horizontal;
+                      @apply --layout-wrap;
+      			}
+
+      			div.horizontal-wrapper vaadin-text-field {
+      				width: 48%;
+      			}
+
+      			div.horizontal-wrapper vaadin-combo-box {
+      				width: 48%;
+      			}
+
+      			[slot='suffix'], [slot='prefix'] {
+      				color: var(--paper-grey-500);
+      			}
+
+                  /* To keep dialog larger with large screens */
+      			@media screen and (min-width: 600px) {
+      				paper-dialog {
+      					width: 610px;
+      				}
+      			}
+
+      			[hidden] {
+      				display: none;
+      			}
+        </style>
+
+        <!-- Firebase Storage Configuration -->
+        <firebase-storage-ref id="storageRef" app-name="wrc_software"></firebase-storage-ref>
+
+        <firebase-storage-multiupload id="firebaseStorage" app-name="wrc_software" path="profile-pics"></firebase-storage-multiupload>
+
+        <!-- Admin Dialog -->
+        <paper-dialog id="adminDialog" opened="{{openedAdmin}}" with-backdrop="" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+
+            <paper-dialog-scrollable>
+                <div class="picture-wrapper">
+                    <input type="file" name="profile_pic" id="adminProfilePicture">
+                    <label for="adminProfilePicture">
+                        <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
+                        <iron-image id="adminProfileImage" preload="" fade="" sizing="cover" src="[[adminInfo.profile_pic_url]]"></iron-image>
+                    </label>
+                    <p>[[adminInfo.email]]</p>
+                </div>
+
+                <iron-form id="adminForm">
+                    <form>
+                        <vaadin-form-layout>
+                            <vaadin-text-field label="First Name" name="first" type="text" required="" error-message="Enter your name" value="{{adminInfo.first}}"></vaadin-text-field>
+                            <vaadin-text-field label="Last Name" name="last" type="text" required="" error-message="Enter your last name" value="{{adminInfo.last}}"></vaadin-text-field>
+                            <vaadin-text-field label="Phone" name="phone" type="text" required="" error-message="Enter your phone number" value="{{adminInfo.phone}}"></vaadin-text-field>
+                            <vaadin-text-field label="Position" name="position" type="text" required="" error-message="Enter your business position" value="{{adminInfo.position}}"></vaadin-text-field>
+                        </vaadin-form-layout>
+                    </form>
+                </iron-form>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button class="cancel-button" dialog-dismiss="" on-tap="_resetForm">Cancel</paper-button>
+                <span flex=""></span>
+                <paper-button class="update-button" on-tap="_serializeAdminForm">Update</paper-button>
+            </div>
+        </paper-dialog>
+
+        <!-- Coach Dialog -->
+        <paper-dialog id="coachDialog" opened="{{openedCoach}}" with-backdrop="" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+
+            <paper-dialog-scrollable>
+                <div class="picture-wrapper">
+                    <input type="file" name="profile_pic" id="coachProfilePicture">
+                    <label for="coachProfilePicture">
+                        <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
+                        <iron-image id="coachProfileImage" preload="" fade="" sizing="cover" src="[[coachInfo.profile_pic_url]]"></iron-image>
+                    </label>
+                    <p>[[coachInfo.email]]</p>
+                </div>
+
+                <iron-form id="coachForm">
+                    <form>
+                        <vaadin-form-layout>
+                            <vaadin-text-field label="First Name" name="first" type="text" required="" error-message="Enter your name" value="{{coachInfo.first}}"></vaadin-text-field>
+                            <vaadin-text-field label="Last Name" name="last" type="text" required="" error-message="Enter your last name" value="{{coachInfo.last}}"></vaadin-text-field>
+                            <vaadin-text-field label="Phone" name="phone" type="text" required="" error-message="Enter your phone number" value="{{coachInfo.phone}}"></vaadin-text-field>
+                            <vaadin-text-field label="Team" name="team" type="text" required="" error-message="Enter your team" value="{{coachInfo.team}}"></vaadin-text-field>
+                        </vaadin-form-layout>
+                    </form>
+                </iron-form>
+            </paper-dialog-scrollable>
+            <div class="buttons" style="margin-top: 1em">
+                <paper-button class="cancel-button" dialog-dismiss="" on-tap="_resetForm">Cancel</paper-button>
+                <span flex=""></span>
+                <paper-button on-tap="_serializeCoachForm">Update</paper-button>
+            </div>
+        </paper-dialog>
+
+        <!-- Athlete Dialog -->
+        <paper-dialog id="athleteDialog" opened="{{openedAthlete}}" with-backdrop="" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+            <paper-dialog-scrollable>
+                <div class="picture-wrapper">
+                    <input type="file" name="profile_pic" id="athleteProfilePicture">
+                    <label for="athleteProfilePicture">
+                        <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
+                        <iron-image id="athleteProfileImage" preload="" fade="" sizing="cover" src="[[athleteInfo.profile_pic_url]]"></iron-image>
+                    </label>
+                    <p>[[athleteInfo.email]]</p>
+                </div>
+
+                <iron-form id="athleteForm">
+                    <form>
+                        <vaadin-form-layout>
+                            <vaadin-text-field label="First Name" name="first" required="" error-message="This field is required" value="{{athleteInfo.first}}"></vaadin-text-field>
+                            <vaadin-text-field label="Last Name" name="last" required="" error-message="This field is required" value="{{athleteInfo.last}}"></vaadin-text-field>
+                            <vaadin-combo-box id="yearCombo" label="Year" name="year" required="" error-message="Select the year" value="{{athleteInfo.year}}"></vaadin-combo-box>
+                            <vaadin-text-field label="Number" name="number" type="number" maxlength="2" pattern="[0-9]*" prevent-invalid-input="" required="" error-message="This field is required" value="{{athleteInfo.number}}">
+                                <span slot="prefix">#</span>
+                            </vaadin-text-field>
+                            <vaadin-combo-box id="posCombo" label="Position" name="pos" required="" error-message="Select the position" value="{{athleteInfo.pos}}"></vaadin-combo-box>
+                            <br>
+                            <div class="horizontal-wrapper">
+                                <vaadin-combo-box id="heightCombo" label="Height" name="height" required="" error-message="Select the height" value="{{athleteInfo.height}}"></vaadin-combo-box>
+                                <span flex=""></span>
+                                <vaadin-text-field label="Weight" name="weight" type="number" maxlength="3" pattern="[0-9]*" prevent-invalid-input="" required="" error-message="This field is required" value="{{athleteInfo.weight}}">
+                                    <span slot="suffix">lbs</span>
+                                </vaadin-text-field>
+                            </div>
+                            <br>
+                            <vaadin-text-field colspan="2" label="Contact" placeholder="Phone" name="phone" value="{{athleteInfo.phone}}"></vaadin-text-field>
+                            <vaadin-text-field label="Instagram" name="instagram" value="{{athleteInfo.instagram}}">
+                                <span slot="prefix">@</span>
+                            </vaadin-text-field>
+                            <vaadin-text-field label="Twitter" name="twitter" value="{{athleteInfo.twitter}}">
+                                <span slot="prefix">@</span>
+                            </vaadin-text-field>
+                            <vaadin-text-field colspan="2" label="Hudl" placeholder="www.hudl.com/" name="hudl" value="{{athleteInfo.hudl}}"></vaadin-text-field>
+                        </vaadin-form-layout>
+                    </form>
+                </iron-form>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button class="cancel-button" dialog-dismiss="" on-tap="_resetForm">Cancel</paper-button>
+                <span flex=""></span>
+                <paper-button on-tap="_serializeAthleteForm">Update</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+(function () {
+    'use strict';
+
+    var UserProfileDialog = function (_Polymer$Element) {
+        babelHelpers.inherits(UserProfileDialog, _Polymer$Element);
+
+        function UserProfileDialog() {
+            babelHelpers.classCallCheck(this, UserProfileDialog);
+            return babelHelpers.possibleConstructorReturn(this, (UserProfileDialog.__proto__ || Object.getPrototypeOf(UserProfileDialog)).apply(this, arguments));
+        }
+
+        babelHelpers.createClass(UserProfileDialog, [{
+            key: 'ready',
+            value: function ready() {
+                babelHelpers.get(UserProfileDialog.prototype.__proto__ || Object.getPrototypeOf(UserProfileDialog.prototype), 'ready', this).call(this);
+
+                this.$.yearCombo.items = ['FR', 'SO', 'JR', 'SR'];
+
+                this.$.posCombo.items = ['Quarterback (QB)', 'Running Back (RB)', 'Fullback (FB)', 'Wide Receiver (WR)', 'Tight End (TE)', 'Offensive Lineman (OL)', 'Center (C)', 'Guard (G)', 'Left Guard (LG)', 'Right Guard (RG)', 'Tackle (T)', 'Left Tackle (LT)', 'Right Tackle (RT)', 'Kicker (K)', 'Kick Returner(KR)', 'Defensive Lineman (DL)', 'Defensive End (DE)', 'Defensive Tackle (DT)', '	Nose Tackle (NT)', 'Linebacker (LB)', 'Inside Linebacker (ILB)', 'Outside Linebacker (OLB)', 'Middle Linebacker (MLB)', 'Defensive Back (DB)', 'Cornerback (CB)', '	Free Safety (FS)', 'Strong Safety (SS)', 'Safety (S)', 'Punter (P)', 'Punt Returner (PR)'];
+
+                this.$.heightCombo.items = ['5’0', '5’1', '5’2', '5’3', '5’4', '5’5', '5’6', '5’7', '5’8', '5’9', '6’0', '6’1', '6’2', '6’3', '6’4', '6’5', '6’6', '6’7', '6’8', '6’9', '7’0'];
+
+                // App Progress Bar
+                this._appProgressBar = document.getElementById('appProgressBar');
+
+                var adminUpload = this.$.adminProfilePicture;
+                adminUpload.addEventListener('change', function (e) {
+                    this._createImgPreview(e.target.files[0], this.$.adminProfileImage);
+                }.bind(this));
+
+                var coachUpload = this.$.coachProfilePicture;
+                coachUpload.addEventListener('change', function (e) {
+                    this._createImgPreview(e.target.files[0], this.$.coachProfileImage);
+                }.bind(this));
+
+                var playerUpload = this.$.athleteProfilePicture;
+                playerUpload.addEventListener('change', function (e) {
+                    this._createImgPreview(e.target.files[0], this.$.athleteProfileImage);
+                }.bind(this));
+            }
+
+            /**
+             * Resets the profile info
+            */
+
+        }, {
+            key: '_resetForm',
+            value: function _resetForm() {
+                this.adminInfo = null;
+                this.coachInfo = null;
+                this.athleteInfo = null;
+            }
+
+            /**
+             * Serializes form data and send it to be saved trought adminInfo
+            */
+
+        }, {
+            key: '_serializeAdminForm',
+            value: function _serializeAdminForm() {
+                if (this.$.adminForm.validate()) {
+                    this._appProgressBar.hidden = false;
+
+                    if (this.$.adminProfilePicture.files[0]) {
+
+                        this.$.storageRef.path = '/profile-pics/' + this.adminInfo.profile_pic_name;
+                        this.$.storageRef.delete();
+
+                        this.$.firebaseStorage.put(this.$.adminProfilePicture.files[0]).then(function () {
+                            this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.adminProfilePicture.files[0].name).then(function (url) {
+                                this.adminInfo.profile_pic_url = url;
+                                this.adminInfo.profile_pic_name = this.$.adminProfilePicture.files[0].name;
+                                this.acceptedCallback(this.adminInfo);
+                            }.bind(this));
+                        }.bind(this));
+                    } else {
+                        this.acceptedCallback(this.adminInfo);
+                    }
+                }
+            }
+
+            /**
+             * Serializes form data and send it to be saved trought coachInfo
+            */
+
+        }, {
+            key: '_serializeCoachForm',
+            value: function _serializeCoachForm() {
+                if (this.$.coachForm.validate()) {
+                    this._appProgressBar.hidden = false;
+
+                    if (this.$.coachProfilePicture.files[0]) {
+
+                        this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
+                        this.$.storageRef.delete();
+
+                        this.$.firebaseStorage.put(this.$.coachProfilePicture.files[0]).then(function () {
+                            this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.coachProfilePicture.files[0].name).then(function (url) {
+                                this.coachInfo.profile_pic_url = url;
+                                this.coachInfo.profile_pic_name = this.$.coachProfilePicture.files[0].name;
+                                this.acceptedCallback(this.coachInfo);
+                            }.bind(this));
+                        }.bind(this));
+                    } else {
+                        this.acceptedCallback(this.coachInfo);
+                    }
+                }
+            }
+
+            /**
+             * Serializes form data and send it to be saved trought athleteInfo
+            */
+
+        }, {
+            key: '_serializeAthleteForm',
+            value: function _serializeAthleteForm() {
+                if (this.$.athleteForm.validate()) {
+                    this._appProgressBar.hidden = false;
+
+                    if (this.$.athleteProfilePicture.files[0]) {
+
+                        this.$.storageRef.path = '/profile-pics/' + this.athleteInfo.profile_pic_name;
+                        this.$.storageRef.delete();
+
+                        this.$.firebaseStorage.put(this.$.athleteProfilePicture.files[0]).then(function () {
+                            this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.athleteProfilePicture.files[0].name).then(function (url) {
+                                this.athleteInfo.profile_pic_url = url;
+                                this.athleteInfo.profile_pic_name = this.$.athleteProfilePicture.files[0].name;
+                                this.acceptedCallback(this.athleteInfo);
+                            }.bind(this));
+                        }.bind(this));
+                    } else {
+                        this.acceptedCallback(this.athleteInfo);
+                    }
+                }
+            }
+
+            /**
+             * Creates image preview for profile picture
+             *
+             * @param {String} image selected by user
+             * @return {void}
+            */
+
+        }, {
+            key: '_createImgPreview',
+            value: function _createImgPreview(image, ironImage) {
+                ironImage.src = URL.createObjectURL(image);
+            }
+        }], [{
+            key: 'is',
+
+            /**
+             * Element definition
+             */
+            get: function get() {
+                return 'user-profile-dialog';
+            }
+
+            /**
+             * Element properties
+             */
+
+        }, {
+            key: 'properties',
+            get: function get() {
+                return {
+                    acceptedCallback: Function,
+                    openedAdmin: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
+                    openedCoach: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
+                    openedAthlete: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
+                    adminInfo: {
+                        type: Object,
+                        notify: true
+                    },
+                    coachInfo: {
+                        type: Object,
+                        notify: true
+                    },
+                    athleteInfo: {
+                        type: Object,
+                        notify: true
+                    }
+                };
+            }
+        }]);
+        return UserProfileDialog;
+    }(Polymer.Element);
+
+    window.customElements.define(UserProfileDialog.is, UserProfileDialog);
+})();</script>
+</dom-module>

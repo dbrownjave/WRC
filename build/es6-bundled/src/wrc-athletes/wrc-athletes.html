@@ -1,0 +1,1223 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+--><!-- Polymer --><!-- Paper Elements --><!-- Iron Elements --><!-- Polymerfire Elements --><!-- Vaadin Elements --><!-- Paper Elements --><!-- Polyfilter --><!-- Suji Elements --><!-- Neon Elements --><!-- Icons --><!-- PDF Workout Creator --><div hidden="" by-polymer-bundler=""><!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><!--
+Material design: [Switch](https://www.google.com/design/spec/components/selection-controls.html#selection-controls-switch)
+
+`paper-toggle-button` provides a ON/OFF switch that user can toggle the state
+by tapping or by dragging the switch.
+
+Example:
+
+    <paper-toggle-button></paper-toggle-button>
+
+### Styling
+
+The following custom properties and mixins are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--paper-toggle-button-unchecked-bar-color` | Slider color when the input is not checked | `#000000`
+`--paper-toggle-button-unchecked-button-color` | Button color when the input is not checked | `--paper-grey-50`
+`--paper-toggle-button-unchecked-ink-color` | Selected/focus ripple color when the input is not checked | `--dark-primary-color`
+`--paper-toggle-button-checked-bar-color` | Slider button color when the input is checked | `--primary-color`
+`--paper-toggle-button-checked-button-color` | Button color when the input is checked | `--primary-color`
+`--paper-toggle-button-checked-ink-color` | Selected/focus ripple color when the input is checked | `--primary-color`
+`--paper-toggle-button-invalid-bar-color` | Slider button color when the input is invalid | `--error-color`
+`--paper-toggle-button-invalid-button-color` | Button color when the input is invalid | `--error-color`
+`--paper-toggle-button-invalid-ink-color` | Selected/focus ripple color when the input is invalid | `--error-color`
+`--paper-toggle-button-unchecked-bar` | Mixin applied to the slider when the input is not checked | `{}`
+`--paper-toggle-button-unchecked-button` | Mixin applied to the slider button when the input is not checked | `{}`
+`--paper-toggle-button-unchecked-ink` | Mixin applied to the ripple when the input is not checked | `{}`
+`--paper-toggle-button-checked-bar` | Mixin applied to the slider when the input is checked | `{}`
+`--paper-toggle-button-checked-button` | Mixin applied to the slider button when the input is checked | `{}`
+`--paper-toggle-button-checked-ink` | Mixin applied to the ripple when the input is checked | `{}`
+`--paper-toggle-button-label-color` | Label color | `--primary-text-color`
+`--paper-toggle-button-label-spacing` | Spacing between the label and the button | `8px`
+
+This element applies the mixin `--paper-font-common-base` but does not import `paper-styles/typography.html`.
+In order to apply the `Roboto` font to this element, make sure you've imported `paper-styles/typography.html`.
+
+@group Paper Elements
+@element paper-toggle-button
+@hero hero.svg
+@demo demo/index.html
+-->
+
+<dom-module id="paper-toggle-button" assetpath="../../bower_components/paper-toggle-button/">
+  <template strip-whitespace="">
+
+    <style>
+      :host {
+        display: inline-block;
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        @apply --paper-font-common-base;
+      }
+
+      :host([disabled]) {
+        pointer-events: none;
+      }
+
+      :host(:focus) {
+        outline:none;
+      }
+
+      .toggle-bar {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        border-radius: 8px;
+        pointer-events: none;
+        opacity: 0.4;
+        transition: background-color linear .08s;
+        background-color: var(--paper-toggle-button-unchecked-bar-color, #000000);
+
+        @apply --paper-toggle-button-unchecked-bar;
+      }
+
+      .toggle-button {
+        position: absolute;
+        top: -3px;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+        transition: -webkit-transform linear .08s, background-color linear .08s;
+        transition: transform linear .08s, background-color linear .08s;
+        will-change: transform;
+        background-color: var(--paper-toggle-button-unchecked-button-color, var(--paper-grey-50));
+
+        @apply --paper-toggle-button-unchecked-button;
+      }
+
+      .toggle-button.dragging {
+        -webkit-transition: none;
+        transition: none;
+      }
+
+      :host([checked]:not([disabled])) .toggle-bar {
+        opacity: 0.5;
+        background-color: var(--paper-toggle-button-checked-bar-color, #4FBE79);
+
+        @apply --paper-toggle-button-checked-bar;
+      }
+
+      :host([disabled]) .toggle-bar {
+        background-color: #000;
+        opacity: 0.12;
+      }
+
+      :host([checked]) .toggle-button {
+        -webkit-transform: translate(16px, 0);
+        transform: translate(16px, 0);
+      }
+
+      :host([checked]:not([disabled])) .toggle-button {
+        background-color: var(--paper-toggle-button-checked-button-color, #4FBE79);
+
+        @apply --paper-toggle-button-checked-button;
+      }
+
+      :host([disabled]) .toggle-button {
+        background-color: #bdbdbd;
+        opacity: 1;
+      }
+
+      .toggle-ink {
+        position: absolute;
+        top: -14px;
+        left: -14px;
+        right: auto;
+        bottom: auto;
+        width: 48px;
+        height: 48px;
+        opacity: 0.5;
+        pointer-events: none;
+        color: var(--paper-toggle-button-unchecked-ink-color, var(--primary-text-color));
+
+        @apply --paper-toggle-button-unchecked-ink;
+      }
+
+      :host([checked]) .toggle-ink {
+        color: var(--paper-toggle-button-checked-ink-color, #4FBE79);
+
+        @apply --paper-toggle-button-checked-ink;
+      }
+
+      .toggle-container {
+        display: inline-block;
+        position: relative;
+        width: 36px;
+        height: 14px;
+        /* The toggle button has an absolute position of -3px; The extra 1px
+        /* accounts for the toggle button shadow box. */
+        margin: 4px 1px;
+      }
+
+      .toggle-label {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        padding-left: var(--paper-toggle-button-label-spacing, 8px);
+        pointer-events: none;
+        color: var(--paper-toggle-button-label-color, var(--primary-text-color));
+      }
+
+      /* invalid state */
+      :host([invalid]) .toggle-bar {
+        background-color: var(--paper-toggle-button-invalid-bar-color, var(--error-color));
+      }
+
+      :host([invalid]) .toggle-button {
+        background-color: var(--paper-toggle-button-invalid-button-color, var(--error-color));
+      }
+
+      :host([invalid]) .toggle-ink {
+        color: var(--paper-toggle-button-invalid-ink-color, var(--error-color));
+      }
+    </style>
+
+    <div class="toggle-container">
+      <div id="toggleBar" class="toggle-bar"></div>
+      <div id="toggleButton" class="toggle-button"></div>
+    </div>
+
+    <div class="toggle-label"><slot></slot></div>
+
+  </template>
+
+  <script>
+Polymer({
+  is: 'paper-toggle-button',
+
+  behaviors: [Polymer.PaperCheckedElementBehavior],
+
+  /** @private */
+  hostAttributes: {
+    role: 'button',
+    'aria-pressed': 'false',
+    tabindex: 0
+  },
+
+  properties: {
+    /**
+     * Fired when the checked state changes due to user interaction.
+     *
+     * @event change
+     */
+    /**
+     * Fired when the checked state changes.
+     *
+     * @event iron-change
+     */
+  },
+
+  listeners: {
+    track: '_ontrack'
+  },
+
+  attached: function attached() {
+    Polymer.RenderStatus.afterNextRender(this, function () {
+      Polymer.Gestures.setTouchAction(this, 'pan-y');
+    });
+  },
+
+  _ontrack: function _ontrack(event) {
+    var track = event.detail;
+    if (track.state === 'start') {
+      this._trackStart(track);
+    } else if (track.state === 'track') {
+      this._trackMove(track);
+    } else if (track.state === 'end') {
+      this._trackEnd(track);
+    }
+  },
+
+  _trackStart: function _trackStart(track) {
+    this._width = this.$.toggleBar.offsetWidth / 2;
+    /*
+     * keep an track-only check state to keep the dragging behavior smooth
+     * while toggling activations
+     */
+    this._trackChecked = this.checked;
+    this.$.toggleButton.classList.add('dragging');
+  },
+
+  _trackMove: function _trackMove(track) {
+    var dx = track.dx;
+    this._x = Math.min(this._width, Math.max(0, this._trackChecked ? this._width + dx : dx));
+    this.translate3d(this._x + 'px', 0, 0, this.$.toggleButton);
+    this._userActivate(this._x > this._width / 2);
+  },
+
+  _trackEnd: function _trackEnd(track) {
+    this.$.toggleButton.classList.remove('dragging');
+    this.transform('', this.$.toggleButton);
+  },
+
+  // customize the element's ripple
+  _createRipple: function _createRipple() {
+    this._rippleContainer = this.$.toggleButton;
+    var ripple = Polymer.PaperRippleBehavior._createRipple();
+    ripple.id = 'ink';
+    ripple.setAttribute('recenters', '');
+    ripple.classList.add('circle', 'toggle-ink');
+    return ripple;
+  }
+
+});</script>
+</dom-module>
+<link rel="import" href="../suji/lib/themes/azul/azul-theme.html"><link rel="import" href="../suji/lib/colors/suji-color-palette.html"><link rel="import" href="../app-icons.html"><link rel="import" href="../fa-icons.html"><link rel="import" href="../pdf-workout-creator/pdf-workout-creator.html"></div><dom-module id="wrc-athletes">
+    <template>
+        <style>
+            /* General Style */
+
+            main {
+                padding: 2em 3em;
+                height: calc(100vh - (64px + 4em));
+                min-height: calc(100vh - (64px + 4em));
+                overflow: auto;
+
+                @apply --layout-vertical;
+                @apply --layout-center;
+            }
+
+            paper-spinner {
+                --paper-spinner-layer-1-color: var(--azul-primary);
+                --paper-spinner-layer-2-color: var(--azul-primary);
+                --paper-spinner-layer-3-color: var(--azul-primary);
+                --paper-spinner-layer-4-color: var(--azul-primary);
+            }
+
+            /* header wrapper */
+
+            div.wrapper-horizontal {
+                @apply --layout-horizontal;
+            }
+
+            [flex] {
+                @apply --layout-flex;
+            }
+
+            /* icon buttons */
+
+            .icon-button {
+                color: #737D8A;
+            }
+
+            .icon-button:hover {
+                color: #425164;
+            }
+
+            .printer-icon {
+                margin: 0 0 0 10px;
+            }
+
+            /* Empty Message */
+
+            .empty-message {
+                width: 100%;
+                height: inherit;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .empty-message .icon-container {
+                border-radius: 300em;
+                width: 200px;
+                height: 200px;
+                background-color: var(--azul-text-title);
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .icon-container iron-icon {
+                color: #fff;
+                width: 90px;
+                height: 90px;
+            }
+
+            .empty-message p {
+                margin-top: 24px;
+                text-align: center;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .empty-message p strong {
+                font-size: 1.2em;
+                font-weight: bold;
+                color: var(--azul-text-title);
+                margin-bottom: 15px;
+                text-align: center;
+            }
+
+            .empty-message p span {
+                font-size: 1em;
+                font-weight: lighter;
+                color: var(--paper-grey-600);
+                margin-bottom: 24px;
+                text-align: center;
+            }
+
+            .empty-message p paper-button {
+                margin: 0;
+                color: #fff;
+                background-color: var(--azul-primary);
+            }
+
+            /* Athletes Wrapper */
+
+            div.athletes-wrapper {
+                width: 100%;
+            }
+
+            div.athletes-wrapper[hidden] {
+                display: none;
+            }
+
+            /* Search Style */
+
+            div.search-wrapper {
+                width: 95%;
+                margin-bottom: 24px;
+            }
+
+            div.search-wrapper vaadin-text-field {
+                width: 100%;
+            }
+
+            div.search-wrapper vaadin-text-field [slot='prefix'] {
+                margin-right: 12px;
+                color: var(--paper-grey-500);
+            }
+
+            /* Grid Wrapper */
+
+            div.grid-wrapper {
+                width: 100%;
+            }
+
+            div.grid-wrapper vaadin-grid {
+                width: inherit;
+                height: auto;
+                @apply --azul-shadow--grid-elevation-1;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon {
+                width: 17px;
+                height: 17px;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon[active='Yes'] {
+                color: #35BF2E;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon[active='No'] {
+                color: var(--paper-grey-500);
+            }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
+                @apply --layout-horizontal;
+                @apply --layout-wrap;
+                @apply --layout-end-justified;
+            }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
+                color: #737D8A;
+            }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
+                color: #425164;
+            }
+
+            /* Vaadin Grid  */
+
+            div.grid-wrapper vaadin-grid {
+                height: auto;
+                @apply --azul-shadow--grid-elevation-1;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon {
+                width: 15px;
+                height: 15px;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon[active='Yes'] {
+                color: #35BF2E;
+            }
+
+            div.grid-wrapper vaadin-grid iron-icon[active='No'] {
+                color: var(--paper-grey-500);
+            }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions {
+                @apply --layout-horizontal;
+                @apply --layout-wrap;
+                @apply --layout-end-justified;
+            }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button {
+                color: #737D8A;
+            }
+
+            div.grid-wrapper vaadin-grid vaadin-grid-cell-content div.actions paper-icon-button:hover {
+                color: #425164;
+            }
+
+            /* Cards Wrapper */
+
+            div.cards-wrapper {
+                width: 100%;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            div.cards-wrapper paper-card {
+                width: 100%;
+                margin-bottom: 24px;
+
+                @apply --azul-shadow--grid-elevation-1;
+            }
+
+            div.cards-wrapper paper-card div.card-content {
+                padding: 1em 1em;
+
+                @apply --layout-horizontal;
+                @apply --layout-center;
+            }
+
+            div.cards-wrapper paper-card div.card-actions {
+                @apply --layout-horizontal;
+                @apply --layout-end-justified;
+            }
+
+            div.cards-wrapper paper-card div.card-actions paper-icon-button {
+                color: #737D8A;
+            }
+
+            paper-card div.card-content div.profile-picture {
+                background-color: #F3F4F5;
+                overflow: hidden;
+                border-radius: 10em;
+                width: 70px;
+                height: 70px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+                margin-right: 12px;
+            }
+
+            paper-card div.card-content div.profile-picture iron-image {
+                overflow: hidden;
+                border-radius: 10em;
+                width: 100%;
+                height: 100%;
+                z-index: 0;
+            }
+
+            paper-card div.card-content div.legend h3 {
+                margin: 0;
+                color: var(--azul-text-title);
+                font-size: 1.1em;
+
+                @apply --layout-horizontal;
+                @apply --layout-center;
+            }
+
+            paper-card div.card-content div.legend h3 iron-icon {
+                width: 15px;
+                height: 15px;
+                margin-right: 5px;
+            }
+
+            paper-card div.card-content div.legend h3 iron-icon[active='Yes'] {
+                color: #35BF2E;
+            }
+
+            paper-card div.card-content div.legend h3 iron-icon[active='No'] {
+                color: var(--paper-grey-500);
+            }
+
+            paper-card div.card-content div.legend p {
+                margin: 0;
+                font-size: .9em;
+                color: var(--paper-grey-700);
+            }
+
+            /* Fab */
+
+            paper-fab {
+                position: fixed;
+                bottom: 2em;
+                right: 2em;
+
+                --paper-fab-background: var(--azul-primary);
+                --paper-fab-keyboard-focus-background: var(--azul-primary);
+            }
+
+            /* Responsive */
+
+            @media screen and (max-width: 425px) {
+                /* General Style */
+                main {
+                    padding: 1em;
+                    height: calc(100vh - (64px + 2em));
+                    min-height: calc(100vh - (64px + 2em));
+
+                    @apply --layout-vertical;
+                    @apply --layout-center;
+                }
+
+                paper-fab {
+                    bottom: 1em;
+                    right: 1em;
+                }
+            }
+
+            [hidden] {
+                display: none;
+            }
+        </style>
+
+        <!-- This media query matches small screens to hide the grid and show responsive cards -->
+        <iron-media-query query="(max-width: 600px)" query-matches="{{responsiveScreen}}"></iron-media-query>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
+
+        <!-- Workouts Query Configuration -->
+        <firebase-query app-name="wrc_software" path="workouts" data="{{workoutsData}}" order-by-child="status" equal-to="false"></firebase-query>
+
+        <main>
+            <template is="dom-if" if="[[!userReady]]">
+                <paper-spinner active=""></paper-spinner>
+            </template>
+
+            <!-- Empty Teams Message -->
+            <div class="empty-message" hidden$="[[!_computeVisibleEmptyMessage(athletesData.length, userReady)]]">
+                <div class="icon-container">
+                    <iron-icon icon="app-icons:person"></iron-icon>
+                </div>
+                <p>
+                    <strong>You don't have athletes</strong>
+                    <span>Add an athlete and it will show up here</span>
+                    <paper-button raised="" on-tap="_openToAdd">Add Athlete</paper-button>
+                </p>
+            </div>
+
+            <!-- Athletes Wrapper -->
+            <div class="athletes-wrapper" hidden$="[[!_computeVisibleData(athletesData.length, userReady)]]">
+
+                <div class="wrapper-horizontal">
+                    <!-- Search filter -->
+                    <div class="search-wrapper">
+                        <!-- Polyfilter configuration -->
+                        <poly-filter-diacritic filter="[[athleteFilter]]" array-to-filter="[[athletesData]]" filtered-array="{{athletesDataFiltered}}"></poly-filter-diacritic>
+
+                        <!-- Search bar -->
+                        <paper-search-bar query="{{athleteFilter}}" hidefilterbutton="true"> </paper-search-bar>
+                    </div>
+
+                    <!-- printer -->
+                    <div class="printer-icon">
+                        <paper-icon-button class="icon-button" noink="" icon="app-icons:printer" on-tap="_printPdfCollection"></paper-icon-button>
+                    </div>
+                </div>
+
+                <!-- Grid View -->
+                <template is="dom-if" if="[[!responsiveScreen]]">
+                    <div class="grid-wrapper">
+                        <vaadin-grid aria-label="Coaches Grid" items="[[athletesDataFiltered]]">
+                            <!-- Active -->
+                            <vaadin-grid-column width="100px" flex-grow="0">
+                                <template class="header">
+
+                                    <vaadin-grid-sorter path="profile.active" active$="[[item.profile.active]]">Active</vaadin-grid-sorter>
+                                </template>
+                                <template>
+
+                                    <paper-toggle-button id$="[[item.$key]]" noink="" checked="{{_computeActiveToggle(item.profile.active)}}" status$="[[item.profile.active]]" on-change="_changeAthleteActiveStatus"></paper-toggle-button>
+                                    <!--<toggle-icon icon="app-icons:dot" active$="[[item.profile.active]]"></toggle-icon> -->
+                                </template>
+                            </vaadin-grid-column>
+
+                            <!-- Athlete number -->
+                            <vaadin-grid-column width="70px" flex-grow="0">
+                                <template class="header">
+                                    <vaadin-grid-sorter path="profile.number">#</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.profile.number]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- First Name -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="profile.first">First</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.profile.first]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- Last Name -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="profile.last">Last</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.profile.last]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- Position -->
+                            <vaadin-grid-column>
+                                <template class="header">
+                                    <vaadin-grid-sorter path="profile.pos">Position</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.profile.pos]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- Year -->
+                            <vaadin-grid-column width="100px" flex-grow="0">
+                                <template class="header">
+                                    <vaadin-grid-sorter path="profile.year">Year</vaadin-grid-sorter>
+                                </template>
+                                <template>[[item.profile.year]]</template>
+                            </vaadin-grid-column>
+
+                            <!-- Actions -->
+                            <vaadin-grid-column>
+                                <template class="horizontal-layout">
+                                    <div class="actions">
+                                        <paper-icon-button id$="[[item.$key]]" noink="" icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
+                                        <paper-icon-button id$="[[item.$key]]" noink="" icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
+                                        <paper-icon-button id$="[[item.$key]]" noink="" icon="fa-icons:pdf" on-tap="_generateAthletePDF" first$="[[item.profile.first]]" last$="[[item.profile.last]]" number$="[[item.profile.number]]"></paper-icon-button>
+                                        <!-- <paper-icon-button id$="[[item.$key]]" noink icon="fa-icons:file-edit" on-tap="_openToEdit"></paper-icon-button> -->
+                                    </div>
+                                </template>
+                            </vaadin-grid-column>
+                        </vaadin-grid>
+                    </div>
+                </template>
+
+                <!-- Cards View -->
+                <template is="dom-if" if="[[responsiveScreen]]">
+                    <div class="cards-wrapper">
+                        <template is="dom-repeat" items="[[athletesDataFiltered]]" as="athlete">
+                            <paper-card>
+                                <div class="card-content">
+                                    <div class="profile-picture">
+                                        <iron-image fade="" preload="" sizing="cover" src="[[athlete.profile.profile_pic_url]]"></iron-image>
+                                    </div>
+                                    <div class="legend">
+                                        <h3>
+                                            <iron-icon icon="app-icons:dot" active$="[[athlete.profile.active]]"></iron-icon>
+                                            [[athlete.profile.first]] [[athlete.profile.last]]
+                                        </h3>
+                                        <p>#[[athlete.profile.number]] - [[athlete.profile.year]] - [[athlete.profile.pos]]</p>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <paper-icon-button id$="[[athlete.$key]]" noink="" icon="fa-icons:player-card" on-tap="_openAthleteProfileDialog"></paper-icon-button>
+                                    <paper-icon-button id$="[[athlete.$key]]" noink="" icon="fa-icons:clipboard" on-tap="_openStatsDialog"></paper-icon-button>
+                                    <paper-icon-button id$="[[athlete.$key]]" noink="" icon="fa-icons:pdf" on-tap="_generateAthletePDF"></paper-icon-button>
+                                </div>
+                            </paper-card>
+                        </template>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Paper Fab to add new athlete -->
+            <paper-fab icon="app-icons:person-add" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(athletesData.length, userReady)]]"></paper-fab>
+
+            <paper-toast id="test" duration="0" text="This toast will stay opened until you close it, or open another toast.">
+              <paper-button onclick="toast1.toggle()" class="yellow-button">Close now!</paper-button>
+            </paper-toast>
+
+        </main>
+    </template>
+
+<script src="../../bower_components/pdfmake/build/pdfmake.min.js"></script>
+<script src="../../bower_components/pdfmake/build/vfs_fonts.js"></script>
+
+<script>
+(function () {
+    'use strict';
+
+    var WrcAthletes = function (_PdfWorkoutCreator) {
+        babelHelpers.inherits(WrcAthletes, _PdfWorkoutCreator);
+
+        function WrcAthletes() {
+            babelHelpers.classCallCheck(this, WrcAthletes);
+            return babelHelpers.possibleConstructorReturn(this, (WrcAthletes.__proto__ || Object.getPrototypeOf(WrcAthletes)).apply(this, arguments));
+        }
+
+        babelHelpers.createClass(WrcAthletes, [{
+            key: 'ready',
+            value: function ready() {
+                babelHelpers.get(WrcAthletes.prototype.__proto__ || Object.getPrototypeOf(WrcAthletes.prototype), 'ready', this).call(this);
+
+                // Athletes Dialog
+                this._athletesDialog = document.getElementById('athletesDialog');
+
+                // Athlete Profile Dialog
+                this._athleteProfileDialog = document.getElementById('athleteProfileDialog');
+
+                // Athlete Stats Dialog
+                this._athleteStatsDialog = document.getElementById('athleteStatsDialog');
+
+                // App Progress Bar
+                this._appProgressBar = document.getElementById('appProgressBar');
+
+                // App Toast
+                this._appToast = document.getElementById('appToast');
+                this._appToastPopupDisabled = document.getElementById('appToastPopupDisabled');
+            }
+
+            /**
+             * Determines if the athletes data is empty to show the message
+             *
+             * @param {Number} length of the athletes array
+             * @param {Boolean} ready status of the user
+             * @return {Boolean}
+             */
+
+        }, {
+            key: '_computeVisibleEmptyMessage',
+            value: function _computeVisibleEmptyMessage(length, ready) {
+                if (!ready) return false;
+                return length > 0 ? false : true;
+            }
+
+            /**
+             * Determines if the athletes data has elements to show data
+             *
+             * @param {Number} length of the athletes array
+             * @param {Boolean} ready status of the user
+             * @return {Boolean}
+             */
+
+        }, {
+            key: '_computeVisibleData',
+            value: function _computeVisibleData(length, ready) {
+                if (!ready) return false;
+                return length > 0 ? true : false;
+            }
+
+            /**
+             * Observers the user for changes
+             *
+             * @param {Object} user information
+             * @return {void}
+             */
+
+        }, {
+            key: '_userChanged',
+            value: function _userChanged(user) {
+                if (user) {
+                    this.userReady = false;
+                    this.$.firebaseDocument.getStoredValue('/users').then(function (snapshot) {
+                        this.userReady = true;
+                    }.bind(this));
+                }
+            }
+
+            /**
+             * Opens athlete dialog to add
+             */
+
+        }, {
+            key: '_openToAdd',
+            value: function _openToAdd() {
+                this.action = 'add';
+                this._athletesDialog._resetForm();
+                this._athletesDialog.acceptedCallback = this._saveAthlete.bind(this);
+                this._athletesDialog.action = 'add';
+                this._athletesDialog.opened = true;
+                this._athletesDialog.user = this.user;
+            }
+
+            /**
+             * Opens athlete dialog to edit
+             *
+             * @param {Event} evt from tapped button
+             * @return {void}
+             */
+
+        }, {
+            key: '_openToEdit',
+            value: function _openToEdit(evt) {
+                this.athleteId = evt.target.getAttribute('id');
+                this.action = 'edit';
+                this._athletesDialog.athleteInfo = null;
+
+                this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile').then(function (snapshot) {
+                    this._athletesDialog.athleteInfo = snapshot;
+                    this._athletesDialog.acceptedCallback = this._saveAthlete.bind(this);
+                    this._athletesDialog.action = 'edit';
+                    this._athletesDialog.opened = true;
+                    this._athletesDialog.user = this.user;
+                }.bind(this));
+            }
+
+            /**
+             * Saves athlete to database
+             *
+             * @param {Object} athleteInfo from dialog
+             * @return {void}
+             */
+
+        }, {
+            key: '_saveAthlete',
+            value: function _saveAthlete(athleteInfo) {
+                if (this.action === 'add') {
+                    // Saves athlete in coach's private path
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', athleteInfo).then(function () {
+                        // Creates athlete private node
+                        this.$.firebaseDocument.setStoredValue(athleteInfo.uid + '/metadata', {
+                            'path': this.user.uid + '/athletes/' + athleteInfo.uid + '/profile',
+                            'role': 'athlete'
+                        });
+
+                        // Saves default maxes in athletes info
+                        this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/stats', {
+                            'bench_press_value': '0',
+                            'bench_press_reps': '0',
+                            'back_squat_value': '0',
+                            'back_squat_reps': '0',
+                            'front_squat_value': '0',
+                            'front_squat_reps': '0',
+                            'deadlift_value': '0',
+                            'deadlift_reps': '0',
+                            'hang_power_clean_value': '0',
+                            'hang_power_clean_reps': '0',
+                            'pull_ups': '0',
+                            'forty_yard_dash': '0',
+                            'three_cone_drill': '0',
+                            'twenty_yard_shuttle': '0',
+                            'sixty_yard_shuttle': '0',
+                            'vertical_jump': '0',
+                            'broad_jump_ft': '0',
+                            'broad_jump_in': '0'
+                        });
+                    }.bind(this)).catch(function (err) {
+                        this._appToast.text = 'There has been an error. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
+
+                    this._athletesDialog.opened = false;
+                    this._appToast.text = 'The athlete has been saved successfully.';
+                    this._appToast.open();
+                    this._appProgressBar.hidden = true;
+                } else {
+                    this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', athleteInfo).catch(function (err) {
+                        this._appToast.text = 'There has been an error. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
+
+                    this._athletesDialog.opened = false;
+                    this._appToast.text = 'The athlete has been modified successfully.';
+                    this._appToast.open();
+                    this._appProgressBar.hidden = true;
+                }
+            }
+
+            /**
+             * Athlete's profile dialog
+             */
+
+        }, {
+            key: '_openAthleteProfileDialog',
+            value: function _openAthleteProfileDialog(e) {
+                this.athleteId = e.target.getAttribute('id');
+
+                this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile').then(function (snapshot) {
+                    this._athleteProfileDialog.user = this.user;
+                    this._athleteProfileDialog.athleteId = this.athleteId;
+                    this._athleteProfileDialog.athleteInfo = snapshot;
+                    this._athleteProfileDialog.opened = true;
+                }.bind(this), function (err) {
+                    this._appToast.text = 'An error has ocurred trying to retrieve the coach data. Please try again.';
+                    this._appToast.open();
+                }.bind(this));
+            }
+
+            /**
+             * Athlete' stats dialog
+             */
+
+        }, {
+            key: '_openStatsDialog',
+            value: function _openStatsDialog(e) {
+                this.athleteId = e.target.getAttribute('id');
+
+                this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile').then(function (athleteInfo) {
+                    this._athleteStatsDialog.athleteInfo = athleteInfo;
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/stats').then(function (athleteStats) {
+                        this._athleteStatsDialog.user = this.user;
+                        this._athleteStatsDialog.athleteStats = athleteStats;
+                        this._athleteStatsDialog.opened = true;
+                    }.bind(this));
+                }.bind(this));
+            }
+
+            /**
+             * Changes active status of the athlete in real-time from toggle-button
+             */
+
+        }, {
+            key: '_changeAthleteActiveStatus',
+            value: function _changeAthleteActiveStatus(e) {
+                this.athleteId = e.target.getAttribute('id');
+
+                // Gets athlete's current status
+                var currentStatus = e.target.getAttribute('status');
+                var newStatus = null;
+
+                // Set new status depending on current status
+                newStatus = currentStatus === 'Yes' ? 'No' : 'Yes';
+
+                // Save new status into firebase
+                this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile/active', newStatus).catch(function (err) {
+                    // Catch any error from firebase
+                    this._appToast.text = 'There has been an error trying to change the active status';
+                    this._appToast.open();
+                }.bind(this));
+
+                // Open toast with successful message
+                this._appToast.text = 'Active status has been changed successfully.';
+                this._appToast.open();
+            }
+
+            /**
+             * @description Computes boolean status to toggle-button
+             *
+             * @param {String} active status of the athlete
+             * @return {Boolean} true if status is Yes, otherwise false
+             */
+
+        }, {
+            key: '_computeActiveToggle',
+            value: function _computeActiveToggle(active) {
+                return active === 'Yes' ? true : false;
+            }
+
+            /**
+             *  @description Print all athletes workouts
+             */
+
+        }, {
+            key: '_printPdfCollection',
+            value: function _printPdfCollection(evt) {
+                var athletesData = this.athletesData;
+                var that = this;
+
+                // Loop for each element in an array, in order.
+                athletesData.forEach(function (athlete) {
+                    //
+                    if (athlete.profile.active == "Yes") {
+                        // Compose name using athlete profile data
+                        var athleteName = athlete.profile.first + " " + athlete.profile.last;
+
+                        that._loadWorkoutData(athlete.stats, athleteName);
+                    }
+                });
+            }
+
+            /**
+             * @description Retrieves active workout data from Firebase
+             *
+             * @param {Object} athleteStats - athlete max stats
+             * @param {String} athleteName - first and last
+             */
+
+        }, {
+            key: '_loadWorkoutData',
+            value: function _loadWorkoutData(athleteStats, athleteName) {
+
+                // Retrieves activated workout path from coach's node
+                this.$.firebaseDocument.getStoredValue(this.user.uid + '/activated_workout/path').then(function (workoutId) {
+                    this.workoutId = workoutId;
+
+                    if (workoutId && workoutId.length) {
+                        // Retrieve workout data
+                        this.$.firebaseDocument.getStoredValue('workouts/' + workoutId).then(function (workoutData) {
+
+                            // Creates pdf with 3 necessary objects
+                            this._computePdfCollection(workoutData, athleteStats, athleteName);
+                        }.bind(this));
+                        //.catch(function(err) {
+                        //  this._appToast.text = "There has been an error. Please try again.";
+                        //this._appToast.open();
+                        //  console.error(err.message);
+                        //}.bind(this));
+                    } else {
+                        this._appToast.text = 'You don\'t have any active workout to Preview.';
+                        this._appToast.open();
+                    }
+                }.bind(this));
+                //.catch(function(err) {
+                //  this._appToast.text = "There has been an error. Please try again.";
+                //this._appToast.open();
+                //  console.error(err.message);
+                //}.bind(this));
+            }
+
+            /*Test*/
+            /**
+             * @description compute PDF collection
+             *
+             * @param {Object} athleteStats - athlete max stats
+             * @param {String} athleteName - athlete first and last
+             * @param {Object} athleteWorkout - athlete workout data
+             */
+
+        }, {
+            key: '_computePdfCollection',
+            value: function _computePdfCollection(workoutData, athleteStats, athleteName) {
+                var pdfCollection = [];
+
+                //pdfCollection = that.pdfCollection;
+
+                pdfCollection.push({
+                    workoutData: workoutData,
+                    athleteStats: athleteStats,
+                    athleteName: athleteName
+                });
+
+                console.log(pdfCollection);
+
+                // Invoke generate preview with 4 retrieved objects
+                this._generatePreview(workoutData, athleteStats, athleteName);
+            }
+
+            /**
+             *  @description Preview athlete individual workout
+             */
+
+        }, {
+            key: '_generateAthletePDF',
+            value: function _generateAthletePDF(evt) {
+                this.athleteId = evt.target.getAttribute('id');
+
+                var that = this;
+                var activeWorkoutId;
+
+                // Retrieve athlete profile
+                this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/profile').then(function (athlete) {
+                    // Compose name using athlete profile data
+                    var athleteName = athlete.first + " " + athlete.last;
+
+                    console.log(athlete.first);
+
+                    // Retrieve athlete stats
+                    this.$.firebaseDocument.getStoredValue(this.user.uid + '/athletes/' + this.athleteId + '/stats').then(function (athleteStats) {
+
+                        console.log(athleteStats);
+
+                        // Retrieves activated workout path from coach's node
+                        this.$.firebaseDocument.getStoredValue(this.user.uid + '/activated_workout/path').then(function (workoutId) {
+                            activeWorkoutId = workoutId;
+
+                            if (workoutId && workoutId.length) {
+                                // Retrieve workout data
+                                this.$.firebaseDocument.getStoredValue('workouts/' + activeWorkoutId).then(function (workoutData) {
+                                    console.log(workoutData);
+
+                                    // Invoke generate preview with 4 retrieved objects
+                                    that._generatePreview(workoutData, athleteStats, athleteName);
+                                }.bind(this));
+                            } else {
+                                this._appToast.text = 'In order to preview PDF you must have an active workout.';
+                                this._appToast.open();
+                            }
+                        }.bind(this));
+                    }.bind(this));
+                }.bind(this));
+            }
+
+            /**
+             * @description Generates workout PDF Preview making use of the super class
+             *
+             * @param {Object} workout - workout retrieved from firebase
+             * @param {Object} athleteStats - stats retrieved from firebase
+             * @param {String} athleteName - first and last
+             */
+
+        }, {
+            key: '_generatePreview',
+            value: function _generatePreview(workout, athleteStats, athleteName) {
+                /**
+                 * Call super class generatePreview function sending
+                 * workout data, athlete max stats and name
+                 */
+                var computePdfPreview = babelHelpers.get(WrcAthletes.prototype.__proto__ || Object.getPrototypeOf(WrcAthletes.prototype), '_generatePreview', this).call(this, workout, athleteStats, athleteName);
+
+                // Notify user that pop-up is disabled
+                if (computePdfPreview === false) {
+                    this._appToastPopupDisabled.text = " 🚫 Pop-ups Blocked. ";
+                    this._appToastPopupDisabled.open();
+                    console.log("Pop-up Window Blocker Enabled");
+                }
+            }
+        }], [{
+            key: 'is',
+
+            /**
+             * Element definition
+             */
+            get: function get() {
+                return 'wrc-athletes';
+            }
+
+            /**
+             * Element properties
+             */
+
+        }, {
+            key: 'properties',
+            get: function get() {
+                return {
+                    userInfo: Object,
+                    userReady: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
+                    user: {
+                        type: Object,
+                        notify: true,
+                        observer: '_userChanged'
+                    },
+                    athletesData: {
+                        type: Object,
+                        notify: true
+                    },
+                    workoutId: {
+                        type: String,
+                        notify: true
+                    },
+                    pdfCollection: {
+                        type: Array,
+                        notfiy: true
+                    }
+                };
+            }
+        }]);
+        return WrcAthletes;
+    }(PdfWorkoutCreator(Polymer.Element));
+
+    window.customElements.define(WrcAthletes.is, WrcAthletes);
+})();</script>
+</dom-module>

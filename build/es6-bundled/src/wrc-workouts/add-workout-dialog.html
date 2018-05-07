@@ -1,0 +1,193 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+--><!-- Paper Elements --><!-- Iron Elements --><!-- Vaadin Elements --><!-- Iron Elements --><!-- Neon Elements --><!-- Icons --><div hidden="" by-polymer-bundler=""><link rel="import" href="../fa-icons.html"></div><dom-module id="add-workout-dialog">
+    <template>
+        <style>
+        /* Dialog */
+      paper-dialog {
+          border-radius: 5px;
+          box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+      }
+
+      paper-dialog h2 {
+        color: var(--azul-text-title);
+        font-size: 1.6em;
+      }
+
+      /* Paper dialog buttons */
+      paper-dialog div.buttons {
+          @apply --layout-horizontal;
+          @apply --layout-end-justified;
+      }
+
+      paper-dialog .buttons paper-button.cancel-button {
+          color: var(--paper-grey-700);
+          font-weight: normal;
+      }
+
+      paper-dialog .buttons paper-button.save-button {
+          color: var(--azul-primary-button-text);
+          font-weight: normal;
+      }
+
+      paper-spinner {
+          --paper-spinner-layer-1-color: var(--azul-primary);
+          --paper-spinner-layer-2-color: var(--azul-primary);
+          --paper-spinner-layer-3-color: var(--azul-primary);
+          --paper-spinner-layer-4-color: var(--azul-primary);
+      }
+
+      .horizontal-layout {
+        @apply --layout-horizontal
+        margin: 0 0 0 0;
+      }
+
+      .dayCombo {
+          width: 125px;
+          margin-bottom: 10px;
+      }
+
+      .weekCombo {
+          width: 175px;
+      }
+
+      .typeCombo {
+        width: 250px;
+      }
+
+      .info-icon {
+        top: 15px;
+        right: 15px;
+        position: absolute;
+      }
+
+      [flex] {
+        @apply --layout-flex;
+      }
+
+      /* Dialog larger with large screens */
+      @media screen and (min-width: 600px) {
+          paper-dialog {
+          width: 350px;
+        }
+      }
+
+  </style>
+
+
+  <!-- Element UI -->
+  <paper-dialog opened="{{opened}}" modal="" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+
+      <!-- title + info icon-->
+      <h2>Select Program</h2>
+      <div>
+          <!-- TODO: Implement Paper Tool-tip -->
+          <img class="info-icon" src="../images/app-images/info-icon.svg" alt="info. button">
+      </div>
+
+      <!-- modal conent  -->
+      <paper-dialog-scrollable>
+          <iron-form id="addWorkoutForm">
+              <form>
+                  <vaadin-form-layout>
+                      <!-- Programs  -->
+                      <vaadin-combo-box id="programCombo" label="Program" name="program" required="" error-message="Select a program" value=""></vaadin-combo-box>
+                      <!-- Program Type  -->
+                      <div class="">
+                          <vaadin-combo-box id="typeCombo" class="typeCombo" label="Type" name="type" required="" error-message="Select a program type" value=""></vaadin-combo-box>
+                      </div>
+                      <!-- Program Duration  -->
+                      <div>
+                        <vaadin-combo-box id="durationCombo" class="weekCombo" label="Duration" name="duration" required="" error-message="Select the duration" value=""></vaadin-combo-box>
+                      </div>
+                      <!--  Days -->
+                      <div>
+                          <vaadin-combo-box id="dayCombo" class="dayCombo" label="Days Per Week" name="day" required="" error-message="Select number of days" value=""></vaadin-combo-box>
+                      </div>
+              </vaadin-form-layout></form>
+          </iron-form>
+      </paper-dialog-scrollable>
+
+      <!-- buttons  -->
+      <div class="buttons">
+          <paper-button dialog-dismiss="" class="cancel-button" on-tap="_resetForm">Cancel</paper-button>
+          <span flex=""></span>
+          <paper-button class="save-button" on-tap="">Download</paper-button>
+      </div>
+  </paper-dialog>
+</template>
+
+
+<script>
+(function () {
+    'use strict';
+
+    var AddWorkoutDialog = function (_Polymer$Element) {
+        babelHelpers.inherits(AddWorkoutDialog, _Polymer$Element);
+
+        function AddWorkoutDialog() {
+            babelHelpers.classCallCheck(this, AddWorkoutDialog);
+            return babelHelpers.possibleConstructorReturn(this, (AddWorkoutDialog.__proto__ || Object.getPrototypeOf(AddWorkoutDialog)).apply(this, arguments));
+        }
+
+        babelHelpers.createClass(AddWorkoutDialog, [{
+            key: 'ready',
+            value: function ready() {
+                babelHelpers.get(AddWorkoutDialog.prototype.__proto__ || Object.getPrototypeOf(AddWorkoutDialog.prototype), 'ready', this).call(this);
+
+                this.$.programCombo.items = ['In-Season', 'Off-Season', 'Pre-Season'];
+
+                this.$.durationCombo.items = ['4 Weeks', '5 Weeks', '6 Weeks', '7 Weeks', '8 Weeks', '9 Weeks', '10 Weeks', '11 Weeks', '12 Weeks'];
+
+                this.$.dayCombo.items = ['2', '3', '4'];
+                this.$.typeCombo.items = ['Strength Phase', 'Power Phase', 'Correctional Phase'];
+            }
+
+            /**
+             * Resets the form
+            */
+
+        }, {
+            key: '_resetForm',
+            value: function _resetForm() {
+                this.equationResult = 0;
+                this.$.addWorkoutForm.reset();
+            }
+
+            /**
+             * Triggers the accepted callback with the response
+            */
+
+        }], [{
+            key: 'is',
+
+            /**
+             * Element definition
+            */
+            get: function get() {
+                return 'add-workout-dialog';
+            }
+
+            /**
+             * Element properties
+            */
+
+        }, {
+            key: 'properties',
+            get: function get() {
+                return {
+                    opened: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    }
+                };
+            }
+        }]);
+        return AddWorkoutDialog;
+    }(Polymer.Element);
+
+    window.customElements.define(AddWorkoutDialog.is, AddWorkoutDialog);
+})();</script>
+  </dom-module>

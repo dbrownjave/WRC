@@ -1,0 +1,204 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+--><!-- Paper Elements --><!-- Iron Elements --><!-- Neon Elements --><!-- Vaadin Elements --><!-- Icons --><div hidden="" by-polymer-bundler=""><link rel="import" href="../fa-icons.html"></div><dom-module id="download-program-dialog">
+	<template>
+    	<style>
+    		/* Dialog */
+      		paper-dialog {
+      			border-radius: 5px;
+      			box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+      		}
+
+      		paper-dialog h2 {
+        		color: var(--azul-text-title);
+        		font-size: 1.6em;
+      		}
+
+      		/* Paper dialog buttons */
+      		paper-dialog div.buttons {
+          		margin: .25cm 0 0 0;
+
+          		@apply --layout-horizontal;
+      		}
+
+      		paper-dialog .buttons paper-button.cancel-button {
+          		color: var(--paper-grey-700);
+          		font-weight: normal;
+	          	margin-right: 2.75cm;
+      		}
+
+      		paper-dialog .buttons paper-button.save-button {
+          		color: var(--azul-primary-button-text);
+          		font-weight: normal;
+      		}
+
+      		paper-spinner {
+          		--paper-spinner-layer-1-color: var(--azul-primary);
+          		--paper-spinner-layer-2-color: var(--azul-primary);
+          		--paper-spinner-layer-3-color: var(--azul-primary);
+          		--paper-spinner-layer-4-color: var(--azul-primary);
+      		}
+
+      		.horizontal-layout {
+				margin: 0 0 0 0;
+
+        		@apply --layout-horizontal
+      		}
+
+
+      		.dayCombo {
+          		width: 125px;
+          		margin-bottom: 10px;
+      		}
+
+      		.weekCombo {
+          		width: 175px;
+      		}
+
+      		.typeCombo {
+        		width: 250px;
+      		}
+
+      		.info-icon {
+        		top: 15px;
+        		right: 15px;
+        		position: absolute;
+  			}
+
+      		[flex] {
+        		@apply --layout-flex;
+      		}
+
+      		/* Dialog larger with large screens */
+      		@media screen and (min-width: 600px) {
+          		paper-dialog {
+          		width: 350px;
+        	}
+      	}
+  	</style>
+
+
+  	<!-- Element UI -->
+  	<paper-dialog opened="{{opened}}" with-backdrop="" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+
+  		<!-- title + info icon-->
+      	<h2>Add Program</h2>
+      	<div>
+      		<!-- TODO: Implement Paper Tool-tip -->
+          	<img class="info-icon" src="../images/app-images/info-icon.svg" alt="info. button">
+      	</div>
+
+      	<!-- modal conent  -->
+      	<paper-dialog-scrollable>
+      		<iron-form id="programForm">
+          		<form>
+              		<vaadin-form-layout>
+                  		<!-- Programs  -->
+              			<vaadin-combo-box id="programCombo" label="Program" name="program" required="" error-message="Select a program" value="{{programInfo.program}}"></vaadin-combo-box>
+                      	<vaadin-combo-box id="typeCombo" class="typeCombo" label="Type" name="type" required="" error-message="Select a program type" value="{{programInfo.type}}"></vaadin-combo-box>
+                      	<vaadin-combo-box id="durationCombo" class="weekCombo" label="Program Duration" name="duration" required="" error-message="Select the duration" value="{{programInfo.duration}}"></vaadin-combo-box>
+                      	<vaadin-combo-box id="dayCombo" class="dayCombo" label="Days Per Week" name="day" required="" error-message="Select number of days" value="{{programInfo.days}}"></vaadin-combo-box>
+              		</vaadin-form-layout></form>
+          		</iron-form>
+      		</paper-dialog-scrollable>
+
+	      	<!-- buttons  -->
+			<div class="buttons">
+          		<paper-button dialog-dismiss="" class="cancel-button" on-tap="resetForm">Cancel</paper-button>
+          		<span flex=""></span>
+          		<paper-button class="save-button" on-tap="_serializeProgram">Download</paper-button>
+      		</div>
+  		</paper-dialog>
+	</template>
+
+
+	<script>
+(function () {
+  'use strict';
+
+  var DownloadProgramDialog = function (_Polymer$Element) {
+    babelHelpers.inherits(DownloadProgramDialog, _Polymer$Element);
+
+    function DownloadProgramDialog() {
+      babelHelpers.classCallCheck(this, DownloadProgramDialog);
+      return babelHelpers.possibleConstructorReturn(this, (DownloadProgramDialog.__proto__ || Object.getPrototypeOf(DownloadProgramDialog)).apply(this, arguments));
+    }
+
+    babelHelpers.createClass(DownloadProgramDialog, [{
+      key: 'ready',
+      value: function ready() {
+        babelHelpers.get(DownloadProgramDialog.prototype.__proto__ || Object.getPrototypeOf(DownloadProgramDialog.prototype), 'ready', this).call(this);
+
+        this.$.programCombo.items = ['In-Season', 'Off-Season', 'Pre-Season'];
+
+        this.$.durationCombo.items = ['4 Weeks', '5 Weeks', '6 Weeks', '7 Weeks', '8 Weeks', '9 Weeks', '10 Weeks', '11 Weeks', '12 Weeks'];
+
+        this.$.dayCombo.items = ['2', '3', '4'];
+        this.$.typeCombo.items = ['Strength Phase', 'Power Phase', 'Correctional Phase'];
+      }
+
+      /**
+       * Resets the form
+      */
+
+    }, {
+      key: 'resetForm',
+      value: function resetForm() {
+        this.$.programForm.reset();
+      }
+
+      /**
+       * Triggers the accepted callback with the response
+       */
+
+    }, {
+      key: '_serializeProgram',
+      value: function _serializeProgram() {
+        if (this.$.programForm.validate()) {
+          this.acceptedCallback(this.programInfo);
+        }
+      }
+    }], [{
+      key: 'is',
+
+      /**
+      	 * Element definition
+      */
+      get: function get() {
+        return 'download-program-dialog';
+      }
+
+      /**
+      	 * Element properties
+      */
+
+    }, {
+      key: 'properties',
+      get: function get() {
+        return {
+          acceptedCallback: Function,
+          opened: {
+            type: Boolean,
+            notify: true,
+            value: false
+          },
+          programInfo: {
+            type: Object,
+            notify: true,
+            value: {
+              program: '',
+              type: '',
+              duration: '',
+              days: ''
+            }
+          }
+        };
+      }
+    }]);
+    return DownloadProgramDialog;
+  }(Polymer.Element);
+
+  window.customElements.define(DownloadProgramDialog.is, DownloadProgramDialog);
+})();</script>
+</dom-module>

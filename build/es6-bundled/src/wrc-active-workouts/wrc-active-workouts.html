@@ -1,0 +1,362 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+--><!-- Polymer --><!-- Paper Elements --><!-- Iron Elements --><!-- Polymerfire Elements --><!-- PDF Workout Creator --><!-- Icons --><!-- Shared Style  --><div hidden="" by-polymer-bundler=""><link rel="import" href="../pdf-workout-creator/pdf-workout-creator.html"><link rel="import" href="../app-icons.html"><link rel="import" href="../fa-icons.html"><link rel="import" href="../shared-styles.html"></div><dom-module id="wrc-active-workouts">
+	<template>
+		<style include="wrc-shared-styles">
+			/* General Style */
+			main {
+				padding: 1em 0em 2em 0em;
+				height: calc(100vh - (64px + 4em));
+				min-height: calc(100vh - (64px + 4em));
+				overflow: auto;
+
+				@apply --layout-vertical;
+			}
+
+			/* Program Selector */
+            .paper-form {
+                position: relative;
+                cursor: auto;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+            .paper-form>.pdf-wrapper {
+                @apply --layout-vertical;
+                @apply --layout-center;
+            }
+
+            paper-menu-button {
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+
+			.paper-form[loading] {
+				pointer-events: none;
+			}
+
+			.paper-form .overlay {
+				position: absolute;
+				top: 0;
+				right: 0;
+				left: 0;
+				bottom: 0;
+				background-color: var(--paper-grey-400);
+				pointer-events: none;
+				z-index: 105;
+				opacity: .9;
+				border-radius: 2px;
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			.overlay[hidden] {
+				display: none;
+			}
+
+			.overlay paper-spinner {
+				--paper-spinner-layer-1-color: var(--paper-light-blue-800);
+				--paper-spinner-layer-2-color: var(--paper-light-blue-800);
+				--paper-spinner-layer-3-color: var(--paper-light-blue-800);
+				--paper-spinner-layer-4-color: var(--paper-light-blue-800);
+			}
+
+            .menu-icon {
+                color: #86919f;
+            }
+
+            paper-menu-button paper-listbox paper-item {
+                font-weight: normal;
+                text-decoration: none;
+                text-transform: none;
+                background-color: #fff;
+                cursor: pointer;
+            }
+
+            paper-menu-button paper-listbox .iron-selected {
+                font-weight: normal;
+                text-decoration: none;
+                text-transform: none;
+                background-color: #fff;
+            }
+
+            paper-item:focus:before {
+                background: #fff;
+            }
+
+            paper-item:active:before {
+                background: var(--paper-grey-300);
+                color: #000;
+            }
+
+            /* Active Status */
+            .tag {
+                width: 70px;
+                height: 21px;
+                border-radius: 3px;
+                background-color: #45BE72;
+                text-align: center;
+                margin-top: 10px;
+
+                @apply --layout-vertical;
+                @apply --layout-center-center;
+            }
+
+
+						.motivation-title {
+							color: #AFB7C1;
+							font-size: 2.5em;
+							font-weight: 500;
+							opacity: .70;
+							text-align: center;
+							margin: 20% auto;
+						}
+
+						/* Hidden */
+						[hidden] {
+							display: none;
+						}
+
+						/*==========  Non-Mobile First Method  ==========*/
+
+						/* Small Devices, Tablets */
+						@media only screen and (max-width : 768px) {
+							.motivation-title {
+								font-size: 2em;
+								margin: 40% auto;
+							}
+						}
+
+						/* Extra Small Devices, Phones */
+						@media only screen and (max-width : 480px) {
+							.motivation-title {
+								font-size: 1.5em;
+								margin: 70% auto;
+							}
+						}
+
+						/* Custom, iPhone Retina */
+						@media only screen and (max-width : 320px) {
+							.motivation-title {
+								font-size: 1em;
+								margin: 70% auto;
+							}
+						}
+
+		</style>
+
+		<!-- Firebase Document Configuration -->
+		<firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
+
+		<main>
+			<!-- Section to show empty message if there is not activated workouts -->
+			<section class="empty-message-wrapper" hidden="[[!noWorkouts]]">
+				<!-- TODO: Show message for not active workouts -->
+				<div class="motivation-title">No Workouts Available 😔</div>
+			</section>
+
+			<!-- Section to show activated workout -->
+			<section class="activated-workout-wrapper" hidden="[[noWorkouts]]">
+				<template is="dom-repeat" items="[[activeWorkout]]" as="workout">
+					<div class="paper-form" id$="[[workout.$key]]" loading$="[[loadingWorkoutPreview]]">
+						<!-- Creates an overlay when loading the PDF Preview -->
+						<div class="overlay" hidden="[[!loadingWorkoutPreview]]">
+							<paper-spinner alt="Loading workout preview" active=""></paper-spinner>
+						</div>
+
+						<div class="pdf-wrapper">
+							<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+								<paper-icon-button class="menu-icon default-transiton" noink="" slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+								<paper-listbox noink="" slot="dropdown-content">
+									<paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
+								</paper-listbox>
+							</paper-menu-button>
+
+							<div class="content-wrapper">
+								<div class="season-title-program">[[workout.season]]</div>
+								<div class="program-title">[[workout.weeks]] Week Program</div>
+								<div class="type-title">[[workout.type]]</div>
+							</div>
+							<!-- Active status -->
+							<div class="tag" active$="[[workout.active]]" id="[[workout.$key]]">
+								<div class="day-title">Week [[workout.week]]</div>
+							</div>
+						</div>
+					</div>
+				</template>
+			</section>
+		</main>
+	</template>
+
+	<script>
+"use strict";
+
+(function () {
+	var WrcActiveWorkouts = function (_PdfWorkoutCreator) {
+		babelHelpers.inherits(WrcActiveWorkouts, _PdfWorkoutCreator);
+
+		function WrcActiveWorkouts() {
+			babelHelpers.classCallCheck(this, WrcActiveWorkouts);
+			return babelHelpers.possibleConstructorReturn(this, (WrcActiveWorkouts.__proto__ || Object.getPrototypeOf(WrcActiveWorkouts)).apply(this, arguments));
+		}
+
+		babelHelpers.createClass(WrcActiveWorkouts, [{
+			key: "ready",
+			value: function ready() {
+				babelHelpers.get(WrcActiveWorkouts.prototype.__proto__ || Object.getPrototypeOf(WrcActiveWorkouts.prototype), "ready", this).call(this);
+
+				// App Toast
+				this._appToast = document.getElementById('appToast');
+				this._appToastPopupDisabled = document.getElementById('appToastPopupDisabled');
+			}
+
+			/**
+    * Observes for changes on user property
+    */
+
+		}, {
+			key: "_userChanged",
+			value: function _userChanged(user) {
+				if (user) {
+					this.$.firebaseDocument.getStoredValue(this.user.uid + "/metadata/path").then(function (path) {
+						this.coachUid = path.split('/', 1)[0];
+					}.bind(this));
+				}
+			}
+
+			/**
+    * Observes for changes on coach uid
+    */
+
+		}, {
+			key: "_coachUidChanged",
+			value: function _coachUidChanged(uid) {
+				if (uid) {
+					var activeWorkout = [];
+					this.noWorkouts = true;
+
+					this.$.firebaseDocument.getStoredValue(uid + "/activated_workout/path").then(function (workout) {
+						if (workout && workout.length) {
+							this.noWorkouts = false;
+							this.$.firebaseDocument.getStoredValue("workouts/" + workout).then(function (workoutData) {
+								workoutData["$key"] = workout;
+								activeWorkout.push(workoutData);
+								this.set("activeWorkout", activeWorkout);
+							}.bind(this));
+						}
+					}.bind(this));
+				}
+			}
+
+			/**
+    * @description Load workout data on PDF Preview using athlete maxes
+    */
+
+		}, {
+			key: "_loadWorkoutData",
+			value: function _loadWorkoutData(evt) {
+				this.loadingWorkoutPreview = true;
+				var workoutId = evt.target.getAttribute("id");
+				// Retrieve athlete's profile
+				this.$.firebaseDocument.getStoredValue(this.coachUid + "/athletes/" + this.user.uid + "/profile").then(function (athleteData) {
+					// Retrieve athlete's stats
+					this.$.firebaseDocument.getStoredValue(this.coachUid + "/athletes/" + this.user.uid + "/stats").then(function (athleteStats) {
+						// Retrieve workout data
+						this.$.firebaseDocument.getStoredValue("workouts/" + workoutId).then(function (workoutData) {
+							this.loadingWorkoutPreview = false;
+
+							// Invoke generatePreview preview with 3 retrieved objects
+							this._generatePreview(workoutData, athleteStats, athleteData);
+						}.bind(this)).catch(function (err) {
+							this._appToast = "An error has ocurred while loading the preview. Please try again";
+							this._appToast.open();
+						}.bind(this));
+					}.bind(this)).catch(function (err) {
+						this._appToast = "An error has ocurred while loading the preview. Please try again";
+						this._appToast.open();
+					}.bind(this));
+				}.bind(this)).catch(function (err) {
+					this._appToast = "An error has ocurred while loading the preview. Please try again";
+					this._appToast.open();
+				}.bind(this));
+			}
+
+			/**
+    * @description Generate PDF Preview using athlete max stats
+    *
+    * @param {Object} workout - workout data for PDF Generation
+    * @param {Object} stats - athlete max stats
+    * @param {Object} athleteData - athlete profile data to extract name
+    */
+
+		}, {
+			key: "_generatePreview",
+			value: function _generatePreview(workout, stats, athleteData) {
+				// Compose name using athlete profile data
+				var athleteName = athleteData.first + " " + athleteData.last;
+
+				/**
+     * Call super class generatePreview function sending
+     * workout data, athlete max stats and name
+     */
+				var computePdfPreview = babelHelpers.get(WrcActiveWorkouts.prototype.__proto__ || Object.getPrototypeOf(WrcActiveWorkouts.prototype), "_generatePreview", this).call(this, workout, stats, athleteName);
+
+				// Notify user that pop-up is disabled
+				if (computePdfPreview === false) {
+					this._appToastPopupDisabled.text = " 🚫 Pop-ups Blocked. ";
+					this._appToastPopupDisabled.open();
+					console.log("Pop-up Window Blocker Enabled");
+				}
+			}
+		}], [{
+			key: "is",
+
+			// Element definition
+			get: function get() {
+				return "wrc-active-workouts";
+			}
+		}, {
+			key: "properties",
+
+
+			// Element properties
+			get: function get() {
+				return {
+					user: {
+						type: Object,
+						notify: true,
+						observer: '_userChanged'
+					},
+					coachUid: {
+						type: String,
+						notify: true,
+						observer: '_coachUidChanged'
+					},
+					noWorkouts: {
+						type: Boolean,
+						notify: true,
+						value: true
+					},
+					activeWorkout: {
+						type: Array,
+						notify: true
+
+					},
+					loadingWorkoutPreview: {
+						type: Boolean,
+						notify: true,
+						value: false
+					}
+				};
+			}
+		}]);
+		return WrcActiveWorkouts;
+	}(PdfWorkoutCreator(Polymer.Element));
+
+	window.customElements.define(WrcActiveWorkouts.is, WrcActiveWorkouts);
+})();</script>
+</dom-module>

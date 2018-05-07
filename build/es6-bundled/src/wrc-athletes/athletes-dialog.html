@@ -1,0 +1,474 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+--><!-- Polymer --><!-- Paper Elements --><!-- Iron Elements --><!-- Vaadin Elements --><!-- Polymerfire Elements --><!-- Suji Elements --><!-- Neon Elements --><div hidden="" by-polymer-bundler=""><link rel="import" href="../suji/lib/themes/azul/azul-theme.html"><link rel="import" href="../suji/lib/colors/suji-color-palette.html"><link rel="import" href="../suji/lib/themes/azul/azul-dialog.html"></div><dom-module id="athletes-dialog">
+    <template>
+        <style>
+            /* Dialog */
+            paper-dialog {
+				border-radius: 5px;
+                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+			}
+
+            paper-dialog h2 {
+				color: var(--azul-text-title);
+				font-size: 1.6em;
+			}
+
+			paper-dialog div p {
+				font-weight: lighter;
+				line-height: 1em;
+			}
+
+			paper-dialog div.buttons {
+				@apply --layout-horizontal;
+				@apply --layout-end-justified;
+			}
+
+			paper-dialog .buttons paper-button {
+				color: var(--azul-primary-button);
+                font-weight: 500;
+			}
+
+			paper-dialog .buttons paper-button.cancel-button {
+				color: var(--paper-grey-700);
+                font-weight: normal;
+			}
+
+			paper-dialog .buttons paper-button.delete-button {
+				color: var(--paper-red-400);
+                font-weight: normal;
+			}
+
+            /* Profile Pic Uploader */
+			[type='file'] {
+				display: none;
+			}
+
+			div.picture-wrapper {
+				width: 100%;
+                margin-bottom: 24px;
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			div.picture-wrapper label {
+				background-color: #F3F4F5;
+				overflow: hidden;
+				border-radius: 10em;
+				width: 150px;
+				height: 150px;
+                box-shadow: 0 3.5px 12.5px 0 rgba(0, 0, 0, 0.25);
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
+			div.picture-wrapper label:hover {
+				background-color: var(--paper-grey-300);
+			}
+
+			label iron-image {
+				width: inherit;
+				height: inherit;
+				cursor: pointer;
+			}
+
+            div.picture-wrapper p {
+                font-size: 1.1em;
+                font-weight: normal;
+                color: var(--azul-text-title);
+                margin: 0.5em 0 0;
+            }
+
+            div.email-wrapper {
+                width: 100%;
+                text-align: center;
+            }
+
+            div.email-wrapper p {
+                color: var(--azul-text-title);
+                font-size: 1.1em;
+                margin-top: 0;
+                font-weight: 400;
+            }
+
+            /* Form */
+            vaadin-form-layout {
+				@apply --layout-vertical;
+			}
+
+			div.horizontal-wrapper {
+				@apply --layout-horizontal;
+                @apply --layout-wrap;
+			}
+
+			div.horizontal-wrapper vaadin-text-field {
+				width: 48%;
+			}
+
+			div.horizontal-wrapper vaadin-combo-box {
+				width: 48%;
+			}
+
+			[slot='suffix'], [slot='prefix'] {
+				color: var(--paper-grey-500);
+			}
+
+            /* To keep dialog larger with large screens */
+			@media screen and (min-width: 600px) {
+				paper-dialog {
+					width: 610px;
+				}
+            }
+
+            @media screen and (max-width: 425px) {
+                div.picture-wrapper label {
+                    width: 135px;
+                    height: 135px;
+                    margin-bottom: 0;
+                }
+            }
+
+			[hidden] {
+				display: none;
+			}
+
+            [flex] {
+                @apply --layout-flex;
+            }
+        </style>
+
+        <!-- Firebase Document Configuration -->
+        <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
+
+        <!-- Firebase Authentication Config | This is used to create new user accounts -->
+        <firebase-auth id="newAccountsAuth" app-name="new_accounts_app"></firebase-auth>
+
+        <!-- Firebase Storage Configuration -->
+        <firebase-storage-ref id="storageRef" app-name="wrc_software"></firebase-storage-ref>
+
+        <firebase-storage-multiupload id="firebaseStorage" app-name="wrc_software" path="profile-pics"></firebase-storage-multiupload>
+
+        <paper-dialog opened="{{opened}}" with-backdrop="" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+
+            <h2>[[_computeDialogTitle(action)]]</h2>
+            <paper-dialog-scrollable>
+                <div class="picture-wrapper">
+                    <input type="file" name="profile_pic" id="profilePicture">
+                    <label for="profilePicture">
+                        <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
+                        <iron-image id="profileImage" preload="" fade="" sizing="cover" src="[[_computeImgSrc(action)]]"></iron-image>
+                    </label>
+                </div>
+                <div class="email-wrapper" hidden="[[!_hideActions(action)]]">
+                    <p>[[athleteInfo.email]]</p>
+                </div>
+                <iron-form id="athleteForm">
+                    <form>
+                        <vaadin-form-layout>
+                            <vaadin-text-field label="First Name" name="first" required="" error-message="This field is required" value="{{athleteInfo.first}}"></vaadin-text-field>
+                            <vaadin-text-field label="Last Name" name="last" required="" error-message="This field is required" value="{{athleteInfo.last}}"></vaadin-text-field>
+                            <vaadin-combo-box id="yearCombo" label="Year" name="year" required="" error-message="Select the year" value="{{athleteInfo.year}}"></vaadin-combo-box>
+                            <vaadin-text-field label="Number" name="number" type="number" maxlength="2" pattern="[0-9]*" prevent-invalid-input="" required="" error-message="This field is required" value="{{athleteInfo.number}}">
+                                <span slot="prefix">#</span>
+                            </vaadin-text-field>
+                            <vaadin-combo-box id="posCombo" label="Position" name="pos" required="" error-message="Select the position" value="{{athleteInfo.pos}}"></vaadin-combo-box>
+                            <br>
+                            <div class="horizontal-wrapper">
+                                <vaadin-combo-box id="heightCombo" label="Height" name="height" required="" error-message="Select the height" value="{{athleteInfo.height}}"></vaadin-combo-box>
+                                <span flex=""></span>
+                                <vaadin-text-field label="Weight" name="weight" type="number" maxlength="3" pattern="[0-9]*" prevent-invalid-input="" required="" error-message="This field is required" value="{{athleteInfo.weight}}">
+                                    <span slot="suffix">lbs</span>
+                                </vaadin-text-field>
+                            </div>
+                            <br>
+                            <div class="horizontal-wrapper">
+                                <vaadin-combo-box id="activeCombo" label="Active" name="active" required="" error-message="Select the status" value="{{athleteInfo.active}}"></vaadin-combo-box>
+                                <span flex=""></span>
+                            </div>
+                            <br>
+                            <vaadin-text-field colspan="2" label="Contact" placeholder="Phone" name="phone" value="{{athleteInfo.phone}}"></vaadin-text-field>
+                            <vaadin-text-field hidden="[[_hideActions(action)]]" colspan="2" placeholder="Email" name="email" type="email" required="" error-message="This field is required" value="{{athleteInfo.email}}"></vaadin-text-field>
+                            <vaadin-text-field label="Instagram" name="instagram" value="{{athleteInfo.instagram}}">
+                                <span slot="prefix">@</span>
+                            </vaadin-text-field>
+                            <vaadin-text-field label="Twitter" name="twitter" value="{{athleteInfo.twitter}}">
+                                <span slot="prefix">@</span>
+                            </vaadin-text-field>
+                            <vaadin-text-field colspan="2" label="Hudl" placeholder="www.hudl.com/" name="hudl" value="{{athleteInfo.hudl}}"></vaadin-text-field>
+                        </vaadin-form-layout>
+                    </form>
+                </iron-form>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button hidden="[[!_hideActions(action)]]" class="delete-button" on-tap="_openDeleteDialog">Delete</paper-button>
+                <span flex=""></span>
+                <paper-button dialog-dismiss="" class="cancel-button" on-tap="_resetForm">Cancel</paper-button>
+                <paper-button on-tap="_serializeForm">Save</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+(function () {
+    'use strict';
+
+    var AthletesDialog = function (_Polymer$Element) {
+        babelHelpers.inherits(AthletesDialog, _Polymer$Element);
+
+        function AthletesDialog() {
+            babelHelpers.classCallCheck(this, AthletesDialog);
+            return babelHelpers.possibleConstructorReturn(this, (AthletesDialog.__proto__ || Object.getPrototypeOf(AthletesDialog)).apply(this, arguments));
+        }
+
+        babelHelpers.createClass(AthletesDialog, [{
+            key: 'ready',
+            value: function ready() {
+                babelHelpers.get(AthletesDialog.prototype.__proto__ || Object.getPrototypeOf(AthletesDialog.prototype), 'ready', this).call(this);
+
+                this.$.yearCombo.items = ['FR', 'SO', 'JR', 'SR'];
+
+                this.$.posCombo.items = ['Athlete (ATH)', 'Quarterback (QB)', 'Running Back (RB)', 'Fullback (FB)', 'Wide Receiver (WR)', 'Tight End (TE)', 'Offensive Lineman (OL)', 'Center (C)', 'Guard (G)', 'Left Guard (LG)', 'Right Guard (RG)', 'Tackle (T)', 'Left Tackle (LT)', 'Right Tackle (RT)', 'Kicker (K)', 'Kick Returner(KR)', 'Defensive Lineman (DL)', 'Defensive End (DE)', 'Defensive Tackle (DT)', '	Nose Tackle (NT)', 'Linebacker (LB)', 'Inside Linebacker (ILB)', 'Outside Linebacker (OLB)', 'Middle Linebacker (MLB)', 'Defensive Back (DB)', 'Cornerback (CB)', '	Free Safety (FS)', 'Strong Safety (SS)', 'Safety (S)', 'Punter (P)', 'Punt Returner (PR)'];
+
+                this.$.heightCombo.items = ['4’10', '4’11', '5’0', '5’1', '5’2', '5’3', '5’4', '5’5', '5’6', '5’7', '5’8', '5’9', '5’10', '5’11', '6’0', '6’1', '6’2', '6’3', '6’4', '6’5', '6’6', '6’7', '6’8', '6’9', '6’10', '6’11', '7’0'];
+
+                this.$.activeCombo.items = ['Yes', 'No'];
+
+                // App Progress Bar
+                this._appProgressBar = document.getElementById('appProgressBar');
+
+                // App Toast
+                this._appToast = document.getElementById('appToast');
+
+                // Delete Athlete Dialog
+                this._deleteAthleteDialog = document.getElementById('appDeleteDialog');
+
+                var fileUpload = this.$.profilePicture;
+                fileUpload.addEventListener('change', function (e) {
+                    this._createImgPreview(e.target.files[0]);
+                }.bind(this));
+            }
+
+            /**
+             * @description Saves profile image and data
+            */
+
+        }, {
+            key: '_saveProfileImgAndAthleteData',
+            value: function _saveProfileImgAndAthleteData() {
+                if (this.$.profilePicture.files[0]) {
+                    if (this.action === 'edit' && this.athleteInfo.profile_pic_name !== 'default_profile.png') {
+                        this.$.storageRef.path = '/profile-pics/' + this.athleteInfo.profile_pic_name;
+                        this.$.storageRef.delete();
+                    }
+                    this.$.firebaseStorage.put(this.$.profilePicture.files[0]).then(function () {
+                        this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0].name).then(function (url) {
+                            this.athleteInfo.profile_pic_url = url;
+                            this.athleteInfo.profile_pic_name = this.$.profilePicture.files[0].name;
+                            this.acceptedCallback(this.athleteInfo);
+                        }.bind(this));
+                    }.bind(this));
+                } else {
+                    this.acceptedCallback(this.athleteInfo);
+                }
+            }
+
+            /**
+             * Serializes the data from form and save selected profile image
+            */
+
+        }, {
+            key: '_serializeForm',
+            value: function _serializeForm() {
+                if (this.$.athleteForm.validate()) {
+                    this._appProgressBar.hidden = false;
+
+                    if (this.action === 'add') {
+                        // Creates the account for the new user using his email and a default passord
+                        this.$.newAccountsAuth.createUserWithEmailAndPassword(this.athleteInfo.email, 'wrc2018').then(function (user) {
+                            // Extracts the new user information to get Unique ID
+                            var new_user_id = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyA8x_v_ISriJLvBKODINC1h9dSyhrszv_s:new_accounts_app'));
+                            // Sets the new coach UI extracted from new user info
+                            this.athleteInfo.uid = new_user_id.uid;
+                            // Signs out the new user since it is automatically signed in
+                            this.$.newAccountsAuth.signOut();
+
+                            this._saveProfileImgAndAthleteData();
+                        }.bind(this)).catch(function (err) {
+                            this._appToast.text = 'An error has ocurred trying to create the new coach. Is possible that the email is already in use.';
+                            this._appToast.open();
+                        }.bind(this));
+                    } else {
+                        this._saveProfileImgAndAthleteData();
+                    }
+                }
+            }
+
+            /**
+             * Resets the form to default values
+            */
+
+        }, {
+            key: '_resetForm',
+            value: function _resetForm() {
+                this.$.athleteForm.reset();
+                this.athleteInfo.profile_pic_name = 'default_profile.png';
+                this.athleteInfo.profile_pic_url = '../../images/app-images/default_profile.png';
+                this.$.profileImage.src = '../../images/app-images/default_profile.png';
+            }
+
+            /**
+             * Creates image preview for profile picture
+             *
+             * @param {String} image selected by user
+             * @return {void}
+            */
+
+        }, {
+            key: '_createImgPreview',
+            value: function _createImgPreview(image) {
+                this.$.profileImage.src = URL.createObjectURL(image);
+            }
+
+            /**
+             * Computes the source for the profile picture
+             *
+             * @param {String} action performed in the dialog
+             * @return {String} the source of the image
+            */
+
+        }, {
+            key: '_computeImgSrc',
+            value: function _computeImgSrc(action) {
+                return action === 'add' ? '../../images/app-images/default_profile.png' : this.athleteInfo.profile_pic_url;
+            }
+
+            /**
+             * Computes the title of the dialog depending if the user is adding or editting
+             *
+             * @param {String} action being performed by user
+             * @return {String} the title of the dialog
+            */
+
+        }, {
+            key: '_computeDialogTitle',
+            value: function _computeDialogTitle(action) {
+                return action === 'add' ? 'New Athlete' : this.athleteInfo.first + ' ' + this.athleteInfo.last;
+            }
+
+            /**
+             * If action is 'edit' some elements have to be hidden
+             *
+             * @param {String} action being performed by user
+             * @return {Boolean} true if action is editting, otherwise false
+            */
+
+        }, {
+            key: '_hideActions',
+            value: function _hideActions(action) {
+                return action === 'edit' ? true : false;
+            }
+
+            /**
+             * Opens the delete confirmation dialog
+            */
+
+        }, {
+            key: '_openDeleteDialog',
+            value: function _openDeleteDialog() {
+                this._deleteAthleteDialog.acceptedCallback = this._deleteAthlete.bind(this);
+                this._deleteAthleteDialog.text = "Test";
+                this._deleteProgramDialog.title = "Test";
+                this._deleteAthleteDialog.opened = true;
+            }
+
+            /**
+             * Deletes the athlete
+             *
+             * @param {Boolean} response from delete confirmation dialog
+             * @return {void}
+            */
+
+        }, {
+            key: '_deleteAthlete',
+            value: function _deleteAthlete(response) {
+                if (response) {
+                    // Deletes the athlete information from the coach's data
+                    this.$.firebaseDocument.destroy(this.user.uid + '/athletes/' + this.athleteInfo.uid).then(function () {
+                        // Deletes the profile picture
+                        if (this.athleteInfo.profile_pic_name !== 'default_profile.png') {
+                            this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
+                            this.$.storageRef.delete();
+                        }
+                        this.athleteInfo = null;
+                    }.bind(this));
+
+                    this._appToast.text = 'The athlete has been deleted.';
+                    this._appToast.open();
+                    this._deleteAthleteDialog.opened = false;
+                    this.opened = false;
+                }
+            }
+        }], [{
+            key: 'is',
+
+            /**
+             * Element definition
+            */
+            get: function get() {
+                return 'athletes-dialog';
+            }
+
+            /**
+             * Element properties
+            */
+
+        }, {
+            key: 'properties',
+            get: function get() {
+                return {
+                    action: String,
+                    dialogTitle: String,
+                    acceptedCallback: Function,
+                    opened: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
+                    user: {
+                        type: Object,
+                        notify: true
+                    },
+                    athleteInfo: {
+                        type: Object,
+                        notify: true,
+                        value: {
+                            uid: '',
+                            first: '',
+                            last: '',
+                            year: '',
+                            number: '',
+                            pos: '',
+                            height: '',
+                            weight: '',
+                            active: 'Yes',
+                            phone: '',
+                            email: '',
+                            instagram: '',
+                            twitter: '',
+                            hudl: '',
+                            profile_pic_name: 'default_profile.png',
+                            profile_pic_url: '../../images/app-images/default_profile.png'
+                        }
+                    }
+                };
+            }
+        }]);
+        return AthletesDialog;
+    }(Polymer.Element);
+
+    window.customElements.define(AthletesDialog.is, AthletesDialog);
+})();</script>
+</dom-module>

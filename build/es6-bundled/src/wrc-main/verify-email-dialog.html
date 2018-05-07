@@ -1,0 +1,209 @@
+<!--
+@license
+Code developed by Dorian Brown in collaboration with Codeself, Inc.
+--><!-- Polymer --><!-- Paper Elements --><!-- Iron Elements --><!-- Suji Elements --><!-- Neon Elements --><!-- Fa Icons --><div hidden="" by-polymer-bundler=""><link rel="import" href="../suji/lib/themes/azul/azul-theme.html"><link rel="import" href="../suji/lib/colors/suji-color-palette.html"><link rel="import" href="../suji/lib/themes/azul/azul-dialog.html"><link rel="import" href="../fa-icons.html"></div><dom-module id="verify-email-dialog">
+    <template>
+        <style include="wrc-shared-styles">
+
+        paper-dialog {
+          height: 290px;
+          width: 550px !important;
+          margin-top: 10px;
+        }
+
+            paper-dialog h2 {
+        				font-size: 2em;
+                font-weight: 400;
+                text-align: center;
+                margin: 0 0 5px;
+			       }
+
+            paper-dialog div.buttons {
+      				@apply --layout-horizontal;
+      				@apply --layout-end-justified;
+      			}
+
+            paper-dialog .buttons paper-button {
+      				color: var(--azul-color-shuttleGray);
+              font-weight: 500;
+      			}
+
+            div.legend {
+                @apply --layout-vertical;
+            }
+
+            div.legend iron-icon {
+                margin-bottom: 16px;
+                --iron-icon-width: 80px;
+                --iron-icon-height: 80px;
+                --iron-icon-fill-color: var(--paper-red-300);
+                --iron-icon-stroke-color: var(--paper-red-400);
+
+                @apply --layout-self-center;
+            }
+
+            div.legend p {
+                color: var(--azul-text-title);
+                font-weight: 400;
+                text-align: center;
+                font-size: 1.1em;
+                margin-bottom: 20px;
+
+                -webkit-font-smoothing: subpixel-antialiased;
+                -webkit-text-stroke:1px transparent;
+            }
+
+            div.legend ul {
+              color: var(--azul-text-title);
+              font-weight: 400;
+              font-size: 1.1em;
+
+              -webkit-font-smoothing: subpixel-antialiased;
+              -webkit-text-stroke:.6px transparent;
+            }
+
+            div.legend li {
+                margin: 0;
+                padding: 0;
+                color: var(--azul-text-title);
+                font-weight: 300;
+                font-size: .9em;
+
+                -webkit-font-smoothing: subpixel-antialiased;
+                -webkit-text-stroke:1px transparent;
+            }
+
+            .sign-out-button {
+              color: var(--azul-primary-text);
+              font-weight: 400 !important;
+              margin: 5px 0 0 0;
+            }
+
+            .done-button {
+              color: #4d98f7 !important;
+            }
+
+            div.mail-box-icon {
+              text-align: center;
+              display:inline-block;
+              font-size: 5em;
+              margin-top: 40px;
+              margin-bottom: 40px;
+            }
+
+            /* To keep dialog larger with large screens */
+    			@media screen and (min-width: 600px) {
+    				paper-dialog {
+    					width: 610px;
+    				}
+    			}
+
+            [flex] {
+                @apply --layout-flex;
+            }
+        </style>
+
+        <paper-dialog opened="{{opened}}" modal="" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+
+            <paper-dialog-scrollable>
+                  <paper-button class="sign-out-button" on-tap="_closeDialog">Sign out</paper-button>
+
+                <div class="legend">
+                  <div class="mail-box-icon"> 📬 </div>
+                    <h2>Verify your account</h2>
+                    <p>
+                        Please verify your email for your WRC account.
+                    </p>
+                </div>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <span flex=""></span>
+                <paper-button on-tap="_triggerAcceptedCallback">Verify My Email</paper-button>
+                <paper-button class="done-button" on-tap="_refreshPage">Got it</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+(function () {
+    'use strict';
+
+    var VerifyEmailDialog = function (_Polymer$Element) {
+        babelHelpers.inherits(VerifyEmailDialog, _Polymer$Element);
+
+        function VerifyEmailDialog() {
+            babelHelpers.classCallCheck(this, VerifyEmailDialog);
+            return babelHelpers.possibleConstructorReturn(this, (VerifyEmailDialog.__proto__ || Object.getPrototypeOf(VerifyEmailDialog)).apply(this, arguments));
+        }
+
+        babelHelpers.createClass(VerifyEmailDialog, [{
+            key: '_triggerAcceptedCallback',
+
+
+            /**
+             * Triggers the acceptedCallback to send verification email
+            */
+            value: function _triggerAcceptedCallback() {
+                this.acceptedCallback(true);
+            }
+
+            /**
+             * Closes the dialog and respond the action with false
+            */
+
+        }, {
+            key: '_closeDialog',
+            value: function _closeDialog() {
+                this.acceptedCallback(false);
+            }
+
+            /**
+             * Reload the current document
+            */
+
+        }, {
+            key: '_refreshPage',
+            value: function _refreshPage() {
+
+                /**
+                 *
+                 * @description location.reload(forceGet)- Optional specifies the type of reloading
+                 *
+                 * true - Reloads the current page from the server
+                 * false - Default. Reloads the current page from the cache.
+                 */
+                location.reload();
+            }
+        }], [{
+            key: 'is',
+
+            /**
+             * Element definition
+             */
+            get: function get() {
+                return 'verify-email-dialog';
+            }
+
+            /**
+             * Element properties
+             */
+
+        }, {
+            key: 'properties',
+            get: function get() {
+                return {
+                    acceptedCallback: Function,
+                    opened: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    }
+                };
+            }
+        }]);
+        return VerifyEmailDialog;
+    }(Polymer.Element);
+
+    window.customElements.define(VerifyEmailDialog.is, VerifyEmailDialog);
+})();</script>
+</dom-module>
