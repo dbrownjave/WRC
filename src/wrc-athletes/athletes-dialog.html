@@ -430,8 +430,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         }
                         this.$.firebaseStorage.put(this.$.profilePicture.files[0])
                             .then(function () {
-                                this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0]
-                                        .name)
+                                this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0].name)
                                     .then(function (url) {
                                         this.athleteInfo.profile_pic_url = url;
                                         this.athleteInfo.profile_pic_name = this.$.profilePicture.files[0].name;
@@ -454,6 +453,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             // Creates the account for the new user using his email and a default passord
                             this.$.newAccountsAuth.createUserWithEmailAndPassword(this.athleteInfo.email, 'wrc2018')
                             .then(function(user) {
+
                                 // Extracts the new user information to get Unique ID
                                 var new_user_id = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyA8x_v_ISriJLvBKODINC1h9dSyhrszv_s:new_accounts_app'));
                                 // Sets the new coach UI extracted from new user info
@@ -464,6 +464,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 this._saveProfileImgAndAthleteData();
 
                             }.bind(this))
+
                             .catch(function(err) {
                                 this._appToast.text = 'An error has ocurred trying to create the new coach. Is possible that the email is already in use.';
                                 this._appToast.open();
