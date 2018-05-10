@@ -701,9 +701,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _deleteAthlete(response) {
                     if (response) {
-                        // Deletes the athlete information from the coach's data
-                        //this.$.firebaseDocument.destroy(this.user.uid + '/athletes/' + this.athleteId)
-
+                      // Deletes the athlete information from the coach's data
+                      this.$.firebaseDocument.destroy(this.user.uid + '/athletes/' + this.athleteId)
+                        .then(function() {
                             // Deletes the profile picture
                             if (this.athleteInfo.profile_pic_name !== 'default_profile.png') {
                                 this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
@@ -715,11 +715,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         // Delete Athlete from database
                         this.$.firebaseDocument.destroy(this.athleteId)
                           .then(function(){
-                            console.log("athlete ID deleted from database");
+                            console.log("athlete ID deleted from database: ", this.athleteId);
                           })
                           .catch(function(err){
                             console.log(err);
                           });
+
+                      }.bind(this));
 
                         // Notification
                         this._appToast.text = 'The athlete has been deleted successfully.';
