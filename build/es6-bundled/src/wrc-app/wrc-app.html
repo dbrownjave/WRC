@@ -6,6 +6,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="lazy-import" href="../wrc-loading/wrc-loading.html">
 
 <!-- WRC Dialogs -->
+<!-- Icons -->
 <div hidden="" by-polymer-bundler=""><!--
 @license
 Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
@@ -52962,9 +52963,19 @@ This program is available under Apache License Version 2.0, available at https:/
   Vaadin.PasswordFieldElement = PasswordFieldElement;
 }</script>
 </dom-module>
-<link rel="import" href="../wrc-main/settings-dialog.html"><link rel="import" href="../shared/dialogs/wrc-delete-dialog.html"></div><dom-module id="wrc-app">
+<link rel="import" href="../wrc-main/settings-dialog.html"><link rel="import" href="../shared/dialogs/wrc-delete-dialog.html"><link rel="import" href="../app-icons.html"></div><dom-module id="wrc-app">
     <template>
-        <style></style>
+        <style>
+
+         #update-button {
+          min-width: 6em !important;
+          background-color: rgb(188, 188, 188, .30);
+          margin: 0 0 0 15px;
+          padding: 3px;
+          text-transform: none;
+        }
+
+        </style>
 
         <!-- App Routing Configuration -->
         <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
@@ -52988,13 +52999,17 @@ This program is available under Apache License Version 2.0, available at https:/
         </iron-pages>
 
         <!-- Service Worker Notification -->
-        <paper-toast id="updateToast" duration="0" text="Install New Update">
-        <paper-button onclick="window.location.reload(true)">
-              Update
+        <paper-toast id="updateToast" duration="0">
+        <iron-icon icon="app-icons:cached"></iron-icon>
+        Update Available
+        <paper-button id="update-button" onclick="window.location.reload(true)"> <!-- refresh page  -->
+              Install
         </paper-button>
+        <!--
         <paper-button onclick="updateToast.toggle()">
             Cancel
         </paper-button>
+        -->
       </paper-toast>
 
     </template>
