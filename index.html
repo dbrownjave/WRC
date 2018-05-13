@@ -76,9 +76,37 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				window.addEventListener('load', function () {
 					navigator.serviceWorker.register('service-worker.js', {
 						scope: Polymer.rootPath,
-					});
+					}).then(function(registration){
+
+			      var app = document.querySelector('#app');
+
+						if (registration.waiting) {
+			        app.update(registration);
+							console.log("registration waiting...");
+			        return;
+			      }
+
+			      if (registration.installing) {
+			        registration.installing.addEventListener('statechange', function () {
+			          app.update(registration);
+								console.log("registration updating...");
+			        });
+			        return;
+			      }
+
+			      registration.addEventListener('updatefound', function () {
+			        app.update(registration);
+							console.log("update found!");
+			      });
+
+			      console.info('ServiceWorker registration successful with scope: ', registration.scope);
+			    }, function (err) {
+			      console.info('ServiceWorker registration failed: ', err);
+			    });
 				});
 			}
+
+
 		</script>
 
 		<!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
@@ -186,7 +214,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 		<wrc-delete-dialog id="appDeleteDialog"></wrc-delete-dialog>
 
 		<!-- App Shell -->
-		<wrc-app></wrc-app>
+		<wrc-app id="app"></wrc-app>
 
 		<noscript>
 			Please enable JavaScript to view this website.

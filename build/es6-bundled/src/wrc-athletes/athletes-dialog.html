@@ -288,6 +288,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     if (this.action === 'add') {
                         // Creates the account for the new user using his email and a default passord
                         this.$.newAccountsAuth.createUserWithEmailAndPassword(this.athleteInfo.email, 'wrc2018').then(function (user) {
+
                             // Extracts the new user information to get Unique ID
                             var new_user_id = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyA8x_v_ISriJLvBKODINC1h9dSyhrszv_s:new_accounts_app'));
                             // Sets the new coach UI extracted from new user info

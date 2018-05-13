@@ -819,16 +819,15 @@ customElements.define(PolymerCordovaInappbrowserHtml.is, PolymerCordovaInappbrow
                         if (this.athleteInfo.profile_pic_name !== 'default_profile.png') {
                             this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
                             this.$.storageRef.delete();
+
+                            console.log("profile photo:", deleted);
                         }
 
-                        this.$.firebaseDocument.destroy(this.athleteId);
-
-                        this._resetForm();
-
-                        admin.auth().deleteUser(this.athleteId).then(function () {
-                            console.log("Successfully deleted user");
-                        }).catch(function (error) {
-                            console.log("Error deleting user:", error);
+                        // Delete Athlete from database
+                        this.$.firebaseDocument.destroy(this.athleteId).then(function () {
+                            console.log("athlete ID deleted from database: ", this.athleteId);
+                        }).catch(function (err) {
+                            console.log(err);
                         });
                     }.bind(this));
 

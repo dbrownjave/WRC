@@ -96,6 +96,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <wrc-main name="main" route="[[subroute]]"></wrc-main>
             <wrc-loading name="loading"></wrc-loading>
         </iron-pages>
+
+        <!-- Service Worker Notification -->
+        <paper-toast id="updateToast" duration="0" text="Install New Update">
+        <paper-button onclick="window.location.reload(true)">
+              Update
+        </paper-button>
+        <paper-button onclick="updateToast.toggle()">
+            Cancel
+        </paper-button>
+      </paper-toast>
+
     </template>
 
     <script>
@@ -202,6 +213,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this.page = 'main';
                     }
                 }
+
+                // update function for sw
+                update(worker) {
+                   this.$.updateToast.show();
+                }
+
             }
             window.customElements.define(WrcApp.is, WrcApp);
         })();

@@ -37,7 +37,7 @@
 /* eslint-disable indent, no-unused-vars, no-multiple-empty-lines, max-nested-callbacks, space-before-function-paren, quotes, comma-spacing */
 'use strict';
 
-var precacheConfig = [["bower_components/webcomponentsjs/webcomponents-loader.js","f13bbbbf647b7922575a7894367ddaaf"],["images/wrc.ico","9300fbf7c724731d1578465c9ba80714"],["index.html","ddfb0a93dfc10ea3a7911596c79a36f1"],["manifest.json","1845171d3c4fe9ebe6a48852f4347b34"],["src/app-icons.html","abc0814d7c598f271867b6e27c132b9c"],["src/fa-icons.html","2f1d8f08863331cff6a30eb15b09ba43"],["src/pdf-workout-creator/pdf-workout-creator.html","6b8ac75e6d620db310c74b87c427c3a6"],["src/shared-styles.html","d6247a1922925151a81c76b00a1ce1ba"],["src/shared/dialogs/wrc-delete-dialog.html","fa70045bd52d3f8e07aa8c65238c33bc"],["src/suji/lib/colors/suji-color-palette.html","b9dccb51022fb5d08835c5914066e1ce"],["src/suji/lib/elements/suji-dialog.html","71a190f4ed21c00a037026672574d713"],["src/suji/lib/themes/azul/azul-dialog.html","a415ff682def3b59b7b761a5dc07c745"],["src/suji/lib/themes/azul/azul-theme.html","a572e43a4abe0ac15f7c3dd94606381f"],["src/wrc-active-workouts/wrc-active-workouts.html","88cb596a5b5b1cc807faed28034c1fc2"],["src/wrc-assign-workouts/download-program-dialog.html","a917b0806c681eaf6267f24fa5451351"],["src/wrc-assign-workouts/wrc-assign-workouts.html","c5f5a0c7956cfc4c899a122023faac4e"],["src/wrc-athletes/athlete-profile-dialog.html","a0395357d5784e58c55b6dd02aadcc9c"],["src/wrc-athletes/athlete-stats-dialog.html","f3d62c1ff76c7604c4423ab6d8f5731a"],["src/wrc-athletes/athletes-dialog.html","5e777af310247f30d56d76bbc3aed85c"],["src/wrc-athletes/delete-athlete-dialog.html","dc73e15aa6cb8922a2333e9fa96cf7f2"],["src/wrc-athletes/wrc-athletes.html","b830dc5a68adbc7d573cc7e9e7ec67c5"],["src/wrc-coaches/coach-profile-dialog.html","541fef97c6c6f3f3f5c2b1e050f6ad3a"],["src/wrc-coaches/wrc-coaches.html","99724956ecc552c8dae1e20b88ca4086"],["src/wrc-library/video-dialog.html","ada7a2ce9d866d7d5eb6e118b1ef1af3"],["src/wrc-library/wrc-library.html","3a458b8835c7ecb5aa31c3a8c0464edd"],["src/wrc-loading/wrc-loading.html","a7913474b14277d14b28b8f054b00d25"],["src/wrc-login/recover-password-dialog.html","8d9888c982f6f1fd044157421b92b663"],["src/wrc-login/wrc-login.html","a1065903956174680062485d60ae5d68"],["src/wrc-main/max-calculator-dialog.html","ea0498c11519774d28928ad190be7037"],["src/wrc-main/settings-dialog.html","cae251c42beaf47064735c5261236cb8"],["src/wrc-main/user-profile-dialog.html","f0faab0c8f0955c5d4e8e0ca9be162d7"],["src/wrc-main/verify-email-dialog.html","746c29c62fa423f372ffed16b92a54bc"],["src/wrc-main/wrc-main.html","c2f9742f2e4dda60310ed157f6691f55"],["src/wrc-programs/add-program-dialog.html","7ad161c81b002b0f5506048a64dbf883"],["src/wrc-programs/wrc-programs.html","a781d4c980d80ef0c5ec82305347659a"],["src/wrc-workout-collection/wrc-workout-collection.html","f0af9239b8cb8450d4b0b7dade071efc"],["src/wrc-workouts-creator/wrc-workouts-creator.html","c7c53e7f59222c4c21df14411fba46c9"],["src/wrc-workouts/add-workout-dialog.html","ab76e57d09710b6feaa03e7eab2a19a8"],["src/wrc-workouts/wrc-workouts.html","dc02dc625ae6c0cfbe4a564d60e225f0"]];
+var precacheConfig = [["bower_components/webcomponentsjs/webcomponents-loader.js","f13bbbbf647b7922575a7894367ddaaf"],["images/wrc.ico","9300fbf7c724731d1578465c9ba80714"],["index.html","42ab9de2397a50f65a1418ec57bd3ad6"],["manifest.json","1845171d3c4fe9ebe6a48852f4347b34"],["src/app-icons.html","abc0814d7c598f271867b6e27c132b9c"],["src/fa-icons.html","2f1d8f08863331cff6a30eb15b09ba43"],["src/pdf-workout-creator/pdf-workout-creator.html","6b8ac75e6d620db310c74b87c427c3a6"],["src/shared-styles.html","d6247a1922925151a81c76b00a1ce1ba"],["src/shared/dialogs/wrc-delete-dialog.html","fa70045bd52d3f8e07aa8c65238c33bc"],["src/suji/lib/colors/suji-color-palette.html","b9dccb51022fb5d08835c5914066e1ce"],["src/suji/lib/elements/suji-dialog.html","71a190f4ed21c00a037026672574d713"],["src/suji/lib/themes/azul/azul-dialog.html","a415ff682def3b59b7b761a5dc07c745"],["src/suji/lib/themes/azul/azul-theme.html","a572e43a4abe0ac15f7c3dd94606381f"],["src/wrc-active-workouts/wrc-active-workouts.html","88cb596a5b5b1cc807faed28034c1fc2"],["src/wrc-assign-workouts/download-program-dialog.html","08556b2c1235453f69fb9b1a9079f733"],["src/wrc-assign-workouts/wrc-assign-workouts.html","c5f5a0c7956cfc4c899a122023faac4e"],["src/wrc-athletes/athlete-profile-dialog.html","c0d4e0b45b0b6d19103c4cb89d548327"],["src/wrc-athletes/athlete-stats-dialog.html","72946b44edc3c89191dcaa2c6876cfbf"],["src/wrc-athletes/athletes-dialog.html","add2a7ebb9d978f17fb11af909441a30"],["src/wrc-athletes/delete-athlete-dialog.html","dc73e15aa6cb8922a2333e9fa96cf7f2"],["src/wrc-athletes/wrc-athletes.html","2c97cfcdc88c19db74bbb5eefb8911a5"],["src/wrc-coaches/coach-profile-dialog.html","541fef97c6c6f3f3f5c2b1e050f6ad3a"],["src/wrc-coaches/wrc-coaches.html","99724956ecc552c8dae1e20b88ca4086"],["src/wrc-library/video-dialog.html","ada7a2ce9d866d7d5eb6e118b1ef1af3"],["src/wrc-library/wrc-library.html","3a458b8835c7ecb5aa31c3a8c0464edd"],["src/wrc-loading/wrc-loading.html","a7913474b14277d14b28b8f054b00d25"],["src/wrc-login/recover-password-dialog.html","91465b9098e6e4426176862e868dc5ec"],["src/wrc-login/wrc-login.html","67e4b62d05c4ebeede4a6e85bc5505c9"],["src/wrc-main/max-calculator-dialog.html","ea0498c11519774d28928ad190be7037"],["src/wrc-main/settings-dialog.html","cae251c42beaf47064735c5261236cb8"],["src/wrc-main/user-profile-dialog.html","f0faab0c8f0955c5d4e8e0ca9be162d7"],["src/wrc-main/verify-email-dialog.html","746c29c62fa423f372ffed16b92a54bc"],["src/wrc-main/wrc-main.html","c2f9742f2e4dda60310ed157f6691f55"],["src/wrc-programs/add-program-dialog.html","7ad161c81b002b0f5506048a64dbf883"],["src/wrc-programs/wrc-programs.html","a781d4c980d80ef0c5ec82305347659a"],["src/wrc-workout-collection/wrc-workout-collection.html","f0af9239b8cb8450d4b0b7dade071efc"],["src/wrc-workouts-creator/wrc-workouts-creator.html","80b03e0abdddc6c73200ea8d53e63f25"],["src/wrc-workouts/add-workout-dialog.html","b661e751c296a7da714030a71e8a819c"],["src/wrc-workouts/wrc-workouts.html","dc02dc625ae6c0cfbe4a564d60e225f0"]];
 var cacheName = 'sw-precache-v3--' + (self.registration ? self.registration.scope : '');
 
 
@@ -176,10 +176,10 @@ self.addEventListener('install', function(event) {
         );
       });
     }).then(function() {
-
+      
       // Force the SW to transition from installing -> active state
       return self.skipWaiting();
-
+      
     })
   );
 });
@@ -199,9 +199,9 @@ self.addEventListener('activate', function(event) {
         );
       });
     }).then(function() {
-
+      
       return self.clients.claim();
-
+      
     })
   );
 });
@@ -262,7 +262,7 @@ self.addEventListener('fetch', function(event) {
 
 
 // *** Start of auto-included sw-toolbox code. ***
-/*
+/* 
  Copyright 2016 Google Inc. All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -286,3 +286,7 @@ self.addEventListener('fetch', function(event) {
 // Runtime cache configuration, using the sw-toolbox library.
 
 toolbox.router.get(/\/bower_components\/webcomponentsjs\/.*.js/, toolbox.fastest, {"cache":{"name":"webcomponentsjs-polyfills-cache"}});
+
+
+
+
