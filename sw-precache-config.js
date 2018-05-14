@@ -8,7 +8,7 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-/* eslint-env node */
+/* eslint-env node
 
 module.exports = {
   staticFileGlobs: [
@@ -16,6 +16,30 @@ module.exports = {
     'images/*',
     'manifest.json',
   ],
+  runtimeCaching: [
+    {
+      urlPattern: /\/bower_components\/webcomponentsjs\/.*.js/,
+      handler: 'fastest',
+      options: {
+        cache: {
+          name: 'webcomponentsjs-polyfills-cache',
+        },
+      },
+    },
+  ],
+};
+*/
+
+module.exports = {
+
+  staticFileGlobs: [
+    '/index.html',
+    '/manifest.json',
+    '/bower_components/webcomponentsjs/webcomponents-lite.js',
+    '/images/*'
+  ],
+  navigateFallback: '/index.html',
+  navigateFallbackWhitelist: [/^(?!.*\.html$|\/data\/).*/],
   runtimeCaching: [
     {
       urlPattern: /\/bower_components\/webcomponentsjs\/.*.js/,

@@ -20,6 +20,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Polymerfire Elements -->
 <link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 
 <!-- Suji Elements -->
 <link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
@@ -55,15 +56,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <dom-module id="wrc-app">
     <template>
         <style>
-
-         #update-button {
-          min-width: 6em !important;
-          background-color: rgb(188, 188, 188, .30);
-          margin: 0 0 0 15px;
-          padding: 3px;
-          text-transform: none;
-        }
-
         </style>
 
         <!-- App Routing Configuration -->
@@ -98,6 +90,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             user="{{user}}"
             signed-in="{{signedIn}}"></firebase-auth>
 
+        <!-- Firebase Document Configuration | Configs application -->
+        <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
+
         <!-- Controls views -->
         <iron-pages
             role="main"
@@ -110,19 +105,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <wrc-loading name="loading"></wrc-loading>
         </iron-pages>
 
-        <!-- Service Worker Notification -->
-        <paper-toast id="updateToast" duration="0">
-        <iron-icon icon="app-icons:cached"></iron-icon>
-        Update Available
-        <paper-button id="update-button" onclick="window.location.reload(true)"> <!-- refresh page  -->
-              Install
-        </paper-button>
-        <!--
-        <paper-button onclick="updateToast.toggle()">
-            Cancel
-        </paper-button>
-        -->
-      </paper-toast>
 
     </template>
 
@@ -160,6 +142,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             notify: true,
                             reflectToAttribute: true,
                             observer: '_signedInChanged'
+                        },
+                        _appVersion: {
+                            type: Object
                         }
                     };
                 }
@@ -172,6 +157,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 static get observers() {
                     return [
                         '_routePageChanged(routeData.page)',
+                        '_manageNewVersion(_appVersion)'
                     ];
                 }
 
@@ -230,12 +216,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this.page = 'main';
                     }
                 }
-
-                // update function for sw
-                update(worker) {
-                   this.$.updateToast.show();
-                }
-
             }
             window.customElements.define(WrcApp.is, WrcApp);
         })();

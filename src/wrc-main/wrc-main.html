@@ -22,6 +22,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <!-- Iron Elements -->
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
@@ -77,6 +78,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 --paper-spinner-layer-3-color: var(--azul-primary);
                 --paper-spinner-layer-4-color: var(--azul-primary);
             }
+
+            #update-button {
+             min-width: 6em !important;
+             background-color: rgb(188, 188, 188, .30);
+             margin: 0 0 0 15px;
+             padding: 3px;
+             text-transform: none;
+           }
 
             div.user-status {
                 margin: 1em 0;
@@ -402,6 +411,21 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 </app-header>
             </app-header-layout>
         </app-drawer-layout>
+
+
+        <!-- Service Worker Notification -->
+        <paper-toast id="updateToast" duration="0">
+        <iron-icon icon="app-icons:cached"></iron-icon>
+        Update Available
+        <paper-button id="update-button" on-tap="_refreshApp">
+        Install
+        </paper-button>
+        <!--
+        <paper-button onclick="_hide">
+            Cancel
+        </paper-button>
+        -->
+      </paper-toast>
     </template>
 
     <script>
@@ -451,6 +475,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             notify: true,
                             reflectToAttribute: true
                         },
+                        appVersion: {
+                            type: Object,
+                            notify: true,
+                            value: function() { return {}; }
+
+                        },
                         userRole: String,
                         userPath: String
                     };
@@ -463,7 +493,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 static get observers() {
                     return [
-                        '_routePageChanged(routeData.page, userRole)'
+                        '_routePageChanged(routeData.page, userRole)',
+                        '_manageNewVersion(_appVersion)'
                     ];
                 }
 
@@ -487,6 +518,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // Max Calculator Dialog
                     this._maxCalculatorDialog = document.getElementById('maxCalculatorDialog');
+
+                    // Check for App updates
+                    this._manageNewVersion();
+
                 }
 
                 /**
@@ -535,6 +570,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     }
                 }
 
+
                 /**
                  * Observes for changes in the property page
                  */
@@ -550,6 +586,55 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _showPage404() {
                     this.page = 'login';
                 }
+
+                _manageNewVersion() {
+                  self = this;
+                  console.info('Current App Version: ', window.myApp.version);
+
+                  // Retrieve data
+                  this.$.firebaseDocument.getStoredValue('config/version')
+                    .then(function (version) {
+
+                      console.log(version);
+
+                              // Prevents getting empty verison node, if version != to new version then update app with new version
+                              if (version !=  window.myApp.version) {
+                                  console.log("current version: " + window.myApp.version + " |  new version: " + version );
+                                  self.$.updateToast.open();
+                              }
+
+                              console.log("Firebase Version: " + version);
+                          }).catch(function (err) {
+                              console.log("error");
+                              console.log(err);
+                          });
+              }
+
+              // hide toast
+              _hide(){
+                self = this;
+                self.$.updateToast.hide();
+              }
+
+              // refresh page
+              _refreshApp() {
+                // Retrieve data
+                this.$.firebaseDocument.getStoredValue('config/version')
+                  .then(function (version) {
+
+                    console.log(version);
+
+                    window.registerSW(version);
+                    setTimeout(() => {
+                      window.location.reload(true);
+                    }, 1000);
+
+                  console.log("Firebase Version: " + version);
+                  }).catch(function (err) {
+                    console.log("error");
+                      console.log(err);
+                  });
+              }
 
                 /**
                  * Observer for changes in user
@@ -777,6 +862,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._settingsDialog.userRole = this.userRole;
                     this._settingsDialog.opened = true;
                 }
+
+
             }
             window.customElements.define(WrcMain.is, WrcMain);
         })();

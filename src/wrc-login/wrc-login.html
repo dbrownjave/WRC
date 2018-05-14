@@ -22,6 +22,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 <!-- Polymerfire Elements -->
 <link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 
 <!-- Suji Elements -->
 <link rel="import" href="../suji/lib/themes/azul/azul-theme.html">
@@ -148,6 +149,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <!-- Firebase Authentication Configuration -->
         <firebase-auth id="firebaseAuth" app-name="wrc_software" user="{{user}}" signed-in="{{signedIn}}" on-success="_handleSuccess"
             on-error="_handleError"></firebase-auth>
+
+
+            		<!-- Firebase Document Configuration -->
+            		<firebase-document
+            			id="firebaseDocument"
+            			app-name="wrc_software"></firebase-document>
+
 
         <!-- Element UI -->
         <main>
@@ -321,6 +329,22 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _openRestorePasswordDialog() {
                     this._recoverDialog.acceptedCallback = this._onRecoverPasswordDialog.bind(this);
                     this._recoverDialog.opened = true;
+
+
+
+                    this.$.firebaseDocument.getStoredValue('config/version')
+                    .catch(function(err) {
+                        this._appToast.text = 'There has been an error. Please try again.';
+                        this._appToast.open();
+                    }.bind(this));
+
+                    this.$.firebaseDocument.getStoredValue('config/version')
+                    .then(function(version) {
+                        this._appToast.text = version;
+                        this._appToast.open();
+                    }.bind(this));
+
+
                 }
 
                 /**
