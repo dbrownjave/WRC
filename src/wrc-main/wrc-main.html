@@ -81,7 +81,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             #update-button {
              min-width: 6em !important;
-             background-color: rgb(188, 188, 188, .30);
+             background-color: rgba(188, 188, 188, .30);
              margin: 0 0 0 15px;
              padding: 3px;
              text-transform: none;
@@ -280,6 +280,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
         <!-- Firebase Document Configuration -->
         <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
 
+        <!-- Firebase App Version Document Configuration -->
+        <firebase-document
+            id="firebaseAppVersion"
+            app-name="wrc_software"
+            path="config/version"
+            data="{{firebaseAppVersion}}">
+        </firebase-document>
+
         <!-- Coaches Query -->
         <firebase-query app-name="wrc_software" path="[[user.uid]]/coaches" data="{{coachesData}}"></firebase-query>
 
@@ -475,15 +483,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             notify: true,
                             reflectToAttribute: true
                         },
-                        appVersion: {
+                        firebaseAppVersion: {
                             type: String,
                             notify: true,
-                            computed:'_updateAppVersion()',
                             observer: '_appVersionChanged'
-                        },
-                        newAppVersion: {
-                          type: String,
-                          notify: true
                         },
                         userRole: String,
                         userPath: String
@@ -497,13 +500,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 static get observers() {
                     return [
-                        '_routePageChanged(routeData.page, userRole)'
+                        '_routePageChanged(routeData.page, userRole)',
+                        '_manageNewAppVersion(firebaseAppVersion)'
                     ];
                 }
 
-                // Observer method defined as a class method
-                _appVersionChanged(appVersion) {
-                  console.log("App Version Changed: ", appVersion);
+                /**
+                 * App Version Observer
+                 *
+                 * @description This functions observes for changes in firebase "config/version" value property
+                 */
+                _appVersionChanged(newAppVersion, oldAppVersion) {
+                  if(newAppVersion){
+                    console.log("App Version Observer: ", newAppVersion);
+                  }
                 }
 
                 ready() {
@@ -526,13 +536,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // Max Calculator Dialog
                     this._maxCalculatorDialog = document.getElementById('maxCalculatorDialog');
-
-                    // Retrieve App Version
-                    this._appVersion();
-
-                    // Check for App updates
-                    //this._manageNewAppVersion();
-
                 }
 
                 /**
@@ -598,58 +601,52 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.page = 'login';
                 }
 
-                _appVersion() {
-                    // Retrieve data
-                    this.$.firebaseDocument.getStoredValue('config/version')
-                      .then(function (version) {
-                        console.log("FIREBASE 🔥 APPLICATION VERSION");
-                        console.log("Firebase App Version: " + version);
-
-                        // Set Current App Verison
-                        this._updateAppVersion(version);
-
-                        // Check for App updates
-                        this._manageNewAppVersion(version);
-
-                      }.bind(this))
-                       .catch(function (err) {
-                        console.log("error", err);
-                      }.bind(this));
-                }
-
-                _updateAppVersion(firebaseAppVersion) {
-                  return firebaseAppVersion;
-                  console.log("Set App Version: ", firebaseAppVersion);
-                }
-
-                _manageNewAppVersion(firebaseAppVersion) {
-
+                /**
+                 * Application Version Notification
+                 *
+                 * @description compares the current app version with new app verison to determine to display update Notification
+                 */
+                _manageNewAppVersion() {
                   self = this;
+
                   console.log("MANAGE NEW APPLICATION VERSION");
                   console.info('Current App Version: ', window.myApp.version);
-                  console.log('Firebase 🔥 App Version: ', firebaseAppVersion);
+                  console.log('Firebase 🔥 App Version: ', self.firebaseAppVersion);
 
-                  // Prevents getting empty verison node, if version != to new version then update app with new version
-                  if (firebaseAppVersion != window.myApp.version) {
-                      console.log();
-                      console.log("NEW APP VERSION AVAILABLE!");
-                      console.log("current version: " + window.myApp.version + " |  new 🔥 version: " + firebaseAppVersion);
-                      self.$.updateToast.open();
+                  // Converts object to string
+                  String(self.firebaseAppVersion);
+
+                  if (typeof self.firebaseAppVersion === 'string') {
+                    // Prevents getting empty verison node, if version != to new version, then update app with new version
+                    if (self.firebaseAppVersion !== window.myApp.version && self.firebaseAppVersion !== null && typeof self.firebaseAppVersion !== 'object') {
+                        console.log();
+                        console.log("NEW APP VERSION AVAILABLE!");
+                        console.log("current version: " + window.myApp.version + " |  new 🔥 version: " + self.firebaseAppVersion);
+                        self.$.updateToast.open();
+                    }
                   }
                 }
 
-
-                // hide toast
+                /**
+                 * Hide toast
+                 *
+                 * @description hide toast functionality
+                 */
                 _hide(){
                   self = this;
                   self.$.updateToast.hide();
                 }
 
-                // refresh page
+                /**
+                 * Refresh Page
+                 *
+                 * @description refresh page and re-register new service worker
+                 */
                 _refreshApp() {
-                   console.log("Current App Version: ", this.appVersion);
+                   console.log("Refresh()");
+                   console.log("Current App Version: ", window.myApp.verison);
 
-                    window.registerSW(this.appVersion);
+                    window.registerSW(this.firebaseAppVersion);
                     setTimeout(() => {
                       window.location.reload(true);
                     }, 1000);
