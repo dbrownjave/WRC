@@ -67,44 +67,48 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 * to indicate the path from which you'll be serving, including leading
 * and trailing slashes (e.g., `/my-app/`).
 */
+/*
 window.Polymer = {
 	rootPath: '/'
 };
+`````*/
 
-// Load and register pre-caching Service Worker
+// configuraion
+window.Polymer = { rootPath: '/' };
+
+// Change Version before deploy to firebase
+window.myApp = { version: '0.0.03' };
+
+/* Load and register pre-caching Service Worker
 if ('serviceWorker' in navigator) {
 	window.addEventListener('load', function () {
 		navigator.serviceWorker.register('service-worker.js', {
-			scope: Polymer.rootPath
-		}).then(function (registration) {
-
-			var app = document.querySelector('#app');
-
-			if (registration.waiting) {
-				app.update(registration);
+			scope: Polymer.rootPath,
+		}).then(function(registration){
+	      var app = document.querySelector('#app');
+				if (registration.waiting) {
+        app.update(registration);
 				console.log("registration waiting...");
-				return;
-			}
-
-			if (registration.installing) {
-				registration.installing.addEventListener('statechange', function () {
-					app.update(registration);
+        return;
+      }
+	      if (registration.installing) {
+        registration.installing.addEventListener('statechange', function () {
+          app.update(registration);
 					console.log("registration updating...");
-				});
-				return;
-			}
-
-			registration.addEventListener('updatefound', function () {
-				app.update(registration);
+        });
+        return;
+      }
+	      registration.addEventListener('updatefound', function () {
+        app.update(registration);
 				console.log("update found!");
-			});
-
-			console.info('ServiceWorker registration successful with scope: ', registration.scope);
-		}, function (err) {
-			console.info('ServiceWorker registration failed: ', err);
-		});
+      });
+	      console.info('ServiceWorker registration successful with scope: ', registration.scope);
+    }, function (err) {
+      console.info('ServiceWorker registration failed: ', err);
+    });
 	});
-}</script>
+}
+*/</script>
 
 		<!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
 		
@@ -112,6 +116,9 @@ if ('serviceWorker' in navigator) {
     <script type="text/javascript" src="bower_components/webcomponentsjs/custom-elements-es5-adapter.js"></script>
     <!--! do not remove -->
 <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+
+		<!-- Service Worker Registeration-->
+		<script src="src/js/service-worker-registration.js"></script>
 
 		<!-- Load your application shell -->
 		<link rel="import" href="src/wrc-app/wrc-app.html">

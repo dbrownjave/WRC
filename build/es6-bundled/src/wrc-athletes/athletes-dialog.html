@@ -261,12 +261,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 if (this.$.profilePicture.files[0]) {
                     if (this.action === 'edit' && this.athleteInfo.profile_pic_name !== 'default_profile.png') {
                         this.$.storageRef.path = '/profile-pics/' + this.athleteInfo.profile_pic_name;
+                        console.log("current athlete photo name", this.athleteInfo.profile_pic_name);
                         this.$.storageRef.delete();
+                        console.log("deleted current photo successfully");
                     }
                     this.$.firebaseStorage.put(this.$.profilePicture.files[0]).then(function () {
                         this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0].name).then(function (url) {
                             this.athleteInfo.profile_pic_url = url;
                             this.athleteInfo.profile_pic_name = this.$.profilePicture.files[0].name;
+                            console.log("new athlete photo name", this.athleteInfo.profile_pic_name);
                             this.acceptedCallback(this.athleteInfo);
                         }.bind(this));
                     }.bind(this));

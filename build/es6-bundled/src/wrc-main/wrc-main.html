@@ -2781,6 +2781,14 @@ Polymer.AppLayout.registerEffect('resize-snapped-title', {
                 --paper-spinner-layer-4-color: var(--azul-primary);
             }
 
+            #update-button {
+             min-width: 6em !important;
+             background-color: rgba(188, 188, 188, .30);
+             margin: 0 0 0 15px;
+             padding: 3px;
+             text-transform: none;
+           }
+
             div.user-status {
                 margin: 1em 0;
 
@@ -2974,6 +2982,10 @@ Polymer.AppLayout.registerEffect('resize-snapped-title', {
         <!-- Firebase Document Configuration -->
         <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
 
+        <!-- Firebase App Version Document Configuration -->
+        <firebase-document id="firebaseAppVersion" app-name="wrc_software" path="config/version" data="{{firebaseAppVersion}}">
+        </firebase-document>
+
         <!-- Coaches Query -->
         <firebase-query app-name="wrc_software" path="[[user.uid]]/coaches" data="{{coachesData}}"></firebase-query>
 
@@ -3105,6 +3117,21 @@ Polymer.AppLayout.registerEffect('resize-snapped-title', {
                 </app-header>
             </app-header-layout>
         </app-drawer-layout>
+
+
+        <!-- Service Worker Notification -->
+        <paper-toast id="updateToast" duration="0" horizontal-align="right" vertical-align="top" vertical-offset="10" dynamicalign="true">
+        <iron-icon icon="app-icons:cached"></iron-icon>
+        Update Available
+        <paper-button id="update-button" on-tap="_refreshApp">
+        Install
+        </paper-button>
+        <!--
+        <paper-button onclick="_hide">
+            Cancel
+        </paper-button>
+        -->
+      </paper-toast>
     </template>
 
     <script>
@@ -3120,6 +3147,20 @@ Polymer.AppLayout.registerEffect('resize-snapped-title', {
         }
 
         babelHelpers.createClass(WrcMain, [{
+            key: '_appVersionChanged',
+
+
+            /**
+             * App Version Observer
+             *
+             * @description This functions observes for changes in firebase "config/version" value property
+             */
+            value: function _appVersionChanged(newAppVersion, oldAppVersion) {
+                if (newAppVersion) {
+                    console.log("App Version Observer: ", newAppVersion);
+                }
+            }
+        }, {
             key: 'ready',
             value: function ready() {
                 babelHelpers.get(WrcMain.prototype.__proto__ || Object.getPrototypeOf(WrcMain.prototype), 'ready', this).call(this);
@@ -3206,6 +3247,69 @@ Polymer.AppLayout.registerEffect('resize-snapped-title', {
             key: '_showPage404',
             value: function _showPage404() {
                 this.page = 'login';
+            }
+
+            /**
+             * Application Version Notification
+             *
+             * @description compares the current app version with new app verison to determine to display update Notification
+             */
+
+        }, {
+            key: '_manageNewAppVersion',
+            value: function _manageNewAppVersion() {
+                self = this;
+
+                // Converts object to string
+                String(self.firebaseAppVersion);
+
+                console.log("MANAGE NEW APPLICATION VERSION");
+                console.info('Current App Version: ', window.myApp.version);
+                console.log('Firebase 🔥 App Version: ', self.firebaseAppVersion);
+
+                if (typeof self.firebaseAppVersion === 'string') {
+                    // Prevents getting empty verison node, if version != to new version, then update app with new version
+                    if (self.firebaseAppVersion !== window.myApp.version && self.firebaseAppVersion !== null && babelHelpers.typeof(self.firebaseAppVersion) !== 'object') {
+                        console.log();
+                        console.log("NEW APP VERSION AVAILABLE!");
+                        console.log("current version: " + window.myApp.version + " |  new 🔥 version: " + self.firebaseAppVersion);
+                        self.$.updateToast.open();
+                    }
+                }
+            }
+
+            /**
+             * Hide toast
+             *
+             * @description hide toast functionality
+             */
+
+        }, {
+            key: '_hide',
+            value: function _hide() {
+                self = this;
+                self.$.updateToast.hide();
+            }
+
+            /**
+             * Refresh Page
+             *
+             * @description refresh page and re-register new service worker
+             */
+
+        }, {
+            key: '_refreshApp',
+            value: function _refreshApp() {
+                console.log("Refresh()");
+                console.log("Current App Version: ", window.myApp.verison);
+
+                window.registerSW(this.firebaseAppVersion);
+                setTimeout(function () {
+                    // Reload the current page, without using the cache
+                    window.location.reload(true);
+                }, 1000);
+
+                console.log("New App Version: ", window.myApp.version);
             }
 
             /**
@@ -3511,6 +3615,11 @@ Polymer.AppLayout.registerEffect('resize-snapped-title', {
                         notify: true,
                         reflectToAttribute: true
                     },
+                    firebaseAppVersion: {
+                        type: String,
+                        notify: true,
+                        observer: '_appVersionChanged'
+                    },
                     userRole: String,
                     userPath: String
                 };
@@ -3525,7 +3634,7 @@ Polymer.AppLayout.registerEffect('resize-snapped-title', {
         }, {
             key: 'observers',
             get: function get() {
-                return ['_routePageChanged(routeData.page, userRole)'];
+                return ['_routePageChanged(routeData.page, userRole)', '_manageNewAppVersion(firebaseAppVersion)'];
             }
         }]);
         return WrcMain;

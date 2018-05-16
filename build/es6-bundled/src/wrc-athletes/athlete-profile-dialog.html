@@ -813,23 +813,22 @@ customElements.define(PolymerCordovaInappbrowserHtml.is, PolymerCordovaInappbrow
             key: '_deleteAthlete',
             value: function _deleteAthlete(response) {
                 if (response) {
-                    // Deletes the athlete information from the coach's data
-                    this.$.firebaseDocument.destroy(this.user.uid + '/athletes/' + this.athleteId).then(function () {
-                        // Deletes the profile picture
-                        if (this.athleteInfo.profile_pic_name !== 'default_profile.png') {
-                            this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
-                            this.$.storageRef.delete();
 
-                            console.log("profile photo:", deleted);
-                        }
+                    // Deletes the profile picture
+                    if (this.athleteInfo.profile_pic_name !== 'default_profile.png') {
+                        this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
+                        console.log("profile photo path: ", this.$.storageRef.path);
+                        this.$.storageRef.delete();
+                    }
 
-                        // Delete Athlete from database
-                        this.$.firebaseDocument.destroy(this.athleteId).then(function () {
-                            console.log("athlete ID deleted from database: ", this.athleteId);
-                        }).catch(function (err) {
-                            console.log(err);
-                        });
-                    }.bind(this));
+                    console.log("preparing to delete athlete, ID: ", this.athleteId);
+
+                    // Delete Athlete from database
+                    this.$.firebaseDocument.destroy(this.athleteId).then(function (athleteId) {
+                        console.log("athlete deleted from database successfully");
+                    }).catch(function (err) {
+                        console.log(err);
+                    });
 
                     // Notification
                     this._appToast.text = 'The athlete has been deleted successfully.';

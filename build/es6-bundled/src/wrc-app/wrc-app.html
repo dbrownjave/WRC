@@ -19517,7 +19517,7 @@ In order to apply the `Roboto` font to this element, make sure you've imported `
         padding: 16px 24px;
         box-sizing: border-box;
         box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-        border-radius: 2px;
+        border-radius: 6px;
         margin: 12px;
         font-size: 14px;
         cursor: default;
@@ -31735,6 +31735,794 @@ be a problem.
   });
 })();</script>
 </dom-module>
+<!--
+@license
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by a BSD-style
+license that can be found in the LICENSE file or at
+https://github.com/firebase/polymerfire/blob/master/LICENSE
+--><!--
+@license
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by a BSD-style
+license that can be found in the LICENSE file or at
+https://github.com/firebase/polymerfire/blob/master/LICENSE
+--><!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><script>
+(function () {
+  'use strict';
+
+  var SPLICES_RX = /\.splices$/;
+  var LENGTH_RX = /\.length$/;
+  var NUMBER_RX = /\.?#?([0-9]+)$/;
+
+  /**
+   * AppStorageBehavior is an abstract behavior that makes it easy to
+   * synchronize in-memory data and a persistent storage system, such as
+   * the browser's IndexedDB, or a remote database like Firebase.
+   *
+   * For examples of how to use this behavior to write your own app storage
+   * elements see `<app-localstorage-document>` here, or check out
+   * [polymerfire](https://github.com/Firebase/polymerfire) and
+   * [app-pouchdb](https://github.com/PolymerElements/app-pouchdb).
+   *
+   * @polymerBehavior
+   */
+  Polymer.AppStorageBehavior = {
+    properties: {
+      /**
+       * The data to synchronize.
+       */
+      data: {
+        type: Object,
+        notify: true,
+        value: function value() {
+          return this.zeroValue;
+        }
+      },
+
+      /**
+       * If this is true transactions will happen one after the other,
+       * never in parallel.
+       *
+       * Specifically, no transaction will begin until every previously
+       * enqueued transaction by this element has completed.
+       *
+       * If it is false, new transactions will be executed as they are
+       * received.
+       */
+      sequentialTransactions: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * When true, will perform detailed logging.
+       */
+      log: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    observers: ['__dataChanged(data.*)'],
+
+    created: function created() {
+      this.__initialized = false;
+      this.__syncingToMemory = false;
+      this.__initializingStoredValue = null;
+      this.__transactionQueueAdvances = Promise.resolve();
+    },
+
+    ready: function ready() {
+      this._initializeStoredValue();
+    },
+
+    /**
+     * Override this getter to return true if the value has never been
+     * persisted to storage.
+     *
+     * @return {boolean}
+     */
+    get isNew() {
+      return true;
+    },
+
+    /**
+     * A promise that will resolve once all queued transactions
+     * have completed.
+     *
+     * This field is updated as new transactions are enqueued, so it will
+     * only wait for transactions which were enqueued when the field
+     * was accessed.
+     *
+     * This promise never rejects.
+     *
+     * @return {Promise}
+     */
+    get transactionsComplete() {
+      return this.__transactionQueueAdvances;
+    },
+
+    /**
+     * Override this getter to define the default value to use when
+     * there's no data stored.
+     *
+     * @return {*}
+     */
+    get zeroValue() {
+      return undefined;
+    },
+
+    /**
+     * Override this method.
+     *
+     * If the data value represented by this storage instance is new, this
+     * method generates an attempt to write the value to storage.
+     *
+     *
+     * @param {*} args
+     * @return {Promise} a Promise that settles only once the write has.
+     */
+    saveValue: function saveValue(args) {
+      return Promise.resolve();
+    },
+
+    /**
+     * Optional. Override this method to clear out the mapping of this
+     * storage object and a logical location within storage.
+     *
+     * If this method is supported, after it's called, isNew() should be
+     * true.
+     */
+    reset: function reset() {},
+
+    /**
+     * Remove the data from storage.
+     *
+     * @return {Promise} A promise that settles once the destruction is
+     *   complete.
+     */
+    destroy: function destroy() {
+      this.data = this.zeroValue;
+      return this.saveValue();
+    },
+
+    /**
+     * Perform the initial sync between storage and memory. This method
+     * is called automatically while the element is being initialized.
+     * Implementations may override it.
+     *
+     * If an implementation intends to call this method, it should instead
+     * call _initializeStoredValue, which provides reentrancy protection.
+     *
+     * @return {Promise} A promise that settles once this process is
+     *     complete.
+     */
+    initializeStoredValue: function initializeStoredValue() {
+      if (this.isNew) {
+        return Promise.resolve();
+      }
+
+      // If this is not a "new" model, then we should attempt
+      // to read an initial value from storage:
+      return this._getStoredValue('data').then(function (data) {
+        this._log('Got stored value!', data, this.data);
+        if (data == null) {
+          return this._setStoredValue('data', this.data || this.zeroValue);
+        } else {
+          this.syncToMemory(function () {
+            this.set('data', data);
+          });
+        }
+      }.bind(this));
+    },
+
+    /**
+     * Override this method to implement reading a value from storage.
+     *
+     *
+     * @param {string} storagePath The path (through storage) of the value to
+     *   create, relative to the root of storage associated with this instance.
+     * @return {Promise} A promise that resolves with the canonical value stored
+     *   at the provided path when the transaction has completed. _If there is no
+     *   such value at the provided path through storage, then the promise will
+     *   resolve to `undefined`._ The promise will be rejected if the transaction
+     *   fails for any reason.
+     */
+    getStoredValue: function getStoredValue(storagePath) {
+      return Promise.resolve();
+    },
+
+    /**
+     * Override this method to implement creating and updating
+     * stored values.
+     *
+     *
+     * @param {string} storagePath The path of the value to update, relative
+     *   to the root storage path configured for this instance.
+     * @param {*} value The updated in-memory value to apply to the stored value
+     *   at the provided path.
+     * @return {Promise} A promise that resolves with the canonical value stored
+     *   at the provided path when the transaction has completed. The promise
+     *   will be rejected if the transaction fails for any reason.
+     */
+    setStoredValue: function setStoredValue(storagePath, value) {
+      return Promise.resolve(value);
+    },
+
+    /**
+     * Maps a Polymer databinding path to the corresponding path in the
+     * storage system. Override to define a custom mapping.
+     *
+     * The inverse of storagePathToMemoryPath.
+     *
+     * @param {string} path An in-memory path through a storage object.
+     * @return {string} The provided path mapped to the equivalent location in
+     *   storage. This mapped version of the path is suitable for use with the
+     *   CRUD operations on both memory and storage.
+     */
+    memoryPathToStoragePath: function memoryPathToStoragePath(path) {
+      return path;
+    },
+
+    /**
+     * Maps a storage path to the corresponding Polymer databinding path.
+     * Override to define a custom mapping.
+     *
+     * The inverse of memoryPathToStoragePath.
+     *
+     * @param {string} path The storage path through a storage object.
+     * @return {string} The provided path through storage mapped to the
+     *   equivalent Polymer path through the in-memory representation of storage.
+     */
+    storagePathToMemoryPath: function storagePathToMemoryPath(path) {
+      return path;
+    },
+
+    /**
+     * Enables performing transformations on the in-memory representation of
+     * storage without activating observers that will cause those
+     * transformations to be re-applied to the storage backend. This is useful
+     * for preventing redundant (or cyclical) application of transformations.
+     *
+     * @param {Function} operation A function that will perform the desired
+     *   transformation. It will be called synchronously, when it is safe to
+     *   apply the transformation.
+     */
+    syncToMemory: function syncToMemory(operation) {
+      if (this.__syncingToMemory) {
+        return;
+      }
+
+      this._group('Sync to memory.');
+
+      this.__syncingToMemory = true;
+      operation.call(this);
+      this.__syncingToMemory = false;
+
+      this._groupEnd('Sync to memory.');
+    },
+
+    /**
+     * A convenience method. Returns true iff value is null, undefined,
+     * an empty array, or an object with no keys.
+     */
+    valueIsEmpty: function valueIsEmpty(value) {
+      if (Array.isArray(value)) {
+        return value.length === 0;
+      } else if (Object.prototype.isPrototypeOf(value)) {
+        return Object.keys(value).length === 0;
+      } else {
+        return value == null;
+      }
+    },
+
+    /**
+     * Like `getStoredValue` but called with a Polymer path rather than
+     * a storage path.
+     *
+     * @param {string} path The Polymer path to get.
+     * @return {Promise} A Promise of the value stored at that path.
+     */
+    _getStoredValue: function _getStoredValue(path) {
+      return this.getStoredValue(this.memoryPathToStoragePath(path));
+    },
+
+    /**
+     * Like `setStoredValue` but called with a Polymer path rather than
+     * a storage path.
+     *
+     * @param {string} path The Polymer path to update.
+     * @param {*} value The updated in-memory value to apply to the stored value
+     *   at the provided path.
+     * @return {Promise} A promise that resolves with the canonical value stored
+     *   at the provided path when the transaction has completed. The promise
+     *   will be rejected if the transaction fails for any reason.
+     */
+    _setStoredValue: function _setStoredValue(path, value) {
+      return this.setStoredValue(this.memoryPathToStoragePath(path), value);
+    },
+
+    /**
+     * Enqueues the given function in the transaction queue.
+     *
+     * The transaction queue allows for optional parallelism/sequentiality
+     * via the `sequentialTransactions` boolean property, as well as giving
+     * the user a convenient way to wait for all pending transactions to
+     * finish.
+     *
+     * The given function may be called immediately or after an arbitrary
+     * delay. Its `this` context will be bound to the element.
+     *
+     * If the transaction performs any asynchronous operations it must
+     * return a promise.
+     *
+     * @param {Function} transaction A function implementing the transaction.
+     * @return {Promise} A promise that resolves once the transaction has
+     *   finished. This promise will never reject.
+     */
+    _enqueueTransaction: function _enqueueTransaction(transaction) {
+      if (this.sequentialTransactions) {
+        transaction = transaction.bind(this);
+      } else {
+        var result = transaction.call(this);
+        transaction = function transaction() {
+          return result;
+        };
+      }
+
+      return this.__transactionQueueAdvances = this.__transactionQueueAdvances.then(transaction).catch(function (error) {
+        this._error('Error performing queued transaction.', error);
+      }.bind(this));
+    },
+
+    /**
+     * A wrapper around `console.log`.
+     */
+    _log: function _log() {
+      if (this.log) {
+        console.log.apply(console, arguments);
+      }
+    },
+
+    /**
+     * A wrapper around `console.error`.
+     */
+    _error: function _error() {
+      if (this.log) {
+        console.error.apply(console, arguments);
+      }
+    },
+
+    /**
+     * A wrapper around `console.group`.
+     */
+    _group: function _group() {
+      if (this.log) {
+        console.group.apply(console, arguments);
+      }
+    },
+
+    /**
+     * A wrapper around `console.groupEnd`.
+     */
+    _groupEnd: function _groupEnd() {
+      if (this.log) {
+        console.groupEnd.apply(console, arguments);
+      }
+    },
+
+    /**
+     * A reentrancy-save wrapper around `this.initializeStoredValue`.
+     * Prefer calling this method over that one.
+     *
+     * @return {Promise} The result of calling `initializeStoredValue`,
+     *   or `undefined` if called while initializing.
+     */
+    _initializeStoredValue: function _initializeStoredValue() {
+      if (this.__initializingStoredValue) {
+        return;
+      }
+
+      this._group('Initializing stored value.');
+
+      var initializingStoredValue = this.__initializingStoredValue = this.initializeStoredValue().then(function () {
+        this.__initialized = true;
+        this.__initializingStoredValue = null;
+        this._groupEnd('Initializing stored value.');
+      }.bind(this));
+
+      return this._enqueueTransaction(function () {
+        return initializingStoredValue;
+      });
+    },
+
+    __dataChanged: function __dataChanged(change) {
+      if (this.isNew || this.__syncingToMemory || !this.__initialized || this.__pathCanBeIgnored(change.path)) {
+        return;
+      }
+
+      var path = this.__normalizeMemoryPath(change.path);
+      var value = change.value;
+      var indexSplices = value && value.indexSplices;
+
+      this._enqueueTransaction(function () {
+
+        this._log('Setting', path + ':', indexSplices || value);
+
+        if (indexSplices && this.__pathIsSplices(path)) {
+          path = this.__parentPath(path);
+          value = this.get(path);
+        }
+
+        return this._setStoredValue(path, value);
+      });
+    },
+
+    __normalizeMemoryPath: function __normalizeMemoryPath(path) {
+      var parts = path.split('.');
+      var parentPath = [];
+      var currentPath = [];
+      var normalizedPath = [];
+      var index;
+
+      for (var i = 0; i < parts.length; ++i) {
+        currentPath.push(parts[i]);
+        if (/^#/.test(parts[i])) {
+          normalizedPath.push(this.get(parentPath).indexOf(this.get(currentPath)));
+        } else {
+          normalizedPath.push(parts[i]);
+        }
+        parentPath.push(parts[i]);
+      }
+
+      return normalizedPath.join('.');
+    },
+
+    __parentPath: function __parentPath(path) {
+      var parentPath = path.split('.');
+      return parentPath.slice(0, parentPath.length - 1).join('.');
+    },
+
+    __pathCanBeIgnored: function __pathCanBeIgnored(path) {
+      return LENGTH_RX.test(path) && Array.isArray(this.get(this.__parentPath(path)));
+    },
+
+    __pathIsSplices: function __pathIsSplices(path) {
+      return SPLICES_RX.test(path) && Array.isArray(this.get(this.__parentPath(path)));
+    },
+
+    __pathRefersToArray: function __pathRefersToArray(path) {
+      return (SPLICES_RX.test(path) || LENGTH_RX.test(path)) && Array.isArray(this.get(this.__parentPath(path)));
+    },
+
+    __pathTailToIndex: function __pathTailToIndex(path) {
+      var tail = path.split('.').pop();
+      return window.parseInt(tail.replace(NUMBER_RX, '$1'), 10);
+    }
+  };
+})();</script>
+<script>
+(function () {
+  'use strict';
+
+  /** @polymerBehavior Polymer.FirebaseDatabaseBehavior */
+
+  Polymer.FirebaseDatabaseBehaviorImpl = {
+    properties: {
+      db: {
+        type: Object,
+        computed: '__computeDb(app)'
+      },
+
+      ref: {
+        type: Object,
+        computed: '__computeRef(db, path, disabled)',
+        observer: '__refChanged'
+      },
+
+      /**
+       * Path to a Firebase root or endpoint. N.B. `path` is case sensitive.
+       * @type {string|null}
+       */
+      path: {
+        type: String,
+        value: null,
+        observer: '__pathChanged'
+      },
+
+      /**
+       * When true, Firebase listeners won't be activated. This can be useful
+       * in situations where elements are loaded into the DOM before they're
+       * ready to be activated (e.g. navigation, initialization scenarios).
+       */
+      disabled: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    observers: ['__onlineChanged(online)'],
+
+    /**
+     * Set the firebase value.
+     * @return {!firebase.Promise<void>}
+     */
+    _setFirebaseValue: function _setFirebaseValue(path, value) {
+      this._log('Setting Firebase value at', path, 'to', value);
+      var key = value && value.$key;
+      var leaf = value && value.hasOwnProperty('$val');
+      if (key) {
+        value.$key = null;
+      }
+      var result = this.db.ref(path).set(leaf ? value.$val : value);
+      if (key) {
+        value.$key = key;
+      }
+      return result;
+    },
+
+    __computeDb: function __computeDb(app) {
+      return app ? app.database() : null;
+    },
+
+    __computeRef: function __computeRef(db, path) {
+      if (db == null || path == null || !this.__pathReady(path) || this.disabled) {
+        return null;
+      }
+
+      return db.ref(path);
+    },
+
+    /**
+     * Override this method if needed.
+     * e.g. to detach or attach listeners.
+     */
+    __refChanged: function __refChanged(ref, oldRef) {
+      return;
+    },
+
+    __pathChanged: function __pathChanged(path, oldPath) {
+      if (!this.disabled && !this.valueIsEmpty(this.data)) {
+        this.syncToMemory(function () {
+          this.data = this.zeroValue;
+          this.__needSetData = true;
+        });
+      }
+    },
+
+    __pathReady: function __pathReady(path) {
+      return path && path.split('/').slice(1).indexOf('') < 0;
+    },
+
+    __onlineChanged: function __onlineChanged(online) {
+      if (!this.ref) {
+        return;
+      }
+
+      if (online) {
+        this.db.goOnline();
+      } else {
+        this.db.goOffline();
+      }
+    }
+  };
+
+  /** @polymerBehavior */
+  Polymer.FirebaseDatabaseBehavior = [Polymer.AppStorageBehavior, Polymer.FirebaseCommonBehavior, Polymer.FirebaseDatabaseBehaviorImpl];
+})();</script>
+<script>
+'use strict';
+
+/**
+ * The firebase-document element is an easy way to interact with a firebase
+ * location as an object and expose it to the Polymer databinding system.
+ *
+ * For example:
+ *
+ *     <firebase-document
+ *       path="/users/[[userId]]/notes/[[noteId]]"
+ *       data="{{noteData}}">
+ *     </firebase-document>
+ *
+ * This fetches the `noteData` object from the firebase location at
+ * `/users/${userId}/notes/${noteId}` and exposes it to the Polymer
+ * databinding system. Changes to `noteData` will likewise be, sent back up
+ * and stored.
+ *
+ * `<firebase-document>` needs some information about how to talk to Firebase.
+ * Set this configuration by adding a `<firebase-app>` element anywhere in your
+ * app.
+ */
+
+Polymer({
+  is: 'firebase-document',
+
+  behaviors: [Polymer.FirebaseDatabaseBehavior],
+
+  attached: function attached() {
+    this.__needSetData = true;
+    this.__refChanged(this.ref, this.ref);
+  },
+
+  detached: function detached() {
+    if (this.ref) {
+      this.ref.off('value', this.__onFirebaseValue, this);
+    }
+  },
+
+  get isNew() {
+    return this.disabled || !this.__pathReady(this.path);
+  },
+
+  get zeroValue() {
+    return {};
+  },
+
+  /**
+   * Update the path and write this.data to that new location.
+   *
+   * Important note: `this.path` is updated asynchronously.
+   *
+   * @param {string} parentPath The new firebase location to write to.
+   * @param {string=} key The key within the parentPath to write `data` to. If
+   *     not given, a random key will be generated and used.
+   * @return {Promise} A promise that resolves once this.data has been
+   *     written to the new path.
+   *
+   */
+  saveValue: function saveValue(data, parentPath, key) {
+    return new Promise(function (resolve, reject) {
+      var path = null;
+
+      if (!this.app) {
+        reject(new Error('No app configured!'));
+      }
+
+      if (key) {
+        path = parentPath + '/' + key;
+        resolve(this._setFirebaseValue(path, this.data));
+      } else {
+        path = firebase.database(this.app).ref(parentPath).push(data, function (error) {
+          if (error) {
+            reject(error);
+            return;
+          }
+
+          resolve();
+        }).path.toString();
+      }
+
+      // this.path = path;
+    }.bind(this));
+  },
+
+  /**
+   * Push the data to the path provided.
+   *
+   * @param {string} path The new firebase location to write to.
+   * @param {string=} key The key within the parentPath to write `data` to. If
+   *     not given, a random key will be generated and used.
+   * @return {Promise} A promise that resolves once the data has been
+   *     pushed to the new path.
+   * @override
+   */
+  push: function push(path, data) {
+    return new Promise(function (resolve, reject) {
+
+      if (!this.app) {
+        reject(new Error('No app configured!'));
+      }
+
+      resolve(this.db.ref(path).push(data));
+    }.bind(this));
+  },
+
+  getTimeStamp: function getTimeStamp() {
+    return firebase.database.ServerValue.TIMESTAMP;
+  },
+
+  reset: function reset() {
+    this.path = null;
+    return Promise.resolve();
+  },
+
+  destroy: function destroy(path) {
+    return this._setFirebaseValue(path, null).then(function () {
+      return this.reset();
+    }.bind(this));
+  },
+
+  memoryPathToStoragePath: function memoryPathToStoragePath(path) {
+    var storagePath = this.path;
+
+    if (path !== 'data') {
+      storagePath += path.replace(/^data\.?/, '/').split('.').join('/');
+    }
+
+    return storagePath;
+  },
+
+  storagePathToMemoryPath: function storagePathToMemoryPath(storagePath) {
+    var path = 'data';
+
+    storagePath = storagePath.replace(this.path, '').split('/').join('.');
+
+    if (storagePath) {
+      path += '.' + storagePath;
+    }
+
+    return path;
+  },
+
+  getStoredValue: function getStoredValue(path) {
+    return new Promise(function (resolve, reject) {
+      this.db.ref(path).once('value', function (snapshot) {
+        var value = snapshot.val();
+        if (value == null) {
+          resolve(this.zeroValue);
+        }
+        resolve(value);
+      }, this.__onError, this);
+    }.bind(this));
+  },
+
+  setStoredValue: function setStoredValue(path, value) {
+    return this._setFirebaseValue(path, value);
+  },
+
+  __refChanged: function __refChanged(ref, oldRef) {
+    if (oldRef) {
+      oldRef.off('value', this.__onFirebaseValue, this);
+    }
+
+    if (ref) {
+      ref.on('value', this.__onFirebaseValue, this.__onError, this);
+    }
+  },
+
+  __onFirebaseValue: function __onFirebaseValue(snapshot) {
+    var value = snapshot.val();
+
+    if (value == null) {
+      value = this.zeroValue;
+      this.__needSetData = true;
+    }
+
+    if (!this.isNew) {
+      this.async(function () {
+        this.syncToMemory(function () {
+          this._log('Updating data from Firebase value:', value);
+
+          // set the value if:
+          // it is the first time we run this (or the path has changed and we are back with zeroValue)
+          // or if  this.data does not exist
+          // or value is primitive
+          // or if firebase value obj contain less keys than this.data (https://github.com/Polymer/polymer/issues/2565)
+          if (this.__needSetData || !this.data || (typeof value === 'undefined' ? 'undefined' : babelHelpers.typeof(value)) !== 'object' || Object.keys(value).length < Object.keys(this.data).length) {
+            this.__needSetData = false;
+            return this.set('data', value);
+          }
+
+          // now, we loop over keys
+          for (var prop in value) {
+            if (value[prop] !== this.data[prop]) {
+              this.set(['data', prop], value[prop]);
+            }
+          }
+        });
+      });
+    }
+  }
+});</script>
 <link rel="import" href="../suji/lib/themes/azul/azul-theme.html"><link rel="import" href="../suji/lib/colors/suji-color-palette.html"><!--
 @license
 Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
@@ -47431,794 +48219,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <!-- Iron Elements -->
 <!-- Vaadin Elements -->
 <!-- Polymerfire Elements -->
-<!--
-@license
-Copyright 2016 Google Inc. All Rights Reserved.
-Use of this source code is governed by a BSD-style
-license that can be found in the LICENSE file or at
-https://github.com/firebase/polymerfire/blob/master/LICENSE
---><!--
-@license
-Copyright 2016 Google Inc. All Rights Reserved.
-Use of this source code is governed by a BSD-style
-license that can be found in the LICENSE file or at
-https://github.com/firebase/polymerfire/blob/master/LICENSE
---><!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
---><script>
-(function () {
-  'use strict';
-
-  var SPLICES_RX = /\.splices$/;
-  var LENGTH_RX = /\.length$/;
-  var NUMBER_RX = /\.?#?([0-9]+)$/;
-
-  /**
-   * AppStorageBehavior is an abstract behavior that makes it easy to
-   * synchronize in-memory data and a persistent storage system, such as
-   * the browser's IndexedDB, or a remote database like Firebase.
-   *
-   * For examples of how to use this behavior to write your own app storage
-   * elements see `<app-localstorage-document>` here, or check out
-   * [polymerfire](https://github.com/Firebase/polymerfire) and
-   * [app-pouchdb](https://github.com/PolymerElements/app-pouchdb).
-   *
-   * @polymerBehavior
-   */
-  Polymer.AppStorageBehavior = {
-    properties: {
-      /**
-       * The data to synchronize.
-       */
-      data: {
-        type: Object,
-        notify: true,
-        value: function value() {
-          return this.zeroValue;
-        }
-      },
-
-      /**
-       * If this is true transactions will happen one after the other,
-       * never in parallel.
-       *
-       * Specifically, no transaction will begin until every previously
-       * enqueued transaction by this element has completed.
-       *
-       * If it is false, new transactions will be executed as they are
-       * received.
-       */
-      sequentialTransactions: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * When true, will perform detailed logging.
-       */
-      log: {
-        type: Boolean,
-        value: false
-      }
-    },
-
-    observers: ['__dataChanged(data.*)'],
-
-    created: function created() {
-      this.__initialized = false;
-      this.__syncingToMemory = false;
-      this.__initializingStoredValue = null;
-      this.__transactionQueueAdvances = Promise.resolve();
-    },
-
-    ready: function ready() {
-      this._initializeStoredValue();
-    },
-
-    /**
-     * Override this getter to return true if the value has never been
-     * persisted to storage.
-     *
-     * @return {boolean}
-     */
-    get isNew() {
-      return true;
-    },
-
-    /**
-     * A promise that will resolve once all queued transactions
-     * have completed.
-     *
-     * This field is updated as new transactions are enqueued, so it will
-     * only wait for transactions which were enqueued when the field
-     * was accessed.
-     *
-     * This promise never rejects.
-     *
-     * @return {Promise}
-     */
-    get transactionsComplete() {
-      return this.__transactionQueueAdvances;
-    },
-
-    /**
-     * Override this getter to define the default value to use when
-     * there's no data stored.
-     *
-     * @return {*}
-     */
-    get zeroValue() {
-      return undefined;
-    },
-
-    /**
-     * Override this method.
-     *
-     * If the data value represented by this storage instance is new, this
-     * method generates an attempt to write the value to storage.
-     *
-     *
-     * @param {*} args
-     * @return {Promise} a Promise that settles only once the write has.
-     */
-    saveValue: function saveValue(args) {
-      return Promise.resolve();
-    },
-
-    /**
-     * Optional. Override this method to clear out the mapping of this
-     * storage object and a logical location within storage.
-     *
-     * If this method is supported, after it's called, isNew() should be
-     * true.
-     */
-    reset: function reset() {},
-
-    /**
-     * Remove the data from storage.
-     *
-     * @return {Promise} A promise that settles once the destruction is
-     *   complete.
-     */
-    destroy: function destroy() {
-      this.data = this.zeroValue;
-      return this.saveValue();
-    },
-
-    /**
-     * Perform the initial sync between storage and memory. This method
-     * is called automatically while the element is being initialized.
-     * Implementations may override it.
-     *
-     * If an implementation intends to call this method, it should instead
-     * call _initializeStoredValue, which provides reentrancy protection.
-     *
-     * @return {Promise} A promise that settles once this process is
-     *     complete.
-     */
-    initializeStoredValue: function initializeStoredValue() {
-      if (this.isNew) {
-        return Promise.resolve();
-      }
-
-      // If this is not a "new" model, then we should attempt
-      // to read an initial value from storage:
-      return this._getStoredValue('data').then(function (data) {
-        this._log('Got stored value!', data, this.data);
-        if (data == null) {
-          return this._setStoredValue('data', this.data || this.zeroValue);
-        } else {
-          this.syncToMemory(function () {
-            this.set('data', data);
-          });
-        }
-      }.bind(this));
-    },
-
-    /**
-     * Override this method to implement reading a value from storage.
-     *
-     *
-     * @param {string} storagePath The path (through storage) of the value to
-     *   create, relative to the root of storage associated with this instance.
-     * @return {Promise} A promise that resolves with the canonical value stored
-     *   at the provided path when the transaction has completed. _If there is no
-     *   such value at the provided path through storage, then the promise will
-     *   resolve to `undefined`._ The promise will be rejected if the transaction
-     *   fails for any reason.
-     */
-    getStoredValue: function getStoredValue(storagePath) {
-      return Promise.resolve();
-    },
-
-    /**
-     * Override this method to implement creating and updating
-     * stored values.
-     *
-     *
-     * @param {string} storagePath The path of the value to update, relative
-     *   to the root storage path configured for this instance.
-     * @param {*} value The updated in-memory value to apply to the stored value
-     *   at the provided path.
-     * @return {Promise} A promise that resolves with the canonical value stored
-     *   at the provided path when the transaction has completed. The promise
-     *   will be rejected if the transaction fails for any reason.
-     */
-    setStoredValue: function setStoredValue(storagePath, value) {
-      return Promise.resolve(value);
-    },
-
-    /**
-     * Maps a Polymer databinding path to the corresponding path in the
-     * storage system. Override to define a custom mapping.
-     *
-     * The inverse of storagePathToMemoryPath.
-     *
-     * @param {string} path An in-memory path through a storage object.
-     * @return {string} The provided path mapped to the equivalent location in
-     *   storage. This mapped version of the path is suitable for use with the
-     *   CRUD operations on both memory and storage.
-     */
-    memoryPathToStoragePath: function memoryPathToStoragePath(path) {
-      return path;
-    },
-
-    /**
-     * Maps a storage path to the corresponding Polymer databinding path.
-     * Override to define a custom mapping.
-     *
-     * The inverse of memoryPathToStoragePath.
-     *
-     * @param {string} path The storage path through a storage object.
-     * @return {string} The provided path through storage mapped to the
-     *   equivalent Polymer path through the in-memory representation of storage.
-     */
-    storagePathToMemoryPath: function storagePathToMemoryPath(path) {
-      return path;
-    },
-
-    /**
-     * Enables performing transformations on the in-memory representation of
-     * storage without activating observers that will cause those
-     * transformations to be re-applied to the storage backend. This is useful
-     * for preventing redundant (or cyclical) application of transformations.
-     *
-     * @param {Function} operation A function that will perform the desired
-     *   transformation. It will be called synchronously, when it is safe to
-     *   apply the transformation.
-     */
-    syncToMemory: function syncToMemory(operation) {
-      if (this.__syncingToMemory) {
-        return;
-      }
-
-      this._group('Sync to memory.');
-
-      this.__syncingToMemory = true;
-      operation.call(this);
-      this.__syncingToMemory = false;
-
-      this._groupEnd('Sync to memory.');
-    },
-
-    /**
-     * A convenience method. Returns true iff value is null, undefined,
-     * an empty array, or an object with no keys.
-     */
-    valueIsEmpty: function valueIsEmpty(value) {
-      if (Array.isArray(value)) {
-        return value.length === 0;
-      } else if (Object.prototype.isPrototypeOf(value)) {
-        return Object.keys(value).length === 0;
-      } else {
-        return value == null;
-      }
-    },
-
-    /**
-     * Like `getStoredValue` but called with a Polymer path rather than
-     * a storage path.
-     *
-     * @param {string} path The Polymer path to get.
-     * @return {Promise} A Promise of the value stored at that path.
-     */
-    _getStoredValue: function _getStoredValue(path) {
-      return this.getStoredValue(this.memoryPathToStoragePath(path));
-    },
-
-    /**
-     * Like `setStoredValue` but called with a Polymer path rather than
-     * a storage path.
-     *
-     * @param {string} path The Polymer path to update.
-     * @param {*} value The updated in-memory value to apply to the stored value
-     *   at the provided path.
-     * @return {Promise} A promise that resolves with the canonical value stored
-     *   at the provided path when the transaction has completed. The promise
-     *   will be rejected if the transaction fails for any reason.
-     */
-    _setStoredValue: function _setStoredValue(path, value) {
-      return this.setStoredValue(this.memoryPathToStoragePath(path), value);
-    },
-
-    /**
-     * Enqueues the given function in the transaction queue.
-     *
-     * The transaction queue allows for optional parallelism/sequentiality
-     * via the `sequentialTransactions` boolean property, as well as giving
-     * the user a convenient way to wait for all pending transactions to
-     * finish.
-     *
-     * The given function may be called immediately or after an arbitrary
-     * delay. Its `this` context will be bound to the element.
-     *
-     * If the transaction performs any asynchronous operations it must
-     * return a promise.
-     *
-     * @param {Function} transaction A function implementing the transaction.
-     * @return {Promise} A promise that resolves once the transaction has
-     *   finished. This promise will never reject.
-     */
-    _enqueueTransaction: function _enqueueTransaction(transaction) {
-      if (this.sequentialTransactions) {
-        transaction = transaction.bind(this);
-      } else {
-        var result = transaction.call(this);
-        transaction = function transaction() {
-          return result;
-        };
-      }
-
-      return this.__transactionQueueAdvances = this.__transactionQueueAdvances.then(transaction).catch(function (error) {
-        this._error('Error performing queued transaction.', error);
-      }.bind(this));
-    },
-
-    /**
-     * A wrapper around `console.log`.
-     */
-    _log: function _log() {
-      if (this.log) {
-        console.log.apply(console, arguments);
-      }
-    },
-
-    /**
-     * A wrapper around `console.error`.
-     */
-    _error: function _error() {
-      if (this.log) {
-        console.error.apply(console, arguments);
-      }
-    },
-
-    /**
-     * A wrapper around `console.group`.
-     */
-    _group: function _group() {
-      if (this.log) {
-        console.group.apply(console, arguments);
-      }
-    },
-
-    /**
-     * A wrapper around `console.groupEnd`.
-     */
-    _groupEnd: function _groupEnd() {
-      if (this.log) {
-        console.groupEnd.apply(console, arguments);
-      }
-    },
-
-    /**
-     * A reentrancy-save wrapper around `this.initializeStoredValue`.
-     * Prefer calling this method over that one.
-     *
-     * @return {Promise} The result of calling `initializeStoredValue`,
-     *   or `undefined` if called while initializing.
-     */
-    _initializeStoredValue: function _initializeStoredValue() {
-      if (this.__initializingStoredValue) {
-        return;
-      }
-
-      this._group('Initializing stored value.');
-
-      var initializingStoredValue = this.__initializingStoredValue = this.initializeStoredValue().then(function () {
-        this.__initialized = true;
-        this.__initializingStoredValue = null;
-        this._groupEnd('Initializing stored value.');
-      }.bind(this));
-
-      return this._enqueueTransaction(function () {
-        return initializingStoredValue;
-      });
-    },
-
-    __dataChanged: function __dataChanged(change) {
-      if (this.isNew || this.__syncingToMemory || !this.__initialized || this.__pathCanBeIgnored(change.path)) {
-        return;
-      }
-
-      var path = this.__normalizeMemoryPath(change.path);
-      var value = change.value;
-      var indexSplices = value && value.indexSplices;
-
-      this._enqueueTransaction(function () {
-
-        this._log('Setting', path + ':', indexSplices || value);
-
-        if (indexSplices && this.__pathIsSplices(path)) {
-          path = this.__parentPath(path);
-          value = this.get(path);
-        }
-
-        return this._setStoredValue(path, value);
-      });
-    },
-
-    __normalizeMemoryPath: function __normalizeMemoryPath(path) {
-      var parts = path.split('.');
-      var parentPath = [];
-      var currentPath = [];
-      var normalizedPath = [];
-      var index;
-
-      for (var i = 0; i < parts.length; ++i) {
-        currentPath.push(parts[i]);
-        if (/^#/.test(parts[i])) {
-          normalizedPath.push(this.get(parentPath).indexOf(this.get(currentPath)));
-        } else {
-          normalizedPath.push(parts[i]);
-        }
-        parentPath.push(parts[i]);
-      }
-
-      return normalizedPath.join('.');
-    },
-
-    __parentPath: function __parentPath(path) {
-      var parentPath = path.split('.');
-      return parentPath.slice(0, parentPath.length - 1).join('.');
-    },
-
-    __pathCanBeIgnored: function __pathCanBeIgnored(path) {
-      return LENGTH_RX.test(path) && Array.isArray(this.get(this.__parentPath(path)));
-    },
-
-    __pathIsSplices: function __pathIsSplices(path) {
-      return SPLICES_RX.test(path) && Array.isArray(this.get(this.__parentPath(path)));
-    },
-
-    __pathRefersToArray: function __pathRefersToArray(path) {
-      return (SPLICES_RX.test(path) || LENGTH_RX.test(path)) && Array.isArray(this.get(this.__parentPath(path)));
-    },
-
-    __pathTailToIndex: function __pathTailToIndex(path) {
-      var tail = path.split('.').pop();
-      return window.parseInt(tail.replace(NUMBER_RX, '$1'), 10);
-    }
-  };
-})();</script>
-<script>
-(function () {
-  'use strict';
-
-  /** @polymerBehavior Polymer.FirebaseDatabaseBehavior */
-
-  Polymer.FirebaseDatabaseBehaviorImpl = {
-    properties: {
-      db: {
-        type: Object,
-        computed: '__computeDb(app)'
-      },
-
-      ref: {
-        type: Object,
-        computed: '__computeRef(db, path, disabled)',
-        observer: '__refChanged'
-      },
-
-      /**
-       * Path to a Firebase root or endpoint. N.B. `path` is case sensitive.
-       * @type {string|null}
-       */
-      path: {
-        type: String,
-        value: null,
-        observer: '__pathChanged'
-      },
-
-      /**
-       * When true, Firebase listeners won't be activated. This can be useful
-       * in situations where elements are loaded into the DOM before they're
-       * ready to be activated (e.g. navigation, initialization scenarios).
-       */
-      disabled: {
-        type: Boolean,
-        value: false
-      }
-    },
-
-    observers: ['__onlineChanged(online)'],
-
-    /**
-     * Set the firebase value.
-     * @return {!firebase.Promise<void>}
-     */
-    _setFirebaseValue: function _setFirebaseValue(path, value) {
-      this._log('Setting Firebase value at', path, 'to', value);
-      var key = value && value.$key;
-      var leaf = value && value.hasOwnProperty('$val');
-      if (key) {
-        value.$key = null;
-      }
-      var result = this.db.ref(path).set(leaf ? value.$val : value);
-      if (key) {
-        value.$key = key;
-      }
-      return result;
-    },
-
-    __computeDb: function __computeDb(app) {
-      return app ? app.database() : null;
-    },
-
-    __computeRef: function __computeRef(db, path) {
-      if (db == null || path == null || !this.__pathReady(path) || this.disabled) {
-        return null;
-      }
-
-      return db.ref(path);
-    },
-
-    /**
-     * Override this method if needed.
-     * e.g. to detach or attach listeners.
-     */
-    __refChanged: function __refChanged(ref, oldRef) {
-      return;
-    },
-
-    __pathChanged: function __pathChanged(path, oldPath) {
-      if (!this.disabled && !this.valueIsEmpty(this.data)) {
-        this.syncToMemory(function () {
-          this.data = this.zeroValue;
-          this.__needSetData = true;
-        });
-      }
-    },
-
-    __pathReady: function __pathReady(path) {
-      return path && path.split('/').slice(1).indexOf('') < 0;
-    },
-
-    __onlineChanged: function __onlineChanged(online) {
-      if (!this.ref) {
-        return;
-      }
-
-      if (online) {
-        this.db.goOnline();
-      } else {
-        this.db.goOffline();
-      }
-    }
-  };
-
-  /** @polymerBehavior */
-  Polymer.FirebaseDatabaseBehavior = [Polymer.AppStorageBehavior, Polymer.FirebaseCommonBehavior, Polymer.FirebaseDatabaseBehaviorImpl];
-})();</script>
-<script>
-'use strict';
-
-/**
- * The firebase-document element is an easy way to interact with a firebase
- * location as an object and expose it to the Polymer databinding system.
- *
- * For example:
- *
- *     <firebase-document
- *       path="/users/[[userId]]/notes/[[noteId]]"
- *       data="{{noteData}}">
- *     </firebase-document>
- *
- * This fetches the `noteData` object from the firebase location at
- * `/users/${userId}/notes/${noteId}` and exposes it to the Polymer
- * databinding system. Changes to `noteData` will likewise be, sent back up
- * and stored.
- *
- * `<firebase-document>` needs some information about how to talk to Firebase.
- * Set this configuration by adding a `<firebase-app>` element anywhere in your
- * app.
- */
-
-Polymer({
-  is: 'firebase-document',
-
-  behaviors: [Polymer.FirebaseDatabaseBehavior],
-
-  attached: function attached() {
-    this.__needSetData = true;
-    this.__refChanged(this.ref, this.ref);
-  },
-
-  detached: function detached() {
-    if (this.ref) {
-      this.ref.off('value', this.__onFirebaseValue, this);
-    }
-  },
-
-  get isNew() {
-    return this.disabled || !this.__pathReady(this.path);
-  },
-
-  get zeroValue() {
-    return {};
-  },
-
-  /**
-   * Update the path and write this.data to that new location.
-   *
-   * Important note: `this.path` is updated asynchronously.
-   *
-   * @param {string} parentPath The new firebase location to write to.
-   * @param {string=} key The key within the parentPath to write `data` to. If
-   *     not given, a random key will be generated and used.
-   * @return {Promise} A promise that resolves once this.data has been
-   *     written to the new path.
-   *
-   */
-  saveValue: function saveValue(data, parentPath, key) {
-    return new Promise(function (resolve, reject) {
-      var path = null;
-
-      if (!this.app) {
-        reject(new Error('No app configured!'));
-      }
-
-      if (key) {
-        path = parentPath + '/' + key;
-        resolve(this._setFirebaseValue(path, this.data));
-      } else {
-        path = firebase.database(this.app).ref(parentPath).push(data, function (error) {
-          if (error) {
-            reject(error);
-            return;
-          }
-
-          resolve();
-        }).path.toString();
-      }
-
-      // this.path = path;
-    }.bind(this));
-  },
-
-  /**
-   * Push the data to the path provided.
-   *
-   * @param {string} path The new firebase location to write to.
-   * @param {string=} key The key within the parentPath to write `data` to. If
-   *     not given, a random key will be generated and used.
-   * @return {Promise} A promise that resolves once the data has been
-   *     pushed to the new path.
-   * @override
-   */
-  push: function push(path, data) {
-    return new Promise(function (resolve, reject) {
-
-      if (!this.app) {
-        reject(new Error('No app configured!'));
-      }
-
-      resolve(this.db.ref(path).push(data));
-    }.bind(this));
-  },
-
-  getTimeStamp: function getTimeStamp() {
-    return firebase.database.ServerValue.TIMESTAMP;
-  },
-
-  reset: function reset() {
-    this.path = null;
-    return Promise.resolve();
-  },
-
-  destroy: function destroy(path) {
-    return this._setFirebaseValue(path, null).then(function () {
-      return this.reset();
-    }.bind(this));
-  },
-
-  memoryPathToStoragePath: function memoryPathToStoragePath(path) {
-    var storagePath = this.path;
-
-    if (path !== 'data') {
-      storagePath += path.replace(/^data\.?/, '/').split('.').join('/');
-    }
-
-    return storagePath;
-  },
-
-  storagePathToMemoryPath: function storagePathToMemoryPath(storagePath) {
-    var path = 'data';
-
-    storagePath = storagePath.replace(this.path, '').split('/').join('.');
-
-    if (storagePath) {
-      path += '.' + storagePath;
-    }
-
-    return path;
-  },
-
-  getStoredValue: function getStoredValue(path) {
-    return new Promise(function (resolve, reject) {
-      this.db.ref(path).once('value', function (snapshot) {
-        var value = snapshot.val();
-        if (value == null) {
-          resolve(this.zeroValue);
-        }
-        resolve(value);
-      }, this.__onError, this);
-    }.bind(this));
-  },
-
-  setStoredValue: function setStoredValue(path, value) {
-    return this._setFirebaseValue(path, value);
-  },
-
-  __refChanged: function __refChanged(ref, oldRef) {
-    if (oldRef) {
-      oldRef.off('value', this.__onFirebaseValue, this);
-    }
-
-    if (ref) {
-      ref.on('value', this.__onFirebaseValue, this.__onError, this);
-    }
-  },
-
-  __onFirebaseValue: function __onFirebaseValue(snapshot) {
-    var value = snapshot.val();
-
-    if (value == null) {
-      value = this.zeroValue;
-      this.__needSetData = true;
-    }
-
-    if (!this.isNew) {
-      this.async(function () {
-        this.syncToMemory(function () {
-          this._log('Updating data from Firebase value:', value);
-
-          // set the value if:
-          // it is the first time we run this (or the path has changed and we are back with zeroValue)
-          // or if  this.data does not exist
-          // or value is primitive
-          // or if firebase value obj contain less keys than this.data (https://github.com/Polymer/polymer/issues/2565)
-          if (this.__needSetData || !this.data || (typeof value === 'undefined' ? 'undefined' : babelHelpers.typeof(value)) !== 'object' || Object.keys(value).length < Object.keys(this.data).length) {
-            this.__needSetData = false;
-            return this.set('data', value);
-          }
-
-          // now, we loop over keys
-          for (var prop in value) {
-            if (value[prop] !== this.data[prop]) {
-              this.set(['data', prop], value[prop]);
-            }
-          }
-        });
-      });
-    }
-  }
-});</script>
 <!-- Suji Elements -->
 <link rel="import" href="../suji/lib/themes/azul/azul-dialog.html">
 
@@ -52966,15 +52966,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../wrc-main/settings-dialog.html"><link rel="import" href="../shared/dialogs/wrc-delete-dialog.html"><link rel="import" href="../app-icons.html"></div><dom-module id="wrc-app">
     <template>
         <style>
-
-         #update-button {
-          min-width: 6em !important;
-          background-color: rgb(188, 188, 188, .30);
-          margin: 0 0 0 15px;
-          padding: 3px;
-          text-transform: none;
-        }
-
         </style>
 
         <!-- App Routing Configuration -->
@@ -52990,6 +52981,9 @@ This program is available under Apache License Version 2.0, available at https:/
         <!-- Firebase Auth Configuration -->
         <firebase-auth app-name="wrc_software" user="{{user}}" signed-in="{{signedIn}}"></firebase-auth>
 
+        <!-- Firebase Document Configuration | Configs application -->
+        <firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
+
         <!-- Controls views -->
         <iron-pages role="main" attr-for-selected="name" selected="[[page]]" fallback-selection="login">
 
@@ -52998,19 +52992,6 @@ This program is available under Apache License Version 2.0, available at https:/
             <wrc-loading name="loading"></wrc-loading>
         </iron-pages>
 
-        <!-- Service Worker Notification -->
-        <paper-toast id="updateToast" duration="0">
-        <iron-icon icon="app-icons:cached"></iron-icon>
-        Update Available
-        <paper-button id="update-button" onclick="window.location.reload(true)"> <!-- refresh page  -->
-              Install
-        </paper-button>
-        <!--
-        <paper-button onclick="updateToast.toggle()">
-            Cancel
-        </paper-button>
-        -->
-      </paper-toast>
 
     </template>
 
@@ -53084,14 +53065,6 @@ This program is available under Apache License Version 2.0, available at https:/
                     this.page = 'main';
                 }
             }
-
-            // update function for sw
-
-        }, {
-            key: 'update',
-            value: function update(worker) {
-                this.$.updateToast.show();
-            }
         }], [{
             key: 'is',
 
@@ -53127,6 +53100,9 @@ This program is available under Apache License Version 2.0, available at https:/
                         notify: true,
                         reflectToAttribute: true,
                         observer: '_signedInChanged'
+                    },
+                    _appVersion: {
+                        type: Object
                     }
                 };
             }
@@ -53140,7 +53116,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }, {
             key: 'observers',
             get: function get() {
-                return ['_routePageChanged(routeData.page)'];
+                return ['_routePageChanged(routeData.page)', '_manageNewVersion(_appVersion)'];
             }
         }]);
         return WrcApp;

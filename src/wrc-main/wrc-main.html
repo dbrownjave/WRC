@@ -648,6 +648,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     window.registerSW(this.firebaseAppVersion);
                     setTimeout(() => {
+                      // Reload the current page, without using the cache
                       window.location.reload(true);
                     }, 1000);
 
