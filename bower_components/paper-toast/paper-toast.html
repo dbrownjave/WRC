@@ -71,14 +71,14 @@ In order to apply the `Roboto` font to this element, make sure you've imported `
         position: fixed;
         background-color: var(--paper-toast-background-color, #323232);
         color: var(--paper-toast-color, #f1f1f1);
-        min-height: 48px;
-        min-width: 288px;
-        padding: 16px 24px;
+        min-height: 40px;
+        min-width: 200px;
+        padding: 14px 24px;
         box-sizing: border-box;
         box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
         border-radius: 6px;
         margin: 12px;
-        font-size: 14px;
+        font-size: 13px;
         cursor: default;
         -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
         transition: transform 0.3s, opacity 0.3s;
@@ -104,6 +104,11 @@ In order to apply the `Roboto` font to this element, make sure you've imported `
         -webkit-transform: translateY(0px);
         transform: translateY(0px);
       }
+
+      #label {
+        font-weight: 300;
+      }
+
     </style>
 
     <span id="label">{{text}}</span>
