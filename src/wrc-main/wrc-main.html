@@ -422,7 +422,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
         <!-- Service Worker Notification -->
-        <paper-toast id="updateToast" duration="0">
+        <paper-toast id="updateToast" duration="0" horizontal-align="right" vertical-align="top" vertical-offset="10" dynamicAlign="true">
         <iron-icon icon="app-icons:cached"></iron-icon>
         Update Available
         <paper-button id="update-button" on-tap="_refreshApp">
@@ -609,12 +609,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _manageNewAppVersion() {
                   self = this;
 
+                  // Converts object to string
+                  String(self.firebaseAppVersion);
+
                   console.log("MANAGE NEW APPLICATION VERSION");
                   console.info('Current App Version: ', window.myApp.version);
                   console.log('Firebase 🔥 App Version: ', self.firebaseAppVersion);
-
-                  // Converts object to string
-                  String(self.firebaseAppVersion);
 
                   if (typeof self.firebaseAppVersion === 'string') {
                     // Prevents getting empty verison node, if version != to new version, then update app with new version
