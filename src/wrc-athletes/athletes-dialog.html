@@ -443,7 +443,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/jpeg');
                       var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
 
-                      this.newImgFile = newImgFile;S
+                      this.newImgFile = newImgFile;
                       console.log("jpg file extended: ", this.newImgFile);
 
                     } else if (this.$.profilePicture.files[0].name.slice(-3) == 'png') {
@@ -464,6 +464,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             console.log("current athlete photo name", this.athleteInfo.profile_pic_name);
                             this.$.storageRef.delete();
                             console.log("deleted current photo successfully");
+                        } else {
+
+
+
                         }
 
                         this.$.firebaseStorage.put(this.newImgFile)

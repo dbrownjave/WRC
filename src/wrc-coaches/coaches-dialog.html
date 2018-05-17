@@ -256,6 +256,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 static get properties() {
                     return {
                         action: String,
+                        newImgFile: Object,
                         dialogTitle: {
                             type: String,
                             computed: '_computeDialogTitle(action)'
@@ -291,7 +292,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     super.ready();
 
                     // App Progress Bar
-					this._appProgressBar = document.getElementById('appProgressBar');
+					          this._appProgressBar = document.getElementById('appProgressBar');
 
                     // App Toast
                     this._appToast = document.getElementById('appToast');
@@ -300,7 +301,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this._deleteCoachDialog = document.getElementById('deleteCoachDialog');
 
                     const fileUpload = this.$.profilePicture;
-					fileUpload.addEventListener('change', function(e) {
+					              fileUpload.addEventListener('change', function(e) {
                         this._createImgPreview(e.target.files[0]);
                     }.bind(this));
                 }
@@ -309,19 +310,58 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @description Saves profile image and data
                 */
                 _saveProfileImgAndAthleteData() {
+                  console.log("profile picture object: ", this.$.profilePicture.files[0]);
+
+                  // Unique Photo ID
+                  var upid = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-5) + Math.random().toString(36).slice(-4) + Math.random().toString(36).slice(-6);
+
+                  console.log("before: ", this.$.profilePicture.files[0].name);
+                  console.log("upid: ", upid);
+
+                   /**
+                   * @description Add Unique Photo ID to orginal photo + file extension
+                   */
+                  if(this.$.profilePicture.files[0].name.slice(-3) == 'jpg') {
+                    // creates unique image file name
+                    var newFileName = this.$.profilePicture.files[0].name.replace('.jpg',upid) + '.jpg';
+
+                    // create new image file - blog: binary large OBject
+                    var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/jpeg');
+                    var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
+
+                    this.newImgFile = newImgFile;
+                    console.log("jpg file extended: ", this.newImgFile);
+
+                  } else if (this.$.profilePicture.files[0].name.slice(-3) == 'png') {
+                    // creates unique image file name
+                    var newFileName = this.$.profilePicture.files[0].name.replace('.png',upid) + '.png';
+
+                    // create new image file - blog: binary large OBject
+                    var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/png');
+                    var newImgFile = new File([blob], newFileName, {type: 'image/png'});
+
+                    this.newImgFile = newImgFile;
+                    console.log("png file extended: ", this.newImgFile);
+                  }
+
                     if (this.$.profilePicture.files[0]) {
                         if (this.action === 'edit' && this.coachInfo.profile_pic_name !== 'default_profile.png') {
                             this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
+                            console.log("current coach photo name", this.coachInfo.profile_pic_name);
                             this.$.storageRef.delete();
                         }
 
-                        this.$.firebaseStorage.put(this.$.profilePicture.files[0])
+                        // collects image from Url
+                        this.$.firebaseStorage.put(this.newImgFile)
                             .then(function () {
-                                this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0]
-                                        .name)
+                                this.$.storageRef.getDownloadURL('/profile-pics/' + this.newImgFile.name)
                                     .then(function (url) {
                                         this.coachInfo.profile_pic_url = url;
-                                        this.coachInfo.profile_pic_name = this.$.profilePicture.files[0].name;
+                                        this.coachInfo.profile_pic_name = this.newImgFile.name;
+
+                                        console.log("new athlete photo name: ", this.coachInfo.profile_pic_name);
+                                        console.log("new athlete photo url: ", url);
+                                        
                                         this.acceptedCallback(this.coachInfo);
                                     }.bind(this));
                             }.bind(this));
@@ -437,7 +477,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
                                 this.$.storageRef.delete();
                             }
-                            
+
                             // Deletes the coach's node
                             // Have in count that this WILL DELETE coach's athletes
                             this.$.firebaseDocument.destroy(this.coachInfo.uid);

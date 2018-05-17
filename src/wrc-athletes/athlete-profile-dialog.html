@@ -564,6 +564,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 static get properties() {
                     return {
                         user: Object,
+                        newImgFile: Object,
                         athleteId: String,
                         athleteInfo: Object,
                         newAthleteInfo: Object,
@@ -634,19 +635,55 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * Serializes form data and saves into athlete data
                 */
                 _serializeAthleteForm() {
+                    console.log("profile picture object: ", this.$.profilePicture.files[0]);
+
+                    // Unique Photo ID
+                    var upid = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-5) + Math.random().toString(36).slice(-4) + Math.random().toString(36).slice(-6);
+
+                    console.log("before: ", this.$.profilePicture.files[0].name);
+                    console.log("upid: ", upid);
+
+                     /**
+                     * @description Add Unique Photo ID to orginal photo + file extension
+                     */
+                    if (this.$.profilePicture.files[0].name.slice(-3) == 'jpg') {
+                      // creates unique image file name
+                      var newFileName = this.$.profilePicture.files[0].name.replace('.jpg',upid) + '.jpg';
+
+                      // create new image file - blog: binary large OBject
+                      var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/jpeg');
+                      var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
+
+                      this.newImgFile = newImgFile;
+                      console.log("jpg file extended: ", this.newImgFile);
+
+                    } else if (this.$.profilePicture.files[0].name.slice(-3) == 'png') {
+                      // creates unique image file name
+                      var newFileName = this.$.profilePicture.files[0].name.replace('.png',upid) + '.png';
+
+                      // create new image file - blog: binary large OBject
+                      var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/png');
+                      var newImgFile = new File([blob], newFileName, {type: 'image/png'});
+
+                      this.newImgFile = newImgFile;
+                      console.log("png file extended: ", this.newImgFile);
+                    }
+
                     if (this.$.athleteForm.validate()) {
                         this._appProgressBar.hidden = false;
 
                         if (this.$.profilePicture.files[0]) {
                             this.$.storageRef.path = '/profile-pics/' + this.athleteInfo.profile_pic_name;
+                            console.log("preparing to delete profile picture: ", this.athleteInfo.profile_pic_name);
                             this.$.storageRef.delete();
+                            console.log("profile picture deleted successfully");
 
-                            this.$.firebaseStorage.put(this.$.profilePicture.files[0])
+                            this.$.firebaseStorage.put(this.newImgFile)
                             .then(function() {
-                                this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0].name)
+                                this.$.storageRef.getDownloadURL('/profile-pics/' + this.newImgFile.name)
                                 .then(function (url) {
                                     this.newAthleteInfo.profile_pic_url = url;
-                                    this.newAthleteInfo.profile_pic_name = this.$.profilePicture.files[0].name;
+                                    this.newAthleteInfo.profile_pic_name = this.newImgFile.name;
                                     this._saveAthleteInfo();
                                 }.bind(this));
                             }.bind(this));
@@ -706,7 +743,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       if (this.athleteInfo.profile_pic_name !== 'default_profile.png') {
                           this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
                           console.log("profile photo path: ", this.$.storageRef.path);
-                          this.$.storageRef.delete();  
+                          this.$.storageRef.delete();
                       }
 
                       console.log("preparing to delete athlete, ID: ", this.athleteId);
