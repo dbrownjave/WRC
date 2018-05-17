@@ -355,6 +355,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     return {
                         action: String,
                         dialogTitle: String,
+                        newImgFile: Object,
                         acceptedCallback: Function,
                         opened: {
                             type: Boolean,
@@ -423,6 +424,40 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @description Saves profile image and data
                 */
                 _saveProfileImgAndAthleteData() {
+                    console.log("profile picture object: ", this.$.profilePicture.files[0]);
+
+                    // Unique Photo ID
+                    var upid = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-5) + Math.random().toString(36).slice(-4) + Math.random().toString(36).slice(-6);
+
+                    console.log("before: ", this.$.profilePicture.files[0].name);
+                    console.log("upid: ", upid);
+
+                     /**
+                     * @description Add Unique Photo ID to orginal photo + file extension
+                     */
+                    if(this.$.profilePicture.files[0].name.slice(-3) == 'jpg') {
+                      // creates unique image file name
+                      var newFileName = this.$.profilePicture.files[0].name.replace('.jpg',upid) + '.jpg';
+
+                      // create new image file - blog: binary large OBject
+                      var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/jpeg');
+                      var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
+
+                      this.newImgFile = newImgFile;S
+                      console.log("jpg file extended: ", this.newImgFile);
+
+                    } else if (this.$.profilePicture.files[0].name.slice(-3) == 'png') {
+                      // creates unique image file name
+                      var newFileName = this.$.profilePicture.files[0].name.replace('.png',upid) + '.png';
+
+                      // create new image file - blog: binary large OBject
+                      var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/png');
+                      var newImgFile = new File([blob], newFileName, {type: 'image/png'});
+
+                      this.newImgFile = newImgFile;
+                      console.log("png file extended: ", this.newImgFile);
+                    }
+
                     if (this.$.profilePicture.files[0]) {
                         if (this.action === 'edit' && this.athleteInfo.profile_pic_name !== 'default_profile.png') {
                             this.$.storageRef.path = '/profile-pics/' + this.athleteInfo.profile_pic_name;
@@ -430,13 +465,18 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this.$.storageRef.delete();
                             console.log("deleted current photo successfully");
                         }
-                        this.$.firebaseStorage.put(this.$.profilePicture.files[0])
+
+                        this.$.firebaseStorage.put(this.newImgFile)
                             .then(function () {
-                                this.$.storageRef.getDownloadURL('/profile-pics/' + this.$.profilePicture.files[0].name)
+                                // collects image from Url
+                                this.$.storageRef.getDownloadURL('/profile-pics/' + this.newImgFile.name)
                                     .then(function (url) {
                                         this.athleteInfo.profile_pic_url = url;
-                                        this.athleteInfo.profile_pic_name = this.$.profilePicture.files[0].name;
-                                        console.log("new athlete photo name", this.athleteInfo.profile_pic_name);
+                                        this.athleteInfo.profile_pic_name = this.newImgFile;
+
+                                        console.log("new athlete photo name: ", this.athleteInfo.profile_pic_name);
+                                        console.log("new athlete photo url: ", url);
+
                                         this.acceptedCallback(this.athleteInfo);
                                     }.bind(this));
                             }.bind(this));
@@ -471,6 +511,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             .catch(function(err) {
                                 this._appToast.text = 'An error has ocurred trying to create the new coach. Is possible that the email is already in use.';
                                 this._appToast.open();
+                                console.log(err);
                             }.bind(this));
                         } else {
                             this._saveProfileImgAndAthleteData();
@@ -485,6 +526,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * Resets the form to default values
                 */
                 _resetForm() {
+                    this._appProgressBar.hidden = true;
                     this.$.athleteForm.reset();
                     this.athleteInfo.profile_pic_name = 'default_profile.png';
                     this.athleteInfo.profile_pic_url = '../../images/app-images/default_profile.png';
