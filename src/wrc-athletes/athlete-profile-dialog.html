@@ -11,6 +11,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <!-- Iron Elements -->
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
@@ -553,6 +554,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 <paper-button class="save-button" on-tap="_serializeAthleteForm">Save</paper-button>
             </div>
         </paper-dialog>
+
+        <!-- Service Worker Notification -->
+        <paper-toast id="updateToast" duration="1500"></paper-toast>
+
+
+
+
     </template>
 
     <script>
@@ -593,18 +601,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     };
                 }
 
-  // TODO: Fix description
-                /**
-                 * App Version Observer
-                 *
-                 * @description This functions observes for changes in firebase "config/version" value property
-                 */
-                _athleteProfileChanged(newData, oldData) {
-                  if (newData) {
-                    console.log("Athlete Profile Observer: ", newData);
-                  }
-                }
-
                 ready() {
                     super.ready();
 
@@ -624,6 +620,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // App Toast
                     this._appToast = document.getElementById('appToast');
+                    this._appToastInfinity = document.getElementById('appToastInfinity');
 
                     // Delete Athlete Dialog
                     this._deleteAthleteDialog = document.getElementById('appDeleteDialog');
@@ -634,13 +631,36 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     }.bind(this));
                 }
 
+                /**
+                * Athlete Profile Observer
+                *
+                * @description This functions observes for changes in firebase "coaches/athlete/uid" value property
+                */
+                _athleteProfileChanged(newData, oldData) {
+                    if (newData && Object.keys(newData).length > 0) {
+                       console.log("Athlete Profile Observer: ", newData);
+                    }
+
+                    if (Object.keys(newData).length === 0) {  // check if object is empty
+                      console.log("Object Empty Observer: ", newData);
+                      this._notificationDeletion();
+                    }
+                }
+
+                _notificationDeletion() {
+                    self = this;
+
+                    // Notification
+                    self.$.updateToast.text = "The athlete has been deleted successfully.";
+                    self.$.updateToast.open();
+                }
+
 
                 /**
                  * Toggles profile/edit view
                 */
                 _toggleEditView() {
                     this.newAthleteInfo = (this.editing) ? null : this.athleteInfo;
-
                     this.editing = !this.editing;
                     this.opened = false;
                     this.opened = true;
@@ -763,33 +783,32 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _deleteAthlete(response) {
                     if (response) {
-                      // Deletes the profile picture
-                      if (this.athleteInfo.profile_pic_name !== 'default_profile.png') {
-                          this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
-                          console.log("profile photo path: ", this.$.storageRef.path);
-                          this.$.storageRef.delete();
-                      }
+                        // Deletes the profile picture
+                        if (this.athleteInfo.profile_pic_name !== 'default_profile.png') {
+                            this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
+                            console.log("profile photo path: ", this.$.storageRef.path);
+                            this.$.storageRef.delete();
+                        }
 
-                      console.log("preparing to delete athlete, ID: ", this.athleteId);
+                        console.log("preparing to delete athlete, ID: ", this.athleteId);
+                        console.log("athlete Profile Profile Data:", this.athleteProfile);
 
-                      console.log("athlete Profile Profile Data:", this.athleteProfile);
+                        // Delete Athlete from database
+                        this.$.firebaseDocument.destroy(this.athleteId)
+                            .then(function(athleteId){
+                              console.log("athlete deleted from database successfully");
+                            })
+                            .catch(function(err){
+                              console.log(err);
+                            });
 
-                      // Delete Athlete from database
-                      this.$.firebaseDocument.destroy(this.athleteId)
-                          .then(function(athleteId){
-                            console.log("athlete deleted from database successfully");
-                          })
-                          .catch(function(err){
-                            console.log(err);
-                          });
+                          // Notification
+                          this._appToastInfinity.text = "Destroying athlete's account... ";
+                          this._appToastInfinity.open();
 
-                        // Notification
-                        this._appToast.text = 'The athlete has been deleted successfully.';
-                        this._appToast.open();
-
-                        // Close Delete + Profile Dialog
-                        this._deleteAthleteDialog.opened = false;
-                        this.opened = false;
+                          // Close Delete + Profile Dialog
+                          this._deleteAthleteDialog.opened = false;
+                          this.opened = false;
                     }
                 }
             }
