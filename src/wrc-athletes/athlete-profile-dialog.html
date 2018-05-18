@@ -308,6 +308,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             id="firebaseDocument"
             app-name="wrc_software"></firebase-document>
 
+        <!-- Firebase App Version Document Configuration -->
+        <firebase-document
+            id="athleteProfileData"
+            app-name="wrc_software"
+            path='{{user.uid}}/athletes/{{athleteId}}'
+            data='{{athleteProfile}}'></firebase-document>
+
         <!-- Firebase Storage Configuration -->
         <firebase-storage-ref
             id="storageRef"
@@ -577,8 +584,25 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             type: Boolean,
                             notify: true,
                             value: false
+                        },
+                        athleteProfile: {
+                          type: Object,
+                          notify: true,
+                          observer: '_athleteProfileChanged'
                         }
                     };
+                }
+
+  // TODO: Fix description
+                /**
+                 * App Version Observer
+                 *
+                 * @description This functions observes for changes in firebase "config/version" value property
+                 */
+                _athleteProfileChanged(newData, oldData) {
+                  if (newData) {
+                    console.log("Athlete Profile Observer: ", newData);
+                  }
                 }
 
                 ready() {
@@ -609,6 +633,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this._createImgPreview(e.target.files[0]);
                     }.bind(this));
                 }
+
 
                 /**
                  * Toggles profile/edit view
@@ -738,7 +763,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _deleteAthlete(response) {
                     if (response) {
-
                       // Deletes the profile picture
                       if (this.athleteInfo.profile_pic_name !== 'default_profile.png') {
                           this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
@@ -747,6 +771,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       }
 
                       console.log("preparing to delete athlete, ID: ", this.athleteId);
+
+                      console.log("athlete Profile Profile Data:", this.athleteProfile);
 
                       // Delete Athlete from database
                       this.$.firebaseDocument.destroy(this.athleteId)
