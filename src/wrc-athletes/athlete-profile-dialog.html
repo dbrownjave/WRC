@@ -309,13 +309,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             id="firebaseDocument"
             app-name="wrc_software"></firebase-document>
 
-        <!-- Firebase App Version Document Configuration -->
-        <firebase-document
-            id="athleteProfileData"
-            app-name="wrc_software"
-            path='{{user.uid}}/athletes/{{athleteId}}'
-            data='{{athleteProfile}}'></firebase-document>
-
         <!-- Firebase Storage Configuration -->
         <firebase-storage-ref
             id="storageRef"
@@ -592,16 +585,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             type: Boolean,
                             notify: true,
                             value: false
-                        },
-                        athleteProfile: {
-                          type: Object,
-                          notify: true,
-                          observer: '_athleteProfileChanged'
-                        },
-                        observerNotifierCount: {
-                          tpye: Number,
-                          notify: true,
-                          value: 0
                         }
                     };
                 }
@@ -635,35 +618,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this._createImgPreview(e.target.files[0]);
                     }.bind(this));
                 }
-
-                /**
-                * Athlete Profile Observer
-                *
-                * @description This functions observes for changes in firebase "coaches/athlete/uid" value property
-                */
-                _athleteProfileChanged(newData, oldData) {
-                    if (newData && Object.keys(newData).length > 0) {
-                       console.log("Athlete Profile Observer: ", newData);
-                       console.log("observerNotifierCount", this.observerNotifierCount);
-                       this.observerNotifierCount = this.observerNotifierCount + 1;
-                       console.log("observerNotifierCount", this.observerNotifierCount);
-                    }
-
-                    if (Object.keys(newData).length === 0 && this.observerNotifierCount > 1) {  // check if object is empty
-                      console.log("Object Empty Observer: ", newData);
-                      console.log("observerNotifierCount", this.observerNotifierCount);
-                      this._notificationDeletion();
-                    }
-                }
-
-                _notificationDeletion() {
-                    self = this;
-
-                    // Notification
-                    self.$.updateToast.text = "The athlete has been deleted successfully.";
-                    self.$.updateToast.open();
-                }
-
 
                 /**
                  * Toggles profile/edit view
@@ -701,26 +655,26 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                      * @description Add Unique Photo ID to orginal photo + file extension
                      */
                     if (this.$.profilePicture.files[0].name.slice(-3) == 'jpg') {
-                      // creates unique image file name
-                      var newFileName = this.$.profilePicture.files[0].name.replace('.jpg',upid) + '.jpg';
+                        // creates unique image file name
+                        var newFileName = this.$.profilePicture.files[0].name.replace('.jpg',upid) + '.jpg';
 
-                      // create new image file - blog: binary large OBject
-                      var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/jpeg');
-                      var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
+                        // create new image file - blog: binary large OBject
+                        var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/jpeg');
+                        var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
 
-                      this.newImgFile = newImgFile;
-                      console.log("jpg file extended: ", this.newImgFile);
+                        this.newImgFile = newImgFile;
+                        console.log("jpg file extended: ", this.newImgFile);
 
                     } else if (this.$.profilePicture.files[0].name.slice(-3) == 'png') {
-                      // creates unique image file name
-                      var newFileName = this.$.profilePicture.files[0].name.replace('.png',upid) + '.png';
+                        // creates unique image file name
+                        var newFileName = this.$.profilePicture.files[0].name.replace('.png',upid) + '.png';
 
-                      // create new image file - blog: binary large OBject
-                      var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/png');
-                      var newImgFile = new File([blob], newFileName, {type: 'image/png'});
+                        // create new image file - blog: binary large OBject
+                        var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/png');
+                        var newImgFile = new File([blob], newFileName, {type: 'image/png'});
 
-                      this.newImgFile = newImgFile;
-                      console.log("png file extended: ", this.newImgFile);
+                        this.newImgFile = newImgFile;
+                        console.log("png file extended: ", this.newImgFile);
                     }
 
                     if (this.$.athleteForm.validate()) {
@@ -822,7 +776,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           this.opened = false;
                     }
                 }
-*/
+            */
 
 
                 /**
@@ -860,7 +814,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             });
 
                           // Notification
-                          this._appToastInfinity.text = "Destroying athlete's account... ";
+                          this._appToastInfinity.text = "The athlete has been deleted successfully.";
                           this._appToastInfinity.open();
 
                           // Close Delete + Profile Dialog
