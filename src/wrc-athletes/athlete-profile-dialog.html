@@ -608,7 +608,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // App Toast
                     this._appToast = document.getElementById('appToast');
-                    this._appToastInfinity = document.getElementById('appToastInfinity');
 
                     // Delete Athlete Dialog
                     this._deleteAthleteDialog = document.getElementById('appDeleteDialog');
@@ -814,8 +813,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             });
 
                           // Notification
-                          this._appToastInfinity.text = "The athlete has been deleted successfully.";
-                          this._appToastInfinity.open();
+                          this._appToast.text = "The athlete has been deleted successfully.";
+                          this._appToast.open();
 
                           // Close Delete + Profile Dialog
                           this._deleteAthleteDialog.opened = false;
