@@ -787,9 +787,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 /**
                  * Deletes the athlete
                  *
+                 * Note: [ENABLE] Delete athlete data from coaches (Cloud Function)
+                 *
                  * @param {Boolean} response from delete confirmation dialog
                  * @return {void}
-                */
+
                 _deleteAthlete(response) {
                     if (response) {
                         // Deletes the profile picture
@@ -820,6 +822,53 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           this.opened = false;
                     }
                 }
+*/
+
+
+                /**
+                 * Deletes the athlete
+                 *
+                 * Note: [DISBALE] Delete athlete data from coaches (Cloud Function)
+                 *
+                 * @param {Boolean} response from delete confirmation dialog
+                 * @return {void}
+                */
+                _deleteAthlete(response) {
+                    if (response) {
+                        // Deletes the athlete information from the coach's data
+                        this.$.firebaseDocument.destroy(this.user.uid + '/athletes/' + this.athleteId)
+                          .then(function() {
+                              // Deletes the profile picture
+                              if (this.athleteInfo.profile_pic_name !== 'default_profile.png') {
+                                  this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
+                                  this.$.storageRef.delete();
+
+                                  console.log("profile photo:", deleted);
+                              }
+                          }.bind(this));
+
+                        console.log("preparing to delete athlete, ID: ", this.athleteId);
+                        console.log("athlete Profile Profile Data:", this.athleteProfile);
+
+                        // Delete Athlete from database
+                        this.$.firebaseDocument.destroy(this.athleteId)
+                            .then(function(athleteId){
+                              console.log("athlete deleted from database successfully");
+                            })
+                            .catch(function(err){
+                              console.log(err);
+                            });
+
+                          // Notification
+                          this._appToastInfinity.text = "Destroying athlete's account... ";
+                          this._appToastInfinity.open();
+
+                          // Close Delete + Profile Dialog
+                          this._deleteAthleteDialog.opened = false;
+                          this.opened = false;
+                    }
+                }
+
             }
             window.customElements.define(AthleteProfileDialog.is, AthleteProfileDialog);
         })();
