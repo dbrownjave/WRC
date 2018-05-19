@@ -597,6 +597,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           type: Object,
                           notify: true,
                           observer: '_athleteProfileChanged'
+                        },
+                        observerNotifierCount: {
+                          tpye: Number,
+                          notify: true,
+                          value: 0
                         }
                     };
                 }
@@ -639,10 +644,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 _athleteProfileChanged(newData, oldData) {
                     if (newData && Object.keys(newData).length > 0) {
                        console.log("Athlete Profile Observer: ", newData);
+                       console.log("observerNotifierCount", this.observerNotifierCount);
+                       this.observerNotifierCount = this.observerNotifierCount + 1;
+                       console.log("observerNotifierCount", this.observerNotifierCount);
                     }
 
-                    if (Object.keys(newData).length === 0) {  // check if object is empty
+                    if (Object.keys(newData).length === 0 && this.observerNotifierCount > 1) {  // check if object is empty
                       console.log("Object Empty Observer: ", newData);
+                      console.log("observerNotifierCount", this.observerNotifierCount);
                       this._notificationDeletion();
                     }
                 }
