@@ -309,59 +309,64 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 /**
                  * @description Saves profile image and data
                 */
-                _saveProfileImgAndAthleteData() {
-                  console.log("profile picture object: ", this.$.profilePicture.files[0]);
+                _saveProfileImgAndCoachData() {
+                    console.log("default profile photo name:", this.coachInfo.profile_pic_name);
+                    if (this.$.profilePicture.files[0] && this.$.profilePicture.files[0].name !== 'default_profile.png') {
+                        console.log("profile picture object: ", this.$.profilePicture.files[0]);
 
-                  // Unique Photo ID
-                  var upid = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-5) + Math.random().toString(36).slice(-4) + Math.random().toString(36).slice(-6);
+                        // Unique Photo ID
+                        var upid = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-5) + Math.random().toString(36).slice(-4) + Math.random().toString(36).slice(-6);
 
-                  console.log("before: ", this.$.profilePicture.files[0].name);
-                  console.log("upid: ", upid);
+                        console.log("before: ", this.$.profilePicture.files[0].name);
+                        console.log("upid: ", upid);
 
-                   /**
-                   * @description Add Unique Photo ID to orginal photo + file extension
-                   */
-                  if(this.$.profilePicture.files[0].name.slice(-3) == 'jpg') {
-                    // creates unique image file name
-                    var newFileName = this.$.profilePicture.files[0].name.replace('.jpg',upid) + '.jpg';
+                         /**
+                         * @description Add Unique Photo ID to orginal photo + file extension
+                         */
+                        if(this.$.profilePicture.files[0].name.slice(-3) == 'jpg') {
+                          // creates unique image file name
+                          var newFileName = this.$.profilePicture.files[0].name.replace('.jpg',upid) + '.jpg';
 
-                    // create new image file - blog: binary large OBject
-                    var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/jpeg');
-                    var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
+                          // create new image file - blog: binary large OBject
+                          var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/jpeg');
+                          var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
 
-                    this.newImgFile = newImgFile;
-                    console.log("jpg file extended: ", this.newImgFile);
+                          this.newImgFile = newImgFile;
+                          console.log("jpg file extended: ", this.newImgFile);
 
-                  } else if (this.$.profilePicture.files[0].name.slice(-3) == 'png') {
-                    // creates unique image file name
-                    var newFileName = this.$.profilePicture.files[0].name.replace('.png',upid) + '.png';
+                        } else if (this.$.profilePicture.files[0].name.slice(-3) == 'png') {
+                          // creates unique image file name
+                          var newFileName = this.$.profilePicture.files[0].name.replace('.png',upid) + '.png';
 
-                    // create new image file - blog: binary large OBject
-                    var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/png');
-                    var newImgFile = new File([blob], newFileName, {type: 'image/png'});
+                          // create new image file - blog: binary large OBject
+                          var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/png');
+                          var newImgFile = new File([blob], newFileName, {type: 'image/png'});
 
-                    this.newImgFile = newImgFile;
-                    console.log("png file extended: ", this.newImgFile);
-                  }
-
-                    if (this.$.profilePicture.files[0]) {
-                        if (this.action === 'edit' && this.coachInfo.profile_pic_name !== 'default_profile.png') {
-                            this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
-                            console.log("current coach photo name", this.coachInfo.profile_pic_name);
-                            this.$.storageRef.delete();
+                          this.newImgFile = newImgFile;
+                          console.log("png file extended: ", this.newImgFile);
                         }
 
-                        // collects image from Url
+                        if (this.action === 'edit' && this.coachInfo.profile_pic_name !== 'default_profile.png') {
+                          console.log("default profile photo name before:", this.coachInfo.profile_pic_name);
+                            this.$.storageRef.path = '/profile-pics/' + this.coachInfo.profile_pic_name;
+                            console.log("current coach photo name:", this.coachInfo.profile_pic_name);
+                            this.$.storageRef.delete();
+                            console.log("deleted current photo successfully");
+                        }
+
+                        // Store new image file to Firebase Storage
                         this.$.firebaseStorage.put(this.newImgFile)
                             .then(function () {
+                              console.log("New File:", this.newImgFile);
+                                // collects image from Url
                                 this.$.storageRef.getDownloadURL('/profile-pics/' + this.newImgFile.name)
                                     .then(function (url) {
                                         this.coachInfo.profile_pic_url = url;
                                         this.coachInfo.profile_pic_name = this.newImgFile.name;
 
-                                        console.log("new athlete photo name: ", this.coachInfo.profile_pic_name);
-                                        console.log("new athlete photo url: ", url);
-                                        
+                                        console.log("new coach photo name: ", this.coachInfo.profile_pic_name);
+                                        console.log("new coach photo url: ", url);
+
                                         this.acceptedCallback(this.coachInfo);
                                     }.bind(this));
                             }.bind(this));
@@ -369,6 +374,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this.acceptedCallback(this.coachInfo);
                     }
                 }
+
 
                 /**
                  * Serializes the data from form and save selected profile image
@@ -391,14 +397,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                 // Signs out the new user since it is automatically signed in
                                 this.$.newAccountsAuth.signOut();
 
-                                this._saveProfileImgAndAthleteData();
+                                this._saveProfileImgAndCoachData();
                             }.bind(this))
                             .catch(function(err) {
                                 this._appToast.text = 'An error has ocurred trying to create the new coach. Is possible that the email is already in use.';
                                 this._appToast.open();
                             }.bind(this));
                         } else {
-                            this._saveProfileImgAndAthleteData();
+                            this.__saveProfileImgAndCoachData();
                         }
                     }
                 }
