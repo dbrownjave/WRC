@@ -426,7 +426,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @description Saves profile image and data
                 */
                 _saveProfileImgAndAthleteData() {
-                  console.log("default profile photo name:", this.athleteInfo.profile_pic_name);
+                    console.log("default profile photo name:", this.athleteInfo.profile_pic_name);
                     if (this.$.profilePicture.files[0] && this.$.profilePicture.files[0].name !== 'default_profile.png') {
                         console.log("profile picture object: ", this.$.profilePicture.files[0]);
 
@@ -462,7 +462,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           console.log("png file extended: ", this.newImgFile);
                         }
 
-                        //console.log("default profile photo:", this.athleteInfo.profile_pic_name);
                         if (this.action === 'edit' && this.athleteInfo.profile_pic_name !== 'default_profile.png') {
                           console.log("default profile photo name before:", this.athleteInfo.profile_pic_name);
                             this.$.storageRef.path = '/profile-pics/' + this.athleteInfo.profile_pic_name;
@@ -471,13 +470,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             console.log("deleted current photo successfully");
                         }
 
-
-
-                        //console.log("photo doesn't match default_profile");
-// TODO: Fix path error
+                        // Store new image file to Firebase Storage
                         this.$.firebaseStorage.put(this.newImgFile)
                             .then(function () {
-
                               console.log("New File:", this.newImgFile);
                                 // collects image from Url
                                 this.$.storageRef.getDownloadURL('/profile-pics/' + this.newImgFile.name)
@@ -547,7 +542,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.$.profileImage.src = '../../images/app-images/default_profile.png';
 
                     this.$.profilePhotoForm.reset();
-
                     console.log("photo file upload after reset: ", this.$.profilePicture.files[0]);
                 }
 
