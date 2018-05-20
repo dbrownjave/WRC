@@ -207,7 +207,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <h2>[[_computeDialogTitle(action)]]</h2>
             <paper-dialog-scrollable>
                 <div class="picture-wrapper">
+                  <form id="profilePhotoForm">
                     <input type="file" name="profile_pic" id="profilePicture">
+                  </form>
                     <label for="profilePicture">
                         <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
                         <iron-image id="profileImage" preload fade sizing="cover" src="[[_computeImgSrc(action)]]"></iron-image>
@@ -543,7 +545,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.athleteInfo.profile_pic_name = 'default_profile.png';
                     this.athleteInfo.profile_pic_url = '../../images/app-images/default_profile.png';
                     this.$.profileImage.src = '../../images/app-images/default_profile.png';
-                    document.getElementById("profilePicture").value = ' ';
+
+                    this.$.profilePhotoForm.reset();
+
                     console.log("photo file upload after reset: ", this.$.profilePicture.files[0]);
                 }
 
