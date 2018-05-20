@@ -642,55 +642,65 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * Serializes form data and saves into athlete data
                 */
                 _serializeAthleteForm() {
-                    console.log("profile picture object: ", this.$.profilePicture.files[0]);
+                    if (this.$.profilePicture.files[0] && this.$.profilePicture.files[0].name !== 'default_profile.png') {
+                        console.log("profile picture object: ", this.$.profilePicture.files[0]);
 
-                    // Unique Photo ID
-                    var upid = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-5) + Math.random().toString(36).slice(-4) + Math.random().toString(36).slice(-6);
+                        // Unique Photo ID
+                        var upid = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-5) + Math.random().toString(36).slice(-4) + Math.random().toString(36).slice(-6);
 
-                    console.log("before: ", this.$.profilePicture.files[0].name);
-                    console.log("upid: ", upid);
+                        console.log("before: ", this.$.profilePicture.files[0].name);
+                        console.log("upid: ", upid);
 
-                     /**
-                     * @description Add Unique Photo ID to orginal photo + file extension
-                     */
-                    if (this.$.profilePicture.files[0].name.slice(-3) == 'jpg') {
-                        // creates unique image file name
-                        var newFileName = this.$.profilePicture.files[0].name.replace('.jpg',upid) + '.jpg';
+                         /**
+                         * @description Add Unique Photo ID to orginal photo + file extension
+                         */
+                        if (this.$.profilePicture.files[0].name.slice(-3) == 'jpg') {
+                            // creates unique image file name
+                            var newFileName = this.$.profilePicture.files[0].name.replace('.jpg',upid) + '.jpg';
 
-                        // create new image file - blog: binary large OBject
-                        var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/jpeg');
-                        var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
+                            // create new image file - blog: binary large OBject
+                            var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/jpeg');
+                            var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
 
-                        this.newImgFile = newImgFile;
-                        console.log("jpg file extended: ", this.newImgFile);
+                            this.newImgFile = newImgFile;
+                            console.log("jpg file extended: ", this.newImgFile);
 
-                    } else if (this.$.profilePicture.files[0].name.slice(-3) == 'png') {
-                        // creates unique image file name
-                        var newFileName = this.$.profilePicture.files[0].name.replace('.png',upid) + '.png';
+                        } else if (this.$.profilePicture.files[0].name.slice(-3) == 'png') {
+                            // creates unique image file name
+                            var newFileName = this.$.profilePicture.files[0].name.replace('.png',upid) + '.png';
 
-                        // create new image file - blog: binary large OBject
-                        var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/png');
-                        var newImgFile = new File([blob], newFileName, {type: 'image/png'});
+                            // create new image file - blog: binary large OBject
+                            var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/png');
+                            var newImgFile = new File([blob], newFileName, {type: 'image/png'});
 
-                        this.newImgFile = newImgFile;
-                        console.log("png file extended: ", this.newImgFile);
+                            this.newImgFile = newImgFile;
+                            console.log("png file extended: ", this.newImgFile);
+                        }
                     }
 
                     if (this.$.athleteForm.validate()) {
                         this._appProgressBar.hidden = false;
 
-                        if (this.$.profilePicture.files[0]) {
+                        // Delete if image is not default image
+                        if (this.$.profilePicture.files[0] && this.athleteInfo.profile_pic_name !== 'default_profile.png') {
+                            // Delete storage ref path of profile image
                             this.$.storageRef.path = '/profile-pics/' + this.athleteInfo.profile_pic_name;
                             console.log("preparing to delete profile picture: ", this.athleteInfo.profile_pic_name);
                             this.$.storageRef.delete();
                             console.log("profile picture deleted successfully");
+                        }
 
+                        if (this.$.profilePicture.files[0]) {
+                            // Put new image file in Firebase Storage
                             this.$.firebaseStorage.put(this.newImgFile)
                             .then(function() {
                                 this.$.storageRef.getDownloadURL('/profile-pics/' + this.newImgFile.name)
                                 .then(function (url) {
+                                    console.log("check new profile photo url?: ", url);
                                     this.newAthleteInfo.profile_pic_url = url;
+                                    console.log("check new profile photo name?: ", this.newImgFile.name);
                                     this.newAthleteInfo.profile_pic_name = this.newImgFile.name;
+                                    console.log("check new profile name?: ", this.newAthleteInfo.profile_pic_name);
                                     this._saveAthleteInfo();
                                 }.bind(this));
                             }.bind(this));
@@ -788,29 +798,31 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _deleteAthlete(response) {
                     if (response) {
+                      console.log("athlete info: ", this.athleteInfo);
+                      console.log("preparing to delete athlete photo: ", this.athleteInfo.profile_pic_name);
+
                         // Deletes the athlete information from the coach's data
                         this.$.firebaseDocument.destroy(this.user.uid + '/athletes/' + this.athleteId)
                           .then(function() {
-                              // Deletes the profile picture
-                              if (this.athleteInfo.profile_pic_name !== 'default_profile.png') {
+                            console.log("after: athlete info: ", this.athleteInfo);
+                              // Deletes athlete's profile picture
+                              if (this.athleteInfo.profile_pic_name && this.athleteInfo.profile_pic_name !== 'default_profile.png') {
+                                  console.log("preparing to delete athlete photo: ", this.athleteInfo.profile_pic_name);
                                   this.$.storageRef.path = 'profile-pics/' + this.athleteInfo.profile_pic_name;
                                   this.$.storageRef.delete();
-
-                                  console.log("profile photo:", deleted);
                               }
                           }.bind(this));
 
                         console.log("preparing to delete athlete, ID: ", this.athleteId);
-                        console.log("athlete Profile Profile Data:", this.athleteProfile);
 
                         // Delete Athlete from database
                         this.$.firebaseDocument.destroy(this.athleteId)
-                            .then(function(athleteId){
-                              console.log("athlete deleted from database successfully");
-                            })
-                            .catch(function(err){
-                              console.log(err);
-                            });
+                          .then(function(athleteId){
+                            console.log("athlete deleted from database successfully");
+                          })
+                          .catch(function(err){
+                            console.log(err);
+                          });
 
                           // Notification
                           this._appToast.text = "The athlete has been deleted successfully.";
