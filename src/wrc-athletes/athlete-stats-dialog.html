@@ -45,895 +45,807 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
 <dom-module id="athlete-stats-dialog">
-    <template>
-        <style include="wrc-shared-styles">
-            /* Dialog */
-            paper-dialog {
-                border-radius: 5px;
-                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
-  			    }
+	<template>
+		<style include="wrc-shared-styles">
+			/* Dialog */
 
-            paper-dialog h2 {
-  				      color: var(--azul-text-title);
-  				      font-size: 1.6em;
+			paper-dialog {
+				border-radius: 5px;
+				box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.05);
+			}
 
-                @apply --layout-horizontal;
-                @apply --layout-center;
-  			    }
+			paper-dialog h2 {
+				color: var(--azul-text-title);
+				font-size: 1.6em;
 
-            paper-dialog h2 iron-image {
-                width: 40px;
-                height: 40px;
-                margin-right: 10px;
-                overflow: hidden;
-                border-radius: 10em;
-            }
+				@apply --layout-horizontal;
+				@apply --layout-center;
+			}
 
-      			paper-dialog div p {
-      				  line-height: 1em;
-      			}
+			paper-dialog h2 iron-image {
+				width: 40px;
+				height: 40px;
+				margin-right: 10px;
+				overflow: hidden;
+				border-radius: 10em;
+			}
 
-      			paper-dialog div.buttons {
-                margin-top:0.5cm;
+			paper-dialog div p {
+				line-height: 1em;
+			}
 
-      				  @apply --layout-horizontal;
-      				  @apply --layout-end-justified;
-      			}
+			paper-dialog div.buttons {
+				margin-top: 0.5cm;
 
-            paper-dialog .buttons paper-button {
-                color: var(--azul-third-button-text);
-            }
+				@apply --layout-horizontal;
+				@apply --layout-end-justified;
+			}
 
-      			paper-dialog .buttons paper-button.cancel-button {
-      				  color: var(--paper-grey-700);
-      			}
+			paper-dialog .buttons paper-button {
+				color: var(--azul-third-button-text);
+			}
 
-            /* Maxes */
-            h3 {
-                color: var(--azul-text-title);
-                margin-top: 0;
-                font-weight: 400;
-                font-size: 1.3em;
-            }
+			paper-dialog .buttons paper-button.cancel-button {
+				color: var(--paper-grey-700);
+			}
 
-            div.header {
-                color: var(--azul-text-title);
-                margin-top: 0;
-                font-weight: 400;
-                font-size: 1.3em;
-            }
+			/* Maxes */
 
-            div.header > .weight {
-                margin-left: 60px
+			h3 {
+				color: var(--azul-text-title);
+				margin-top: 0;
+				font-weight: 400;
+				font-size: 1.3em;
+			}
 
-            }
+			div.header {
+				color: var(--azul-text-title);
+				margin-top: 0;
+				font-weight: 400;
+				font-size: 1.3em;
+			}
 
-            div.header > .reps {
-                margin-left: 104px
-            }
+			div.header>.weight {
+				margin-left: 60px
+			}
 
-            div.header > .max-weight {
-                margin-left: 105px
-            }
+			div.header>.reps {
+				margin-left: 104px
+			}
 
-            div.horizontal {
-                margin: 0;
-                padding: 0;
-                width: 60%;
+			div.header>.max-weight {
+				margin-left: 105px
+			}
 
-                @apply --layout-horizontal;
-            }
+			div.horizontal {
+				margin: 0;
+				padding: 0;
+				width: 60%;
 
-            div.maxes-wrapper p {
-                color: var(--azul-text-title);
-                margin-bottom: 0;
-                margin-top: 18px;
-                font-size: 1.1em;
-            }
+				@apply --layout-horizontal;
+			}
 
-            div.maxes-wrapper p span {
-                font-size: 1.05em;
-            }
+			div.maxes-wrapper p {
+				color: var(--azul-text-title);
+				margin-bottom: 0;
+				margin-top: 18px;
+				font-size: 1.1em;
+			}
 
-            div.agility-wrapper {
-              width: 6cm;
-            }
+			div.maxes-wrapper p span {
+				font-size: 1.05em;
+			}
 
-            div.agility > div.horizontal {
-                margin: 0;
-                padding: 0;
-                width: 80%;
+			div.agility-wrapper {
+				width: 6cm;
+			}
 
-                @apply --layout-horizontal;
-            }
+			div.agility>div.horizontal {
+				margin: 0;
+				padding: 0;
+				width: 80%;
 
-            /* Form Wrapper */
-            vaadin-form-layout {
-				        @apply --layout-vertical;
-			      }
+				@apply --layout-horizontal;
+			}
 
-			    div.horizontal-fields {
-              width: 100%;
+			/* Form Wrapper */
 
-				      @apply --layout-horizontal;
-              @apply --layout-wrap;
-			    }
+			vaadin-form-layout {
+				@apply --layout-vertical;
+			}
 
-    			div.horizontal-fields vaadin-text-field {
-    				  width: 47.5%;
-    			}
+			div.horizontal-fields {
+				width: 100%;
 
-    			div.horizontal-fields vaadin-combo-box {
-    				  width: 47.5%;
-    			}
+				@apply --layout-horizontal;
+				@apply --layout-wrap;
+			}
 
-          div.horizontal-fields-vert vaadin-text-field {
-    				  width: 47.5%;
-    			}
+			div.horizontal-fields vaadin-text-field {
+				width: 47.5%;
+			}
 
-          div.horizontal-fields-broad-jump vaadin-text-field {
-              width: 28.5%;
-          }
+			div.horizontal-fields vaadin-combo-box {
+				width: 47.5%;
+			}
 
-          [slot='suffix'], [slot='prefix'] {
-    				  color: var(--paper-grey-500);
-    			}
+			div.horizontal-fields-vert vaadin-text-field {
+				width: 47.5%;
+			}
 
-          div.form-wrapper {
-              margin-bottom: 12px;
-          }
+			div.horizontal-fields-broad-jump vaadin-text-field {
+				width: 28.5%;
+			}
 
-          /* Stat Modal */
-          div.stat-wrapper {
-              color: var(--azul-text-title);
-              margin-bottom: 0;
-              margin-top: 18px;
-              font-size: 1.1em;
+			[slot='suffix'],
+			[slot='prefix'] {
+				color: var(--paper-grey-500);
+			}
 
-              @apply --layout-horizontal;
-              @apply --layout-justified;
-              @apply --layout-around-justified;
-              @apply --layout-start-justified;
-              @apply --layout-start;
-          }
+			div.form-wrapper {
+				margin-bottom: 12px;
+			}
 
-          div.stat-wrapper .title {}
+			/* Stat Modal */
 
-          div.stat-wrapper > .weight-container {
-              width: 110px;
-          }
+			div.stat-wrapper {
+				color: var(--azul-text-title);
+				margin-bottom: 0;
+				margin-top: 18px;
+				font-size: 1.1em;
 
-          div.stat-wrapper  .reps-container {
-              margin-left: 50px;
-              width: 90px;
-          }
+				@apply --layout-horizontal;
+				@apply --layout-justified;
+				@apply --layout-around-justified;
+				@apply --layout-start-justified;
+				@apply --layout-start;
+			}
 
-          div.stat-wrapper .equal-container {
-              margin-right: 50px;
-          }
+			div.stat-wrapper .title {}
 
-          [flex] {
-            @apply --layout-flex;
-          }
+			div.stat-wrapper>.weight-container {
+				width: 110px;
+			}
 
-      /* To keep dialog larger with large screens */
+			div.stat-wrapper .reps-container {
+				margin-left: 50px;
+				width: 90px;
+			}
+
+			div.stat-wrapper .equal-container {
+				margin-right: 50px;
+			}
+
+			[flex] {
+				@apply --layout-flex;
+			}
+
+			/* To keep dialog larger with large screens */
+
 			@media screen and (min-width: 600px) {
 				paper-dialog {
 					width: 610px;
 				}
-            }
-
-            @media screen and (max-width: 425px) {
-                /* Maxes */
-                div.horizontal {
-                    width: 100%;
-
-                    @apply --layout-vertical;
-                }
-
-                div.maxes-wrapper p {
-                    margin-top: 18px;
-                    font-size: 1em;
-                }
-
-                div.maxes-wrapper p span {
-                    font-size: .95em;
-                }
-
-                /* Form */
-                div.horizontal-fields vaadin-text-field {
-                    width: 60%;
-                }
-
-                div.horizontal-fields vaadin-combo-box {
-                    width: 35%;
-                }
-
-                /* Stats */
-
-                div.header {
-                  font-size: 1em
-                }
-
-                div.header > .weight {
-                    margin-left: 45px
-
-                }
-
-                div.header > .reps {
-                    margin-left: 20px
-                }
-
-                div.header > .max-weight {
-                    margin-left: 20px
-                }
-
-                /* Stat Modal */
-                div.stat-wrapper {
-                    font-size: .9em
-                }
-
-                div.stat-wrapper .title {}
-
-                div.stat-wrapper > .weight-container {
-                    width: 110px;
-                }
-
-                div.stat-wrapper  .reps-container {
-                    margin-left: 50px;
-                    width: 90px;
-                }
-
-                div.stat-wrapper .equal-container {
-                    margin-right: 50px;
-                }
-            }
-
-            [flex] {
-                @apply --layout-flex;
-            }
-
-            [hidden] {
-                display: none;
-            }
-
-            div.buttons[hidden] {
-                display: none;
-            }
-        </style>
-
-        <!-- Firebase Document Configuration -->
-        <firebase-document
-            id="firebaseDocument"
-            app-name="wrc_software"></firebase-document>
-
-        <paper-dialog
-            opened="{{opened}}"
-            with-backdrop
-            entry-animation="scale-up-animation"
-            exit-animation="fade-out-animation"
-            editing$="[[editMaxes]]">
-
-            <h2>
-                <iron-image
-                    fade
-                    preload
-                    sizing="cover"
-                    src="[[athleteInfo.profile_pic_url]]"></iron-image>
-                [[athleteInfo.first]] [[athleteInfo.last]] #[[athleteInfo.number]]
-            </h2>
-            <paper-dialog-scrollable>
-
-                <template is="dom-if" if="[[!editMaxes]]">
-                  <!-- Header  -->
-                  <div class="header">
-                      <span> Exercise</span>
-                      <span class="weight">Weight</span>
-                      <span class="reps">Reps</span>
-                      <span class="max-weight">Est. Max</span>
-                  </div>
-
-                    <div class="maxes-wrapper">
-
-                        <!-- Bench -->
-                        <div class="stat-wrapper">
-                          <div>
-                            <strong class="title" style="margin-right: 42px;">Bench Press:</strong>
-                          </div>
-
-                          <div class="weight-container">
-                            <span>[[athleteStats.bench_press_value]]lbs</span>
-                          </div>
-
-                          <div>
-                            <strong>x</strong>
-                          </div>
-
-                          <div class="reps-container">
-                            <span >[[athleteStats.bench_press_reps]] reps</span>
-                          </div>
-
-                          <div>
-                            <strong class="equal-container">=</strong>
-                          </div>
-
-                          <div>
-                            <strong class="max-container">[[maxBenchPress]]lbs</strong>
-                          </div>
-                        </div>
-
-                          <!-- BackSquat -->
-                          <div class="stat-wrapper">
-                            <div>
-                              <strong class="title" style="margin-right: 50px;">Back Squat:</strong>
-                            </div>
-
-                            <div class="weight-container">
-                              <span>[[athleteStats.back_squat_value]]lbs</span>
-                            </div>
-
-                            <div>
-                              <strong>x</strong>
-                            </div>
-
-                            <div class="reps-container">
-                              <span>[[athleteStats.back_squat_reps]] reps</span>
-                            </div>
-
-                            <div>
-                              <strong class="equal-container">=</strong>
-                            </div>
-
-                            <div>
-                              <strong class="max-container">[[maxBackSquat]]lbs</strong>
-                            </div>
-                          </div>
-
-                         <!--  Front Squat -->
-                         <div class="stat-wrapper">
-                           <div>
-                             <strong class="title" style="margin-right: 50px;">Front Squat:</strong>
-                           </div>
-
-                           <div class="weight-container">
-                             <span>[[athleteStats.front_squat_value]]lbs</span>
-                           </div>
-
-                           <div>
-                             <strong>x</strong>
-                           </div>
-
-                           <div class="reps-container">
-                             <span>[[athleteStats.front_squat_reps]] reps</span>
-                           </div>
-
-                           <div>
-                             <strong class="equal-container">=</strong>
-                           </div>
-
-                           <div>
-                             <strong class="max-container">[[maxFrontSquat]]lbs</strong>
-                           </div>
-                         </div>
-
-                         <!--  Deadlift -->
-                         <div class="stat-wrapper">
-                           <div>
-                             <strong class="title" style="margin-right: 75px;">Deadlift:</strong>
-                           </div>
-
-                           <div class="weight-container">
-                             <span>[[athleteStats.deadlift_value]]lbs</span>
-                           </div>
-
-                           <div>
-                             <strong>x</strong>
-                           </div>
-
-                           <div class="reps-container">
-                             <span>[[athleteStats.deadlift_reps]] reps</span>
-                           </div>
-
-                           <div>
-                             <strong class="equal-container">=</strong>
-                           </div>
-
-                           <div>
-                             <strong class="max-container">[[maxDeadLift]]lbs</strong>
-                           </div>
-                         </div>
-
-                         <!--  Hang / Power Clean -->
-                         <div class="stat-wrapper">
-                           <div style="width: 135px">
-                             <strong class="title">Clean:</strong>
-                           </div>
-
-                           <div class="weight-container">
-                             <span>[[athleteStats.hang_power_clean_value]]lbs</span>
-                           </div>
-
-                           <div>
-                             <strong>x</strong>
-                           </div>
-
-                           <div class="reps-container">
-                             <span>[[athleteStats.hang_power_clean_reps]] reps</span>
-                           </div>
-
-                           <div>
-                             <strong class="equal-container">=</strong>
-                           </div>
-
-                           <div>
-                             <strong class="max-container">[[maxClean]]lbs</strong>
-                           </div>
-                         </div>
-
-                         <!--  Pull-ups -->
-                         <div class="stat-wrapper">
-                           <div style="width: 135px">
-                             <strong class="title">Pull-ups:</strong>
-                           </div>
-
-                           <div class="weight-container">
-                             <span>[[athleteStats.pull_ups]]</span>
-                           </div>
-                         </div>
-
-                         <!-- Agility Header  -->
-                         <div class="agility">
-
-                         <div class="header" style="margin: 1.5em 0 0 0">
-                             <span> Agility</span>
-                         </div>
-
-                        <div class="horizontal">
-                        <div class="agility-wrapper">
-                          <p>
-                              <strong class="title">40 Yard Dash:</strong>
-                              <span>[[athleteStats.forty_yard_dash]] sec</span>
-                          </p>
-                        </div>
-                          <span flex></span>
-                        <div class="agility-wrapper">
-                          <p>
-                              <strong class="title">Broad Jump:</strong>
-                              <span>{{athleteStats.broad_jump_ft}} ft {{athleteStats.broad_jump_in}} in</span>
-                          </p>
-                        </div>
-                      </div>
-
-                        <div class="horizontal">
-                        <div class="agility-wrapper">
-                            <p>
-                                <strong class="title">20 Yard Shuttle:</strong>
-                                <span>[[athleteStats.twenty_yard_shuttle]] sec</span>
-                            </p>
-                        </div>
-                            <span flex></span>
-                        <div class="agility-wrapper">
-                            <p>
-                                <strong class="title">3 Cone Drill:</strong>
-                                <span>[[athleteStats.three_cone_drill]] sec</span>
-                            </p>
-                          </div>
-                        </div>
-
-                        <div class="horizontal">
-                          <div class="agility-wrapper">
-                            <p>
-                                <strong class="title">Vertical Jump:</strong>
-                                <span>[[athleteStats.vertical_jump]] in</span>
-                            </p>
-                          </div>
-                            <span flex></span>
-                          <div class="agility-wrapper">
-                            <p>
-                                <strong class="title">60 Yard Shuttle:</strong>
-                                <span>[[athleteStats.sixty_yard_shuttle]] sec</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                </template>
-
-                <!-- Form Wrapper -->
-                <div class="form-wrapper" hidden="[[!editMaxes]]">
-                    <iron-form id="maxesForm">
-                        <form>
-                            <vaadin-form-layout>
-                                <div class="horizontal-fields" colspan="2">
-                                    <vaadin-text-field
-                                        label="Bench Press"
-                                        name="bench_press_value"
-                                        type="number"
-                                        maxlength="3"
-                                        pattern="[0-9]*"
-                                        prevent-invalid-input
-                                        value="{{athleteStats.bench_press_value}}">
-                                        <span slot="suffix">lbs</span>
-                                    </vaadin-text-field>
-                                    <span flex></span>
-                                    <vaadin-combo-box
-                                        id="benchPressCombo"
-                                        label="Reps"
-                                        name="bench_press_reps"
-                                        value="{{athleteStats.bench_press_reps}}"></vaadin-combo-box>
-                                </div>
-                                <br>
-                                <div class="horizontal-fields" colspan="2">
-                                    <vaadin-text-field
-                                        label="Back Squat"
-                                        name="back_squat_value"
-                                        maxlength="3"
-                                        pattern="[0-9]*"
-                                        prevent-invalid-input
-                                        value="{{athleteStats.back_squat_value}}">
-                                        <span slot="suffix">lbs</span>
-                                    </vaadin-text-field>
-                                    <span flex></span>
-                                    <vaadin-combo-box
-                                        id="backSquatCombo"
-                                        label="Reps"
-                                        name="back_squat_reps"
-                                        value="{{athleteStats.back_squat_reps}}"></vaadin-combo-box>
-                                </div>
-                                <br>
-                                <div class="horizontal-fields" colspan="2">
-                                    <vaadin-text-field
-                                        label="Front Squat"
-                                        name="front_squat_value"
-                                        maxlength="3"
-                                        pattern="[0-9]*"
-                                        prevent-invalid-input
-                                        value="{{athleteStats.front_squat_value}}">
-                                        <span slot="suffix">lbs</span>
-                                    </vaadin-text-field>
-                                    <span flex></span>
-                                    <vaadin-combo-box
-                                        id="frontSquatCombo"
-                                        label="Reps"
-                                        name="front_squat_reps"
-                                        value="{{athleteStats.front_squat_reps}}"></vaadin-combo-box>
-                                </div>
-                                <br>
-                                <div class="horizontal-fields" colspan="2">
-                                    <vaadin-text-field
-                                        label="Deadlift"
-                                        name="deadlift_value"
-                                        maxlength="3"
-                                        pattern="[0-9]*"
-                                        prevent-invalid-input
-                                        value="{{athleteStats.deadlift_value}}">
-                                        <span slot="suffix">lbs</span>
-                                    </vaadin-text-field>
-                                    <span flex></span>
-                                    <vaadin-combo-box
-                                        id="deadliftCombo"
-                                        label="Reps"
-                                        name="deadlift_reps"
-                                        value="{{athleteStats.deadlift_reps}}"></vaadin-combo-box>
-                                </div>
-                                <br>
-                                <div class="horizontal-fields" colspan="2">
-                                    <vaadin-text-field
-                                        label="Hang / Power Clean"
-                                        name="hang_power_clean_value"
-                                        maxlength="3"
-                                        pattern="[0-9]*"
-                                        prevent-invalid-input
-                                        value="{{athleteStats.hang_power_clean_value}}">
-                                        <span slot="suffix">lbs</span>
-                                    </vaadin-text-field>
-                                    <span flex></span>
-                                    <vaadin-combo-box
-                                        id="hangPowerCleanCombo"
-                                        label="Reps"
-                                        name="hang_power_clean_reps"
-                                        value="{{athleteStats.hang_power_clean_reps}}"></vaadin-combo-box>
-                                </div>
-                                <br>
-                                <div class="horizontal-fields">
-                                    <vaadin-text-field
-                                        colspan="2"
-                                        label="Pull ups"
-                                        name="pull_ups"
-                                        type="number"
-                                        pattern="[0-9]*"
-                                        maxlength="3"
-                                        prevent-invalid-input
-                                        value="{{athleteStats.pull_ups}}">
-                                        <span slot="suffix">reps</span>
-                                    </vaadin-text-field>
-                                </div>
-                                <vaadin-text-field
-                                    colspan="2"
-                                    label="40 Yard Dash"
-                                    name="forty_yard_dash"
-                                    maxlength="4"
-                                    value="{{athleteStats.forty_yard_dash}}">
-                                </vaadin-text-field>
-                                <vaadin-text-field
-                                    colspan="2"
-                                    label="3 Cone Drill"
-                                    name="three_cone_drill"
-                                    maxlength="4"
-                                    value="{{athleteStats.three_cone_drill}}">
-                                </vaadin-text-field>
-                                <vaadin-text-field
-                                    colspan="2"
-                                    label="20 Yard Shuttle"
-                                    name="twenty_yard_shuttle"
-                                    maxlength="4"
-                                    value="{{athleteStats.twenty_yard_shuttle}}">
-                                </vaadin-text-field>
-                                <vaadin-text-field
-                                    colspan="2"
-                                    label="60 Yard Shuttle"
-                                    name="sixty_yard_shuttle"
-                                    maxlength="5"
-                                    value="{{athleteStats.sixty_yard_shuttle}}">
-                                </vaadin-text-field>
-                                <div class="horizontal-fields-vert">
-                                    <vaadin-text-field
-                                        colspan="2"
-                                        label="Vertical Jump"
-                                        name="vertical_jump"
-                                        maxlength="2"
-                                        value="{{athleteStats.vertical_jump}}">
-                                        <div slot="suffix">in</div>
-                                    </vaadin-text-field>
-                                  </div>
-                                <div class="horizontal-fields" colspan="2">
-                                  <div class="horizontal-fields-broad-jump">
-
-                                    <vaadin-text-field
-                                        colspan="2"
-                                        label="Broad Jump"
-                                        name="broad_jump_ft"
-                                        value="{{athleteStats.broad_jump_ft}}">
-                                        <div slot="suffix">ft</div>
-                                    </vaadin-text-field>
-                                    <span flex></span>
-                                    <vaadin-text-field
-                                      class="no-tf-label"
-                                      colspan="2"
-                                      name="broad_jump_in"
-                                      value="{{athleteStats.broad_jump_in}}">
-                                      <div slot="suffix">in</div>
-                                    </vaadin-text-field>
-                                  </div>
-                                  </div>
-                            </vaadin-form-layout>
-                        </form>
-                    </iron-form>
-                </div>
-            </paper-dialog-scrollable>
-            <div class="buttons" hidden="[[editMaxes]]">
-                <paper-button class="cancel-button" dialog-dismiss>Close</paper-button>
-                <span flex></span>
-                <paper-button on-tap="_switchToEditView">Edit</paper-button>
-            </div>
-            <div class="buttons" hidden="[[!editMaxes]]">
-                <paper-button class="cancel-button" on-tap="_switchToEditView">Back</paper-button>
-                <span flex></span>
-                <paper-button on-tap="_saveNewMaxes">Save</paper-button>
-            </div>
-        </paper-dialog>
-    </template>
-
-    <script>
-        (function() {
-            'use strict';
-
-            class AthleteStatsDialog extends Polymer.Element {
-                /**
-                 * Element definition
-                */
-                static get is() { return 'athlete-stats-dialog'; }
-
-                /**
-                 * Element properties
-                */
-                static get properties() {
-                    return {
-                        user: Object,
-                        athleteInfo: Object,
-                        athleteStats: Object,
-                        opened: {
-                            type: Boolean,
-                            notify: true,
-                            value: false,
-                        },
-                        editMaxes: {
-                            type: Boolean,
-                            notify: true,
-                            value: false
-                        },
-                        maxBenchPress: {
-                          type: Number,
-                          notify: true,
-                          value: "0"
-                        },
-                        maxBackSquat: {
-                          type: Number,
-                          notify: true,
-                          value: "0"
-                        },
-                        maxFrontSquat:  {
-                          type: Number,
-                          notify: true,
-                          value: "0"
-                        },
-                        maxDeadLift: {
-                          type: Number,
-                          notify: true,
-                          value: "0"
-                        },
-                        maxClean:  {
-                          type: Number,
-                          notify: true,
-                          value: "0"
-                        },
-                    };
-                }
-
-                static get observers() {
-                    return [
-                        '_athleteStatsChanged(athleteStats)'
-                    ];
-                }
-
-                ready() {
-                    super.ready();
-
-
-                    // Max Estimation Calculations
-                    // this._calculateMaxReps();
-
-                    // App Progress Bar
-                    this._appProgressBar = document.getElementById('appProgressBar');
-
-                    // App Toast
-                    this._appToast = document.getElementById('appToast');
-
-                    // Sets items for all reps combos
-                    this.$.benchPressCombo.items =
-                    this.$.backSquatCombo.items =
-                    this.$.frontSquatCombo.items =
-                    this.$.deadliftCombo.items = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
-                    this.$.hangPowerCleanCombo.items = ['1'];
-                }
-
-                _athleteStatsChanged(stats) {
-                    this._calculateMaxReps();
-                }
-
-
-                /**
-                 * Based on form data calculates the max reps
-                */
-                _calculateMaxReps() {
-
-                        var stats = this.athleteStats;
-                        console.log(stats);
-                        if (this.athleteStats) {
-                          console.log(this.athleteStats)
-                        }
-
-                        // Inital variable values
-                        var e = parseFloat(0.0333);
-                        var clean = 0;
-                        var deadLift = 0;
-                        var backSquat = 0;
-                        var frontSquat = 0;
-                        var benchPress = 0;
-
-                        // the raw result =  to this, if ('weight and reps' have a value) [equation] else result = '0'
-
-                        // Power & Hang Clean
-                        if (stats.hang_power_clean_reps === '1') {
-                          this.maxClean = stats.hang_power_clean_value;
-                          //alert("Calculating Clean Max Successful 🎉")
-                        } else {
-                          //alert("Error 💩")
-                          clean = (stats.hang_power_clean_value && stats.hang_power_clean_reps) ? (parseInt(stats.hang_power_clean_value) * parseInt(stats.hang_power_clean_reps) * e) + parseInt(stats.hang_power_clean_value) : "0";
-                          this.maxClean = this._roundMaxResult(clean);
-                        }
-
-                        // Deadlift
-                        if (stats.deadlift_reps === '1') {
-                          this.deadlift = stats.deadlift_value;
-                        } else {
-                          deadLift = (stats.deadlift_value && stats.deadlift_reps) ? (parseInt(stats.deadlift_value) * parseInt(stats.deadlift_reps) * e) + parseInt(stats.deadlift_value) : "0";
-                          this.maxDeadLift = this._roundMaxResult(deadLift);
-                        }
-
-                        // Backsquat
-                        if (stats.back_squat_reps === '1') {
-                          this.maxBackSquat = stats.back_squat_value;
-                        } else {
-                          backSquat = (stats.back_squat_value && stats.back_squat_reps) ? (parseInt(stats.back_squat_value) * parseInt(stats.back_squat_reps) * e) + parseInt(stats.back_squat_value) : "0";
-                          this.maxBackSquat = this._roundMaxResult(backSquat);
-                        }
-
-                        // Frontsquat
-                        if (stats.front_squat_reps === '1') {
-                          this.maxFrontSquat = stats.front_squat_value;
-                        } else {
-                          frontSquat = (stats.front_squat_value && stats.front_squat_reps) ? (parseInt(stats.front_squat_value) * parseInt(stats.front_squat_reps) * e) + parseInt(stats.front_squat_value) : "0";
-                          this.maxFrontSquat = this._roundMaxResult(frontSquat);
-                        }
-
-                        // Benchpress
-                        if (stats.bench_press_reps === '1') {
-                          this.maxBenchPress = stats.bench_press_value
-
-                        } else {
-                          benchPress = (stats.bench_press_value && stats.bench_press_reps) ? (parseInt(stats.bench_press_value) * parseInt(stats.bench_press_reps) * e) + parseInt(stats.bench_press_value) : "0";
-                          this.maxBenchPress = this._roundMaxResult(benchPress);
-                        }
-
-                }
-
-                // Weight Rounding Method to round the equation results; (e.g. floats/decimals) since weight's are (5,10,15...)
-                _roundMaxResult(rawEquationResult) {
-                    // Display before: rawEquationResult
-                    //alert(this.rawEquationResult);
-                    var rawEquationResult = parseInt(Math.round(rawEquationResult));
-
-                    // Display after: rawEquationResult
-                    //alert(rawEquationResult);
-
-                    // find last digit of number
-                    var lastDigit = rawEquationResult.toString().split('').pop();
-
-                    // Testing: Display last digit
-                    //alert(lastDigit);
-
-                    // Conditional statement to determine the rounding method
-                    if (lastDigit >= 5) {
-                        return ((rawEquationResult - lastDigit) + 5);
-                    } else if (lastDigit <= 4) {
-                        return (rawEquationResult - lastDigit);
-                    }
-                }
-
-                /**
-                 * Switch edit view
-                */
-                _switchToEditView() {
-                    this.editMaxes = !this.editMaxes;
-                    this.opened = false;
-                    this.opened = true;
-                }
-
-                /**
-                 * Saves new maxes
-                */
-                _saveNewMaxes() {
-                    if (this.$.maxesForm.validate()) {
-                        this._calculateMaxReps()
-                        this._appProgressBar.hidden = false;
-                        var newMaxes = this.$.maxesForm.serializeForm();
-                        this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + this.athleteInfo.uid + '/stats', newMaxes)
-                        .catch(function(err) {
-                            this._appToast.text = 'There has been an error. Please try again.';
-                            this._appToast.open();
-                        }.bind(this));
-
-                        this._appToast.text = 'The new stats for the athlete has been saved.';
-            						this._appToast.open();
-            						this._appProgressBar.hidden = true;
-                        this.athleteStats = newMaxes;
-                        this.editMaxes = false;
-                        this.opened = false;
-                        this.opened = true;
-                    }
-                }
-            }
-            window.customElements.define(AthleteStatsDialog.is, AthleteStatsDialog);
-        })();
-    </script>
+			}
+
+			@media screen and (max-width: 425px) {
+				/* Maxes */
+				div.horizontal {
+					width: 100%;
+
+					@apply --layout-vertical;
+				}
+
+				div.maxes-wrapper p {
+					margin-top: 18px;
+					font-size: 1em;
+				}
+
+				div.maxes-wrapper p span {
+					font-size: .95em;
+				}
+
+				/* Form */
+				div.horizontal-fields vaadin-text-field {
+					width: 60%;
+				}
+
+				div.horizontal-fields vaadin-combo-box {
+					width: 35%;
+				}
+
+				/* Stats */
+				div.header {
+					font-size: 1em
+				}
+
+				div.header>.weight {
+					margin-left: 45px
+				}
+
+				div.header>.reps {
+					margin-left: 20px
+				}
+
+				div.header>.max-weight {
+					margin-left: 20px
+				}
+
+				/* Stat Modal */
+				div.stat-wrapper {
+					font-size: .9em
+				}
+
+				div.stat-wrapper .title {}
+
+				div.stat-wrapper>.weight-container {
+					width: 110px;
+				}
+
+				div.stat-wrapper .reps-container {
+					margin-left: 50px;
+					width: 90px;
+				}
+
+				div.stat-wrapper .equal-container {
+					margin-right: 50px;
+				}
+			}
+
+			[flex] {
+				@apply --layout-flex;
+			}
+
+			[hidden] {
+				display: none;
+			}
+
+			div.buttons[hidden] {
+				display: none;
+			}
+		</style>
+
+		<!-- Firebase Document Configuration -->
+		<firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
+
+		<paper-dialog opened="{{opened}}" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation"
+		  editing$="[[editMaxes]]">
+
+			<h2>
+				<iron-image fade preload sizing="cover" src="[[athleteInfo.profile_pic_url]]"></iron-image>
+				[[athleteInfo.first]] [[athleteInfo.last]] #[[athleteInfo.number]]
+			</h2>
+			<paper-dialog-scrollable>
+
+				<template is="dom-if" if="[[!editMaxes]]">
+					<!-- Header  -->
+					<div class="header">
+						<span> Exercise</span>
+						<span class="weight">Weight</span>
+						<span class="reps">Reps</span>
+						<span class="max-weight">Est. Max</span>
+					</div>
+
+					<div class="maxes-wrapper">
+
+						<!-- Bench -->
+						<div class="stat-wrapper">
+							<div>
+								<strong class="title" style="margin-right: 42px;">Bench Press:</strong>
+							</div>
+
+							<div class="weight-container">
+								<span>[[athleteStats.bench_press_value]]lbs</span>
+							</div>
+
+							<div>
+								<strong>x</strong>
+							</div>
+
+							<div class="reps-container">
+								<span>[[athleteStats.bench_press_reps]] reps</span>
+							</div>
+
+							<div>
+								<strong class="equal-container">=</strong>
+							</div>
+
+							<div>
+								<strong class="max-container">[[maxBenchPress]]lbs</strong>
+							</div>
+						</div>
+
+						<!-- BackSquat -->
+						<div class="stat-wrapper">
+							<div>
+								<strong class="title" style="margin-right: 50px;">Back Squat:</strong>
+							</div>
+
+							<div class="weight-container">
+								<span>[[athleteStats.back_squat_value]]lbs</span>
+							</div>
+
+							<div>
+								<strong>x</strong>
+							</div>
+
+							<div class="reps-container">
+								<span>[[athleteStats.back_squat_reps]] reps</span>
+							</div>
+
+							<div>
+								<strong class="equal-container">=</strong>
+							</div>
+
+							<div>
+								<strong class="max-container">[[maxBackSquat]]lbs</strong>
+							</div>
+						</div>
+
+						<!--  Front Squat -->
+						<div class="stat-wrapper">
+							<div>
+								<strong class="title" style="margin-right: 50px;">Front Squat:</strong>
+							</div>
+
+							<div class="weight-container">
+								<span>[[athleteStats.front_squat_value]]lbs</span>
+							</div>
+
+							<div>
+								<strong>x</strong>
+							</div>
+
+							<div class="reps-container">
+								<span>[[athleteStats.front_squat_reps]] reps</span>
+							</div>
+
+							<div>
+								<strong class="equal-container">=</strong>
+							</div>
+
+							<div>
+								<strong class="max-container">[[maxFrontSquat]]lbs</strong>
+							</div>
+						</div>
+
+						<!--  Deadlift -->
+						<div class="stat-wrapper">
+							<div>
+								<strong class="title" style="margin-right: 75px;">Deadlift:</strong>
+							</div>
+
+							<div class="weight-container">
+								<span>[[athleteStats.deadlift_value]]lbs</span>
+							</div>
+
+							<div>
+								<strong>x</strong>
+							</div>
+
+							<div class="reps-container">
+								<span>[[athleteStats.deadlift_reps]] reps</span>
+							</div>
+
+							<div>
+								<strong class="equal-container">=</strong>
+							</div>
+
+							<div>
+								<strong class="max-container">[[maxDeadLift]]lbs</strong>
+							</div>
+						</div>
+
+						<!--  Hang / Power Clean -->
+						<div class="stat-wrapper">
+							<div style="width: 135px">
+								<strong class="title">Clean:</strong>
+							</div>
+
+							<div class="weight-container">
+								<span>[[athleteStats.hang_power_clean_value]]lbs</span>
+							</div>
+
+							<div>
+								<strong>x</strong>
+							</div>
+
+							<div class="reps-container">
+								<span>[[athleteStats.hang_power_clean_reps]] reps</span>
+							</div>
+
+							<div>
+								<strong class="equal-container">=</strong>
+							</div>
+
+							<div>
+								<strong class="max-container">[[maxClean]]lbs</strong>
+							</div>
+						</div>
+
+						<!--  Pull-ups -->
+						<div class="stat-wrapper">
+							<div style="width: 135px">
+								<strong class="title">Pull-ups:</strong>
+							</div>
+
+							<div class="weight-container">
+								<span>[[athleteStats.pull_ups]]</span>
+							</div>
+						</div>
+
+						<!-- Agility Header  -->
+						<div class="agility">
+
+							<div class="header" style="margin: 1.5em 0 0 0">
+								<span> Agility</span>
+							</div>
+
+							<div class="horizontal">
+								<div class="agility-wrapper">
+									<p>
+										<strong class="title">40 Yard Dash:</strong>
+										<span>[[athleteStats.forty_yard_dash]] sec</span>
+									</p>
+								</div>
+								<span flex></span>
+								<div class="agility-wrapper">
+									<p>
+										<strong class="title">Broad Jump:</strong>
+										<span>{{athleteStats.broad_jump_ft}} ft {{athleteStats.broad_jump_in}} in</span>
+									</p>
+								</div>
+							</div>
+
+							<div class="horizontal">
+								<div class="agility-wrapper">
+									<p>
+										<strong class="title">20 Yard Shuttle:</strong>
+										<span>[[athleteStats.twenty_yard_shuttle]] sec</span>
+									</p>
+								</div>
+								<span flex></span>
+								<div class="agility-wrapper">
+									<p>
+										<strong class="title">3 Cone Drill:</strong>
+										<span>[[athleteStats.three_cone_drill]] sec</span>
+									</p>
+								</div>
+							</div>
+
+							<div class="horizontal">
+								<div class="agility-wrapper">
+									<p>
+										<strong class="title">Vertical Jump:</strong>
+										<span>[[athleteStats.vertical_jump]] in</span>
+									</p>
+								</div>
+								<span flex></span>
+								<div class="agility-wrapper">
+									<p>
+										<strong class="title">60 Yard Shuttle:</strong>
+										<span>[[athleteStats.sixty_yard_shuttle]] sec</span>
+									</p>
+								</div>
+							</div>
+						</div>
+				</template>
+
+				<!-- Form Wrapper -->
+				<div class="form-wrapper" hidden="[[!editMaxes]]">
+					<iron-form id="maxesForm">
+						<form>
+							<vaadin-form-layout>
+								<div class="horizontal-fields" colspan="2">
+									<vaadin-text-field label="Bench Press" name="bench_press_value" type="number" maxlength="3" pattern="[0-9]*" prevent-invalid-input
+									  value="{{athleteStats.bench_press_value}}">
+										<span slot="suffix">lbs</span>
+									</vaadin-text-field>
+									<span flex></span>
+									<vaadin-combo-box id="benchPressCombo" label="Reps" name="bench_press_reps" value="{{athleteStats.bench_press_reps}}"></vaadin-combo-box>
+								</div>
+								<br>
+								<div class="horizontal-fields" colspan="2">
+									<vaadin-text-field label="Back Squat" name="back_squat_value" maxlength="3" pattern="[0-9]*" prevent-invalid-input value="{{athleteStats.back_squat_value}}">
+										<span slot="suffix">lbs</span>
+									</vaadin-text-field>
+									<span flex></span>
+									<vaadin-combo-box id="backSquatCombo" label="Reps" name="back_squat_reps" value="{{athleteStats.back_squat_reps}}"></vaadin-combo-box>
+								</div>
+								<br>
+								<div class="horizontal-fields" colspan="2">
+									<vaadin-text-field label="Front Squat" name="front_squat_value" maxlength="3" pattern="[0-9]*" prevent-invalid-input value="{{athleteStats.front_squat_value}}">
+										<span slot="suffix">lbs</span>
+									</vaadin-text-field>
+									<span flex></span>
+									<vaadin-combo-box id="frontSquatCombo" label="Reps" name="front_squat_reps" value="{{athleteStats.front_squat_reps}}"></vaadin-combo-box>
+								</div>
+								<br>
+								<div class="horizontal-fields" colspan="2">
+									<vaadin-text-field label="Deadlift" name="deadlift_value" maxlength="3" pattern="[0-9]*" prevent-invalid-input value="{{athleteStats.deadlift_value}}">
+										<span slot="suffix">lbs</span>
+									</vaadin-text-field>
+									<span flex></span>
+									<vaadin-combo-box id="deadliftCombo" label="Reps" name="deadlift_reps" value="{{athleteStats.deadlift_reps}}"></vaadin-combo-box>
+								</div>
+								<br>
+								<div class="horizontal-fields" colspan="2">
+									<vaadin-text-field label="Hang / Power Clean" name="hang_power_clean_value" maxlength="3" pattern="[0-9]*" prevent-invalid-input
+									  value="{{athleteStats.hang_power_clean_value}}">
+										<span slot="suffix">lbs</span>
+									</vaadin-text-field>
+									<span flex></span>
+									<vaadin-combo-box id="hangPowerCleanCombo" label="Reps" name="hang_power_clean_reps" value="{{athleteStats.hang_power_clean_reps}}"></vaadin-combo-box>
+								</div>
+								<br>
+								<div class="horizontal-fields">
+									<vaadin-text-field colspan="2" label="Pull ups" name="pull_ups" type="number" pattern="[0-9]*" maxlength="3" prevent-invalid-input
+									  value="{{athleteStats.pull_ups}}">
+										<span slot="suffix">reps</span>
+									</vaadin-text-field>
+								</div>
+								<vaadin-text-field colspan="2" label="40 Yard Dash" name="forty_yard_dash" maxlength="4" value="{{athleteStats.forty_yard_dash}}">
+								</vaadin-text-field>
+								<vaadin-text-field colspan="2" label="3 Cone Drill" name="three_cone_drill" maxlength="4" value="{{athleteStats.three_cone_drill}}">
+								</vaadin-text-field>
+								<vaadin-text-field colspan="2" label="20 Yard Shuttle" name="twenty_yard_shuttle" maxlength="4" value="{{athleteStats.twenty_yard_shuttle}}">
+								</vaadin-text-field>
+								<vaadin-text-field colspan="2" label="60 Yard Shuttle" name="sixty_yard_shuttle" maxlength="5" value="{{athleteStats.sixty_yard_shuttle}}">
+								</vaadin-text-field>
+								<div class="horizontal-fields-vert">
+									<vaadin-text-field colspan="2" label="Vertical Jump" name="vertical_jump" maxlength="2" value="{{athleteStats.vertical_jump}}">
+										<div slot="suffix">in</div>
+									</vaadin-text-field>
+								</div>
+								<div class="horizontal-fields" colspan="2">
+									<div class="horizontal-fields-broad-jump">
+
+										<vaadin-text-field colspan="2" label="Broad Jump" name="broad_jump_ft" value="{{athleteStats.broad_jump_ft}}">
+											<div slot="suffix">ft</div>
+										</vaadin-text-field>
+										<span flex></span>
+										<vaadin-text-field class="no-tf-label" colspan="2" name="broad_jump_in" value="{{athleteStats.broad_jump_in}}">
+											<div slot="suffix">in</div>
+										</vaadin-text-field>
+									</div>
+								</div>
+							</vaadin-form-layout>
+						</form>
+					</iron-form>
+				</div>
+			</paper-dialog-scrollable>
+			<div class="buttons" hidden="[[editMaxes]]">
+				<paper-button class="cancel-button" dialog-dismiss>Close</paper-button>
+				<span flex></span>
+				<paper-button on-tap="_switchToEditView">Edit</paper-button>
+			</div>
+			<div class="buttons" hidden="[[!editMaxes]]">
+				<paper-button class="cancel-button" on-tap="_switchToEditView">Back</paper-button>
+				<span flex></span>
+				<paper-button on-tap="_saveNewMaxes">Save</paper-button>
+			</div>
+		</paper-dialog>
+	</template>
+
+	<script>
+		(function () {
+			'use strict';
+
+			class AthleteStatsDialog extends Polymer.Element {
+				/**
+				 * Element definition
+				 */
+				static get is() {
+					return 'athlete-stats-dialog';
+				}
+
+				/**
+				 * Element properties
+				 */
+				static get properties() {
+					return {
+						user: Object,
+						athleteInfo: Object,
+						athleteStats: Object,
+						opened: {
+							type: Boolean,
+							notify: true,
+							value: false,
+						},
+						editMaxes: {
+							type: Boolean,
+							notify: true,
+							value: false
+						},
+						maxBenchPress: {
+							type: Number,
+							notify: true,
+							value: "0"
+						},
+						maxBackSquat: {
+							type: Number,
+							notify: true,
+							value: "0"
+						},
+						maxFrontSquat: {
+							type: Number,
+							notify: true,
+							value: "0"
+						},
+						maxDeadLift: {
+							type: Number,
+							notify: true,
+							value: "0"
+						},
+						maxClean: {
+							type: Number,
+							notify: true,
+							value: "0"
+						},
+					};
+				}
+
+				static get observers() {
+					return [
+						'_athleteStatsChanged(athleteStats)'
+					];
+				}
+
+				ready() {
+					super.ready();
+
+
+					// Max Estimation Calculations
+					// this._calculateMaxReps();
+
+					// App Progress Bar
+					this._appProgressBar = document.getElementById('appProgressBar');
+
+					// App Toast
+					this._appToast = document.getElementById('appToast');
+
+					// Sets items for all reps combos
+					this.$.benchPressCombo.items =
+						this.$.backSquatCombo.items =
+						this.$.frontSquatCombo.items =
+						this.$.deadliftCombo.items = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+					this.$.hangPowerCleanCombo.items = ['1'];
+				}
+
+				_athleteStatsChanged(stats) {
+					this._calculateMaxReps();
+				}
+
+
+				/**
+				 * Based on form data calculates the max reps
+				 */
+				_calculateMaxReps() {
+
+					var stats = this.athleteStats;
+					console.log(stats);
+					if (this.athleteStats) {
+						console.log(this.athleteStats)
+					}
+
+					// Inital variable values
+					var e = parseFloat(0.0333);
+					var clean = 0;
+					var deadLift = 0;
+					var backSquat = 0;
+					var frontSquat = 0;
+					var benchPress = 0;
+
+					// the raw result =  to this, if ('weight and reps' have a value) [equation] else result = '0'
+
+					// Power & Hang Clean
+					if (stats.hang_power_clean_reps === '1') {
+						this.maxClean = stats.hang_power_clean_value;
+						//alert("Calculating Clean Max Successful 🎉")
+					} else {
+						//alert("Error 💩")
+						clean = (stats.hang_power_clean_value && stats.hang_power_clean_reps) ? (parseInt(stats.hang_power_clean_value) *
+							parseInt(stats.hang_power_clean_reps) * e) + parseInt(stats.hang_power_clean_value) : "0";
+						this.maxClean = this._roundMaxResult(clean);
+					}
+
+					// Deadlift
+					if (stats.deadlift_reps === '1') {
+						this.deadlift = stats.deadlift_value;
+					} else {
+						deadLift = (stats.deadlift_value && stats.deadlift_reps) ? (parseInt(stats.deadlift_value) * parseInt(stats.deadlift_reps) *
+							e) + parseInt(stats.deadlift_value) : "0";
+						this.maxDeadLift = this._roundMaxResult(deadLift);
+					}
+
+					// Backsquat
+					if (stats.back_squat_reps === '1') {
+						this.maxBackSquat = stats.back_squat_value;
+					} else {
+						backSquat = (stats.back_squat_value && stats.back_squat_reps) ? (parseInt(stats.back_squat_value) * parseInt(
+							stats.back_squat_reps) * e) + parseInt(stats.back_squat_value) : "0";
+						this.maxBackSquat = this._roundMaxResult(backSquat);
+					}
+
+					// Frontsquat
+					if (stats.front_squat_reps === '1') {
+						this.maxFrontSquat = stats.front_squat_value;
+					} else {
+						frontSquat = (stats.front_squat_value && stats.front_squat_reps) ? (parseInt(stats.front_squat_value) *
+							parseInt(stats.front_squat_reps) * e) + parseInt(stats.front_squat_value) : "0";
+						this.maxFrontSquat = this._roundMaxResult(frontSquat);
+					}
+
+					// Benchpress
+					if (stats.bench_press_reps === '1') {
+						this.maxBenchPress = stats.bench_press_value
+
+					} else {
+						benchPress = (stats.bench_press_value && stats.bench_press_reps) ? (parseInt(stats.bench_press_value) *
+							parseInt(stats.bench_press_reps) * e) + parseInt(stats.bench_press_value) : "0";
+						this.maxBenchPress = this._roundMaxResult(benchPress);
+					}
+
+				}
+
+				// Weight Rounding Method to round the equation results; (e.g. floats/decimals) since weight's are (5,10,15...)
+				_roundMaxResult(rawEquationResult) {
+					// Display before: rawEquationResult
+					//alert(this.rawEquationResult);
+					var rawEquationResult = parseInt(Math.round(rawEquationResult));
+
+					// Display after: rawEquationResult
+					//alert(rawEquationResult);
+
+					// find last digit of number
+					var lastDigit = rawEquationResult.toString().split('').pop();
+
+					// Testing: Display last digit
+					//alert(lastDigit);
+
+					// Conditional statement to determine the rounding method
+					if (lastDigit >= 5) {
+						return ((rawEquationResult - lastDigit) + 5);
+					} else if (lastDigit <= 4) {
+						return (rawEquationResult - lastDigit);
+					}
+				}
+
+				/**
+				 * Switch edit view
+				 */
+				_switchToEditView() {
+					this.editMaxes = !this.editMaxes;
+					this.opened = false;
+					this.opened = true;
+				}
+
+				/**
+				 * Saves new maxes
+				 */
+				_saveNewMaxes() {
+					if (this.$.maxesForm.validate()) {
+						this._calculateMaxReps()
+						this._appProgressBar.hidden = false;
+						var newMaxes = this.$.maxesForm.serializeForm();
+						this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + this.athleteInfo.uid + '/stats',
+								newMaxes)
+							.catch(function (err) {
+								this._appToast.text = 'There has been an error. Please try again.';
+								this._appToast.open();
+							}.bind(this));
+
+						this._appToast.text = 'The new stats for the athlete has been saved.';
+						this._appToast.open();
+						this._appProgressBar.hidden = true;
+						this.athleteStats = newMaxes;
+						this.editMaxes = false;
+						this.opened = false;
+						this.opened = true;
+					}
+				}
+			}
+			window.customElements.define(AthleteStatsDialog.is, AthleteStatsDialog);
+		})();
+	</script>
 </dom-module>
