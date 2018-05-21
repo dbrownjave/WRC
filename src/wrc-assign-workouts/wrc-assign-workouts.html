@@ -463,7 +463,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     if (programPath && programPath.length) {
                       this.set("programDownloaded", true);
                       this.$.firebaseDocument.getStoredValue(`programs/${programPath}`).then(function(programData) {
-                        if (programData && programData.length) {
+                        if (programData) {
 													programData["$key"] = programPath;
 	                        downloadedPrograms.push(programData);
 													this.set("downloadedPrograms", downloadedPrograms);
