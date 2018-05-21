@@ -89,6 +89,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 
 			/* Spinner Wrapper */
+
 			.spinner-wrapper {
 				width: 100%;
 				margin-top: 24px;
@@ -119,7 +120,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			.paper-form.iron-selected {
 				border-style: solid;
 				border-color: rgba(66, 141, 255, .60);
-			  border-width: 3px;
+				border-width: 3px;
 				color: white;
 
 				box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.10);
@@ -232,7 +233,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						<div class="paper-form" hidden$="[[_computeHiddenPrograms(reviewMode, editMode)]]" id$="[[program.$key]]">
 							<div class="pdf-wrapper">
 								<paper-menu-button id="programMenu" horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0"
-								    class="option-menu">
+								  class="option-menu">
 									<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
 									<paper-listbox noink slot="dropdown-content" selected="{{selectedMenuItem}}">
 										<paper-item id$="[[program.$key]]" on-tap="_reviewProgram" data-option="review">Review</paper-item>
@@ -260,7 +261,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					<paper-fab src="../icons/fab-icon/plus-icon@3x.png" hidden$="{{reviewMode}}" on-tap="_openToAdd"></paper-fab>
 				</div>
 
-				</div>
+			</div>
 
 			<!-- Review Workouts content -->
 			<div class="review-content" hidden$="{{!reviewMode}}">
@@ -401,8 +402,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							notify: true
 						},
 						programsData: {
-								type: Object,
-								notify: true
+							type: Object,
+							notify: true
 						},
 						loadingPrograms: {
 							type: Boolean,
@@ -534,7 +535,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				/**
 				 * @description Go to review mode and loads the workouts saved in the program
-				*/
+				 */
 				_reviewProgram(evt) {
 					this.reviewMode = true;
 					this.programId = evt.target.getAttribute("id");
@@ -545,7 +546,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				/**
 				 * @description Go to edit mode and loads the workouts saved in the program and unassigned workouts
-				*/
+				 */
 				_editProgram(evt) {
 					this.editMode = true;
 					this.programId = evt.target.getAttribute("id");
@@ -561,29 +562,29 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 * @param Boolean requestProgram
 				 *
 				 * @return an array of workouts in selected program
-				*/
+				 */
 				_loadWorkoutsOfProgram(programId, requestProgram) {
 					let workoutsOfProgram = [];
 					this.programId = programId;
 
 					this.$.firebaseDocument.getStoredValue(`programs/${this.programId}/workouts`)
-						.then(function(workouts) {
+						.then(function (workouts) {
 							if (workouts && workouts.length) {
-								for(let workout of workouts) {
+								for (let workout of workouts) {
 									this.$.firebaseDocument.getStoredValue(`workouts/${workout}`)
-									.then(function(workoutData) {
-										workoutData["$key"] = workout;
-										workoutsOfProgram.push(workoutData);
-									}.bind(this));
+										.then(function (workoutData) {
+											workoutData["$key"] = workout;
+											workoutsOfProgram.push(workoutData);
+										}.bind(this));
 								}
 							}
 							this.set("workoutsOfProgram", workoutsOfProgram);
 						}.bind(this));
 
-						// return array of program workouts
-						if (requestProgram == true) {
-							return workoutsOfProgram;
-						}
+					// return array of program workouts
+					if (requestProgram == true) {
+						return workoutsOfProgram;
+					}
 				}
 
 				/**
@@ -611,12 +612,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							.then(function () {
 
 								// Return non-selected workout's to workout collection
-								workoutsOfProgram.forEach(function(workoutData) {
+								workoutsOfProgram.forEach(function (workoutData) {
 									let workoutId = workoutData["$key"];
 
 									// note: prev. workout in program status should = true
 									console.log("----------- 🚫 No Workout ID Match ---------------");
-									Object.values(bindedWorkouts).forEach(function(bindedWorkoutId) {
+									Object.values(bindedWorkouts).forEach(function (bindedWorkoutId) {
 										// check if prev. workout that is non-selected status is true
 										if (workoutId != bindedWorkoutId) {
 											console.log("workout ID:", workoutId);
@@ -624,14 +625,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 											// check workout status and set to false
 											this.$.firebaseDocument.getStoredValue("workouts/" + workoutId + "/status")
-												.then(function(status) {
+												.then(function (status) {
 													console.log("status: ", status);
 													if (status == true) {
 														this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", false);
 													}
 												}.bind(this));
-											}
-										}.bind(this));
+										}
+									}.bind(this));
 								}.bind(this));
 
 								this._appProgress.hidden = true;
@@ -652,7 +653,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				/**
 				 * @description Retrieves workout data from Firebase
-				*/
+				 */
 				_loadWorkoutData(evt) {
 					evt.preventDefault();
 
@@ -661,7 +662,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					// Retrieves data from Firebase
 					this.$.firebaseDocument.getStoredValue("workouts/" + workoutId)
-						.then(function(snapshot) {
+						.then(function (snapshot) {
 							// Pass the retrieved workout to our generation function
 							this._generatePreview(snapshot);
 						}.bind(this));
@@ -670,7 +671,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				/**
 				 * @description Generates workout PDF Preview making use of the super class
 				 * @param {Object} workout - workout retrieved from firebase
-				*/
+				 */
 				_generatePreview(workout) {
 					/**
 					 * Call super class generatePreview function, sending workout data
