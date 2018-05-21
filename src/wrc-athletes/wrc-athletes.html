@@ -336,8 +336,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 color: var(--paper-grey-700);
             }
 
-            /* Fab */
+            /* paper toast */
+            paper-toast #appToastPopupDisabled {
+              width: 180px !important;
+            }
 
+            /* Fab */
             paper-fab {
                 position: fixed;
                 bottom: 2em;
@@ -524,8 +528,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             <!-- Paper Fab to add new athlete -->
             <paper-fab icon="app-icons:person-add" on-tap="_openToAdd" hidden$="[[!_computeVisibleData(athletesData.length, userReady)]]"></paper-fab>
 
-            <paper-toast id="test" duration="0" text="This toast will stay opened until you close it, or open another toast.">
-              <paper-button onclick="toast1.toggle()" class="yellow-button">Close now!</paper-button>
+            <paper-toast id="appToastPopupDisabled" duration="4000">
+              <a href="https://support.norton.com/sp/en/us/home/current/solutions/v107843274_EndUserProfile_en_us" target="_blank">Enable</a>
             </paper-toast>
 
         </main>
@@ -595,7 +599,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     // App Toast
                     this._appToast = document.getElementById('appToast');
-                    this._appToastPopupDisabled = document.getElementById('appToastPopupDisabled');
                 }
 
                 /**
@@ -961,8 +964,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                   // Notify user that pop-up is disabled
                   if (computePdfPreview === false) {
-                    this._appToastPopupDisabled.text = " 🚫 Pop-ups Blocked. ";
-                    this._appToastPopupDisabled.open();
+                    self = this;
+                    self.$._appToastPopupDisabled.text = " 🚫 Pop-ups Blocked. ";
+                    self.$._appToastPopupDisabled.open();
                     console.log("Pop-up Window Blocker Enabled");
                   }
                 }
