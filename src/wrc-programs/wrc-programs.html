@@ -88,6 +88,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				@apply --layout-vertical;
 			}
 
+			/* Spinner Wrapper */
+			.spinner-wrapper {
+				width: 100%;
+				margin-top: 24px;
+				
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
 			/* Paper Fab */
 
 			paper-fab.finish-button {
@@ -207,6 +216,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 		<!-- Element UI -->
 		<main>
+			<dom-if if="[[loadingPrograms]]">
+				<template>
+					<div class="spinner-wrapper">
+						<paper-spinner active></paper-spinner>
+					</div>
+				</template>
+			</dom-if>
 
 			<div hidden$="{{hidden}}">
 
@@ -387,9 +403,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						programsData: {
 								type: Object,
 								notify: true
+						},
+						loadingPrograms: {
+							type: Boolean,
+							notify: true,
+							value: true
 						}
 					}
 				};
+
+				static get observers() {
+					return [
+						'_programsDataChanged(programsData, programsData.length)'
+					];
+				}
 
 				ready() {
 					super.ready();
@@ -407,6 +434,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					// Delete Workout Dialog
 					this._deleteProgramDialog = document.getElementById("appDeleteDialog");
 
+				}
+
+				_programsDataChanged(data, length) {
+					if (data && length) {
+						this.set('loadingPrograms', false);
+					}
 				}
 
 				_computeHiddenPrograms(reviewMode, editMode) {
