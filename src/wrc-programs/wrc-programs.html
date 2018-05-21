@@ -288,6 +288,30 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				<!-- Workouts Cards Selector -->
 				<iron-selector multi>
+
+					<!--  Assigned Workouts -->
+					<template is=dom-repeat items="{{workoutsOfProgram}}" as="workout">
+						<div class="paper-form" id$="[[workout.$key]]">
+							<div class="pdf-wrapper">
+								<paper-menu-button horizontal-align="right" vertical-align="top" horizontal-offset="10" vertical-offset="0" class="option-menu">
+									<paper-icon-button class="menu-icon default-transiton" noink slot="dropdown-trigger" icon="app-icons:more-vert" alt="menu"></paper-icon-button>
+									<paper-listbox noink slot="dropdown-content">
+										<paper-item id$="[[workout.$key]]" on-tap="_loadWorkoutData" data-option="review">Preview</paper-item>
+									</paper-listbox>
+								</paper-menu-button>
+								<div class="content-wrapper">
+									<div class="season-title-program">[[workout.season]]</div>
+									<div class="program-title">[[workout.weeks]] Week Program</div>
+									<div class="type-title">[[workout.type]]</div>
+								</div>
+								<div class="tag">
+									<div class="day-title">Week [[workout.week]]</div>
+								</div>
+							</div>
+						</div>
+					</template>
+
+					<!--  Unassigned Workouts -->
 					<template is=dom-repeat items="{{workoutsData}}" as="workout">
 						<div class="paper-form" id$="[[workout.$key]]">
 							<div class="pdf-wrapper">
@@ -392,8 +416,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					}
 
 					return false;
-
-
 				}
 
 				/**
@@ -479,6 +501,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					this.reviewMode = true;
 					this.programId = evt.target.getAttribute("id");
 
+
 					this.$.firebaseDocument.getStoredValue(`programs/${this.programId}/workouts`)
 					.then(function(workouts) {
 						if (workouts && workouts.length) {
@@ -513,23 +536,25 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							bindedWorkouts.push(workoutId);
 							this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", true);
 						}
-						console.log(bindedWorkouts);
-
-						// Release workouts
-						//var programsData = this.programsData;
-						//console.log(programsData);
-
-						// Loop for each element in an array, in order.
-						///if(programsData) {
-						//programsData.forEach(function(workout) {
-						//	this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", + workoutId + "/status", false);
-						//	console.log("workout ID: " + workoutId + "  Status: " + workout.status);
-						//});
-					//}
-
+						console.log("binded workouts:", bindedWorkouts);
 
 						this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", bindedWorkouts)
 							.then(function () {
+
+								// Set non-assigned workouts (status: false)
+								this.$.firebaseDocument.getStoredValue("workouts")
+									.then(function(workoutCollection) {
+										Object.keys(workoutCollection).forEach(function(workoutId) {
+											Object.values(bindedWorkouts).forEach(function(bindedWorkoutId) {
+												if (workoutId != bindedWorkoutId) {
+													console.log("-------------------------------");
+													console.log("binded workout ID: " + bindedWorkoutId);
+													console.log("workout ID: " + workoutId);
+													this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", false);
+												}
+											}.bind(this));
+										}.bind(this));
+									}.bind(this));
 								this._appProgress.hidden = true;
 								this._appToast.text = "The workouts has been assigned succesfully.";
 								this._appToast.open();
@@ -557,10 +582,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					// Retrieves data from Firebase
 					this.$.firebaseDocument.getStoredValue("workouts/" + workoutId)
-					.then(function(snapshot) {
-						// Pass the retrieved workout to our generation function
-						this._generatePreview(snapshot);
-					}.bind(this));
+						.then(function(snapshot) {
+							// Pass the retrieved workout to our generation function
+							this._generatePreview(snapshot);
+						}.bind(this));
 				}
 
 				/**
