@@ -58,6 +58,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				overflow: auto;
 			}
 
+			.spinner-wrapper {
+				margin-top: 24px;
+
+				@apply --layout-vertical;
+				@apply --layout-center-center;
+			}
+
 			/* Header Section */
 
 			div.title {
@@ -196,7 +203,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 		<!-- Element UI -->
 		<main>
-
+			<dom-if if="[[loadingWorkouts]]">
+				<template>
+					<div class="spinner-wrapper">
+						<paper-spinner active></paper-spinner>
+					</div>
+				</template>
+			</dom-if>
 
 			<!-- Workouts Cards -->
 			<div class="collection-wrapper">
@@ -245,9 +258,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							type: Boolean,
 							notify: true,
 							value: false
+						},
+						loadingWorkouts: {
+							type: Boolean,
+							notify: true,
+							value: true
 						}
 					}
-				};
+				}
+
+				static get observers() {
+					return [
+						'_workoutsDataChanged(workoutsData, workoutsData.length)'
+					];
+				}
 
 				ready() {
 					super.ready();
@@ -261,6 +285,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					// Delete Dialog
 					this._deleteWorkoutDialog = document.getElementById('appDeleteDialog');
+				}
+
+				_workoutsDataChanged(data, length) {
+					if (data && length) {
+						this.set('loadingWorkouts', false);
+					}
 				}
 
 				/**
