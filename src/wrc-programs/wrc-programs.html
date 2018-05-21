@@ -92,7 +92,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			.spinner-wrapper {
 				width: 100%;
 				margin-top: 24px;
-				
+
 				@apply --layout-vertical;
 				@apply --layout-center-center;
 			}
@@ -436,6 +436,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				}
 
+				/**
+				 * @description Observes for changes on programs data to hide or show loading indicator
+				 */
 				_programsDataChanged(data, length) {
 					if (data && length) {
 						this.set('loadingPrograms', false);
