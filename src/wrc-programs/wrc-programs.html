@@ -206,9 +206,22 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 
 			@media screen and (max-width: 500px) {
-				.review-content {
+				.review-content, .edit-content {
 					min-width: 100%;
 					width: 100%;
+				}
+
+				.review-content div.title h3 {
+					font-size: 1.1em;
+				}
+
+				.edit-content div.title h3 {
+					font-size: 1.1em;
+				}
+
+				iron-selector {
+					@apply --layout-vertical;
+					@apply --layout-center-center;
 				}
 			}
 		</style>
