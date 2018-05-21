@@ -433,7 +433,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					// Delete Workout Dialog
 					this._deleteProgramDialog = document.getElementById("appDeleteDialog");
-
 				}
 
 				/**
@@ -501,7 +500,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				}
 
 				/**
-				 * Opens program dialog to add
+				 * @description  Opens program dialog to add
 				 */
 				_openToAdd() {
 					this._addProgramDialog.acceptedCallback = this._onProgramDialog.bind(this);
@@ -509,7 +508,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				}
 
 				/**
-				 * Saves new program
+				 * @description Saves new program
 				 */
 				_onProgramDialog(programInfo) {
 					this._appProgress.hidden = false;
@@ -537,35 +536,65 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 * @description Go to review mode and loads the workouts saved in the program
 				*/
 				_reviewProgram(evt) {
-					let workoutsOfProgram = [];
 					this.reviewMode = true;
 					this.programId = evt.target.getAttribute("id");
+					console.log("📍 program Id: ", this.programId);
 
-
-					this.$.firebaseDocument.getStoredValue(`programs/${this.programId}/workouts`)
-					.then(function(workouts) {
-						if (workouts && workouts.length) {
-							for(let workout of workouts) {
-								this.$.firebaseDocument.getStoredValue(`workouts/${workout}`)
-								.then(function(workoutData) {
-									workoutData["$key"] = workout;
-									workoutsOfProgram.push(workoutData);
-								}.bind(this));
-							}
-						}
-						this.set("workoutsOfProgram", workoutsOfProgram);
-					}.bind(this));
-				}
-
-				_editProgram(evt) {
-					this.editMode = true;
-					this.programId = evt.target.getAttribute("id");
+					this._loadWorkoutsOfProgram(this.programId);
 				}
 
 				/**
-				 * Binds selected workouts to program
+				 * @description Go to edit mode and loads the workouts saved in the program and unassigned workouts
+				*/
+				_editProgram(evt) {
+					this.editMode = true;
+					this.programId = evt.target.getAttribute("id");
+					console.log("📍 program Id: ", this.programId);
+
+					this._loadWorkoutsOfProgram(this.programId);
+				}
+
+				/**
+				 * @description loads the workouts saved in the program
+				 *
+				 * @param String programId
+				 * @param Boolean requestProgram
+				 *
+				 * @return an array of workouts in selected program
+				*/
+				_loadWorkoutsOfProgram(programId, requestProgram) {
+					let workoutsOfProgram = [];
+					this.programId = programId;
+
+					this.$.firebaseDocument.getStoredValue(`programs/${this.programId}/workouts`)
+						.then(function(workouts) {
+							if (workouts && workouts.length) {
+								for(let workout of workouts) {
+									this.$.firebaseDocument.getStoredValue(`workouts/${workout}`)
+									.then(function(workoutData) {
+										workoutData["$key"] = workout;
+										workoutsOfProgram.push(workoutData);
+									}.bind(this));
+								}
+							}
+							this.set("workoutsOfProgram", workoutsOfProgram);
+						}.bind(this));
+
+						// return array of program workouts
+						if (requestProgram == true) {
+							return workoutsOfProgram;
+						}
+				}
+
+				/**
+				 *  @description Binds selected workouts to program
 				 */
 				_bindWorkoutsToProgram() {
+
+					// selected program workout collection
+					let workoutsOfProgram = this._loadWorkoutsOfProgram(this.programId, true);
+					console.log("current program: ", workoutsOfProgram);
+
 					const selectableWorkouts = this.root.querySelector("iron-selector");
 					const selectedWorkouts = selectableWorkouts.querySelectorAll(".iron-selected");
 					if (selectedWorkouts && selectedWorkouts.length > 0) {
@@ -581,20 +610,30 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", bindedWorkouts)
 							.then(function () {
 
-								// Set non-assigned workouts (status: false)
-								this.$.firebaseDocument.getStoredValue("workouts")
-									.then(function(workoutCollection) {
-										Object.keys(workoutCollection).forEach(function(workoutId) {
-											Object.values(bindedWorkouts).forEach(function(bindedWorkoutId) {
-												if (workoutId != bindedWorkoutId) {
-													console.log("-------------------------------");
-													console.log("binded workout ID: " + bindedWorkoutId);
-													console.log("workout ID: " + workoutId);
-													this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", false);
-												}
-											}.bind(this));
+								// Return non-selected workout's to workout collection
+								workoutsOfProgram.forEach(function(workoutData) {
+									let workoutId = workoutData["$key"];
+
+									// note: prev. workout in program status should = true
+									console.log("----------- 🚫 No Workout ID Match ---------------");
+									Object.values(bindedWorkouts).forEach(function(bindedWorkoutId) {
+										// check if prev. workout that is non-selected status is true
+										if (workoutId != bindedWorkoutId) {
+											console.log("workout ID:", workoutId);
+											console.log("binded workout ID: " + bindedWorkoutId);
+
+											// check workout status and set to false
+											this.$.firebaseDocument.getStoredValue("workouts/" + workoutId + "/status")
+												.then(function(status) {
+													console.log("status: ", status);
+													if (status == true) {
+														this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", false);
+													}
+												}.bind(this));
+											}
 										}.bind(this));
-									}.bind(this));
+								}.bind(this));
+
 								this._appProgress.hidden = true;
 								this._appToast.text = "The workouts has been assigned succesfully.";
 								this._appToast.open();
