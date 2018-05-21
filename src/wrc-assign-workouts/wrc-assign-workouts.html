@@ -420,7 +420,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 ready() {
                     super.ready();
-                    
+
                     // Notification
                     this._appToast = document.getElementById("appToast");
                     this._appToastPopupDisabled = document.getElementById('appToastPopupDisabled');
@@ -458,19 +458,32 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @description Load downloaded programs
                  */
                 _loadDownloadedPrograms() {
-                    let downloadedPrograms = [];
-                    this.$.firebaseDocument.getStoredValue(`${this.user.uid}/downloaded_program/path`).then(function(programPath) {
-                        if (programPath && programPath.length) {
-                            this.set("programDownloaded", true);
-                            this.$.firebaseDocument.getStoredValue(`programs/${programPath}`).then(function(programData) {
-                                programData["$key"] = programPath;
-                                downloadedPrograms.push(programData);
-								this.set("downloadedPrograms", downloadedPrograms);
-                            }.bind(this));
-                        } else {
-                            this.set("programDownloaded", false);
-                        }
-                    }.bind(this));
+									let downloadedPrograms = [];
+                  this.$.firebaseDocument.getStoredValue(`${this.user.uid}/downloaded_program/path`).then(function(programPath) {
+                    if (programPath && programPath.length) {
+                      this.set("programDownloaded", true);
+                      this.$.firebaseDocument.getStoredValue(`programs/${programPath}`).then(function(programData) {
+                        if (programData && programData.length) {
+													programData["$key"] = programPath;
+	                        downloadedPrograms.push(programData);
+													this.set("downloadedPrograms", downloadedPrograms);
+												} else {
+													// Tells the coach that the program was deleted
+													this._appToast.text = 'The program you had active was deleted by an administrator.';
+													this._appToast.open();
+
+													// Deletes the current downloaded program and active workout on coach's data
+													this.$.firebaseDocument.destroy(`${this.user.uid}/downloaded_program`);
+													this.$.firebaseDocument.destroy(`${this.user.uid}/activated_workout`);
+
+													// Sets programDownloaded to false to show awesome UI for download new program
+													this.set("programDownloaded", false);
+												}
+                      }.bind(this));
+                    } else {
+                      this.set("programDownloaded", false);
+                    }
+                  }.bind(this));
                 }
 
                 /**
