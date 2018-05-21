@@ -15,6 +15,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <!-- Polymerfire Elements -->
@@ -91,61 +92,79 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 			/* Maxes */
 
-			h3 {
-				color: var(--azul-text-title);
-				margin-top: 0;
-				font-weight: 400;
-				font-size: 1.3em;
+			/* Stats Table */
+			.stats-table {
+				@apply --layout-vertical;
 			}
 
-			div.header {
-				color: var(--azul-text-title);
-				margin-top: 0;
-				font-weight: 400;
-				font-size: 1.3em;
-			}
-
-			div.header>.weight {
-				margin-left: 60px
-			}
-
-			div.header>.reps {
-				margin-left: 104px
-			}
-
-			div.header>.max-weight {
-				margin-left: 105px
-			}
-
-			div.horizontal {
-				margin: 0;
-				padding: 0;
-				width: 60%;
+			.row {
+				width: 100%;
+				min-width: 100%;
 
 				@apply --layout-horizontal;
+				@apply --layout-center-center;
+				@apply --layout-wrap;
 			}
 
-			div.maxes-wrapper p {
-				color: var(--azul-text-title);
-				margin-bottom: 0;
-				margin-top: 18px;
-				font-size: 1.1em;
-			}
-
-			div.maxes-wrapper p span {
+			.row .column {
+				margin-bottom: 8px;
 				font-size: 1.05em;
+				color: var(--azul-text-title);
+
+				@apply --layout-vertical;
+				@apply --layout-flex;
 			}
 
-			div.agility-wrapper {
-				width: 6cm;
+			.column.x-column, .column.equal-column {
+				max-width: 50px;
+				text-align: center;
+				font-weight: bold;
 			}
 
-			div.agility>div.horizontal {
-				margin: 0;
-				padding: 0;
-				width: 80%;
+			.column.title-column {
+				color: var(--azul-text-title);
+				margin-top: 0;
+				font-weight: bold;
+			}
+
+			.column.header {
+				color: var(--azul-text-title);
+				margin-bottom: 18px;
+				font-weight: bold;
+				font-size: 1.3em;
+			}
+
+			/* Data Rows */
+			.agility-title {
+				margin: 24px 0 15px;
+				color: var(--azul-text-title);
+				font-weight: bold;
+				font-size: 1.3em;
+			}
+
+			.data-row {
+				font-size: 1.05em;
 
 				@apply --layout-horizontal;
+				@apply --layout-wrap;
+			}
+
+			.data-column {
+				width: 50%;
+				min-width: 50%;
+
+				@apply --layout-horizontal;
+			}
+
+			.data-column strong {
+				color: var(--azul-text-title);
+				margin-top: 0;
+				font-weight: bold;
+				margin-right: 5px;
+			}
+
+			.data-column span {
+				color: var(--azul-text-title);
 			}
 
 			/* Form Wrapper */
@@ -228,7 +247,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				}
 			}
 
-			@media screen and (max-width: 425px) {
+			@media screen and (max-width: 500px) {
+				/* Independent Rows */
+				.data-row {
+					@apply --layout-vertical;
+				}
+
+				.data-column {
+					width: 100%;
+					min-width: 100%;
+					margin-top: 5px;
+				}
+
+				.data-column p {
+					margin: 0;
+				}
+				/* END */
+
+
 				/* Maxes */
 				div.horizontal {
 					width: 100%;
@@ -305,6 +341,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 		</style>
 
+		<!-- Small Screens -->
+		<iron-media-query query="(max-width: 500px)" query-matches="{{smallScreens}}"></iron-media-query>
+
 		<!-- Firebase Document Configuration -->
 		<firebase-document id="firebaseDocument" app-name="wrc_software"></firebase-document>
 
@@ -318,217 +357,227 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			<paper-dialog-scrollable>
 
 				<template is="dom-if" if="[[!editMaxes]]">
-					<!-- Header  -->
-					<div class="header">
-						<span> Exercise</span>
-						<span class="weight">Weight</span>
-						<span class="reps">Reps</span>
-						<span class="max-weight">Est. Max</span>
-					</div>
-
-					<div class="maxes-wrapper">
-
-						<!-- Bench -->
-						<div class="stat-wrapper">
-							<div>
-								<strong class="title" style="margin-right: 42px;">Bench Press:</strong>
+					<div class="stats-table" hidden="[[smallScreens]]">
+						<!-- Header Row -->
+						<div class="row">
+							<div class="column header">
+								<span>Exercise</span>
 							</div>
+							<div class="column header">
+								<span>Weight</span>
+							</div>
+							<div class="column header x-column"></div>
+							<div class="column header">
+								<span>Reps</span>
+							</div>
+							<div class="column header equal-column"></div>
+							<div class="column header">
+								<span>Est. Max</span>
+							</div>
+						</div>
 
-							<div class="weight-container">
+						<!-- Bench Press Row -->
+						<div class="row">
+							<div class="column title-column">
+								<span>Bench Press:</span>
+							</div>
+							<div class="column">
 								<span>[[athleteStats.bench_press_value]]lbs</span>
 							</div>
-
-							<div>
-								<strong>x</strong>
+							<div class="column x-column">
+								<span>x</span>
 							</div>
-
-							<div class="reps-container">
+							<div class="column">
 								<span>[[athleteStats.bench_press_reps]] reps</span>
 							</div>
-
-							<div>
-								<strong class="equal-container">=</strong>
+							<div class="column equal-column">
+								<span>=</span>
 							</div>
-
-							<div>
+							<div class="column">
 								<strong class="max-container">[[maxBenchPress]]lbs</strong>
 							</div>
 						</div>
 
-						<!-- BackSquat -->
-						<div class="stat-wrapper">
-							<div>
-								<strong class="title" style="margin-right: 50px;">Back Squat:</strong>
+						<!-- Back Squat Row -->
+						<div class="row">
+							<div class="column title-column">
+								<span>Back Squat:</span>
 							</div>
-
-							<div class="weight-container">
+							<div class="column">
 								<span>[[athleteStats.back_squat_value]]lbs</span>
 							</div>
-
-							<div>
-								<strong>x</strong>
+							<div class="column x-column">
+								<span>x</span>
 							</div>
-
-							<div class="reps-container">
+							<div class="column">
 								<span>[[athleteStats.back_squat_reps]] reps</span>
 							</div>
-
-							<div>
-								<strong class="equal-container">=</strong>
+							<div class="column equal-column">
+								<span>=</span>
 							</div>
-
-							<div>
+							<div class="column">
 								<strong class="max-container">[[maxBackSquat]]lbs</strong>
 							</div>
 						</div>
 
-						<!--  Front Squat -->
-						<div class="stat-wrapper">
-							<div>
-								<strong class="title" style="margin-right: 50px;">Front Squat:</strong>
+						<!-- Front Squad Row -->
+						<div class="row">
+							<div class="column title-column">
+								<span>Front Squad:</span>
 							</div>
-
-							<div class="weight-container">
+							<div class="column">
 								<span>[[athleteStats.front_squat_value]]lbs</span>
 							</div>
-
-							<div>
-								<strong>x</strong>
+							<div class="column x-column">
+								<span>x</span>
 							</div>
-
-							<div class="reps-container">
+							<div class="column">
 								<span>[[athleteStats.front_squat_reps]] reps</span>
 							</div>
-
-							<div>
-								<strong class="equal-container">=</strong>
+							<div class="column equal-column">
+								<span>=</span>
 							</div>
-
-							<div>
+							<div class="column">
 								<strong class="max-container">[[maxFrontSquat]]lbs</strong>
 							</div>
 						</div>
 
-						<!--  Deadlift -->
-						<div class="stat-wrapper">
-							<div>
-								<strong class="title" style="margin-right: 75px;">Deadlift:</strong>
+						<!-- Deadlift Row -->
+						<div class="row">
+							<div class="column title-column">
+								<span>Deadlift:</span>
 							</div>
-
-							<div class="weight-container">
+							<div class="column">
 								<span>[[athleteStats.deadlift_value]]lbs</span>
 							</div>
-
-							<div>
-								<strong>x</strong>
+							<div class="column x-column">
+								<span>x</span>
 							</div>
-
-							<div class="reps-container">
+							<div class="column">
 								<span>[[athleteStats.deadlift_reps]] reps</span>
 							</div>
-
-							<div>
-								<strong class="equal-container">=</strong>
+							<div class="column equal-column">
+								<span>=</span>
 							</div>
-
-							<div>
+							<div class="column">
 								<strong class="max-container">[[maxDeadLift]]lbs</strong>
 							</div>
 						</div>
 
-						<!--  Hang / Power Clean -->
-						<div class="stat-wrapper">
-							<div style="width: 135px">
-								<strong class="title">Clean:</strong>
+						<!-- Hang / Power Clean Row -->
+						<div class="row">
+							<div class="column title-column">
+								<span>Clean:</span>
 							</div>
-
-							<div class="weight-container">
+							<div class="column">
 								<span>[[athleteStats.hang_power_clean_value]]lbs</span>
 							</div>
-
-							<div>
-								<strong>x</strong>
+							<div class="column x-column">
+								<span>x</span>
 							</div>
-
-							<div class="reps-container">
-								<span>[[athleteStats.hang_power_clean_reps]] reps</span>
+							<div class="column">
+									<span>[[athleteStats.hang_power_clean_reps]] reps</span>
 							</div>
-
-							<div>
-								<strong class="equal-container">=</strong>
+							<div class="column equal-column">
+								<span>=</span>
 							</div>
-
-							<div>
+							<div class="column">
 								<strong class="max-container">[[maxClean]]lbs</strong>
 							</div>
 						</div>
+					</div>
 
-						<!--  Pull-ups -->
-						<div class="stat-wrapper">
-							<div style="width: 135px">
-								<strong class="title">Pull-ups:</strong>
+					<!-- Small Screens -->
+					<div hidden="[[!smallScreens]]">
+						<!-- Bench Press Row -->
+						<div class="data-row">
+							<div class="data-column">
+								<strong>Bench Press:</strong>
+								<span>[[athleteStats.bench_press_value]]lbs <strong>x</strong> [[athleteStats.bench_press_reps]] reps <strong>=</strong> [[maxBenchPress]]lbs</span>
 							</div>
+						</div>
 
-							<div class="weight-container">
-								<span>[[athleteStats.pull_ups]]</span>
+						<!-- Back Squat Row -->
+						<div class="data-row">
+							<div class="data-column">
+								<strong>Back Squat:</strong>
+								<span>[[athleteStats.back_squat_value]]lbs <strong>x</strong> [[athleteStats.back_squat_reps]] reps <strong>=</strong> [[maxBackSquat]]lbs</span>
 							</div>
 						</div>
 
-						<!-- Agility Header  -->
-						<div class="agility">
-
-							<div class="header" style="margin: 1.5em 0 0 0">
-								<span> Agility</span>
-							</div>
-
-							<div class="horizontal">
-								<div class="agility-wrapper">
-									<p>
-										<strong class="title">40 Yard Dash:</strong>
-										<span>[[athleteStats.forty_yard_dash]] sec</span>
-									</p>
-								</div>
-								<span flex></span>
-								<div class="agility-wrapper">
-									<p>
-										<strong class="title">Broad Jump:</strong>
-										<span>{{athleteStats.broad_jump_ft}} ft {{athleteStats.broad_jump_in}} in</span>
-									</p>
-								</div>
-							</div>
-
-							<div class="horizontal">
-								<div class="agility-wrapper">
-									<p>
-										<strong class="title">20 Yard Shuttle:</strong>
-										<span>[[athleteStats.twenty_yard_shuttle]] sec</span>
-									</p>
-								</div>
-								<span flex></span>
-								<div class="agility-wrapper">
-									<p>
-										<strong class="title">3 Cone Drill:</strong>
-										<span>[[athleteStats.three_cone_drill]] sec</span>
-									</p>
-								</div>
-							</div>
-
-							<div class="horizontal">
-								<div class="agility-wrapper">
-									<p>
-										<strong class="title">Vertical Jump:</strong>
-										<span>[[athleteStats.vertical_jump]] in</span>
-									</p>
-								</div>
-								<span flex></span>
-								<div class="agility-wrapper">
-									<p>
-										<strong class="title">60 Yard Shuttle:</strong>
-										<span>[[athleteStats.sixty_yard_shuttle]] sec</span>
-									</p>
-								</div>
+						<!-- Front Squat Row -->
+						<div class="data-row">
+							<div class="data-column">
+								<strong>Front Squat:</strong>
+								<span>[[athleteStats.front_squat_value]]lbs <strong>x</strong> [[athleteStats.front_squat_reps]] reps <strong>=</strong> [[maxFrontSquat]]lbs</span>
 							</div>
 						</div>
+
+						<!-- Deadlift Row -->
+						<div class="data-row">
+							<div class="data-column">
+								<strong>Deadlift:</strong>
+								<span>[[athleteStats.deadlift_value]]lbs <strong>x</strong> [[athleteStats.deadlift_reps]] reps <strong>=</strong> [[maxDeadLift]]lbs</span>
+							</div>
+						</div>
+
+						<!-- Clean Row -->
+						<div class="data-row">
+							<div class="data-column">
+								<strong>Clean:</strong>
+								<span>[[athleteStats.hang_power_clean_value]]lbs <strong>x</strong> [[athleteStats.hang_power_clean_reps]] reps <strong>=</strong> [[maxClean]]lbs</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Independent Rows -->
+
+					<!-- Pull-ups Row -->
+					<div class="data-row">
+						<div class="data-column first">
+							<strong>Pull-ups:</strong>
+							<span>[[athleteStats.pull_ups]]</span>
+						</div>
+						<div class="data-column second"></div>
+					</div>
+
+					<h3 class="title agility-title">Agility</h3>
+
+					<!-- 40 Yard Dash & Broad Jump Columns -->
+					<div class="data-row">
+						<div class="data-column first">
+							<strong>40 Yard Dash:</strong>
+							<span>[[athleteStats.forty_yard_dash]] sec</span>
+						</div>
+						<div class="data-column second">
+							<strong>Broad Jump:</strong>
+							<span>{{athleteStats.broad_jump_ft}} ft {{athleteStats.broad_jump_in}} in</span>
+						</div>
+					</div>
+
+					<!-- 20 Yard Shuttle & 3 Cone Drill Columns -->
+					<div class="data-row">
+						<div class="data-column first">
+							<strong>20 Yard Shuttle:</strong>
+							<span>[[athleteStats.twenty_yard_shuttle]] sec</span>
+						</div>
+						<div class="data-column second">
+							<strong>3 Cone Drill:</strong>
+							<span>[[athleteStats.three_cone_drill]] sec</span>
+						</div>
+					</div>
+
+					<!-- Vertical Jump & 60 Yard Shuttle Columns -->
+					<div class="data-row">
+						<div class="data-column first">
+							<strong>Vertical Jump:</strong>
+							<span>[[athleteStats.vertical_jump]] in</span>
+						</div>
+						<div class="data-column second">
+							<strong>60 Yard Shuttle:</strong>
+							<span>[[athleteStats.sixty_yard_shuttle]] sec</span>
+						</div>
+					</div>
 				</template>
 
 				<!-- Form Wrapper -->
