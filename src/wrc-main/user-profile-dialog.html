@@ -170,7 +170,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             <paper-dialog-scrollable>
                 <div class="picture-wrapper">
-                    <input type="file" name="profile_pic" id="adminProfilePicture">
+                    <input type="file" accept="image/*"  name="profile_pic" id="adminProfilePicture">
                     <label for="adminProfilePicture">
                         <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
                         <iron-image id="adminProfileImage" preload fade sizing="cover" src="[[adminInfo.profile_pic_url]]"></iron-image>
@@ -230,7 +230,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             <paper-dialog-scrollable>
                 <div class="picture-wrapper">
-                    <input type="file" name="profile_pic" id="coachProfilePicture">
+                    <input type="file" accept="image/*"  name="profile_pic" id="coachProfilePicture">
                     <label for="coachProfilePicture">
                         <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
                         <iron-image id="coachProfileImage" preload fade sizing="cover" src="[[coachInfo.profile_pic_url]]"></iron-image>
@@ -289,7 +289,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             exit-animation="fade-out-animation">
             <paper-dialog-scrollable>
                 <div class="picture-wrapper">
-                    <input type="file" name="profile_pic" id="athleteProfilePicture">
+                    <input type="file" accept="image/*" name="profile_pic" id="athleteProfilePicture">
                     <label for="athleteProfilePicture">
                         <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
                         <iron-image id="athleteProfileImage" preload fade sizing="cover" src="[[athleteInfo.profile_pic_url]]"></iron-image>

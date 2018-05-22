@@ -234,7 +234,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                 <!-- Profile image that allows user to change it -->
                 <div class="picture-wrapper" hidden="[[!editing]]">
-                    <input type="file" name="profile_pic" id="profilePicture">
+                    <input type="file" accept="image/*"  name="profile_pic" id="profilePicture">
                     <label for="profilePicture">
                         <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
                         <iron-image id="profileImage" preload fade sizing="cover" src="[[coachInfo.profile_pic_url]]"></iron-image>
