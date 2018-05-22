@@ -11,6 +11,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <!-- Polymerfire Elements -->
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
@@ -52,9 +53,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 			.spinner-wrapper {
 				margin-top: 24px;
-				
+
 				@apply --layout-vertical;
 				@apply --layout-center-center;
+			}
+
+			/* pop-up blocker notification */
+			a.blocker-notification
+			a:active.blocker-notification,
+			a:hover.blocker-notification,
+			a:link.blocker-notification,
+			a:visited.blocker-notification
+			{
+				color: #4FBE79;
+				font-weight: bold;
+				text-transform: uppercase;
+				text-decoration: none;
+				display: inline-block;
+				padding-left: 40px;
 			}
 
 			/* Program Selector */
@@ -360,6 +376,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				</div>
 			</div>
 
+			<!--  Pop Blocker Notification -->
+			<paper-toast id="appToastPopupDisabled" duration="4000" horizontal-align="right" vertical-align="top" vertical-offset="10" dynamicAlign="true">
+			🚫 Pop-ups Blocked.
+			<a class="blocker-notification" href="https://support.norton.com/sp/en/us/home/current/solutions/v107843274_EndUserProfile_en_us" target="_blank">Enable</a>
+			</paper-toast>
+
 		</main>
 	</template>
 
@@ -438,7 +460,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					// Notification
 					this._appToast = document.getElementById("appToast");
-					this._appToastPopupDisabled = document.getElementById('appToastPopupDisabled');
 
 					// App Progress bar
 					this._appProgress = document.getElementById("appProgressBar");
@@ -531,8 +552,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					// Notify user that pop-up is disabled
 					if (computePdfPreview === false) {
-						this._appToastPopupDisabled.text = " 🚫 Pop-ups Blocked. ";
-						this._appToastPopupDisabled.open();
+						this.appToastPopupDisabled.open();
 						console.log("Pop-up Window Blocker Enabled");
 					}
 				}
