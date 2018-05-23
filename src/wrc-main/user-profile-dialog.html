@@ -57,8 +57,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       			}
 
             paper-dialog .buttons paper-button {
-                margin-top: .5cm;
-
 				        color: var(--azul-primary-button);
                 font-weight: normal;
 			      }
@@ -119,6 +117,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             /* Form */
             vaadin-form-layout {
       				@apply --layout-vertical;
+              margin-bottom: 30px;
       			}
 
       			div.horizontal-wrapper {
@@ -138,11 +137,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       				color: var(--paper-grey-500);
       			}
 
-                  /* To keep dialog larger with large screens */
+            /* Larger screens */
       			@media screen and (min-width: 600px) {
-      				paper-dialog {
+              /* To keep dialog larger with large screens */
+              paper-dialog {
       					width: 610px;
       				}
+
+              /* Form */
+              vaadin-form-layout {
+                @apply --layout-vertical;
+              }
       			}
 
       			[hidden] {
@@ -273,7 +278,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     </form>
                 </iron-form>
             </paper-dialog-scrollable>
-            <div class="buttons" style="margin-top: 1em">
+            <div class="buttons">
                 <paper-button class="cancel-button" dialog-dismiss on-tap="_resetForm">Cancel</paper-button>
                 <span flex></span>
                 <paper-button on-tap="_serializeCoachForm">Update</paper-button>
