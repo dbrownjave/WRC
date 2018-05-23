@@ -742,7 +742,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						console.log("athlete info: ", this.athleteInfo);
 						console.log("preparing to delete athlete photo: ", this.athleteInfo.profile_pic_name);
 
-						// Deletes the athlete information from the coach's data
+						// Deletes the athlete information from the athlete's data
 						this.$.firebaseDocument.destroy(this.user.uid + '/athletes/' + this.athleteId)
 							.then(function () {
 								console.log("after: athlete info: ", this.athleteInfo);

@@ -700,7 +700,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 _saveAthlete(athleteInfo) {
                     if (this.action === 'add') {
-                        // Saves athlete in coach's private path
+                        // Saves athlete in athlete's private path
                         this.$.firebaseDocument.setStoredValue(this.user.uid + '/athletes/' + athleteInfo.uid + '/profile', athleteInfo)
                             .then(function () {
                                 // Creates athlete private node
@@ -767,7 +767,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             this._athleteProfileDialog.athleteInfo = snapshot;
                             this._athleteProfileDialog.opened = true;
                         }.bind(this), function (err) {
-                            this._appToast.text = 'An error has ocurred trying to retrieve the coach data. Please try again.';
+                            this._appToast.text = 'An error has ocurred trying to retrieve the athlete data. Please try again.';
                             this._appToast.open();
                         }.bind(this));
                 }
@@ -853,7 +853,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  * @param {String} athleteName - first and last
                  */
                 _loadWorkoutData(athleteStats, athleteName) {
-                    // Retrieves activated workout path from coach's node
+                    // Retrieves activated workout path from athlete's node
                     this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
                         .then(function (workoutId) {
                             this.workoutId = workoutId;
@@ -937,7 +937,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                                 console.log(athleteStats);
 
-                                // Retrieves activated workout path from coach's node
+                                // Retrieves activated workout path from athlete's node
                                 this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
                                   .then(function (workoutId) {
                                     activeWorkoutId = workoutId;

@@ -442,7 +442,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         if(this.$.profilePicture.files[0].name.slice(-3) == 'jpg') {
                           // creates unique image file name
                           var newFileName = this.$.profilePicture.files[0].name.replace('.jpg',upid) + '.jpg';
-
+athlete
                           // create new image file - blog: binary large OBject
                           var blob = this.$.profilePicture.files[0].slice(0, -1, 'image/jpeg');
                           var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
@@ -505,7 +505,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                                 // Extracts the new user information to get Unique ID
                                 var new_user_id = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyA8x_v_ISriJLvBKODINC1h9dSyhrszv_s:new_accounts_app'));
-                                // Sets the new coach UI extracted from new user info
+                                // Sets the new athlete UI extracted from new user info
                                 this.athleteInfo.uid = new_user_id.uid;
                                 // Signs out the new user since it is automatically signed in
                                 this.$.newAccountsAuth.signOut();
@@ -521,7 +521,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             }.bind(this))
 
                             .catch(function(err) {
-                                this._appToast.text = 'An error has ocurred trying to create the new coach. Is possible that the email is already in use.';
+                                this._appToast.text = 'An error has ocurred trying to create the new athlete. Is possible that the email is already in use.';
                                 this._appToast.open();
                                 console.log(err);
                             }.bind(this));
@@ -603,7 +603,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 */
                 _deleteAthlete(response) {
                     if (response) {
-                        // Deletes the athlete information from the coach's data
+                        // Deletes the athlete information from the athlete's data
                         this.$.firebaseDocument.destroy(this.user.uid + '/athletes/' + this.athleteInfo.uid)
                         .then(function() {
                             // Deletes the profile picture
