@@ -161,7 +161,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             path="profile-pics"></firebase-storage-multiupload>
 
         <!-- Admin Dialog -->
-        <paper-dialog-scrollable
+        <paper-dialog
             id="adminDialog"
             opened="{{openedAdmin}}"
             with-backdrop
@@ -218,10 +218,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 <span flex></span>
                 <paper-button class="update-button" on-tap="_serializeAdminForm">Update</paper-button>
             </div>
-        </paper-dialog-scrollable>
+        </paper-dialog>
 
         <!-- Coach Dialog -->
-        <paper-dialog-scrollable
+        <paper-dialog
             id="coachDialog"
             opened="{{openedCoach}}"
             with-backdrop
@@ -278,10 +278,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 <span flex></span>
                 <paper-button on-tap="_serializeCoachForm">Update</paper-button>
             </div>
-        </paper-dialog-scrollable>
+        </paper-dialog>
 
         <!-- Athlete Dialog -->
-        <paper-dialog-scrollable
+        <paper-dialog
             id="athleteDialog"
             opened="{{openedAthlete}}"
             with-backdrop
@@ -395,7 +395,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 <span flex></span>
                 <paper-button on-tap="_serializeAthleteForm">Update</paper-button>
             </div>
-        </paper-dialog-scrollable>
+        </paper-dialog>
     </template>
 
     <script>
@@ -630,6 +630,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     }
                 }
 
+
+
                 /**
                  * Serializes form data and saves into athlete data
                 */
@@ -701,6 +703,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       }
                     }
                   }
+
 
                 /**
                  * Creates image preview for profile picture
