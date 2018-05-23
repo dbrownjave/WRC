@@ -30,7 +30,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 						athleteExerciseMax = this._calculateMax(athleteStats.bench_press_value, athleteStats.bench_press_reps);
 						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
 
-					} else if (exercise == "back-squat" || exercise == "back squat" || exercise == "backsquat" ) {
+					} else if (exercise == "back-squat" || exercise == "back squat" || exercise == "backsquat" || exercise == "rev lunge" || exercise == "lunge") {
 						athleteExerciseMax = this._calculateMax(athleteStats.back_squat_value, athleteStats.back_squat_reps);
 						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
 
@@ -44,7 +44,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					} else if (exercise == "power clean" || exercise == "clean" || exercise == "hang clean" || exercise == "hang" || exercise == "ps/hc" ||
 										 exercise == "ps / hc" || exercise == "pc" || exercise == "hc" || exercise == "pc/hc" || exercise == "pc / hc" || exercise == "hc/ps" ||
-					 										 exercise == "hc / ps" || exercise == "hc/pc" || exercise == "hc / pc" || exercise == "ps") {
+					 					 exercise == "hc / ps" || exercise == "hc/pc" || exercise == "hc / pc" || exercise == "ps") {
 						athleteExerciseMax = this._calculateMax(athleteStats.hang_power_clean_value, athleteStats.hang_power_clean_reps);
 						return this._computeAthleteExerciseMax(athleteExerciseMax, rawMaxPercentage);
 
