@@ -234,7 +234,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             exit-animation="fade-out-animation">
 
             <paper-dialog-scrollable>
-                <div class="picture-wrapper">
+                <div class="picture-wrapper" id="pictureContainer">
                     <input type="file" accept="image/*"  name="profile_pic" id="coachProfilePicture">
                     <label for="coachProfilePicture">
                         <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
@@ -471,15 +471,31 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this._createImgPreview(e.target.files[0], this.$.adminProfileImage);
                     }.bind(this));
 
+
+
+
+
+                    const pictureObject = this.$.pictureContainer;
+                    pictureObject.addEventListener('click', function(e) {
+                       console.log("📷 Touched");
+
                     const coachUpload = this.$.coachProfilePicture;
 					              coachUpload.addEventListener('change', function(e) {
                         this._createImgPreview(e.target.files[0], this.$.coachProfileImage);
                     }.bind(this));
 
+                    }.bind(this));
+
+
+
+
+
                     const playerUpload = this.$.athleteProfilePicture;
 					              playerUpload.addEventListener('change', function(e) {
                         this._createImgPreview(e.target.files[0], this.$.athleteProfileImage);
                     }.bind(this));
+
+
                 }
 
                 /**
@@ -490,6 +506,22 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.coachInfo = null;
                     this.athleteInfo = null;
                 }
+
+// TODO: Fix Mobile Profile Picture Upload Issue
+                /**
+                 * Image File Input listener
+                 *
+                 * @description forward click events in iOS Safari / Android Mobile Devices
+                 *
+                 */
+                 _uploadListener() {
+                   /*
+                                       const pictureObject = this.$.pictureContainer;
+                                       pictureObject.addEventListener('click', function(e) {
+                                          console.log("📷 Touched");
+                                       }.bind(this));
+                   */
+                 }
 
                 /**
                  * Serializes form data and send it to be saved into admin data
