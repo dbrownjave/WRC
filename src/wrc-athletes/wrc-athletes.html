@@ -592,10 +592,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         workoutId: {
                             type: String,
                             notify: true
-                        },
-                        pdfCollection: {
-                            type: Array,
-                            notfiy: true
                         }
                     };
                 }
@@ -833,26 +829,37 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                  */
                 _printPdfCollection(evt) {
                     var athletesData = this.athletesData;
-                    var that = this;
+                    console.log("athlete database: ", athletesData);
 
-                    // Loop for each element in an array, in order.
+                    var that = this;
+                    var activeAthletes = [];
+
+                    // Loop for each element in an array of athlete data, in order.
                     athletesData.forEach(function (athlete) { //
                         if (athlete.profile.active == "Yes") {
                             // Compose name using athlete profile data
                             var athleteName = athlete.profile.first + " " + athlete.profile.last;
 
-                            that._loadWorkoutData(athlete.stats, athleteName);
+                            activeAthletes.push({
+                                athleteStats: athlete.stats,
+                                athleteName: athleteName
+                            });
                         }
                     });
+
+                    console.log("preparing to print athlete data collection: ", activeAthletes);
+
+                    // load workout data after collecting array of active athletes
+                    that._loadWorkoutData(activeAthletes);
                 }
 
                 /**
                  * @description Retrieves active workout data from Firebase
                  *
-                 * @param {Object} athleteStats - athlete max stats
-                 * @param {String} athleteName - first and last
+                 * @param {Object} activeAthletes - collection of active athletes
+                 *
                  */
-                _loadWorkoutData(athleteStats, athleteName) {
+                _loadWorkoutData(activeAthletes) {
                     // Retrieves activated workout path from athlete's node
                     this.$.firebaseDocument.getStoredValue(`${this.user.uid}/activated_workout/path`)
                         .then(function (workoutId) {
@@ -864,55 +871,36 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                                     .then(function (workoutData) {
 
                                         // Creates pdf with 3 necessary objects
-                                        this._computePdfCollection(workoutData, athleteStats,
-                                            athleteName);
+                                        this._generateCollectionPreview(workoutData, activeAthletes);
                                     }.bind(this));
-                                //.catch(function(err) {
-                                //  this._appToast.text = "There has been an error. Please try again.";
-                                //this._appToast.open();
-                                //  console.error(err.message);
-                                //}.bind(this));
                             } else {
                                 this._appToast.text = `You don't have any active workout to Preview.`;
                                 this._appToast.open();
                             }
                         }.bind(this));
-                    //.catch(function(err) {
-                    //  this._appToast.text = "There has been an error. Please try again.";
-                    //this._appToast.open();
-                    //  console.error(err.message);
-                    //}.bind(this));
                 }
 
-                /*Test*/
                 /**
-                 * @description compute PDF collection
+                 * @description Generates workout PDF Preview making use of the super class
                  *
-                 * @param {Object} athleteStats - athlete max stats
-                 * @param {String} athleteName - athlete first and last
-                 * @param {Object} athleteWorkout - athlete workout data
+                 * @param {Object} activeAthletes - collection of active athletes
+                 * @param {Object} workout - workout retrieved from firebase
+                 *
                  */
+                _generateCollectionPreview(workout, activeAthletes) {
+                  /**
+                   * Call super class generatePreview function sending
+                   * workout data and collection of active athletes
+                   */
+                  var computePdfCollectionPreview = super._generateCollectionPreview(workout, activeAthletes);
 
-                _computePdfCollection(workoutData, athleteStats, athleteName) {
-                    var pdfCollection = [];
-
-
-                    //pdfCollection = that.pdfCollection;
-
-                    pdfCollection.push({
-                        workoutData: workoutData,
-                        athleteStats: athleteStats,
-                        athleteName: athleteName
-                    });
-
-
-                    console.log(pdfCollection);
-
-
-                    // Invoke generate preview with 4 retrieved objects
-                    this._generatePreview(workoutData, athleteStats, athleteName);
+                  // Notify user that pop-up is disabled
+                  if (computePdfCollectionPreview === false) {
+                    self = this;
+                    self.$.appToastPopupDisabled.open();
+                    console.log("Pop-up Window Blocker Enabled");
+                  }
                 }
-
 
                 /**
                  *  @description Preview athlete individual workout
