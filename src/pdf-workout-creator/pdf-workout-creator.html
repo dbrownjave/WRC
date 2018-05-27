@@ -54,7 +54,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				}
 			}
 
-
 			/**
 			* Calculates athlete's exercise weight %
 			*
@@ -82,7 +81,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				return max + "lbs";
 			}
-
 
 				/**
 				* Calculates Estimation of athlete max
@@ -5107,8 +5105,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 								}, // EO Day 4
 							], // EO Content: Row 33
 
-
-
 							] // EO Table Body
 						} // EO Table
 					} // EO Main Content
@@ -5120,17 +5116,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 			return pdfCollection;
 		}
-
-
-
-
-
-// TODO: Collection Seperation
-// FIXME:
-
-
-
-
 
 
 		/**
@@ -10087,8 +10072,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							}, // EO Day 4
 						], // EO Content: Row 33
 
-
-
 						] // EO Table Body
 					} // EO Table
 				} // EO Main Content
@@ -10102,17 +10085,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 	}
 
 
-
-
-
-
-
-			// Generates Preview for Workout
+			// Generates Preview for Workout individuals
 			_generatePreview(workout = {}, stats = {}, name = {}, ) {
 				console.log("PDF: Workout - " +  workout);
 				console.log("PDF: Stats - " +  stats);
 				console.log("PDF: Name - " +  name);
-
 
 				/**
 				 * Create a global stats object in case stats is not null,
@@ -10129,6 +10106,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				];
 
 				var pdfContent = {
+
 					// Page Orientation: [portrait or landscap]
 					pageOrientation: 'landscape',
 
@@ -10138,7 +10116,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					// Content for PDF
 					content: this._computeContent(pdfData),
 
-					////////////////////////////////////////////
 					// Style Guide
 					styles: {
 
@@ -10208,8 +10185,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				} // EO Content
 
-				//console.log("PDF Collection: "  + this._computeContent(pdfData));
-
 				/**
 				 * @description notify if pdf window is opened successfully
 				 *
@@ -10231,44 +10206,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			// Generates Preview for Workout
+			// Generates Preview for Workout Collection
 			_generateCollectionPreview(workout = {}, activeAthletes = {}) {
 				console.log("PDF: Workout - " +  workout);
 				console.log("Active Athletes - " +  activeAthletes);
@@ -10292,7 +10230,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					// Content for PDF
 					content: this._computeContentCollection(pdfData),
 
-					////////////////////////////////////////////
 					// Style Guide
 					styles: {
 
@@ -10362,9 +10299,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 				} // EO Content
 
-
-				//console.log("PDF Collection: "  + this._computeContent(pdfData));
-
 				/**
 				 * @description notify if pdf window is opened successfully
 				 *
@@ -10383,9 +10317,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					console.log(err);
 					return false;
 				}
-
 			}
-
 		}
 	};
 </script>
