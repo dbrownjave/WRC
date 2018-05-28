@@ -798,10 +798,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 					// Deadlift
 					if (stats.deadlift_reps === '1') {
-						this.deadlift = stats.deadlift_value;
+						this.maxDeadLift = stats.deadlift_value;
 					} else {
-						deadLift = (stats.deadlift_value && stats.deadlift_reps) ? (parseInt(stats.deadlift_value) * parseInt(stats.deadlift_reps) *
-							e) + parseInt(stats.deadlift_value) : "0";
+						deadLift = (stats.deadlift_value && stats.deadlift_reps) ? (parseInt(stats.deadlift_value) *
+						parseInt(stats.deadlift_reps) * e) + parseInt(stats.deadlift_value) : "0";
 						this.maxDeadLift = this._roundMaxResult(deadLift);
 					}
 
@@ -809,8 +809,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					if (stats.back_squat_reps === '1') {
 						this.maxBackSquat = stats.back_squat_value;
 					} else {
-						backSquat = (stats.back_squat_value && stats.back_squat_reps) ? (parseInt(stats.back_squat_value) * parseInt(
-							stats.back_squat_reps) * e) + parseInt(stats.back_squat_value) : "0";
+						backSquat = (stats.back_squat_value && stats.back_squat_reps) ? (parseInt(stats.back_squat_value) *
+						parseInt(stats.back_squat_reps) * e) + parseInt(stats.back_squat_value) : "0";
 						this.maxBackSquat = this._roundMaxResult(backSquat);
 					}
 
