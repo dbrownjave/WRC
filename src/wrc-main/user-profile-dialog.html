@@ -145,9 +145,22 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
               padding-top: 1.5px;
             }
 
-            /* Hides default file input */
-            [type='file'] {
-              display: none;
+             input[type="file"] {
+              position: absoulte;
+              width: 50%;
+              opacity: 0;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+            }
+
+            div.input-file-container {
+              position: relative;
+            }
+
+            div.input-file-wrapper {
+               position: absolute;
             }
 
             /* Form */
@@ -174,6 +187,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       			}
 
 
+
             /* Larger screens */
       			@media screen and (min-width: 600px) {
               /* To keep dialog larger with large screens */
@@ -186,12 +200,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 @apply --layout-vertical;
               }
 
+              /* Hides default file input */
+              [type='file'] {
+                display: none;
+              }
+
       			}
 
       			[hidden] {
       				display: none;
       			}
-
 
         </style>
 
@@ -283,14 +301,16 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     <!-- Display iOS + Android Devices -->
                     <div class="btn-upload-photo">
                       <label class="label" for="coachProfilePicture">
-                        <div class="horizontal-wrapper">
+                        <div class="input-file-container horizontal-wrapper">
                           <iron-icon icon="app-icons:photo-camera"></iron-icon>
                           <span class="icon-label">Edit</span>
+                          <div class="input-file-wrapper">
+                            <input type="file" accept="image/*"  name="profile_pic" id="coachProfilePicture">
+                          </div>
                         </div>
                       </label>
                    </div>
 
-                    <input class="mobile-device-gesture" type="file" accept="image/*"  name="profile_pic" id="coachProfilePicture">
                     <p>[[coachInfo.email]]</p>
                 </div>
 
