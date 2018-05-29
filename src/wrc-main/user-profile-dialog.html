@@ -16,6 +16,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
 <!-- Vaadin Elements -->
 <link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
@@ -37,9 +38,13 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../../bower_components/neon-animation/web-animations.html">
 
+<!-- Icons -->
+<link rel="import" href="../app-icons.html">
+<link rel="import" href="../fa-icons.html">
+
 <dom-module id="user-profile-dialog">
     <template>
-        <style>
+        <style id="wrc-shared-styles">
             /* General Style */
             [flex] {
                 @apply --layout-flex;
@@ -72,9 +77,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             }
 
             /* Profile Pic Uploader */
-      			[type='file'] {
-      				display: none;
-      			}
 
       			div.picture-wrapper {
       				width: 100%;
@@ -114,6 +116,40 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 margin: 0.5em 0 0;
             }
 
+            .btn-upload-photo {
+              width: 100%;
+              height: 45px;
+              margin-top: 10px;
+              cursor: pointer;
+
+              @apply --layout-vertical;
+              @apply --layout-center-center;
+            }
+
+            .btn-upload-photo > .label {
+              color: #445567;
+              cursor: pointer;
+              box-shadow: none;
+              background-color: #f3f4f5;
+              border-radius: 4px;
+              padding-top: 3px;
+              width: 100px;
+            }
+
+            .label > .icon-wrapper {
+              @apply horizontal-layout
+            }
+
+             .icon-label {
+              margin-left: 5px;
+              padding-top: 1.5px;
+            }
+
+            /* Hides default file input */
+            [type='file'] {
+              display: none;
+            }
+
             /* Form */
             vaadin-form-layout {
       				@apply --layout-vertical;
@@ -137,10 +173,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
       				color: var(--paper-grey-500);
       			}
 
-            .mobile-device-gesture {
-              position: relative;
-              z-index: 9999;
-            }
 
             /* Larger screens */
       			@media screen and (min-width: 600px) {
@@ -153,6 +185,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
               vaadin-form-layout {
                 @apply --layout-vertical;
               }
+
       			}
 
       			[hidden] {
@@ -182,7 +215,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             <paper-dialog-scrollable>
                 <div class="picture-wrapper">
-                    <input  class="mobile-device-gesture" type="file" accept="image/*"  name="profile_pic" id="adminProfilePicture">
+                    <input class="" type="file" accept="image/*"  name="profile_pic" id="adminProfilePicture">
                     <label for="adminProfilePicture">
                         <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
                         <iron-image id="adminProfileImage" preload fade sizing="cover" src="[[adminInfo.profile_pic_url]]"></iron-image>
@@ -242,11 +275,22 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             <paper-dialog-scrollable>
                 <div class="picture-wrapper" id="pictureContainer">
-                    <input class="mobile-device-gesture" type="file" accept="image/*"  name="profile_pic" id="coachProfilePicture">
                     <label for="coachProfilePicture">
                         <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
                         <iron-image id="coachProfileImage" preload fade sizing="cover" src="[[coachInfo.profile_pic_url]]"></iron-image>
                     </label>
+
+                    <!-- Display iOS + Android Devices -->
+                    <div class="btn-upload-photo">
+                      <label class="label" for="coachProfilePicture">
+                        <div class="horizontal-wrapper">
+                          <iron-icon icon="app-icons:photo-camera"></iron-icon>
+                          <span class="icon-label">Edit</span>
+                        </div>
+                      </label>
+                   </div>
+
+                    <input class="mobile-device-gesture" type="file" accept="image/*"  name="profile_pic" id="coachProfilePicture">
                     <p>[[coachInfo.email]]</p>
                 </div>
 
