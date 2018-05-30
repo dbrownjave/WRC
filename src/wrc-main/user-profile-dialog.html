@@ -187,11 +187,24 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
             <paper-dialog-scrollable>
                 <div class="picture-wrapper">
-                    <input class="" type="file" accept="image/*"  name="profile_pic" id="adminProfilePicture">
                     <label for="adminProfilePicture">
                         <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
                         <iron-image id="adminProfileImage" preload fade sizing="cover" src="[[adminInfo.profile_pic_url]]"></iron-image>
                     </label>
+
+                    <!-- Display iOS + Android Devices -->
+                    <div class="btn-upload-photo">
+                      <label class="label" for="adminProfilePicture">
+                        <div class="input-file-container horizontal-wrapper">
+                          <iron-icon icon="app-icons:photo-camera"></iron-icon>
+                          <span class="icon-label">Edit</span>
+                          <div class="input-file-wrapper">
+                            <input type="file" accept="image/*"  name="profile_pic" id="adminProfilePicture">
+                          </div>
+                        </div>
+                      </label>
+                   </div>
+
                     <p>[[adminInfo.email]]</p>
                 </div>
 
