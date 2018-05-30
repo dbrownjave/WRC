@@ -42,9 +42,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../app-icons.html">
 <link rel="import" href="../fa-icons.html">
 
+<!-- Shared Style  -->
+<link rel="import" href="../shared-styles.html">
+
 <dom-module id="user-profile-dialog">
     <template>
-        <style id="wrc-shared-styles">
+        <style include="wrc-shared-styles">
             /* General Style */
             [flex] {
                 @apply --layout-flex;
@@ -114,57 +117,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 font-weight: normal;
                 color: var(--azul-text-title);
                 margin: 0.5em 0 0;
-            }
-
-            .btn-upload-photo {
-              width: 100%;
-              height: 45px;
-              margin-top: 10px;
-
-              @apply --layout-vertical;
-              @apply --layout-center-center;
-            }
-
-            .btn-upload-photo > .label {
-              color: #445567;
-              box-shadow: none;
-              background-color: #f3f4f5;
-              border-radius: 4px;
-              padding-top: 3px;
-              width: 100px;
-              cursor: pointer;
-            }
-
-            label.label {
-              cursor: pointer;
-            }
-
-            .label > .icon-wrapper {
-              cursor: pointer;
-              @apply horizontal-layout
-            }
-
-             .icon-label {
-              margin-left: 5px;
-              padding-top: 1.5px;
-            }
-
-             input[type="file"] {
-              position: absoulte;
-              width: 50%;
-              opacity: 0;
-              top: 0;
-              left: 0;
-              right: 0;
-              bottom: 0;
-            }
-
-            div.input-file-container {
-              position: relative;
-            }
-
-            div.input-file-wrapper {
-               position: absolute;
             }
 
             /* Form */
@@ -366,12 +318,25 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             entry-animation="scale-up-animation"
             exit-animation="fade-out-animation">
             <paper-dialog-scrollable>
-                <div class="picture-wrapper">
-                    <input class="mobile-device-gesture" type="file" accept="image/*" name="profile_pic" id="athleteProfilePicture">
-                    <label for="athleteProfilePicture">
-                        <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
-                        <iron-image id="athleteProfileImage" preload fade sizing="cover" src="[[athleteInfo.profile_pic_url]]"></iron-image>
-                    </label>
+                    <div class="picture-wrapper">
+                        <label for="athleteProfilePicture">
+                            <paper-tooltip position="bottom" animation-delay="50">Upload Picture</paper-tooltip>
+                            <iron-image id="athleteProfileImage" preload fade sizing="cover" src="[[athleteInfo.profile_pic_url]]"></iron-image>
+                        </label>
+
+                    <!-- Display iOS + Android Devices -->
+                    <div class="btn-upload-photo">
+                      <label class="label" for="athleteProfilePicture">
+                        <div class="input-file-container horizontal-wrapper">
+                          <iron-icon icon="app-icons:photo-camera"></iron-icon>
+                          <span class="icon-label">Edit</span>
+                          <div class="input-file-wrapper">
+                            <input type="file" accept="image/*"  name="profile_pic" id="athleteProfilePicture">
+                          </div>
+                        </div>
+                      </label>
+                   </div>
+
                     <p>[[athleteInfo.email]]</p>
                 </div>
 
