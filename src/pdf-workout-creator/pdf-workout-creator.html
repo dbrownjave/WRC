@@ -9,6 +9,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <script>
 	"use strict";
 
+	var athleteStats = {};
+
 	const PdfWorkoutCreator = function(superClass) {
 		return class extends superClass {
 
@@ -16,14 +18,15 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			 * @description Compute max weight using athlete maxes
 			 *
 			 * @param {Number} max_percentage - max value percentage from workout data
-			 * @param {String} exercise - exercise name from workout data
+			 * @param {String} ex - exercise name from workout data
 			 */
         _computeWorkoutWeight(max_percentage, ex) {
 				let rawMaxPercentage = max_percentage;
 				let athleteExerciseMax = 0;
 
 				const exercise = ex.toLowerCase();
-				const athleteStats = this.stats;
+
+				console.log("Collection Print Mode: Athlete Stats | ", athleteStats);
 
 				if (athleteStats) {
 					if (exercise == "bench" || exercise == "bench press" || exercise == "benchpress") {
@@ -5144,7 +5147,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 			var stats = athlete.athleteStats;
 
 			console.log("name:", athlete.athleteName);
-			console.log("stats:", athlete.athleteStats);
+
+			// Individual athlete stats
+			athleteStats = stats;
+			//console.log("Collection Print Mode: Athlete Stats | ", athleteStats);
 
 			// Push PDF to PDF collection
 			pdfCollection.push(
@@ -10086,10 +10092,17 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 
 			// Generates Preview for Workout individuals
-			_generatePreview(workout = {}, stats = {}, name = {}, ) {
+			_generatePreview(workout = {}, stats = {}, name = {}) {
 				console.log("PDF: Workout - " +  workout);
 				console.log("PDF: Stats - " +  stats);
 				console.log("PDF: Name - " +  name);
+
+				// Individual athlete stats
+				athleteStats = stats;
+
+				console.log("Single Print Mode 👱‍♂️: ", athleteStats);
+				//this.athleteStats = this.stats;
+
 
 				/**
 				 * Create a global stats object in case stats is not null,
