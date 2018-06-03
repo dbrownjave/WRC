@@ -633,7 +633,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				 *  @description Binds selected workouts to program
 				 */
 				_bindWorkoutsToProgram() {
-
 					// selected program workout collection
 					let workoutsOfProgram = this._loadWorkoutsOfProgram(this.programId, true);
 					console.log("current program: ", workoutsOfProgram);
@@ -648,35 +647,55 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 							bindedWorkouts.push(workoutId);
 							this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", true);
 						}
-						console.log("binded workouts:", bindedWorkouts);
+						console.log("new workout collection: ", bindedWorkouts);
 
 						this.$.firebaseDocument.setStoredValue("programs/" + this.programId + "/workouts", bindedWorkouts)
 							.then(function () {
 
-								// Return non-selected workout's to workout collection
-								workoutsOfProgram.forEach(function (workoutData) {
+								// Return non-selected workout's to unassigned workout collection
+								workoutsOfProgram.forEach(function (workoutData) { // loop -> [Program's workouts]
 									let workoutId = workoutData["$key"];
 
-									// note: prev. workout in program status should = true
-									console.log("----------- 🚫 No Workout ID Match ---------------");
 									Object.values(bindedWorkouts).forEach(function (bindedWorkoutId) {
-										// check if prev. workout that is non-selected status is true
+										// if prev. workout in program is not selected then status = false
 										if (workoutId != bindedWorkoutId) {
-											console.log("workout ID:", workoutId);
-											console.log("binded workout ID: " + bindedWorkoutId);
+											console.log("----------- 🚫 No Workout ID Match ---------------");
 
 											// check workout status and set to false
 											this.$.firebaseDocument.getStoredValue("workouts/" + workoutId + "/status")
 												.then(function (status) {
-													console.log("status: ", status);
 													if (status == true) {
-														this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", false);
+														// return workout to unassigned workout collection
+														// set workout status: false
+														this.$.firebaseDocument.setStoredValue("workouts/" + workoutId + "/status", false)
+														.then(function() {
+															console.log(workoutId + "status: " + status + " -> false");
+														}.bind(this));
+
+														// remove workout from program
+														this.$.firebaseDocument.destroy("programs/" + this.programId + "/workouts/" + workoutId)
+															.then(function() {
+																console.log("succesfully removed workout: ", workoutId);
+															}.bind(this));
 													}
 												}.bind(this));
 										}
 									}.bind(this));
-								}.bind(this));
 
+									// set binded workouts (new program workouts) status = true
+									bindedWorkouts.forEach(function(bindedWorkoutId) {
+										// retrieve workout status
+										this.$.firebaseDocument.getStoredValue("workouts/" + bindedWorkoutId + "/status")
+											.then(function (status) {
+												console.log("----------- Program Workout Collection ✅ ---------------");
+													// set workout status: true
+													this.$.firebaseDocument.setStoredValue("workouts/" + bindedWorkoutId + "/status", true)
+														.then(function() {
+														console.log(workoutId + " - set status: true");
+													}.bind(this));
+											}.bind(this));
+									}.bind(this));
+								}.bind(this));
 								this._appProgress.hidden = true;
 								this._appToast.text = "The workouts has been assigned succesfully.";
 								this._appToast.open();
