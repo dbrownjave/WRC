@@ -524,10 +524,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         this._createImgPreview(e.target.files[0], this.$.adminProfileImage);
                     }.bind(this));
 
-
-
-
-
                     const pictureObject = this.$.pictureContainer;
                     pictureObject.addEventListener('click', function(e) {
                        console.log("📷 Touched");
@@ -539,16 +535,10 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                     }.bind(this));
 
-
-
-
-
                     const playerUpload = this.$.athleteProfilePicture;
 					              playerUpload.addEventListener('change', function(e) {
                         this._createImgPreview(e.target.files[0], this.$.athleteProfileImage);
                     }.bind(this));
-
-
                 }
 
                 /**
@@ -560,21 +550,6 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                     this.athleteInfo = null;
                 }
 
-// TODO: Fix Mobile Profile Picture Upload Issue
-                /**
-                 * Image File Input listener
-                 *
-                 * @description forward click events in iOS Safari / Android Mobile Devices
-                 *
-                 */
-                 _uploadListener() {
-                   /*
-                                       const pictureObject = this.$.pictureContainer;
-                                       pictureObject.addEventListener('click', function(e) {
-                                          console.log("📷 Touched");
-                                       }.bind(this));
-                   */
-                 }
 
                 /**
                  * Serializes form data and send it to be saved into admin data
@@ -632,7 +607,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           // Put new image file in Firebase Storage
                           this.$.firebaseStorage.put(this.newImgFile)
                           .then(function() {
-                              this.$.storageRef.getDownloadURL('/profile-pics/' + this.newImgFile.name)
+                            this.$.storageRef.getDownloadURL('/profile-pics/' + this.newImgFile.name)
                               .then(function (url) {
                                   console.log("check new profile photo url?: ", url);
                                   this.adminInfo.profile_pic_url = url;
