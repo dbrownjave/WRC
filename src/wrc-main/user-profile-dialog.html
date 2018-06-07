@@ -747,30 +747,49 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       console.log("before: ", this.$.athleteProfilePicture.files[0].name);
                       console.log("upid: ", upid);
 
-                       /**
-                       * @description Add Unique Photo ID to orginal photo + file extension
-                       */
+                      // DEBUG: Test for any issues
+                      //console.log(this.$.athleteProfilePicture.files[0].name.slice(-3));
+
+                      /**
+                      * @description Add Unique Photo ID to orginal photo + file extension
+                      */
                       if (this.$.athleteProfilePicture.files[0].name.slice(-3) == 'jpg') {
                           // creates unique image file name
                           var newFileName = this.$.athleteProfilePicture.files[0].name.replace('.jpg',upid) + '.jpg';
 
                           // create new image file - blog: binary large OBject
+                          // slice is used for collecting only image data
                           var blob = this.$.athleteProfilePicture.files[0].slice(0, -1, 'image/jpeg');
                           var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
 
                           this.newImgFile = newImgFile;
                           console.log("jpg file extended: ", this.newImgFile);
 
+                      } else if (this.$.athleteProfilePicture.files[0].name.slice(-3) == 'peg') {
+                        // creates unique image file name
+                        var newFileName = this.$.athleteProfilePicture.files[0].name.replace('.jpeg',upid) + '.jpeg';
+
+                        // create new image file - blog: binary large OBject
+                        // slice is used for collecting only image data
+                        var blob = this.$.athleteProfilePicture.files[0].slice(0, -1, 'image/jpeg'); // collects only image data
+                        var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
+
+                        this.set('newImgFile',newImgFile);
+                        console.log("jpeg file extended: ", this.newImgFile);
+
                       } else if (this.$.athleteProfilePicture.files[0].name.slice(-3) == 'png') {
                           // creates unique image file name
                           var newFileName = this.$.athleteProfilePicture.files[0].name.replace('.png',upid) + '.png';
 
                           // create new image file - blog: binary large OBject
+                          // slice is used for collecting only image data
                           var blob = this.$.athleteProfilePicture.files[0].slice(0, -1, 'image/png');
                           var newImgFile = new File([blob], newFileName, {type: 'image/png'});
 
                           this.newImgFile = newImgFile;
                           console.log("png file extended: ", this.newImgFile);
+                      } else {
+                        console.error("file extension not excepted: ", this.$.coachProfilePicture.files[0].name);
                       }
                   }
 
