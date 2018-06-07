@@ -566,9 +566,9 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       // DEBUG: Test for any issues
                       //console.log(this.$.adminProfilePicture.files[0].name.slice(-3));
 
-                       /**
-                       * @description Add Unique Photo ID to orginal photo + file extension
-                       */
+                      /**
+                      * @description Add Unique Photo ID to orginal photo + file extension
+                      */
                       if (this.$.adminProfilePicture.files[0].name.slice(-3) == 'jpg') {
                           // creates unique image file name
                           var newFileName = this.$.adminProfilePicture.files[0].name.replace('.jpg',upid) + '.jpg';
@@ -657,9 +657,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                       console.log("before: ", this.$.coachProfilePicture.files[0].name);
                       console.log("upid: ", upid);
 
-                       /**
-                       * @description Add Unique Photo ID to orginal photo + file extension
-                       */
+                      // DEBUG: Test for any issues
+                      //console.log(this.$.coachProfilePicture.files[0].name.slice(-3));
+
+                      /**
+                      * @description Add Unique Photo ID to orginal photo + file extension
+                      */
                       if (this.$.coachProfilePicture.files[0].name.slice(-3) == 'jpg') {
                           // creates unique image file name
                           var newFileName = this.$.coachProfilePicture.files[0].name.replace('.jpg',upid) + '.jpg';
@@ -668,8 +671,19 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           var blob = this.$.coachProfilePicture.files[0].slice(0, -1, 'image/jpeg');
                           var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
 
-                          this.newImgFile = newImgFile;
+                          this.set('newImgFile',newImgFile);
                           console.log("jpg file extended: ", this.newImgFile);
+
+                      } else if (this.$.coachProfilePicture.files[0].name.slice(-3) == 'peg') {
+                        // creates unique image file name
+                        var newFileName = this.$.coachProfilePicture.files[0].name.replace('.jpeg',upid) + '.jpeg';
+
+                        // create new image file - blog: binary large OBject
+                        var blob = this.$.coachProfilePicture.files[0].slice(0, -1, 'image/jpeg');
+                        var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
+
+                        this.set('newImgFile',newImgFile);
+                        console.log("jpeg file extended: ", this.newImgFile);
 
                       } else if (this.$.coachProfilePicture.files[0].name.slice(-3) == 'png') {
                           // creates unique image file name
@@ -681,6 +695,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                           this.newImgFile = newImgFile;
                           console.log("png file extended: ", this.newImgFile);
+                      } else {
+                        console.error("file extension not excepted: ", this.$.coachProfilePicture.files[0].name);
                       }
                   }
 
