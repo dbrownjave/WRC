@@ -48,9 +48,12 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 <link rel="import" href="../app-icons.html">
 <link rel="import" href="../fa-icons.html">
 
+<!-- Shared Style  -->
+<link rel="import" href="../shared-styles.html">
+
 <dom-module id="wrc-coaches">
     <template>
-        <style>
+        <style include="wrc-shared-styles">
             /* General Style */
             main {
                 padding: 2em 3em 5em 3em;
@@ -132,8 +135,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
             /* Fab */
             paper-fab {
                 position: fixed;
-                bottom: 2em;
-                right: 2em;
+                bottom: 1em;
+                right: 1em;
 
                 --paper-fab-background: var(--azul-primary);
                 --paper-fab-keyboard-focus-background: var(--azul-primary);
@@ -303,27 +306,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                 color: #737D8A;
             }
 
-            /* Responsive */
-            @media screen and (max-width: 425px) {
-                /* General Style */
-                main {
-                    padding: 1em;
-                    height: calc(100vh - (64px + 2em));
-                    min-height: calc(100vh - (64px + 2em));
-
-                    @apply --layout-vertical;
-                    @apply --layout-center;
-                }
-
-                paper-fab {
-                    bottom: 1em;
-                    right: 1em;
-                }
-            }
 
             [hidden] {
                 display: none;
             }
+
         </style>
 
         <!-- This media query matches small screens to hide the grid and show responsive cards -->
@@ -470,6 +457,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                         </template>
                     </div>
                 </template>
+
             </div>
 
             <!-- Paper Fab to add new coach -->
