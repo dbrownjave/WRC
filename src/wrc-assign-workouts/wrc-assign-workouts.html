@@ -181,14 +181,32 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				position: absolute;
 			}
 
+			div.top-content {
+				@apply --layout-horizontal;
+			}
+
+			paper-icon-button.back-button {
+				margin: 10px 0 0 15px;
+			}
+
+			/* Header Section */
+			.review-content div.title h3{
+				font-size: 1.6em;
+				font-weight: 400;
+				font-style: normal;
+				font-stretch: normal;
+				line-height: normal;
+				letter-spacing: 1px;
+				color: #6a7582;
+				top: 3px;
+				margin-top: -32px;
+
+				@apply --layout-center-center;
+				@apply --layout-vertical;
+			}
+
 			/* Responsive */
-
 			@media screen and (max-width: 600px) {
-
-				paper-fab {
-					bottom: 1em;
-					right: 1em;
-				}
 
 				/* Empty Workout State */
 				.motivation-msg {
@@ -221,8 +239,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 				}
 			}
 
-			/* Responsive Small Devices */
+			/* Responsive */
+			@media screen and (max-width: 600px) {
+				.review-content div.title h3 {
+					font-size: 1.4em;
+				}
 
+				div.collection-wrapper {
+					@apply --layout-wrap;
+					@apply --layout-vertical;
+					@apply --layout-center;
+				}
+			}
+
+			/* Responsive Small Devices */
 			@media screen and (max-width: 425px) {
 				/* General Style */
 				main {
@@ -233,9 +263,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					@apply --layout-vertical;
 					@apply --layout-center;
 				}
-				paper-fab {
-					bottom: 1em;
-					right: 1em;
+
+				.review-content {
+					min-width: 100%;
+					width: 100%;
+				}
+
+				.review-content div.title h3 {
+					font-size: 1.3em;
 				}
 
 				/* Empty Workout State */
@@ -267,6 +302,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 					bottom: 2.5em;
 					position: absolute;
 				}
+
+
 			}
 		</style>
 
@@ -345,8 +382,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
 			<!-- Review Workouts content -->
 			<div class="review-content" hidden$="{{!reviewMode}}">
-				<!-- Back button -->
-				<paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
+				<div class="top-content">
+					<!-- Back button -->
+					<paper-icon-button noink class="back-button" alt="Back" src="../icons/buttons/left-arrow.svg" on-tap="_backToPrograms"></paper-icon-button>
+				</div>
+
+				<div class="title">
+					<h3>Review Workouts</h3>
+				</div>
 
 				<!-- Workouts of the program -->
 				<div class="collection-wrapper">
