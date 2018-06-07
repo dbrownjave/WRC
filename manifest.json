@@ -1,6 +1,6 @@
 {
-  "name": "My App",
-  "short_name": "My App",
+  "name": "Weight Room Coach",
+  "short_name": "WRC",
   "description": "My App description",
   "icons": [
     {
@@ -16,6 +16,6 @@
   ],
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#3f51b5",
-  "background_color": "#3f51b5"
+  "theme_color": "#8D9AA6",
+  "background_color": "#8D9AA6"
 }
