@@ -563,6 +563,8 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                       console.log("before: ", this.$.adminProfilePicture.files[0].name);
                       console.log("upid: ", upid);
+                      // DEBUG: Test for any issues
+                      //console.log(this.$.adminProfilePicture.files[0].name.slice(-3));
 
                        /**
                        * @description Add Unique Photo ID to orginal photo + file extension
@@ -575,8 +577,20 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           var blob = this.$.adminProfilePicture.files[0].slice(0, -1, 'image/jpeg');
                           var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
 
-                          this.newImgFile = newImgFile;
+                          this.set('newImgFile',newImgFile);
                           console.log("jpg file extended: ", this.newImgFile);
+
+                      } else if (this.$.adminProfilePicture.files[0].name.slice(-3) == 'peg') {
+
+                        // creates unique image file name
+                        var newFileName = this.$.adminProfilePicture.files[0].name.replace('.jpeg',upid) + '.jpeg';
+
+                        // create new image file - blog: binary large OBject
+                        var blob = this.$.adminProfilePicture.files[0].slice(0, -1, 'image/jpeg');
+                        var newImgFile = new File([blob], newFileName, {type: 'image/jpeg'});
+
+                        this.set('newImgFile',newImgFile);
+                        console.log("jpeg file extended: ", this.newImgFile);
 
                       } else if (this.$.adminProfilePicture.files[0].name.slice(-3) == 'png') {
                           // creates unique image file name
@@ -586,8 +600,11 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           var blob = this.$.adminProfilePicture.files[0].slice(0, -1, 'image/png');
                           var newImgFile = new File([blob], newFileName, {type: 'image/png'});
 
-                          this.newImgFile = newImgFile;
+                          // this.newImgFile = newImgFile;
+                          this.set('newImgFile',newImgFile);
                           console.log("png file extended: ", this.newImgFile);
+                      } else {
+                        console.error("file extension not excepted: ", this.$.adminProfilePicture.files[0].name);
                       }
                   }
 
@@ -603,10 +620,14 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                           console.log("profile picture deleted successfully");
                       }
 
+
+
                       if (this.$.adminProfilePicture.files[0]) {
+                        console.log(this.newImgFile);
                           // Put new image file in Firebase Storage
                           this.$.firebaseStorage.put(this.newImgFile)
                           .then(function() {
+                            console.log("entered");
                             this.$.storageRef.getDownloadURL('/profile-pics/' + this.newImgFile.name)
                               .then(function (url) {
                                   console.log("check new profile photo url?: ", url);
