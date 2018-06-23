@@ -512,6 +512,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
 
                                 try {
                                     this._saveProfileImgAndAthleteData();
+                                    location.reload();
                                 } catch (err) {
                                     this._appToast.text = 'An error has ocurred trying to upload an image.';
                                     this._appToast.open();
@@ -521,7 +522,7 @@ Code developed by Dorian Brown in collaboration with Codeself, Inc.
                             }.bind(this))
 
                             .catch(function(err) {
-                                this._appToast.text = 'An error has ocurred trying to create the new athlete. Is possible that the email is already in use.';
+                                this._appToast.text = "An error has ocurred trying to create the new athlete. It's possible that the email is already in use.";
                                 this._appToast.open();
                                 console.log(err);
                             }.bind(this));
